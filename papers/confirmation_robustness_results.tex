@@ -1,10 +1,10 @@
-\section{Prospective confirmation and exhaustive robustness details}\label{app:confirmation}
+\section{Prospective confirmation and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix contains the complete numerical support for the fresh-data stages summarized in the main text. Stage D was frozen before any block 4000--4019 outcome was generated. Stage E was separately frozen before any block 5000--5049 outcome was generated and remains secondary to Stage D. The main paper now carries the headline Stage-D curve, the default-release Stage-E architecture comparison, and the full budget-curve figure; this appendix retains the complete ranking/profile breakdowns, secondary controls, and audit details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix contains the complete numerical support for Stages D and E. Stage D was frozen before any outcome from blocks 4000--4019 was generated. Stage E was separately frozen before any outcome from blocks 5000--5049 was generated and remains secondary to Stage D. The main text reports the Stage-D primary curve, the default-release Stage-E architecture comparison, and the full selected-fidelity curves; this appendix retains the complete ranking/profile breakdowns, secondary controls, and audit details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Stage-D selected-fidelity treatment effects}\label{app:stage-d-full}
 
-All entries are release minus constant-retention selected fidelity at epoch 200, paired over 20 fresh blocks. Only TinyCNN/contrast supplies the single primary test; the remaining rows are predeclared secondary analyses.
+All entries are release minus constant-retention selected fidelity at epoch 200, paired over 20 previously unused blocks. Only TinyCNN/contrast supplies the single primary test; the remaining rows are predeclared secondary analyses.
 
 {
 \small
@@ -49,13 +49,13 @@ TwoLayerCNN & validation patch & 8 & +0.0100 & [-0.0015, +0.0214] \\
 \normalsize
 }
 
-\subsection{Stage-D intervention-budget contrasts}\label{app:stage-d-b}
+\subsection{Stage-D predeclared contrast}\label{app:stage-d-b}
 
-For every architecture/ranking pair, the intervention-budget contrast is
+For every architecture/ranking pair,
 \[
 B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
 \]
-Positive $B$ means release becomes relatively more faithful at the larger tested intervention budgets; it does not require a positive release effect at each larger $k$. The TinyCNN/contrast row is the single frozen primary test. All other rows are secondary and do not alter the primary decision.
+Positive $B$ indicates that the release-minus-retention difference is larger at $k=4,8$ than at $k=1,2$; it does not require a positive release effect at either larger value of $k$. The TinyCNN/contrast row is the single frozen primary test. All other rows are secondary and do not alter the primary decision.
 
 \begin{table}[h]
 \centering
@@ -72,29 +72,29 @@ TwoLayerCNN & AUROC & -0.03179 & [-0.05830, -0.00529] & 0.02126 \\
 TwoLayerCNN & validation patch & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 \bottomrule
 \end{tabular}
-\caption{Stage-D intervention-budget contrasts. The first row alone is confirmatory.}
+\caption{Stage-D values of the predeclared contrast $B$. The first row alone is confirmatory.}
 \label{tab:stage-d-b}
 \end{table}
 
 \subsection{Stage-D absolute counterfactual accuracy}\label{app:stage-d-cf}
 
-Absolute selected-patch counterfactual accuracy was retained to prevent a relative fidelity score from obscuring the direction of intervention correctness. For the primary TinyCNN/contrast setting, release minus retention is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
+Absolute selected-patch counterfactual accuracy was retained to report intervention correctness alongside the relative fidelity measure. For the primary TinyCNN/contrast setting, release minus retention is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
 
-The same qualitative small-versus-larger-budget separation appears under AUROC and validation-patch rankings. These are secondary outcomes and were not used to define confirmation.
+AUROC and validation-patch rankings show the same broad change between smaller and larger patch sizes. These are secondary outcomes and were not used to define confirmation.
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The validation-energy-matched control selects eight same-size alternative channel sets with replacement energy closest to the selected set, using validation data only. For TinyCNN/contrast, release-minus-retention $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: singleton alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control therefore supports sensitivity of relative scores to intervention size but is not substituted for selected fidelity in the primary analysis.
+The validation-energy-matched control selects eight same-size alternative channel sets with replacement energy closest to the selected set, using validation data only. For TinyCNN/contrast, release-minus-retention $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: singleton alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the relative score also changes with patch size, but it is not substituted for selected fidelity in the primary analysis.
 
-\subsection{Stage-E full profile map under contrast ranking}\label{app:stage-e-profiles}
+\subsection{Stage-E profile comparisons under contrast ranking}\label{app:stage-e-profiles}
 
-The four default-release rows that delimit the architecture effect are promoted to Table~\ref{tab:stage-e-main} in the main paper. The table below gives the complete five-profile-versus-retention family for each task/architecture setting. Holm adjustment is performed within each task/architecture/ranking family, exactly as predeclared.
+The four default-release rows summarized in Table~\ref{tab:stage-e-main} delimit the architecture dependence in the main text. The table below gives the complete five-profile-versus-retention family for each task/architecture setting. Holm adjustment is performed within each task/architecture/ranking family, exactly as predeclared.
 
 {
 \small
 \setlength{\tabcolsep}{3.5pt}
 \begin{longtable}{lllccl}
-\caption{Stage-E intervention-budget contrasts for every non-reference profile under contrast ranking.}\label{tab:stage-e-profiles}\\
+\caption{Stage-E values of $B$ for every non-reference profile under contrast ranking.}\label{tab:stage-e-profiles}\\
 \toprule
 Task & Architecture & Profile vs. retention 1 & Mean $B$ & 95\% CI & Holm $p$ \\
 \midrule
@@ -129,9 +129,9 @@ two concepts & TwoLayerCNN & release late & -0.04523 & [-0.06854, -0.02192] & 0.
 \normalsize
 }
 
-\subsection{Stage-E endpoint morphology and prediction}\label{app:stage-e-endpoints}
+\subsection{Stage-E endpoint alignment and prediction}\label{app:stage-e-endpoints}
 
-The endpoint comparison below complements the main intervention-budget results by showing ordinary prediction and first-layer alignment. Values are means over 50 fresh blocks.
+The endpoint comparison below complements the activation-patching results with ordinary prediction and first-layer alignment. Values are means over 50 previously unused blocks.
 
 \begin{table}[h]
 \centering
@@ -171,7 +171,7 @@ concept AUROC & 0 & $10^{-9}$ \\
 localization IoU & 0 & $10^{-9}$ \\
 selected fidelity & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
 random fidelity & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
-causal usefulness & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
+$U_{\mathrm{random}}$ & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
 counterfactual accuracy & 0 & $10^{-12}$ \\
 \bottomrule
 \end{tabular}
