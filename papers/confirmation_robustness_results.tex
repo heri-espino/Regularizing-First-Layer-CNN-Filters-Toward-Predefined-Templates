@@ -58,6 +58,8 @@ B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
 Positive $B$ indicates that the release-minus-retention difference is larger at $k=4,8$ than at $k=1,2$; it does not require a positive release effect at either larger value of $k$. The TinyCNN/contrast row is the single frozen primary test. All other rows are secondary and do not alter the primary decision.
 
 \begin{table}[h]
+\caption{Stage-D values of the predeclared contrast $B$. The first row alone is confirmatory.}
+\label{tab:stage-d-b}
 \centering
 \small
 \begin{tabular}{llccc}
@@ -72,8 +74,6 @@ TwoLayerCNN & AUROC & -0.03179 & [-0.05830, -0.00529] & 0.02126 \\
 TwoLayerCNN & validation patch & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 \bottomrule
 \end{tabular}
-\caption{Stage-D values of the predeclared contrast $B$. The first row alone is confirmatory.}
-\label{tab:stage-d-b}
 \end{table}
 
 \subsection{Stage-D absolute counterfactual accuracy}\label{app:stage-d-cf}
@@ -134,6 +134,8 @@ two concepts & TwoLayerCNN & release late & -0.04523 & [-0.06854, -0.02192] & 0.
 The endpoint comparison below complements the activation-patching results with ordinary prediction and first-layer alignment. Values are means over 50 previously unused blocks.
 
 \begin{table}[h]
+\caption{Stage-E endpoint prediction and first-layer alignment for default release versus constant retention.}
+\label{tab:stage-e-endpoints}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -154,8 +156,6 @@ two concepts & TwoLayerCNN & retention 1 & 99.11\% & 0.999 \\
 two concepts & TwoLayerCNN & release default & 99.26\% & 0.896 \\
 \bottomrule
 \end{tabular}
-\caption{Stage-E endpoint prediction and first-layer alignment for default release versus constant retention.}
-\label{tab:stage-e-endpoints}
 \end{table}
 
 \subsection{Independent checkpoint audit}\label{app:audit}
@@ -163,6 +163,8 @@ two concepts & TwoLayerCNN & release default & 99.26\% & 0.896 \\
 The frozen audit protocol specified 32 Stage-B checkpoint evaluations. All 32 completed after correcting an audit-only implementation error that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The corrected implementation did not alter the frozen audit protocol and passed every tolerance.
 
 \begin{table}[h]
+\caption{Independent checkpoint-audit discrepancies. Full-patch and no-op probability errors were both zero.}
+\label{tab:audit}
 \centering
 \small
 \begin{tabular}{lcc}
@@ -179,6 +181,4 @@ $U_{\mathrm{random}}$ & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
 counterfactual accuracy & 0 & $10^{-12}$ \\
 \bottomrule
 \end{tabular}
-\caption{Independent checkpoint-audit discrepancies. Full-patch and no-op probability errors were both zero.}
-\label{tab:audit}
 \end{table}
