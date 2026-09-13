@@ -135,19 +135,23 @@ The endpoint comparison below complements the activation-patching results with o
 
 \begin{table}[h]
 \centering
-\small
-\begin{tabular}{llrr}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lllrr}
 \toprule
-Setting & Profile & Test accuracy & Alignment \\
+Task & Architecture & Profile & Test accuracy & Alignment \\
 \midrule
-single shape / TinyCNN & retention 1 & 99.98\% & 0.958 \\
-single shape / TinyCNN & release default & 99.99\% & 0.682 \\
-single shape / TwoLayerCNN & retention 1 & 99.98\% & 1.000 \\
-single shape / TwoLayerCNN & release default & 99.99\% & 0.942 \\
-two concepts / TinyCNN & retention 1 & 98.05\% & 0.944 \\
-two concepts / TinyCNN & release default & 99.45\% & 0.574 \\
-two concepts / TwoLayerCNN & retention 1 & 99.11\% & 0.999 \\
-two concepts / TwoLayerCNN & release default & 99.26\% & 0.896 \\
+single shape & TinyCNN & retention 1 & 99.98\% & 0.958 \\
+single shape & TinyCNN & release default & 99.99\% & 0.682 \\
+\addlinespace[2pt]
+single shape & TwoLayerCNN & retention 1 & 99.98\% & 1.000 \\
+single shape & TwoLayerCNN & release default & 99.99\% & 0.942 \\
+\addlinespace[2pt]
+two concepts & TinyCNN & retention 1 & 98.05\% & 0.944 \\
+two concepts & TinyCNN & release default & 99.45\% & 0.574 \\
+\addlinespace[2pt]
+two concepts & TwoLayerCNN & retention 1 & 99.11\% & 0.999 \\
+two concepts & TwoLayerCNN & release default & 99.26\% & 0.896 \\
 \bottomrule
 \end{tabular}
 \caption{Stage-E endpoint prediction and first-layer alignment for default release versus constant retention.}
