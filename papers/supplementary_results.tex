@@ -9,14 +9,15 @@ Stage A compared \texttt{template\_retention\_1} with \texttt{template\_init} at
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{lrrrr}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrr}
 \toprule
-Setting & $\Delta$ alignment & $\Delta$ acc. (pp) & $\Delta U$ [95\% CI] & Holm $p$ \\
+Task & Architecture & $\Delta$ alignment & $\Delta$ acc. (pp) & $\Delta U$ [95\% CI] & Holm $p$ \\
 \midrule
-single shape / TinyCNN & +0.268 & -0.23 & +0.0345 [0.0018, 0.0672] & 0.1633 \\
-single shape / TwoLayerCNN & +0.172 & -0.04 & -0.0092 [-0.0513, 0.0329] & 1.0000 \\
-two concepts / TinyCNN & +0.289 & -6.13 & +0.0252 [-0.0306, 0.0811] & 0.9995 \\
-two concepts / TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000 \\
+single shape & TinyCNN & +0.268 & -0.23 & +0.0345 [0.0018, 0.0672] & 0.1633 \\
+single shape & TwoLayerCNN & +0.172 & -0.04 & -0.0092 [-0.0513, 0.0329] & 1.0000 \\
+two concepts & TinyCNN & +0.289 & -6.13 & +0.0252 [-0.0306, 0.0811] & 0.9995 \\
+two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000 \\
 \bottomrule
 \end{tabular}
 \caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
@@ -29,19 +30,23 @@ The table below gives the Stage-B endpoint quantities most relevant to the reten
 
 \begin{table}[h]
 \centering
-\small
-\begin{tabular}{llrrr}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lllrrr}
 \toprule
-Setting & Condition & Accuracy (\%) & Alignment & $U_{\mathrm{random}}$ \\
+Task & Architecture & Condition & Accuracy (\%) & Alignment & $U_{\mathrm{random}}$ \\
 \midrule
-single shape / TinyCNN & retention 1 & 99.961 & 0.959 & 0.358 \\
-single shape / TinyCNN & release & 100.000 & 0.690 & 0.335 \\
-single shape / TwoLayerCNN & retention 1 & 99.922 & 1.000 & 0.067 \\
-single shape / TwoLayerCNN & release & 99.961 & 0.942 & 0.060 \\
-two concepts / TinyCNN & retention 1 & 98.008 & 0.947 & 0.657 \\
-two concepts / TinyCNN & release & 99.219 & 0.580 & 0.718 \\
-two concepts / TwoLayerCNN & retention 1 & 99.141 & 0.999 & 0.061 \\
-two concepts / TwoLayerCNN & release & 99.531 & 0.907 & 0.003 \\
+single shape & TinyCNN & retention 1 & 99.961 & 0.959 & 0.358 \\
+single shape & TinyCNN & release & 100.000 & 0.690 & 0.335 \\
+\addlinespace[2pt]
+single shape & TwoLayerCNN & retention 1 & 99.922 & 1.000 & 0.067 \\
+single shape & TwoLayerCNN & release & 99.961 & 0.942 & 0.060 \\
+\addlinespace[2pt]
+two concepts & TinyCNN & retention 1 & 98.008 & 0.947 & 0.657 \\
+two concepts & TinyCNN & release & 99.219 & 0.580 & 0.718 \\
+\addlinespace[2pt]
+two concepts & TwoLayerCNN & retention 1 & 99.141 & 0.999 & 0.061 \\
+two concepts & TwoLayerCNN & release & 99.531 & 0.907 & 0.003 \\
 \bottomrule
 \end{tabular}
 \caption{Stage-B final-checkpoint means for constant retention and default release.}
