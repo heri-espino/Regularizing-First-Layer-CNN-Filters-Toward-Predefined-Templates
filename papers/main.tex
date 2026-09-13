@@ -23,7 +23,7 @@
 \maketitle
 
 \begin{abstract}
-First-layer convolutional kernels can remain close to hand-designed templates after training, but kernel-template similarity does not determine how internal activation interventions affect the model output. We study this distinction in two controlled rendering tasks and two small CNNs using template initialization, continued template retention, and gradual release of the retention penalty. Persistent retention strongly increases kernel-template similarity. The release-versus-retention difference in selected-channel fidelity, however, varies with the number of patched channels. In a prospective confirmation on 20 previously unused \texttt{two\_concepts} TinyCNN blocks, the predeclared contrast comparing larger ($k=4,8$) with smaller ($k=1,2$) patch sizes is $B=0.33098$ (95\% CI $[0.27368,0.38827]$, $p=2.28\times10^{-10}$). Release is strongly worse at $k=1,2$, slightly worse at $k=4$, and slightly better at $k=8$. A separate 1,200-model study over 50 new blocks gives positive values of the same contrast for TinyCNN on both tasks and across several prior schedules, whereas TwoLayerCNN gives different, often negative estimates. An earlier positive four-channel selected-versus-random fidelity difference is partly explained by a change in the random-channel control, showing that the baseline can affect a relative patching comparison. An independent 32-checkpoint reimplementation audit passes all fixed tolerances. Within the tested models, kernel-template similarity and activation-patching behavior therefore provide different information, and the measured release-versus-retention effect depends on patch size and architecture. The experiments do not establish a unique mechanism, human interpretability, or natural-image generalization.
+First-layer convolutional kernels can remain close to hand-designed templates after training, but kernel-template similarity does not determine how internal activation interventions affect the model output. We study this distinction in two controlled rendering tasks and two small CNNs using template initialization, continued template retention, and gradual release of the retention penalty. Persistent retention strongly increases kernel-template similarity. The release-versus-retention difference in selected-channel fidelity, however, varies with the number of patched channels. In a prospective confirmation on 20 previously unused \texttt{two\_concepts} TinyCNN blocks, the predeclared contrast comparing larger ($k=4,8$) with smaller ($k=1,2$) patch sizes is $B=0.33098$ (95\% CI $[0.27368,0.38827]$, $p=2.28\times10^{-10}$). Release is strongly worse at $k=1,2$, slightly worse at $k=4$, and slightly better at $k=8$. A separate 1,200-model study over 50 new blocks gives positive values of the same contrast for TinyCNN on both tasks and across several prior schedules, whereas TwoLayerCNN gives different, often negative estimates. An earlier positive four-channel selected-versus-random fidelity difference is partly explained by a change in the random-channel control, showing that the baseline can affect a relative patching comparison. An independent 32-checkpoint reimplementation audit passes all fixed tolerances. Within the tested models, kernel-template similarity and activation-patching behavior therefore provide different information, and the measured release-versus-retention effect depends on patch size and architecture. The experiments do not establish a unique mechanism, human interpretability, or natural-image generalization.\footnote{ChatGPT (OpenAI) was used as an assistive tool during experimental planning, code development and debugging, manuscript organization, and language editing. All experimental protocols, analyses, interpretations, and manuscript text were reviewed by the authors, who take full responsibility for the work.}
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -108,6 +108,8 @@ where the baseline averages eight deterministic same-size random channel sets. A
 \subsection{Experimental stages and inferential roles}\label{sec:stages}
 
 \begin{table}[t]
+\caption{Experimental roadmap. Stages D and E use previously unused blocks under protocols frozen before their own outcomes were generated.}
+\label{tab:stages}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -122,8 +124,6 @@ D & 80 new models; \texttt{two\_concepts}; blocks 4000--4019 & Frozen prospectiv
 E & 1,200 new models; 2 tasks; 2 architectures; 6 prior profiles; blocks 5000--5049 & Predeclared secondary sensitivity study \\
 \bottomrule
 \end{tabular}
-\caption{Experimental roadmap. Stages D and E use previously unused blocks under protocols frozen before their own outcomes were generated.}
-\label{tab:stages}
 \end{table}
 
 The stages are not pooled as independent observations of one treatment effect. Conditions share generated contexts and initialization components within block. The block is the unit of paired uncertainty.
@@ -194,6 +194,8 @@ with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. The frozen confirmat
 The positive value of $B$ reflects a change in the release-minus-retention difference across patch sizes. The four required individual effects are shown in Table~\ref{tab:primary-curve}.
 
 \begin{table}[t]
+\caption{Stage-D primary TinyCNN/contrast release-minus-retention selected-fidelity effects on 20 previously unused \texttt{two\_concepts} blocks.}
+\label{tab:primary-curve}
 \centering
 \small
 \begin{tabular}{rcc}
@@ -206,8 +208,6 @@ Patched channels $k$ & $\Delta F_{\mathrm{selected}}$ & 95\% CI \\
 8 & $+0.0065$ & $[+0.0037,+0.0093]$ \\
 \bottomrule
 \end{tabular}
-\caption{Stage-D primary TinyCNN/contrast release-minus-retention selected-fidelity effects on 20 previously unused \texttt{two\_concepts} blocks.}
-\label{tab:primary-curve}
 \end{table}
 
 Release is much less favorable for one- and two-channel interventions than for four- and eight-channel interventions; the estimated effect becomes positive only at $k=8$. Absolute selected-patch counterfactual accuracy follows the same broad pattern: its release-minus-retention effect is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
@@ -221,6 +221,8 @@ The energy-matched relative score also separates small and larger patch sizes in
 Stage E completed all 1,200 planned final-checkpoint evaluations on 50 previously unused blocks. Under the original contrast ranking and default release schedule, the predeclared contrast $B$ relative to constant retention is positive for TinyCNN on both tasks and is not positive for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
 
 \begin{table}[t]
+\caption{Stage-E default-release contrast $B$ relative to constant retention under the original contrast ranking. These are predeclared secondary sensitivity analyses, not additional primary tests.}
+\label{tab:stage-e-main}
 \centering
 \small
 \begin{tabular}{lccc}
@@ -233,8 +235,6 @@ Setting & Mean $B$ & 95\% CI & Holm $p$ \\
 \texttt{two\_concepts} / TwoLayerCNN & -0.04156 & [-0.06983, -0.01329] & 0.0144 \\
 \bottomrule
 \end{tabular}
-\caption{Stage-E default-release contrast $B$ relative to constant retention under the original contrast ranking. These are predeclared secondary sensitivity analyses, not additional primary tests.}
-\label{tab:stage-e-main}
 \end{table}
 
 The result is not specific to the default schedule. Relative to $\lambda=1$ retention, all five alternative prior profiles have positive contrast-ranking $B$ in TinyCNN for both tasks. For \texttt{two\_concepts}/TinyCNN, the values range from $0.1663$ for constant $\lambda=0.1$ to $0.3456$ for immediate release after template initialization. TwoLayerCNN effects are near zero on \texttt{single\_shape} and tend to be negative for released profiles on \texttt{two\_concepts}. Because release timing changes several aspects of optimization jointly, these ordered schedules are interpreted as a sensitivity analysis rather than as a monotone causal dose law.
