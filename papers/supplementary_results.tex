@@ -1,6 +1,6 @@
 \section{Historical Stages A--C}\label{app:historical}
 
-Stages A--C precede the fresh prospective confirmation reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory estimand was narrowed from a relative selected-versus-random score to selected-channel fidelity itself.
+Stages A--C precede the prospective confirmation reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory estimand was narrowed from a selected-versus-random score to selected-channel fidelity itself.
 
 \subsection{Stage-A locally prospective primary contrasts}\label{app:stage-a}
 
@@ -48,9 +48,9 @@ two concepts / TwoLayerCNN & release & 99.531 & 0.907 & 0.003 \\
 \label{tab:stage-b-endpoints}
 \end{table}
 
-On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under release even though $U_{\mathrm{random}}$ is higher under release. This discrepancy motivated separating absolute selected intervention behavior from relative selected-versus-control scores.
+On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under release even though $U_{\mathrm{random}}$ is higher under release. This discrepancy motivated separate reporting of selected intervention behavior and selected-versus-control scores.
 
-\subsection{Stage-C decomposition of the original relative score}\label{app:stage-c-decomposition}
+\subsection{Stage-C decomposition of the original selected-versus-random score}\label{app:stage-c-decomposition}
 
 Stage C reused the 80 final Stage-B release/retention checkpoints and evaluated three validation-only rankings at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is release minus constant retention; intervals are marginal paired 95\% $t$ intervals over ten blocks. Stage C is post hoc and supplies no confirmatory test.
 
@@ -85,14 +85,14 @@ validation patch & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 \normalsize
 }
 
-The full intervals make the interpretation explicit. Under contrast ranking, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore substantially baseline-driven. At $k=8$, selected fidelity itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patch rankings show the same broad pattern.
+Under contrast ranking, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, selected fidelity itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patch rankings show the same broad pattern.
 
-For \texttt{two\_concepts}/TwoLayerCNN, selected fidelity at $k=4$ is negative under all three rankings (approximately -0.125, -0.121, and -0.087 for contrast, AUROC, and validation-patch, respectively). Validation-patch selected fidelity becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes further motivated a budget-based rather than fixed-sign confirmatory hypothesis.
+For \texttt{two\_concepts}/TwoLayerCNN, selected fidelity at $k=4$ is negative under all three rankings (approximately -0.125, -0.121, and -0.087 for contrast, AUROC, and validation-patch, respectively). Validation-patch selected fidelity becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across patch sizes rather than on a fixed sign at one value of $k$.
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose same-size alternative channel sets with validation replacement energy closest to the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on budget: singleton sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-fidelity treatment contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The energy-matched score is therefore reported as a secondary robustness diagnostic rather than evidence for a distinct mechanism.
+A later post hoc control chose same-size alternative channel sets with validation replacement energy closest to the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on patch size: singleton sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-fidelity treatment contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The energy-matched score is therefore reported as a secondary diagnostic.
 
-\subsection{Interpretive transition to Stage D}\label{app:transition}
+\subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C support three observations but did not, by themselves, provide a prospective confirmation of the final claim: template retention preserves morphology; learning and prediction can improve after releasing the constraint; and the release-minus-retention intervention comparison changes with channel budget. Because the original $U$ sign reversal conflated selected and baseline fidelity, the Stage-D protocol was frozen around selected fidelity before new blocks were generated. Appendix~\ref{app:confirmation} reports that independent confirmation and the subsequent 1,200-model robustness map.
+Stages A--C established that template retention preserves alignment and that prediction can improve after the retention penalty is released. They also showed that the release-minus-retention patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected and baseline fidelity, the Stage-D protocol was frozen around selected fidelity before new blocks were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
