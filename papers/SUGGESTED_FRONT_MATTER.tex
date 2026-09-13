@@ -1,47 +1,42 @@
-% Suggested front matter matching the current claim-first manuscript framing.
+% Suggested front matter matching the current manuscript wording.
 % This file is not included by the build; papers/main.tex is authoritative.
 
 % Suggested title
-\title{Template Alignment Is Not Functional Alignment: Intervention-Budget Sensitivity in Small CNNs}
+\title{Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels}
 
 % Suggested abstract
 \begin{abstract}
-Interpretable-looking weights are often treated as evidence of interpretable
-function, but weight-space resemblance and intervention behavior need not
-agree. We test this gap in small CNNs with first-layer edge, corner, and ring
-template priors and matched counterfactual interventions. Persistent
-retention strongly preserves template alignment, yet it does not produce a
-stable functional advantage. Instead, the release-versus-retention effect on
-selected-channel fidelity changes sharply with intervention budget. In a
-prospective confirmation on 20 fresh \texttt{two\_concepts} TinyCNN blocks,
-the predeclared \emph{intervention-budget contrast}---whether release becomes
-relatively more faithful at larger ($k=4,8$) than smaller ($k=1,2$) patch
-budgets---is $B=0.33098$ (95\% CI $[0.27368,0.38827]$,
-$p=2.28\times10^{-10}$). Release is strongly worse at $k=1,2$, slightly
-worse at $k=4$, and slightly better at $k=8$. A separate 1,200-model
-robustness study over 50 fresh blocks reproduces positive budget shifts for
-TinyCNN on both tasks and across several prior schedules, whereas TwoLayerCNN
-shows a different, often negative direction. The earlier positive
-four-channel relative-usefulness effect is also partly baseline-driven,
-showing that baseline choice can change the apparent functional conclusion.
-An independent 32-checkpoint reimplementation audit passes all fixed
-tolerances. Thus template alignment is not a sufficient summary of functional
-influence in these models: the measured effect of a structured prior depends
-on intervention scale, baseline definition, and architecture. We do not claim
-a unique mechanism, human interpretability, or natural-image generalization.
+First-layer convolutional kernels can remain close to hand-designed templates
+after training, but kernel-template similarity does not determine how internal
+activation interventions affect the model output. We study this distinction in
+two controlled rendering tasks and two small CNNs using template
+initialization, continued template retention, and gradual release of the
+retention penalty. Persistent retention strongly increases kernel-template
+similarity. The release-versus-retention difference in selected-channel
+fidelity, however, varies with the number of patched channels. In a prospective
+confirmation on 20 previously unused \texttt{two\_concepts} TinyCNN blocks,
+the predeclared contrast comparing larger ($k=4,8$) with smaller ($k=1,2$)
+patch sizes is $B=0.33098$ (95\% CI $[0.27368,0.38827]$,
+$p=2.28\times10^{-10}$). Release is strongly worse at $k=1,2$, slightly worse
+at $k=4$, and slightly better at $k=8$. A separate 1,200-model study over 50
+new blocks gives positive values of the same contrast for TinyCNN on both
+tasks and across several prior schedules, whereas TwoLayerCNN gives different,
+often negative estimates. An earlier positive four-channel selected-versus-
+random fidelity difference is partly explained by a change in the random-
+channel control, showing that the baseline can affect a relative patching
+comparison. An independent 32-checkpoint reimplementation audit passes all
+fixed tolerances. Within the tested models, kernel-template similarity and
+activation-patching behavior therefore provide different information, and the
+measured release-versus-retention effect depends on patch size and architecture.
+The experiments do not establish a unique mechanism, human interpretability,
+or natural-image generalization.
 \end{abstract}
 
 % Suggested contribution paragraph
-Our contributions are threefold. First, we make the gap between template
-appearance and intervention behavior explicit under a controlled
-structured-prior manipulation, while separately tracking prediction, concept
-measurements, and learning dynamics. Second, we define and prospectively
-confirm an intervention-budget contrast on fresh blocks, showing that the
-release-versus-retention functional comparison changes materially with the
-number of patched channels. Third, we map the boundary of that result across
-1,200 additional models: the positive budget shift is robust in TinyCNN but
-not architecture-invariant, and relative conclusions are also sensitive to
-baseline construction. An independent checkpoint audit verifies the central
-stored measurements within fixed numerical tolerances. The claims remain
+The study combines a controlled comparison of initialization, continued
+retention, and gradual release with a prospective test of patch-size dependence
+and a larger secondary study across tasks, architectures, schedules, and all
+channel counts. The independent checkpoint audit provides a separate
+implementation check on the central stored measurements. The claims are
 restricted to the tested synthetic renderer, first-layer interventions, and
 small CNN family.
