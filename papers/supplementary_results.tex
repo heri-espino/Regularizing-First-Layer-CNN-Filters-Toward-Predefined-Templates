@@ -7,6 +7,8 @@ Stages A--C precede the prospective confirmation reported in Appendix~\ref{app:c
 Stage A compared \texttt{template\_retention\_1} with \texttt{template\_init} at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and Holm-adjusted as one family. Alignment and accuracy columns are descriptive companion outcomes.
 
 \begin{table}[h]
+\caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
+\label{tab:stage-a-primary}
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
@@ -20,8 +22,6 @@ two concepts & TinyCNN & +0.289 & -6.13 & +0.0252 [-0.0306, 0.0811] & 0.9995 \\
 two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000 \\
 \bottomrule
 \end{tabular}
-\caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
-\label{tab:stage-a-primary}
 \end{table}
 
 \subsection{Stage-B endpoint condition means}\label{app:stage-b-endpoints}
@@ -29,6 +29,8 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 The table below gives the Stage-B endpoint quantities most relevant to the retention/release comparison. Means are over ten blocks. The full five-condition endpoint tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
+\caption{Stage-B final-checkpoint means for constant retention and default release.}
+\label{tab:stage-b-endpoints}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -49,8 +51,6 @@ two concepts & TwoLayerCNN & retention 1 & 99.141 & 0.999 & 0.061 \\
 two concepts & TwoLayerCNN & release & 99.531 & 0.907 & 0.003 \\
 \bottomrule
 \end{tabular}
-\caption{Stage-B final-checkpoint means for constant retention and default release.}
-\label{tab:stage-b-endpoints}
 \end{table}
 
 On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under release even though $U_{\mathrm{random}}$ is higher under release. This discrepancy motivated separate reporting of selected intervention behavior and selected-versus-control scores.
