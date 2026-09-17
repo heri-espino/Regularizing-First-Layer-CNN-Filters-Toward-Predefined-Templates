@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.13"
 license = { text = "MIT" }
 authors = [
-  { name = "Heriberto Espino Montelongo" },
+  { name = "Heriberto Espino-Montelongo" },
 ]
 keywords = [
   "convolutional neural networks",
@@ -39,6 +39,7 @@ dev = [
 
 [project.urls]
 Repository = "https://github.com/heri-espino/prior-templates-for-cnns"
+ORCID = "https://orcid.org/0009-0009-1230-2931"
 
 [tool.setuptools]
 py-modules = []
