@@ -2,8 +2,9 @@ name: paper-compile
 
 on:
   push:
-    branches: [paper_suggestions]
+    branches: [main]
     paths:
+      - 'build.py'
       - 'papers/**'
       - 'analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png'
       - 'analysis/retention_release_001/**'
@@ -20,18 +21,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Install TeX
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-bibtex-extra
       - name: Compile manuscript
-        run: bash papers/build_paper.sh
+        run: python build.py --clean
       - name: Upload compiled PDF and log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: revised-paper
+          name: espino_2026_template-priors
           path: |
-            papers/main.pdf
+            espino_2026_template-priors.pdf
             papers/build/main.log
           if-no-files-found: warn
