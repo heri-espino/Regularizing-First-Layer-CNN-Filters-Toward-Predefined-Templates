@@ -17,6 +17,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: paper-figures-main
+  cancel-in-progress: true
+
 jobs:
   refresh:
     if: github.actor != 'github-actions[bot]'
@@ -59,7 +63,7 @@ jobs:
               text = text.replace(old, new)
           text = text.replace(
               'The illustration concerns kernel-template similarity, not human interpretability.}',
-              'The heatmap cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}',
+              'The dense kernel cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}',
           )
           path.write_text(text, encoding='utf-8')
           PY
@@ -80,5 +84,6 @@ jobs:
             echo 'Publication figures are already up to date.'
           else
             git commit -m 'style: refresh publication figures'
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
