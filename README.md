@@ -1,77 +1,111 @@
-# Prior templates for CNNs
+# Template Priors in Small CNNs
 
-Research on when template-initialized convolutional filters improve learning, and whether template alignment corresponds to independently measured concepts and causal usefulness.
+This repository contains the manuscript, frozen experimental protocols, analysis outputs, and reproducibility code for:
 
-**One paper:** [Main manuscript](papers/main.md) · [Complete tables](papers/supplementary_results.md) · [Literature comparison](papers/literature_comparison.md) · [Revision status](papers/MANUSCRIPT_STATUS.md).
+> **Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels**
 
-**Current status:** the 400-run alignment study is complete. Stronger retention increases alignment, but all four primary causal-usefulness comparisons remain inconclusive after multiple-comparison correction. The retention-release follow-up is complete (200 runs × 200 epochs) and analyzed in the [updated paper draft](papers/main.md).
+The paper studies first-layer template priors in small convolutional networks and separates **kernel-template similarity** from **activation-patching behavior**. Persistent template retention produces high kernel-template similarity, while the measured release-versus-retention effect under activation patching changes with the number of patched channels and with architecture.
 
 ## Start here
 
-| Study | Question | Status | Entry point |
-|---|---|---|---|
-| 01 — First pass | What does the original project do? | 28 runs; historical pilot with known limitations | [Report](studies/cnn_first_pass/REPORT.md) |
-| 02 — Alignment and causal usefulness | Does stronger template retention improve independent concept/patching measurements? | 400 runs + 200 exploratory head evaluations; audited | [Report](studies/cnn_causal_milestone/REPORT.md) · [Short findings](studies/cnn_causal_milestone/FINDINGS.md) |
-| 03 — Retention release | Do templates help early learning, then constrain adaptation? | 200 completed runs; exploratory analysis | [Paper draft](papers/main.md) · [Instructions](studies/cnn_release_experiment/README.md) |
+- **Paper source:** [`papers/main.tex`](papers/main.tex)
+- **Build the paper:** `python build.py`
+- **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
+- **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
+- **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
+- **Study map and frozen protocols:** [`studies/README.md`](studies/README.md)
+- **Analysis map:** [`analysis/README.md`](analysis/README.md)
 
-The [learning-dynamics follow-up](studies/cnn_causal_milestone/LEARNING_DYNAMICS.md) examines all 16,000 saved epoch records from study 02. Template initialization has an early descriptive advantage in some settings, not all. Forty epochs did not establish a genuine plateau.
+## Build the manuscript
 
-## Completed GPU patching robustness
+Python itself has no package dependencies for the paper build. A TeX installation providing `pdflatex` and `bibtex` must be available on `PATH`.
 
-All 80 GPU evaluations are uploaded. The [robustness review](analysis/patch_robustness_gpu_001/REPORT.md) finds that the causal-usefulness conclusion depends on patch budget and selection. Reproduce the analysis with `bash review_robustness.sh`. The runner below remains available for reproduction.
+From the repository root:
 
-```sh
-bash run_gpu.sh check
-bash run_gpu.sh smoke
-bash run_gpu.sh main
+```bash
+python build.py
 ```
 
-See [GPU instructions](studies/cnn_patch_robustness/README.md) and [analysis plan](studies/cnn_patch_robustness/PROTOCOL.md). This is the robustness stage; new-task replication is not launched yet.
+The final PDF is written as:
 
-## Run the current experiment
-
-Python 3.10–3.12 is recommended. From the repository root:
-
-```sh
-bash run.sh smoke
-bash run.sh main
+```text
+espino_2026_template-priors.pdf
 ```
 
-Windows PowerShell:
+For a clean rebuild:
 
-```powershell
-.\run.ps1 smoke
-.\run.ps1 main
+```bash
+python build.py --clean
 ```
 
-The launchers install dependencies in the study's local environment. Main runs 200 models, each for 200 epochs. `pilot` runs one block (20 models). Run the same command after an interruption to resume. Avoid concurrent writers to one output folder.
-
-**Already running the downloaded package? Keep that run in its current folder.** There is no need to stop, move or restart it. Its experiment/core source files are preserved byte-for-byte here. See [importing ongoing results](docs/IMPORT_RESULTS.md) when it finishes.
+Intermediate LaTeX files are kept under `papers/build/` and are ignored by Git.
 
 ## Repository layout
 
 ```text
-studies/
-  cnn_first_pass/           # Study 01: original sources, repairs, pilot evidence
-  cnn_causal_milestone/     # Study 02: frozen protocol/code and audited evidence
-  cnn_release_experiment/   # Study 03: current runner, tests and reporting
-.ai_handoff/               # Concise context, decisions, evidence and next actions
-scripts/                   # Repository integrity checker
- docs/                     # Result import and evidence navigation
+.
+├── build.py                         # Cross-platform paper builder
+├── papers/                          # TMLR manuscript source and appendix tables
+├── studies/                         # Frozen protocols and experiment code
+├── analysis/                        # Paper-facing analyses, tables, figures, reports
+├── results/                         # Imported experiment outputs used by later analyses
+├── literature/                      # Bibliography and literature notes
+├── scripts/                         # Shared execution helpers
+└── run_paper_experiments.*          # Stage-D / Stage-E reproduction launchers
 ```
 
-Historical study directories retain their names and internal organization deliberately: source hashes, audit scripts and report links depend on them. Navigation is organized here without rewriting the scientific record. Historical data, checkpoints and tables are versioned; new study-03 output and environments are ignored until a reviewed result import. Redundant distribution ZIPs are omitted except the small original input archive.
+The repository preserves the experimental record rather than flattening all stages into a single script. Each confirmatory or secondary study keeps its own protocol, implementation, and analysis files. The top-level documentation is intended to make that record navigable without rewriting it.
 
-## Scientific interpretation
+## Experimental record
 
-- Alignment measures kernel resemblance to an audited edge/corner/ring bank.
-- Concept AUROC and localization use renderer annotations independent of that bank.
-- Causal usefulness U measures selected-channel patching fidelity advantage over a random same-size channel set. It can reproduce an inaccurate model's behavior; always inspect accuracy too.
-- Frozen-template TinyCNN accuracy on `single_shape` rises from 83.40% to 99.77% after changing only the classifier. This establishes a training/readout optimization gap at fixed features, not a universal representation limit.
-- No publication novelty, general causal identifiability or universal negative effect is claimed.
+The manuscript is built around five evidential stages.
 
-For reproducibility, consult each study's README and protocol. Check imported file integrity with `python3 scripts/verify_import.py`. AI collaborators should read [AGENTS.md](AGENTS.md), then [.ai_handoff/START_HERE.md](.ai_handoff/START_HERE.md). No license is assigned yet; ownership/licensing of the original input needs review before choosing one.
+| Stage | Role | Main location |
+|---|---|---|
+| A | Initial alignment and intervention study | `studies/cnn_causal_milestone/` |
+| B | 200-epoch retention/release study | `studies/cnn_release_experiment/` |
+| C | Post hoc patch-size and baseline decomposition | `studies/cnn_patch_robustness/`, `studies/cnn_patch_energy_control/` |
+| D | Frozen prospective confirmation | `studies/cnn_budget_confirmation/` |
+| E | Predeclared 1,200-model sensitivity study | `studies/cnn_exhaustive_robustness/` |
 
-## Kernel matching from existing checkpoints
+The independent reimplementation audit is in `studies/cnn_checkpoint_audit/`.
 
-Run `bash run_kernel_analysis.sh` (WSL/Linux/macOS) or `./run_kernel_analysis.ps1` (PowerShell) in the experiment environment. No retraining or GPU is needed. [Instructions](analysis/kernel_similarity/README.md), [analysis plan](analysis/kernel_similarity/PLAN.md), and [completed results](analysis/kernel_similarity/results/REPORT.md). The analysis compares every first-layer kernel against every template and contrasts nearest with one-to-one assignment; it does not measure human interpretability.
+The single Stage-D primary test used 20 previously unused `two_concepts` TinyCNN blocks. Its predeclared contrast was
+
+\[
+B=0.33098,\qquad 95\%\ \mathrm{CI}=[0.27368,0.38827],
+\]
+
+with two-sided \(p=2.28\times10^{-10}\). Stage E then tested the same patch-size contrast across two tasks, two architectures, six prior schedules, and 50 new blocks. TinyCNN gives positive values of the contrast in both tasks, while TwoLayerCNN shows a different pattern. The paper therefore treats architecture and the number of patched channels as part of the reported result.
+
+## Reproducing the prospective studies
+
+The Stage-D and Stage-E launchers are retained because their protocols were frozen before the corresponding outcomes were generated.
+
+Windows:
+
+```powershell
+.\run_paper_experiments.cmd
+```
+
+PowerShell directly:
+
+```powershell
+.\run_paper_experiments.ps1
+```
+
+Zsh:
+
+```bash
+zsh run_paper_experiments.zsh
+```
+
+These experiments are computationally expensive. For exact design details, source hashes, block ranges, and output structure, read the protocol in the relevant study directory before running anything.
+
+## Scope
+
+The empirical claims are intentionally restricted to the tested synthetic renderer, first-layer interventions, and small CNN family. Kernel-template similarity is a weight-space measurement; selected-channel fidelity is defined for the specified activation-patching procedure. The experiments do not establish a unique causal mechanism, human interpretability, or natural-image generalization.
+
+## Archival note
+
+This repository is being prepared as the archival research artifact associated with the manuscript. A Zenodo DOI and final citation metadata should be added only after the archival release is minted. Third-party TMLR style files retain their original license in `papers/tmlr/tmlr-style-file-main/`.
