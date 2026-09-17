@@ -3,8 +3,9 @@ message: "If you use this research artifact, please cite the repository and the 
 title: "Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels"
 type: software
 authors:
-  - family-names: "Espino Montelongo"
+  - family-names: "Espino-Montelongo"
     given-names: "Heriberto"
+    orcid: "https://orcid.org/0009-0009-1230-2931"
 repository-code: "https://github.com/heri-espino/prior-templates-for-cnns"
 version: 1.0.0
 date-released: 2026-09-17
