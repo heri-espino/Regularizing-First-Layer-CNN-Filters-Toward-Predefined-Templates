@@ -21,7 +21,7 @@ import sys
 ROOT = Path(__file__).resolve().parent
 PAPER_DIR = ROOT / "papers"
 BUILD_DIR = PAPER_DIR / "build"
-STYLE_DIR = PAPER_DIR / "tmlr" / "tmlr-style-file-main"
+STYLE_DIR = PAPER_DIR / "tmlr"
 SOURCE = PAPER_DIR / "main.tex"
 DEFAULT_OUTPUT = ROOT / "espino_2026_template-priors.pdf"
 
@@ -94,7 +94,8 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
         raise SystemExit("Build finished without producing papers/build/main.pdf")
 
     shutil.copy2(built_pdf, output)
-    print(f"\nBuilt manuscript: {output.relative_to(ROOT) if output.is_relative_to(ROOT) else output}")
+    relative_output = output.relative_to(ROOT) if output.is_relative_to(ROOT) else output
+    print(f"\nBuilt manuscript: {relative_output}")
     return output
 
 
