@@ -10,6 +10,19 @@ The appendix material is split into three files so the main source remains reada
 
 The bibliography is `../literature/references.bib`. The minimal TMLR style files required for compilation are vendored in `tmlr/` and retain their upstream license.
 
+## Figures
+
+The five figures used by the manuscript are publication assets in `figures/`. They are regenerated from saved experimental artifacts with:
+
+```bash
+python -m pip install -e ".[experiments]"
+python paper/build_figures.py
+```
+
+`plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. The plotting system uses a restrained white-grid theme, a color-blind-friendly palette, and a serif stack headed by Latin/Computer Modern so figure typography matches the TMLR manuscript closely.
+
+Figures are exported as PDF. Curves, axes, text, and annotations remain vector; dense heatmaps and kernel images are selectively rasterized inside the PDF. The figure builder is presentation-only: it reads saved CSV/NPZ outputs and fixed checkpoints and does not retrain models or redefine any analysis.
+
 ## Build
 
 From the repository root:
