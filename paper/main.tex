@@ -169,7 +169,7 @@ Longer optimization removes much of the shallow compositional deficit. On \textt
 
 \begin{figure}[t]
 \centering
-\pandocbounded{\includegraphics[width=\linewidth]{../analysis/retention_release_001/learning.png}}
+\includegraphics[width=\linewidth]{figures/fig01_learning.pdf}
 \caption{Stage-B learning and alignment trajectories over 200 epochs. Curves show block means and bands show block standard deviations. Persistent retention and release separate only after the release schedule begins.}
 \label{fig:learning}
 \end{figure}
@@ -241,7 +241,7 @@ The result is not specific to the default schedule. Relative to $\lambda=1$ rete
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{../analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png}
+\includegraphics[width=\linewidth]{figures/fig02_patch_size.pdf}
 \caption{Stage-E selected-fidelity curves for $k=1,\ldots,16$ under the contrast ranking. Each panel contains all six template-prior profiles; lines are means over 50 previously unused blocks and bands are 95\% $t$ intervals. The full-patch boundary at $k=16$ is an integrity check.}
 \label{fig:exhaustive-curves}
 \end{figure}
@@ -256,7 +256,7 @@ The exploratory matching analysis on the 2,000 saved Stage-B checkpoint states a
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/matching_trajectories.png}
+\includegraphics[width=\linewidth]{figures/fig03_matching_trajectories.pdf}
 \caption{Nearest-template alignment, maximum-weight one-to-one alignment, and their gap over all saved Stage-B epochs. All five conditions and four task/architecture settings are shown. Bands are sample SD over ten blocks, not confidence intervals.}
 \label{fig:matching-trajectories}
 \end{figure}
@@ -265,7 +265,7 @@ Figure~\ref{fig:matching-trajectories} shows the evolution of nearest-template a
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/matrices_two_concepts_TinyCNN.png}
+\includegraphics[width=\linewidth]{figures/fig04_similarity_matrices.pdf}
 \caption{All 256 signed kernel--template cosine similarities for \texttt{two\_concepts}/TinyCNN, fixed block 2000, at initialization and epoch 200. Rows retain original channel indices and columns retain template indices; black crosses mark the maximum-weight one-to-one assignment. Values range from $-1$ to $1$.}
 \label{fig:matching-matrices}
 \end{figure}
@@ -274,8 +274,8 @@ Figure~\ref{fig:matching-matrices} shows the complete $16\times16$ channel--temp
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/kernels_two_concepts_TinyCNN.png}
-\caption{Original templates and saved first-layer kernels for \texttt{two\_concepts}/TinyCNN, block 2000. Rows are independently reordered by maximum-weight one-to-one matching so that the paired template and learned kernel can be compared directly. The dense kernel cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}
+\includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}
+\caption{Original templates and saved first-layer kernels for \texttt{two\_concepts}/TinyCNN, block 2000. Rows are independently reordered by maximum-weight one-to-one matching so that the paired template and learned kernel can be compared directly. The dense kernel cells are rasterized inside the PDF while labels remain vector. The dense kernel cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}
 \label{fig:kernel-gallery}
 \end{figure}
 
