@@ -1,8 +1,8 @@
-name: prospective-studies-static
+name: reproducibility-static-checks
 
 on:
   push:
-    branches: [paper_suggestions]
+    branches: [main]
     paths:
       - 'run_paper_experiments.zsh'
       - 'run_paper_experiments.ps1'
@@ -52,7 +52,7 @@ jobs:
             }
           }
           if (-not (Test-Path 'run_paper_experiments.cmd')) { throw 'Missing Windows CMD wrapper.' }
-      - name: Compile prospective and robustness Python
+      - name: Compile experiment Python
         run: |
           python -m py_compile studies/cnn_budget_confirmation/analyze.py
           python -m py_compile studies/cnn_exhaustive_robustness/train_grid.py
