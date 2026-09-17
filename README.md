@@ -108,4 +108,4 @@ The empirical claims are intentionally restricted to the tested synthetic render
 
 ## Archival note
 
-This repository is being prepared as the archival research artifact associated with the manuscript. A Zenodo DOI and final citation metadata should be added only after the archival release is minted. Third-party TMLR style files retain their original license in `papers/tmlr/tmlr-style-file-main/`.
+This repository is being prepared as the archival research artifact associated with the manuscript. A Zenodo DOI and final citation metadata should be added only after the archival release is minted. Third-party TMLR style files retain their original license in `papers/tmlr/`.
