@@ -50,16 +50,16 @@ jobs:
           path = Path('paper/main.tex')
           text = path.read_text(encoding='utf-8')
           replacements = {
-              r'\\pandocbounded{\\includegraphics[width=\\linewidth]{../analysis/retention_release_001/learning.png}}':
-                  r'\\includegraphics[width=\\linewidth]{figures/fig01_learning.pdf}',
-              r'\\includegraphics[width=\\linewidth]{../analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png}':
-                  r'\\includegraphics[width=\\linewidth]{figures/fig02_patch_size.pdf}',
-              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/matching_trajectories.png}':
-                  r'\\includegraphics[width=\\linewidth]{figures/fig03_matching_trajectories.pdf}',
-              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/matrices_two_concepts_TinyCNN.png}':
-                  r'\\includegraphics[width=\\linewidth]{figures/fig04_similarity_matrices.pdf}',
-              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/kernels_two_concepts_TinyCNN.png}':
-                  r'\\includegraphics[width=\\linewidth]{figures/fig05_kernel_gallery.pdf}',
+              r'\pandocbounded{\includegraphics[width=\linewidth]{../analysis/retention_release_001/learning.png}}':
+                  r'\includegraphics[width=\linewidth]{figures/fig01_learning.pdf}',
+              r'\includegraphics[width=\linewidth]{../analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png}':
+                  r'\includegraphics[width=\linewidth]{figures/fig02_patch_size.pdf}',
+              r'\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/matching_trajectories.png}':
+                  r'\includegraphics[width=\linewidth]{figures/fig03_matching_trajectories.pdf}',
+              r'\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/matrices_two_concepts_TinyCNN.png}':
+                  r'\includegraphics[width=\linewidth]{figures/fig04_similarity_matrices.pdf}',
+              r'\includegraphics[width=\linewidth]{../analysis/kernel_similarity/results/kernels_two_concepts_TinyCNN.png}':
+                  r'\includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}',
           }
           for old, new in replacements.items():
               text = text.replace(old, new)
