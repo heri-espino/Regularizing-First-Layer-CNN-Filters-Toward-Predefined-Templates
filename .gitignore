@@ -5,7 +5,11 @@ __pycache__/
 .env
 .env.*
 !.env.example
-studies/cnn_release_experiment/outputs/
 *.tmp
 
+# Experiment scratch/output directories
 /outputs/
+studies/cnn_release_experiment/outputs/
+
+# Paper build intermediates
+papers/build/
