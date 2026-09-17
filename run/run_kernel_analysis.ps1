@@ -4,7 +4,8 @@ param(
     [string]$Python = "python"
 )
 $ErrorActionPreference = "Stop"
-Set-Location $PSScriptRoot
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+Set-Location $RepoRoot
 & $Python -c "import torch, numpy, scipy, pandas, matplotlib, PIL"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Activate your experiment environment or run:"

@@ -1,4 +1,4 @@
-"""Build complete paper tables and plots from existing analyses; no new model evaluation."""
+"""Build historical paper tables and plots from existing analyses; no new model evaluation."""
 from pathlib import Path
 import pandas as pd
 import matplotlib
@@ -24,8 +24,7 @@ axes[0,0].set_ylabel('Release − constant: U');axes[1,0].set_ylabel('Release �
 fig.legend(*axes[0,0].get_legend_handles_labels(),loc='lower center',ncol=3)
 fig.suptitle('All settings and channel sizes; exploratory marginal 95% paired t intervals (10 blocks)')
 fig.tight_layout(rect=(0,.06,1,.95));fig.savefig(OUT/'all_robustness.png',dpi=180);plt.close(fig)
-# Complete descriptive supplement avoids selective presentation of tasks, methods or sizes.
-text=['# Supplementary results for the main paper','', 'These tables are part of [the main manuscript](main.md). They reproduce existing analyses without new statistical tests. Values are not selected by significance.','', '## S1. All prospective primary contrasts','']
+text=['# Historical supplementary tables','', 'These tables reproduce existing analyses without new statistical tests. Values are not selected by significance.','', '## S1. All prospective primary contrasts','']
 p=pd.read_csv(ROOT/'studies/cnn_causal_milestone/analysis/primary_contrasts.csv');assert len(p)==4
 text+=['| Setting | ΔU [marginal 95% CI] | Raw p | Holm p | Δalignment | Δaccuracy (pp) |','|---|---:|---:|---:|---:|---:|']
 for _,v in p.iterrows():text.append(f"| {v.task} / {v.architecture} | {v['mean']:+.4f} [{v.lo:+.4f}, {v.hi:+.4f}] | {v.p:.4f} | {v.p_holm:.4f} | {v.alignment_delta:+.3f} | {100*v.accuracy_delta:+.2f} |")
@@ -36,11 +35,11 @@ for (task,arch,condition),s in e.groupby(['task','architecture','condition']):
  for metric,scale in [('id_acc',100),('alignment',1),('semantic_auc',1),('localization_iou',1),('causal_usefulness',1),('cf_accuracy',100)]:
   vals.append(f'{s[metric].mean()*scale:.3f} ± {s[metric].std()*scale:.3f}')
  text.append('| '+task+' / '+arch+' | '+condition+' | '+' | '.join(vals)+' |')
-text+=['','## S3. Complete measurement-robustness contrasts','', 'Release minus constant retention. All 96 contrasts: 4 settings × 3 rankings × 4 sizes × 2 outcomes. Intervals are marginal 95% paired t intervals; no multiplicity adjustment. Neither exclusion of zero nor agreement of several dependent intervals is a confirmatory discovery. CF accuracy differences are shown as proportions.','']
+text+=['','## S3. Complete measurement-sensitivity contrasts','', 'Release minus constant retention. All 96 contrasts: 4 settings × 3 rankings × 4 sizes × 2 outcomes. Intervals are marginal 95% paired t intervals; no multiplicity adjustment.','']
 for metric in ['causal_usefulness','cf_accuracy']:
  text+=['### '+metric,'','| Setting | Ranking | k | Mean difference | 95% interval |','|---|---|---:|---:|---:|']
  for _,v in r[r.metric==metric].iterrows():text.append(f"| {v.task} / {v.architecture} | {v.method} | {int(v.k)} | {v['mean']:+.4f} | [{v.ci_low:+.4f}, {v.ci_high:+.4f}] |")
  text+=['']
-text+=['## S4. Data and analysis map','', '- Prospective raw per-run results: `studies/cnn_causal_milestone/analysis/per_run.csv`.','- Retention-release: `analysis/retention_release_001/endpoints.csv` and `paired_contrasts.csv` (all 160 exploratory endpoint contrasts).','- Robustness raw method/size data: `results/patch_robustness_gpu_001/analysis/metrics.csv`.','- Rebuild these tables and the full sensitivity figure with `python analysis/main_paper/build_assets.py`.','- This script checks completeness and presentation, not saved model forwards. The final independent reproducibility review is deferred.']
-(ROOT/'papers/supplementary_results.md').write_text('\n'.join(text)+'\n')
-print('Saved complete tables and all-setting sensitivity figure.')
+text+=['## Data and analysis map','', '- Prospective raw per-run results: `studies/cnn_causal_milestone/analysis/per_run.csv`.','- Retention-release: `analysis/retention_release_001/endpoints.csv` and `paired_contrasts.csv`.','- Robustness raw method/size data: `results/patch_robustness_gpu_001/analysis/metrics.csv`.','- Rebuild with `python analysis/main_paper/build_assets.py`.']
+(OUT/'supplementary_results.md').write_text('\n'.join(text)+'\n')
+print('Saved historical tables and all-setting sensitivity figure.')

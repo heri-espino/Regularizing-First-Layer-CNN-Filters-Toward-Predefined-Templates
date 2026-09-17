@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'build.py'
-      - 'papers/**'
+      - 'paper/**'
       - 'analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png'
       - 'analysis/retention_release_001/**'
       - 'analysis/kernel_similarity/results/**'
@@ -29,13 +28,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-bibtex-extra
       - name: Compile manuscript
-        run: python build.py --clean
+        run: python paper/build.py --clean
       - name: Upload compiled PDF and log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: espino_2026_template-priors
           path: |
-            espino_2026_template-priors.pdf
-            papers/build/main.log
+            paper/espino_2026_template-priors.pdf
+            paper/build/main.log
           if-no-files-found: warn

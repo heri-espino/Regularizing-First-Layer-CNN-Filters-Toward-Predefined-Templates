@@ -1,0 +1,18 @@
+{
+  "title": "Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels",
+  "upload_type": "software",
+  "description": "Research artifact containing the manuscript source, frozen experimental protocols, analysis outputs, and reproduction code for a study of first-layer template priors and activation-patching sensitivity in small convolutional neural networks.",
+  "creators": [
+    {
+      "name": "Espino Montelongo, Heriberto"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "convolutional neural networks",
+    "mechanistic interpretability",
+    "activation patching",
+    "template priors",
+    "interpretable filters"
+  ]
+}

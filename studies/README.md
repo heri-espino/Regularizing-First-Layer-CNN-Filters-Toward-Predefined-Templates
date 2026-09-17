@@ -15,15 +15,11 @@ The manuscript combines several experiments with different inferential roles. Th
 
 ## Recommended reading order
 
-For the shortest path through the evidence:
-
-1. Read the manuscript in `../papers/main.tex` or build it with `python ../build.py` from the repository root.
+1. Read `../paper/main.tex` or build the manuscript with `python paper/build.py` from the repository root.
 2. Read `cnn_budget_confirmation/PROTOCOL.md` and `../analysis/budget_confirmation_001/REPORT.md` for the prospective primary result.
 3. Read `cnn_exhaustive_robustness/PROTOCOL.md` and `../analysis/exhaustive_robustness_001/REPORT.md` for the larger secondary sensitivity study.
 4. Read `cnn_checkpoint_audit/AUDIT_PROTOCOL.md` and `../analysis/checkpoint_audit/AUDIT_REPORT.md` for the independent implementation check.
-5. Return to Stages A--C only when tracing how the final confirmatory estimand was developed.
-
-## Inferential status
+5. Return to Stages A--C when tracing how the final confirmatory estimand was developed.
 
 Stages A--C motivated the final analysis but are not treated as independent confirmations of Stage D. Stage D contains the single prospective primary test. Stage E was separately frozen and is reported as a secondary sensitivity study; it does not redefine the Stage-D primary hypothesis.
 

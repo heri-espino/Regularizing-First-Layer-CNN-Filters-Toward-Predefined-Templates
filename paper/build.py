@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the TMLR manuscript from the repository root.
+"""Build the TMLR manuscript.
 
 Default output:
-    espino_2026_template-priors.pdf
+    paper/espino_2026_template-priors.pdf
 
 Requirements:
     - Python 3.10+
@@ -18,12 +18,12 @@ import shutil
 import subprocess
 import sys
 
-ROOT = Path(__file__).resolve().parent
-PAPER_DIR = ROOT / "papers"
+PAPER_DIR = Path(__file__).resolve().parent
+ROOT = PAPER_DIR.parent
 BUILD_DIR = PAPER_DIR / "build"
 STYLE_DIR = PAPER_DIR / "tmlr"
 SOURCE = PAPER_DIR / "main.tex"
-DEFAULT_OUTPUT = ROOT / "espino_2026_template-priors.pdf"
+DEFAULT_OUTPUT = PAPER_DIR / "espino_2026_template-priors.pdf"
 
 
 def require_tool(name: str) -> str:
@@ -59,9 +59,9 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     output.parent.mkdir(parents=True, exist_ok=True)
 
     env = os.environ.copy()
-    path_sep = os.pathsep
-    env["TEXINPUTS"] = f".{path_sep}{STYLE_DIR}{path_sep}{env.get('TEXINPUTS', '')}"
-    env["BSTINPUTS"] = f"{STYLE_DIR}{path_sep}{env.get('BSTINPUTS', '')}"
+    sep = os.pathsep
+    env["TEXINPUTS"] = f".{sep}{STYLE_DIR}{sep}{env.get('TEXINPUTS', '')}"
+    env["BSTINPUTS"] = f"{STYLE_DIR}{sep}{env.get('BSTINPUTS', '')}"
 
     latex_command = [
         pdflatex,
@@ -73,12 +73,11 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
 
     run(latex_command, cwd=PAPER_DIR, env=env)
 
-    # BibTeX is run inside papers/build. The bibliography path written by
-    # pdflatex is relative to papers/, so adjust it by one directory level.
+    # BibTeX runs from paper/build. main.aux records the bibliography path
+    # relative to paper/, so it must be shifted one level for the build dir.
     main_aux = BUILD_DIR / "main.aux"
     bibliography_aux = BUILD_DIR / "bibliography.aux"
-    aux_text = main_aux.read_text(encoding="utf-8")
-    aux_text = aux_text.replace(
+    aux_text = main_aux.read_text(encoding="utf-8").replace(
         "../literature/references", "../../literature/references"
     )
     bibliography_aux.write_text(aux_text, encoding="utf-8")
@@ -91,11 +90,14 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
 
     built_pdf = BUILD_DIR / "main.pdf"
     if not built_pdf.exists():
-        raise SystemExit("Build finished without producing papers/build/main.pdf")
+        raise SystemExit("Build finished without producing paper/build/main.pdf")
 
     shutil.copy2(built_pdf, output)
-    relative_output = output.relative_to(ROOT) if output.is_relative_to(ROOT) else output
-    print(f"\nBuilt manuscript: {relative_output}")
+    try:
+        shown = output.relative_to(ROOT)
+    except ValueError:
+        shown = output
+    print(f"\nBuilt manuscript: {shown}")
     return output
 
 
@@ -105,7 +107,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=DEFAULT_OUTPUT,
-        help=f"Output PDF path (default: {DEFAULT_OUTPUT.name})",
+        help=f"Output PDF path (default: paper/{DEFAULT_OUTPUT.name})",
     )
     parser.add_argument(
         "--clean",

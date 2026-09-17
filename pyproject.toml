@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prior-templates-for-cnns"
+version = "1.0.0"
+description = "Research artifact for template priors and activation-patching sensitivity in small CNNs."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = "MIT"
+authors = [
+  { name = "Heriberto Espino Montelongo" },
+]
+keywords = [
+  "convolutional neural networks",
+  "mechanistic interpretability",
+  "activation patching",
+  "template priors",
+  "interpretable filters",
+]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "scipy>=1.10",
+  "matplotlib>=3.7",
+  "pillow>=9.5",
+  "scikit-learn>=1.3",
+]
+
+[project.optional-dependencies]
+experiments = [
+  "torch>=2.0",
+]
+dev = [
+  "pytest>=7",
+  "ruff>=0.6",
+]
+
+[project.urls]
+Repository = "https://github.com/heri-espino/prior-templates-for-cnns"
+
+[tool.setuptools]
+py-modules = []
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

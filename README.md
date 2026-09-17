@@ -1,64 +1,74 @@
 # Template Priors in Small CNNs
 
-This repository contains the manuscript, frozen experimental protocols, analysis outputs, and reproducibility code for:
+Research artifact for:
 
 > **Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels**
 
-The paper studies first-layer template priors in small convolutional networks and separates **kernel-template similarity** from **activation-patching behavior**. Persistent template retention produces high kernel-template similarity, while the measured release-versus-retention effect under activation patching changes with the number of patched channels and with architecture.
+This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior**: persistent template retention strongly preserves template-like kernels, while the measured release-versus-retention effect changes with the number of patched channels and with architecture.
 
 ## Start here
 
-- **Paper source:** [`papers/main.tex`](papers/main.tex)
-- **Build the paper:** `python build.py`
+- **Paper:** [`paper/main.tex`](paper/main.tex)
+- **Build:** `python paper/build.py`
 - **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
-- **Study map and frozen protocols:** [`studies/README.md`](studies/README.md)
+- **Study map:** [`studies/README.md`](studies/README.md)
+- **Run helpers:** [`run/README.md`](run/README.md)
 - **Analysis map:** [`analysis/README.md`](analysis/README.md)
 
 ## Build the manuscript
 
-Python itself has no package dependencies for the paper build. A TeX installation providing `pdflatex` and `bibtex` must be available on `PATH`.
-
-From the repository root:
+A TeX installation providing `pdflatex` and `bibtex` must be available on `PATH`.
 
 ```bash
-python build.py
+python paper/build.py --clean
 ```
 
-The final PDF is written as:
+This produces:
 
 ```text
-espino_2026_template-priors.pdf
+paper/espino_2026_template-priors.pdf
 ```
 
-For a clean rebuild:
+The build script itself uses only the Python standard library. LaTeX intermediates and the generated PDF are not versioned.
+
+## Python environment
+
+`pyproject.toml` provides a convenient common analysis environment:
 
 ```bash
-python build.py --clean
+python -m pip install -e .
 ```
 
-Intermediate LaTeX files are kept under `papers/build/` and are ignored by Git.
+For scripts that require PyTorch:
+
+```bash
+python -m pip install -e ".[experiments]"
+```
+
+Individual study directories still contain their original requirement files and environment notes; those remain authoritative when reproducing a frozen experiment.
 
 ## Repository layout
 
 ```text
 .
-├── build.py                         # Cross-platform paper builder
-├── papers/                          # TMLR manuscript source and appendix tables
-├── studies/                         # Frozen protocols and experiment code
-├── analysis/                        # Paper-facing analyses, tables, figures, reports
-├── results/                         # Imported experiment outputs used by later analyses
-├── literature/                      # Bibliography and literature notes
-├── scripts/                         # Shared execution helpers
-└── run_paper_experiments.*          # Stage-D / Stage-E reproduction launchers
+├── paper/                 # Manuscript, TMLR style files, paper builder
+├── run/                   # Convenience launchers
+├── studies/               # Frozen protocols and experiment implementations
+├── analysis/              # Paper-facing analyses, figures, tables, reports
+├── results/               # Imported experiment outputs used by analyses
+├── literature/            # Bibliography and literature notes
+├── scripts/               # Shared environment/execution helpers
+├── pyproject.toml          # Common Python metadata and dependencies
+├── CITATION.cff            # Machine-readable citation metadata
+├── .zenodo.json            # Zenodo release metadata
+└── LICENSE                 # Repository license
 ```
 
-The repository preserves the experimental record rather than flattening all stages into a single script. Each confirmatory or secondary study keeps its own protocol, implementation, and analysis files. The top-level documentation is intended to make that record navigable without rewriting it.
+The repository intentionally preserves the experimental record instead of flattening all stages into a single pipeline. Frozen protocols and historical study directories remain separate so the inferential status and provenance of each result are traceable.
 
 ## Experimental record
-
-The manuscript is built around five evidential stages.
 
 | Stage | Role | Main location |
 |---|---|---|
@@ -67,45 +77,44 @@ The manuscript is built around five evidential stages.
 | C | Post hoc patch-size and baseline decomposition | `studies/cnn_patch_robustness/`, `studies/cnn_patch_energy_control/` |
 | D | Frozen prospective confirmation | `studies/cnn_budget_confirmation/` |
 | E | Predeclared 1,200-model sensitivity study | `studies/cnn_exhaustive_robustness/` |
+| Audit | Independent checkpoint reimplementation | `studies/cnn_checkpoint_audit/` |
 
-The independent reimplementation audit is in `studies/cnn_checkpoint_audit/`.
-
-The single Stage-D primary test used 20 previously unused `two_concepts` TinyCNN blocks. Its predeclared contrast was
+The Stage-D primary analysis used 20 previously unused `two_concepts` TinyCNN blocks. The predeclared contrast was
 
 \[
 B=0.33098,\qquad 95\%\ \mathrm{CI}=[0.27368,0.38827],
 \]
 
-with two-sided \(p=2.28\times10^{-10}\). Stage E then tested the same patch-size contrast across two tasks, two architectures, six prior schedules, and 50 new blocks. TinyCNN gives positive values of the contrast in both tasks, while TwoLayerCNN shows a different pattern. The paper therefore treats architecture and the number of patched channels as part of the reported result.
+with two-sided \(p=2.28\times10^{-10}\). Stage E evaluated the same patch-size contrast across two tasks, two architectures, six prior schedules, and 50 new blocks. TinyCNN gives positive values of the contrast in both tasks, while TwoLayerCNN shows a different pattern.
 
 ## Reproducing the prospective studies
 
-The Stage-D and Stage-E launchers are retained because their protocols were frozen before the corresponding outcomes were generated.
+The convenience wrappers are now grouped under `run/`.
 
 Windows:
 
 ```powershell
-.\run_paper_experiments.cmd
+.\run\run_paper_experiments.cmd
 ```
 
 PowerShell directly:
 
 ```powershell
-.\run_paper_experiments.ps1
+.\run\run_paper_experiments.ps1
 ```
 
 Zsh:
 
 ```bash
-zsh run_paper_experiments.zsh
+zsh run/run_paper_experiments.zsh
 ```
 
-These experiments are computationally expensive. For exact design details, source hashes, block ranges, and output structure, read the protocol in the relevant study directory before running anything.
+These experiments are computationally expensive. Read the corresponding `PROTOCOL.md` before rerunning them.
 
 ## Scope
 
-The empirical claims are intentionally restricted to the tested synthetic renderer, first-layer interventions, and small CNN family. Kernel-template similarity is a weight-space measurement; selected-channel fidelity is defined for the specified activation-patching procedure. The experiments do not establish a unique causal mechanism, human interpretability, or natural-image generalization.
+The empirical claims are restricted to the tested synthetic renderer, first-layer interventions, and small CNN family. Kernel-template similarity is a weight-space measurement; selected-channel fidelity is defined for the specified activation-patching procedure. The experiments do not establish a unique causal mechanism, human interpretability, or natural-image generalization.
 
-## Archival note
+## Citation and archival release
 
-This repository is being prepared as the archival research artifact associated with the manuscript. A Zenodo DOI and final citation metadata should be added only after the archival release is minted. Third-party TMLR style files retain their original license in `papers/tmlr/`.
+Citation metadata is provided in [`CITATION.cff`](CITATION.cff), with Zenodo metadata in [`.zenodo.json`](.zenodo.json). The repository is prepared for a versioned archival release; after Zenodo mints the DOI, add that DOI to both metadata files and the README before freezing the final citation record.

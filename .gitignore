@@ -5,11 +5,16 @@ __pycache__/
 .env
 .env.*
 !.env.example
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
 *.tmp
 
 # Experiment scratch/output directories
 /outputs/
 studies/cnn_release_experiment/outputs/
 
-# Paper build intermediates
-papers/build/
+# Paper build products are also ignored by paper/.gitignore
+paper/build/
+paper/espino_2026_template-priors.pdf

@@ -4,9 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'run_paper_experiments.zsh'
-      - 'run_paper_experiments.ps1'
-      - 'run_paper_experiments.cmd'
+      - 'run/**'
       - 'scripts/use_conda_env.zsh'
       - 'scripts/use_conda_env.ps1'
       - 'studies/cnn_budget_confirmation/**'
@@ -27,9 +25,13 @@ jobs:
           python-version: '3.11'
       - name: Install zsh
         run: sudo apt-get update -qq && sudo apt-get install -y zsh
-      - name: Validate zsh syntax
+      - name: Validate shell syntax
         run: |
-          zsh -n run_paper_experiments.zsh
+          bash -n run/run.sh
+          bash -n run/run_gpu.sh
+          bash -n run/review_robustness.sh
+          bash -n run/run_kernel_analysis.sh
+          zsh -n run/run_paper_experiments.zsh
           zsh -n scripts/use_conda_env.zsh
           zsh -n studies/cnn_budget_confirmation/run_confirmation.zsh
           zsh -n studies/cnn_exhaustive_robustness/run_exhaustive.zsh
@@ -37,7 +39,9 @@ jobs:
         shell: pwsh
         run: |
           $files = @(
-            'run_paper_experiments.ps1',
+            'run/run.ps1',
+            'run/run_kernel_analysis.ps1',
+            'run/run_paper_experiments.ps1',
             'scripts/use_conda_env.ps1',
             'studies/cnn_budget_confirmation/run_confirmation.ps1',
             'studies/cnn_exhaustive_robustness/run_exhaustive.ps1'
@@ -51,7 +55,7 @@ jobs:
               exit 1
             }
           }
-          if (-not (Test-Path 'run_paper_experiments.cmd')) { throw 'Missing Windows CMD wrapper.' }
+          if (-not (Test-Path 'run/run_paper_experiments.cmd')) { throw 'Missing Windows CMD wrapper.' }
       - name: Compile experiment Python
         run: |
           python -m py_compile studies/cnn_budget_confirmation/analyze.py

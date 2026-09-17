@@ -10,7 +10,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$RepoRoot = $PSScriptRoot
+$RepoRoot = Split-Path -Parent $PSScriptRoot
 $LocalResultsRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'prior-templates-cnns\results'
 $ConfirmationRoot = Join-Path $LocalResultsRoot 'budget_confirmation_001'
 $ExhaustiveRoot = Join-Path $LocalResultsRoot 'exhaustive_robustness_001'
@@ -23,7 +23,7 @@ try {
         -BatchSize $ConfirmationBatchSize -Threads $ConfirmationThreads
 
     Write-Host ''
-    Write-Host '=== Stage E: separate exhaustive robustness map (blocks 5000-5049) ==='
+    Write-Host '=== Stage E: secondary sensitivity study (blocks 5000-5049) ==='
     & (Join-Path $RepoRoot 'studies\cnn_exhaustive_robustness\run_exhaustive.ps1') `
         -OutputRoot $ExhaustiveRoot -Device $Device -CondaEnv $CondaEnv `
         -Workers $Workers -ThreadsPerWorker $ThreadsPerWorker -BatchSize $ExhaustiveBatchSize
@@ -31,7 +31,7 @@ try {
     Write-Host ''
     Write-Host 'All planned paper experiments finished.'
     Write-Host "Primary confirmation report: $(Join-Path $ConfirmationRoot 'analysis\budget_confirmation\REPORT.md')"
-    Write-Host "Exhaustive robustness report: $(Join-Path $ExhaustiveRoot 'analysis\REPORT.md')"
+    Write-Host "Sensitivity-study report: $(Join-Path $ExhaustiveRoot 'analysis\REPORT.md')"
 }
 finally {
     Pop-Location

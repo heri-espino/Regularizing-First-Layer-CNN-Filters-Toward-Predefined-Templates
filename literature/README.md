@@ -1,20 +1,15 @@
 # Literature and BibTeX
 
-- [Corpus index](INDEX.md): 39 supplied PDF/Docling pairs.
-- [Reusable bibliography](references.bib): 43 works, including the three technically reviewed additions.
-- [Review and expansion recommendation](BIBLIOGRAPHY_REVIEW.md): metadata corrections, version choices and three targeted additions.
-- [Candidate bibliography](candidates.bib): redirects to references.bib; the three candidates are now integrated.
-- [Main-paper citation keys](../papers/citation_keys.md): conversion map for the current numbered Markdown references.
+The reusable bibliography for the manuscript is [`references.bib`](references.bib). The directory also retains the literature corpus, extracted text, and technical reading notes used during development of the study.
 
-From a LaTeX document in `papers/`, use the venue's bibliography style and:
+From the manuscript in `paper/`, the bibliography is loaded as:
 
 ```latex
-\cite{molaei_2020_gabor-filter-structure,linse_2024_predefined-filters}
 \bibliography{../literature/references}
 ```
 
-For the current TMLR target, follow the [official template](https://github.com/JmlrOrg/tmlr-style-file) and use `\bibliographystyle{tmlr}` with its citation commands. Do not replace the template bibliography system with biblatex. Only cited entries appear unless `\nocite{*}` is used. Load only `references.bib`; the candidates have been integrated.
+The current TMLR manuscript uses the official `tmlr` bibliography style vendored under `paper/tmlr/`. Only cited entries appear unless `\nocite{*}` is used.
 
-Keys preserve existing corpus names so links remain stable; the `year` field describes the cited version. Some files are older preprints despite a later year in their filename. `file` paths are relative to the repository root and are catalog metadata, not required by LaTeX. The `.bib` protects title capitalization and escapes author accents for classic BibTeX. Original PDFs and Docling outputs remain unchanged.
+Keys preserve the corpus naming convention so references remain stable across analyses. Some local files are preprints even when a later publication year appears in the filename; `references.bib` records the version selected for citation.
 
-[Technical reading and experimental implications](TECHNICAL_COMPARISON.md).
+For the literature-to-experiment rationale, see [`TECHNICAL_COMPARISON.md`](TECHNICAL_COMPARISON.md).
