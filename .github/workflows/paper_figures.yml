@@ -1,0 +1,84 @@
+name: paper-figures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'paper/build_figures.py'
+      - 'paper/plot_style.py'
+      - 'pyproject.toml'
+      - '.github/workflows/paper_figures.yml'
+      - 'analysis/exhaustive_robustness_001/full_budget_curves.csv'
+      - 'analysis/kernel_similarity/results/per_checkpoint.csv'
+      - 'analysis/kernel_similarity/results/similarity_matrices.npz'
+      - 'results/retention_release_001/analysis/learning_curves.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install publication-figure dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-lmodern
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[experiments]'
+      - name: Regenerate publication figures
+        run: python paper/build_figures.py
+      - name: Point manuscript at publication figures
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('paper/main.tex')
+          text = path.read_text(encoding='utf-8')
+          replacements = {
+              r'\\pandocbounded{\\includegraphics[width=\\linewidth]{../analysis/retention_release_001/learning.png}}':
+                  r'\\includegraphics[width=\\linewidth]{figures/fig01_learning.pdf}',
+              r'\\includegraphics[width=\\linewidth]{../analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png}':
+                  r'\\includegraphics[width=\\linewidth]{figures/fig02_patch_size.pdf}',
+              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/matching_trajectories.png}':
+                  r'\\includegraphics[width=\\linewidth]{figures/fig03_matching_trajectories.pdf}',
+              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/matrices_two_concepts_TinyCNN.png}':
+                  r'\\includegraphics[width=\\linewidth]{figures/fig04_similarity_matrices.pdf}',
+              r'\\includegraphics[width=\\linewidth]{../analysis/kernel_similarity/results/kernels_two_concepts_TinyCNN.png}':
+                  r'\\includegraphics[width=\\linewidth]{figures/fig05_kernel_gallery.pdf}',
+          }
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+          text = text.replace(
+              'The illustration concerns kernel-template similarity, not human interpretability.}',
+              'The heatmap cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}',
+          )
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Check generated files
+        run: |
+          test -s paper/figures/fig01_learning.pdf
+          test -s paper/figures/fig02_patch_size.pdf
+          test -s paper/figures/fig03_matching_trajectories.pdf
+          test -s paper/figures/fig04_similarity_matrices.pdf
+          test -s paper/figures/fig05_kernel_gallery.pdf
+          git diff --check
+      - name: Commit refreshed figures
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add paper/main.tex paper/figures/*.pdf
+          if git diff --cached --quiet; then
+            echo 'Publication figures are already up to date.'
+          else
+            git commit -m 'style: refresh publication figures'
+            git push origin HEAD:main
+          fi
