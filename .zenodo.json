@@ -4,7 +4,8 @@
   "description": "Research artifact containing the manuscript source, frozen experimental protocols, analysis outputs, and reproduction code for a study of first-layer template priors and activation-patching sensitivity in small convolutional neural networks.",
   "creators": [
     {
-      "name": "Espino Montelongo, Heriberto"
+      "name": "Espino-Montelongo, Heriberto",
+      "orcid": "0009-0009-1230-2931"
     }
   ],
   "license": "MIT",
