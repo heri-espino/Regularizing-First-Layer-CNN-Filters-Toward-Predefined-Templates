@@ -8,7 +8,7 @@ The appendix material is split into three files to keep the main source readable
 - `supplementary_results.tex` — historical Stages A--C
 - `kernel_matching_results.tex` — complete endpoint kernel-matching table
 
-The bibliography is `../literature/references.bib`. TMLR style files are vendored under `tmlr/tmlr-style-file-main/` and retain their upstream license.
+The bibliography is `../literature/references.bib`. The minimal TMLR style files needed for compilation are vendored in `tmlr/` and retain their upstream license.
 
 ## Build
 
@@ -32,4 +32,4 @@ python build.py --clean
 
 LaTeX intermediates are written to `papers/build/` and are ignored by Git.
 
-The Markdown drafts and editorial planning files used during development are intentionally not part of the archival manuscript directory; the LaTeX source and the frozen analysis outputs are the publication record.
+The Markdown drafts and editorial planning files used during development are intentionally excluded from the archival manuscript directory; the LaTeX source and frozen analysis outputs are the publication record.
