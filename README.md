@@ -10,6 +10,7 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 
 - **Paper:** [`paper/main.tex`](paper/main.tex)
 - **Build:** `python paper/build.py`
+- **Publication figures:** `python paper/build_figures.py`
 - **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
@@ -31,7 +32,18 @@ This produces:
 paper/espino_2026_template-priors.pdf
 ```
 
-The build script itself uses only the Python standard library. LaTeX intermediates and the generated PDF are not versioned.
+The manuscript builder itself uses only the Python standard library. LaTeX intermediates and the generated PDF are not versioned.
+
+### Regenerate the publication figures
+
+The figures used by the manuscript are generated separately from saved experimental artifacts:
+
+```bash
+python -m pip install -e ".[experiments]"
+python paper/build_figures.py
+```
+
+The publication plotting system uses a consistent white-grid theme, a color-blind-friendly palette, and a Latin/Computer Modern serif stack. Figures are saved as PDF; axes and typography remain vector while dense heatmaps and kernel images are selectively rasterized inside the PDF. This step changes presentation only and does not retrain models or redefine analyses.
 
 ## Python environment
 
@@ -53,7 +65,7 @@ Individual study directories still contain their original requirement files and 
 
 ```text
 .
-├── paper/                 # Manuscript, TMLR style files, paper builder
+├── paper/                 # Manuscript, publication figures, style, paper builders
 ├── run/                   # Convenience launchers
 ├── studies/               # Frozen protocols and experiment implementations
 ├── analysis/              # Paper-facing analyses, figures, tables, reports
