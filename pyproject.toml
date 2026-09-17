@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Research artifact for template priors and activation-patching sensitivity in small CNNs."
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
-license = "MIT"
+license = { text = "MIT" }
 authors = [
   { name = "Heriberto Espino Montelongo" },
 ]
