@@ -50,7 +50,7 @@ STAGE_E_PROFILES = (
 
 
 def pretty_task(task: str) -> str:
-    return task.replace("_", r"\_")
+    return task.replace("_", " ")
 
 
 def normalized(weights: np.ndarray) -> np.ndarray:
