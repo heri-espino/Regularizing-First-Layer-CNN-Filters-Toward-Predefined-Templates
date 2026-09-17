@@ -40,6 +40,15 @@ jobs:
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -e .
           fc-match 'Latin Modern Roman' | head -1
+      - name: Normalize publication labels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('paper/build_figures.py')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('return task.replace("_", r"\\_")', 'return task.replace("_", " ")')
+          path.write_text(text, encoding='utf-8')
+          PY
       - name: Regenerate publication figures
         run: python paper/build_figures.py
       - name: Point manuscript at publication figures
@@ -97,7 +106,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add paper/main.tex paper/figures/*.pdf
+          git add paper/build_figures.py paper/main.tex paper/figures/*.pdf
           if git diff --cached --quiet; then
             echo 'Publication figures are already up to date.'
           else
