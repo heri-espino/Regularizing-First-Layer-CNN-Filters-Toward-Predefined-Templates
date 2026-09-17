@@ -32,10 +32,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install publication-figure dependencies
+      - name: Install publication dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y fonts-lmodern
+          sudo apt-get install -y fonts-lmodern texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-bibtex-extra
           python -m pip install --upgrade pip
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -e .
@@ -63,10 +63,15 @@ jobs:
           }
           for old, new in replacements.items():
               text = text.replace(old, new)
-          text = text.replace(
-              'The illustration concerns kernel-template similarity, not human interpretability.}',
-              'The dense kernel cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}',
-          )
+
+          raster_note = 'The dense kernel cells are rasterized inside the PDF while labels remain vector. '
+          while raster_note + raster_note in text:
+              text = text.replace(raster_note + raster_note, raster_note)
+          if raster_note not in text:
+              text = text.replace(
+                  'The illustration concerns kernel-template similarity, not human interpretability.}',
+                  raster_note + 'The illustration concerns kernel-template similarity, not human interpretability.}',
+              )
           path.write_text(text, encoding='utf-8')
           PY
       - name: Check generated files
@@ -77,6 +82,17 @@ jobs:
           test -s paper/figures/fig04_similarity_matrices.pdf
           test -s paper/figures/fig05_kernel_gallery.pdf
           git diff --check
+      - name: Compile manuscript with refreshed figures
+        run: python paper/build.py --clean
+      - name: Upload visual-review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: espino_2026_template-priors-publication-figures
+          path: |
+            paper/espino_2026_template-priors.pdf
+            paper/figures/*.pdf
+            paper/build/main.log
+          if-no-files-found: error
       - name: Commit refreshed figures
         run: |
           git config user.name 'github-actions[bot]'
