@@ -86,6 +86,5 @@ jobs:
             echo 'Publication figures are already up to date.'
           else
             git commit -m 'style: refresh publication figures'
-            git pull --rebase origin main
             git push origin HEAD:main
           fi
