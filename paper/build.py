@@ -7,6 +7,7 @@ Default output:
 Requirements:
     - Python 3.10+
     - pdflatex and bibtex available on PATH
+    - publication figures under paper/figures/
 """
 
 from __future__ import annotations
@@ -24,6 +25,16 @@ BUILD_DIR = PAPER_DIR / "build"
 STYLE_DIR = PAPER_DIR / "tmlr"
 SOURCE = PAPER_DIR / "main.tex"
 DEFAULT_OUTPUT = PAPER_DIR / "espino_2026_template-priors.pdf"
+FIGURES = tuple(
+    PAPER_DIR / "figures" / name
+    for name in (
+        "fig01_learning.pdf",
+        "fig02_patch_size.pdf",
+        "fig03_matching_trajectories.pdf",
+        "fig04_similarity_matrices.pdf",
+        "fig05_kernel_gallery.pdf",
+    )
+)
 
 
 def require_tool(name: str) -> str:
@@ -34,6 +45,16 @@ def require_tool(name: str) -> str:
             "that provides pdflatex and bibtex, then try again."
         )
     return executable
+
+
+def require_figures() -> None:
+    missing = [p for p in FIGURES if not p.is_file() or p.stat().st_size == 0]
+    if missing:
+        names = ", ".join(p.name for p in missing)
+        raise SystemExit(
+            f"Missing publication figure assets: {names}. "
+            "Regenerate them with `python paper/build_figures.py`."
+        )
 
 
 def run(command: list[str], *, cwd: Path, env: dict[str, str]) -> None:
@@ -52,6 +73,7 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     if clean_first:
         clean(output)
 
+    require_figures()
     pdflatex = require_tool("pdflatex")
     bibtex = require_tool("bibtex")
 
