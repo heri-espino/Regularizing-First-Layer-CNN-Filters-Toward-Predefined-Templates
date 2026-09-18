@@ -144,7 +144,7 @@ Stage D compares constant template regularization (\texttt{template\_retention\_
 \[
 \Delta_b(k)=F_{b}^{\mathrm{annealed}}(k)-F_{b}^{\mathrm{constant}}(k).
 \]
-For the primary analysis, channels are ranked by the standardized mean activation difference on the validation set. This ranking was prespecified because it was the original Stage-B/C ranking and does not itself optimize the downstream patching metric. The prespecified contrast is
+For the primary analysis, channels are ranked by the validation-only magnitude $|d_{g,j}|$ defined above. This ranking was prespecified because it was the original Stage-B/C ranking and does not itself optimize the downstream patching metric. The prespecified contrast is
 \[
 B_b=\frac{\Delta_b(4)+\Delta_b(8)}{2}
 -\frac{\Delta_b(1)+\Delta_b(2)}{2}.
