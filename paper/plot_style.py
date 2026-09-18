@@ -28,13 +28,13 @@ LABELS = {
     "random": "Random",
     "random_unitnorm": "Unit-norm random",
     "template_init": "Template init.",
-    "template_retention_1": "Retention",
-    "template_release": "Release",
+    "template_retention_1": "Constant reg.",
+    "template_release": "Annealed reg.",
     "retention_0p1": r"Retention $\lambda=0.1$",
     "retention_1": r"Retention $\lambda=1$",
-    "release_early": "Early release",
-    "release_default": "Default release",
-    "release_late": "Late release",
+    "release_early": "Early anneal",
+    "release_default": "Default anneal",
+    "release_late": "Late anneal",
 }
 
 LINESTYLES = {
