@@ -1,0 +1,24 @@
+﻿{
+    "created_utc":  "2026-09-18T19:31:47.4873492Z",
+    "repo_head_at_launch":  "824183f296330dc4e05fa95e43db1bcbe0f60092",
+    "protocol_commit":  "70450548a5c9feb4a2334eaef7f56707bb2c858f",
+    "protocol_git_blob":  "670f8769348d5589b5fe0ae6d9582d6133bf6b86",
+    "device":  "cuda",
+    "batch_size":  256,
+    "conda_environment":  "prior-templates-cnns",
+    "stage_d_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\budget_confirmation_001",
+    "stage_e_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\exhaustive_robustness_001",
+    "source_git_blobs":  {
+                             "protocol":  "670f8769348d5589b5fe0ae6d9582d6133bf6b86",
+                             "evaluator":  "6ea0b0276a50ce088c2eaa5fd54cee0755cb6456",
+                             "analyzer":  "1b99ceefce77b063da7cdf495384b93e4d161bd4",
+                             "core":  "753cb5121971e2a57b3c4dce9ccd84d9be3a403f"
+                         },
+    "input_design_sha256":  {
+                                "stage_d_training":  "8efa7d7f2bb0b13487ee39bbecad348f4039d16ef52372eb3d571aa32379854a",
+                                "stage_d_rankings":  "a3b73145b47bdcea80c9464c1eeb79168db348000f47495f368cec7416d54d5a",
+                                "stage_e_training":  "43b7dee71c328983fa884e5131a09d7593337f365fd674e617a2377102c8b7c2",
+                                "stage_e_rankings":  "8c7eccf8e2543857d098dd1ce11cec2e256a2cf07569c580ff9003baf907a40a"
+                            },
+    "training_invoked":  false
+}

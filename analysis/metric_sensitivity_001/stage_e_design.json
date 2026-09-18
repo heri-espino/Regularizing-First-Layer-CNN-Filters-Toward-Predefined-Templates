@@ -1,0 +1,40 @@
+{
+  "stage": "e",
+  "input_training_design_sha256": "43b7dee71c328983fa884e5131a09d7593337f365fd674e617a2377102c8b7c2",
+  "protocol_git_blob": "670f8769348d5589b5fe0ae6d9582d6133bf6b86",
+  "evaluator_git_blob": "6ea0b0276a50ce088c2eaa5fd54cee0755cb6456",
+  "core_git_blob": "753cb5121971e2a57b3c4dce9ccd84d9be3a403f",
+  "device": "cuda",
+  "gpu": "NVIDIA RTX 4500 Ada Generation",
+  "batch_size": 256,
+  "methods": [
+    "contrast",
+    "auroc",
+    "validation_patch"
+  ],
+  "budgets": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "denominator_epsilon": 1e-10,
+  "legacy_probability_tolerance": 2e-05,
+  "patch_atol": 2e-05,
+  "patch_rtol": 0.0001,
+  "expected_models": 1200,
+  "reuses_stored_rankings": true,
+  "trains_models": false
+}

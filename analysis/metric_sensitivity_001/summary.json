@@ -1,0 +1,16 @@
+{
+  "status": "post_hoc_frozen_metric_sensitivity",
+  "training_invoked": false,
+  "protocol_commit": "70450548a5c9feb4a2334eaef7f56707bb2c858f",
+  "protocol_git_blob": "670f8769348d5589b5fe0ae6d9582d6133bf6b86",
+  "analysis_git_blob": "1b99ceefce77b063da7cdf495384b93e4d161bd4",
+  "stage_d_models": 80,
+  "stage_e_models": 1200,
+  "primary_metrics": [
+    "centered_logit_fidelity",
+    "prob_error_reduction"
+  ],
+  "maximum_legacy_probability_fidelity_abs_diff": 1.2429082762999144e-07,
+  "maximum_full_patch_logit_error": 0.0,
+  "maximum_noop_logit_error": 0.0
+}
