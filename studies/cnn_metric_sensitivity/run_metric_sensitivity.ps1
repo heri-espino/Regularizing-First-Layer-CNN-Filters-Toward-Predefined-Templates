@@ -43,39 +43,54 @@ try {
 
     New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
 
-    function Get-Sha256([string]$Path) {
-        return (Get-FileHash -Algorithm SHA256 -Path $Path).Hash.ToLowerInvariant()
+    function Get-GitBlobId([string]$RepoRelativePath) {
+        $value = (& git rev-parse "HEAD:$RepoRelativePath").Trim()
+        if ($LASTEXITCODE -ne 0 -or -not $value) {
+            throw "Could not resolve committed Git blob for: $RepoRelativePath"
+        }
+        return $value
+    }
+
+    function Get-PythonSha256([string]$Path) {
+        $code = 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest())'
+        $lines = @(Invoke-CnnPython '-c' $code $Path)
+        $value = ($lines | Select-Object -Last 1).ToString().Trim()
+        if (-not $value -or $value.Length -ne 64) {
+            throw "Could not compute SHA-256 with project Python for: $Path"
+        }
+        return $value
     }
 
     $protocolCommit = (& git log -n 1 --format=%H -- $Protocol).Trim()
+    $protocolBlob = Get-GitBlobId $Protocol
     $record = [ordered]@{
         created_utc = [DateTime]::UtcNow.ToString('o')
         repo_head_at_launch = (& git rev-parse HEAD).Trim()
         protocol_commit = $protocolCommit
-        protocol_sha256 = Get-Sha256 (Join-Path $RepoRoot $Protocol)
+        protocol_git_blob = $protocolBlob
         device = $Device
         batch_size = $BatchSize
         conda_environment = $CondaEnv
         stage_d_root = $StageDRoot
         stage_e_root = $StageERoot
-        source_sha256 = [ordered]@{
-            protocol = Get-Sha256 (Join-Path $RepoRoot $Protocol)
-            evaluator = Get-Sha256 (Join-Path $RepoRoot $Evaluator)
-            analyzer = Get-Sha256 (Join-Path $RepoRoot $Analyzer)
-            core = Get-Sha256 (Join-Path $RepoRoot 'studies\cnn_release_experiment\core.py')
+        source_git_blobs = [ordered]@{
+            protocol = $protocolBlob
+            evaluator = Get-GitBlobId $Evaluator
+            analyzer = Get-GitBlobId $Analyzer
+            core = Get-GitBlobId 'studies/cnn_release_experiment/core.py'
         }
         input_design_sha256 = [ordered]@{
-            stage_d_training = Get-Sha256 (Join-Path $StageDRoot 'training\design.json')
-            stage_d_rankings = Get-Sha256 (Join-Path $StageDRoot 'patch_eval\design.json')
-            stage_e_training = Get-Sha256 (Join-Path $StageERoot 'training\design.json')
-            stage_e_rankings = Get-Sha256 (Join-Path $StageERoot 'evaluation\design.json')
+            stage_d_training = Get-PythonSha256 (Join-Path $StageDRoot 'training\design.json')
+            stage_d_rankings = Get-PythonSha256 (Join-Path $StageDRoot 'patch_eval\design.json')
+            stage_e_training = Get-PythonSha256 (Join-Path $StageERoot 'training\design.json')
+            stage_e_rankings = Get-PythonSha256 (Join-Path $StageERoot 'evaluation\design.json')
         }
         training_invoked = $false
     }
 
     if (Test-Path $Manifest) {
         $old = Get-Content $Manifest -Raw | ConvertFrom-Json
-        if ($old.protocol_sha256 -ne $record.protocol_sha256 -or
+        if ($old.protocol_git_blob -ne $record.protocol_git_blob -or
             $old.device -ne $Device -or
             [int]$old.batch_size -ne $BatchSize -or
             $old.stage_d_root -ne $StageDRoot -or
@@ -83,7 +98,7 @@ try {
             throw 'Existing metric-sensitivity manifest is incompatible. Use a new OutputRoot.'
         }
         foreach ($name in @('protocol','evaluator','analyzer','core')) {
-            if ($old.source_sha256.$name -ne $record.source_sha256[$name]) { throw "Source changed since this run started: $name" }
+            if ($old.source_git_blobs.$name -ne $record.source_git_blobs[$name]) { throw "Committed source changed since this run started: $name" }
         }
         foreach ($name in @('stage_d_training','stage_d_rankings','stage_e_training','stage_e_rankings')) {
             if ($old.input_design_sha256.$name -ne $record.input_design_sha256[$name]) { throw "Frozen input design changed since this run started: $name" }
@@ -93,6 +108,7 @@ try {
     }
 
     Write-Host "Protocol commit: $protocolCommit"
+    Write-Host "Protocol Git blob: $protocolBlob"
     Write-Host "No training will be run."
     Write-Host ''
     Write-Host '[1/3] Re-evaluating Stage D checkpoints under frozen alternative metrics...'
