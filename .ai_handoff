@@ -75,3 +75,63 @@ Compute cost is not a practical constraint for the user; university machines inc
 The next proposed study is a new, prospectively frozen architecture-robustness experiment (Stage F). It should use fresh blocks/seeds and systematically vary downstream CNN architecture while preserving the same 16-channel first layer and template bank so that intervention budget `k=1,...,16` remains comparable. Candidate factors include depth, GAP versus GMP, downstream width, residual mixing, and downstream normalization.
 
 Freeze the protocol before running Stage F. Do not alter Stage-D/E or the completed metric-sensitivity protocol based on Stage-F outcomes.
+
+
+## Stage F frozen architecture robustness study
+
+The Stage-F protocol was committed **before Stage-F implementation and before any Stage-F outcomes**:
+
+- protocol path: `studies/cnn_architecture_robustness/PROTOCOL.md`
+- protocol commit: `6dccf0948204e4af05d232f4d944b7b3903e5387`
+
+Do not modify the scientific design after outcomes are inspected. Pure implementation fixes are allowed only if they preserve the frozen estimands/design and are documented.
+
+Frozen full design:
+
+- 100 fresh renderer blocks, 6000--6099;
+- 4 paired initialization replicates;
+- 2 tasks;
+- 2 treatments: constant `retention_1` and `release_default`;
+- 16 architectures;
+- 25,600 trained models;
+- fixed 16-channel 9x9 template-initialized first layer and first-layer ReLU patch point;
+- k=1,...,16;
+- primary task `two_concepts`;
+- primary metrics centered-logit fidelity and unnormalized probability error reduction;
+- renderer block is the inferential unit after averaging init replicates;
+- primary omnibus architecture-heterogeneity tests plus a fresh-sample TinyCNN-vs-TwoLayer-form bridge contrast.
+
+Default external result root:
+
+`%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_001`
+
+Run:
+
+```powershell
+git pull --ff-only origin main
+.\run\run_architecture_robustness.ps1 -Smoke
+.\run\run_architecture_robustness.ps1
+```
+
+After completion on a restricted worktree:
+
+```powershell
+.\run\stage_architecture_robustness_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add Stage-F architecture robustness results"
+git push
+```
+
+Do not commit the 25,600 raw checkpoints or per-model evaluation JSONs unless explicitly needed. Archive the paper-facing `analysis/` outputs and provenance using the staging helper.
+
+### Metric-sensitivity result motivating Stage F
+
+The completed frozen metric-sensitivity analysis found, in the Stage-D primary TinyCNN/two_concepts/contrast setting:
+
+- centered-logit B = +0.178881, 95% CI [+0.127268, +0.230494];
+- unnormalized probability-error-reduction B = +0.894411, 95% CI [+0.786301, +1.002522].
+
+The release-minus-retention base-to-counterfactual probability error scale differed by +0.848558 in TinyCNN, so normalization scale clearly differed across treatments, but the patch-budget contrast remained under unnormalized and centered-logit metrics.
+
+Stage-E architecture results were heterogeneous: TinyCNN retained positive effects across both tasks, whereas TwoLayerCNN effects were much weaker, null, or negative depending on task/metric. This is why Stage F prioritizes systematic architecture factors rather than merely adding seeds to the original TinyCNN.
