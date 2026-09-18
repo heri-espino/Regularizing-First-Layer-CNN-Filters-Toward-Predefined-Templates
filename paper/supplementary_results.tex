@@ -1,10 +1,10 @@
 \section{Historical Stages A--C}\label{app:historical}
 
-Stages A--C precede the prespecified confirmatory experiment reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory analysis was narrowed from a selected-minus-random score to the patching effect for selected channels itself.
+Stages A--C precede the prespecified confirmatory experiment reported in Appendix~\ref{app:confirmation}. They are retained to show why the confirmatory analysis ultimately used the patching effect for selected channels rather than the selected-minus-random comparison.
 
 \subsection{Stage-A prespecified primary comparisons}\label{app:stage-a}
 
-Stage A compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and Holm-adjusted as one family. Filter-template similarity and accuracy are reported as descriptive companion outcomes.
+Stage A compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and were Holm-adjusted as one family. Filter-template similarity and accuracy are also reported descriptively.
 
 \begin{table}[h]
 \caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
@@ -57,7 +57,7 @@ On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual ta
 
 \subsection{Stage-C decomposition of the original selected-minus-random score}\label{app:stage-c-decomposition}
 
-Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and supplies no confirmatory test.
+Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and is not used as a confirmatory test.
 
 {
 \small
@@ -96,8 +96,8 @@ For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channel
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-channel annealed-minus-constant contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
 \subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C established that constant template regularization preserves high filter-template similarity and that prediction can improve after the regularizer is annealed to zero. They also showed that the annealed-minus-constant patching comparison changes with the number of patched channels. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
+Stages A--C showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison changes with the number of patched channels. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity analysis.
