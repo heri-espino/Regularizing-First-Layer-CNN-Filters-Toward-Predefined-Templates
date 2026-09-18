@@ -126,13 +126,13 @@ E & 1,200 new models; 2 tasks; 2 architectures; 6 regularization schedules; repl
 \end{tabular}
 \end{table}
 
-The stages are not pooled as independent observations of a single effect. Replicates use independent renderer/model seed blocks, whereas experimental conditions within a replicate share the generated data and relevant initialization components. Conditions are therefore paired within replicate, and the replicate is the unit of analysis.
+The stages are not pooled as independent observations of a single effect. Each replicate corresponds to an independent renderer/model seed block, whereas experimental conditions within a block share the generated data and relevant initialization components. Conditions are therefore paired within block, and the block is the unit of analysis.
 
 Stage A evaluates filter-template similarity and the initial controls. Stage B extends training to 200 epochs and introduces annealing of the template regularizer. Stage C reuses Stage-B checkpoints to examine sensitivity to the channel-selection rule and the number of patched channels; this stage is post hoc. The Stage-C decomposition motivated the Stage-D protocol, which was specified before replicates 4000--4019 were run. Stage E was separately specified before replicates 5000--5049 were run and remains secondary to the Stage-D primary test.
 
 \subsection{Stage D: prespecified confirmatory test}\label{sec:stage-d-method}
 
-Stage D compares constant template regularization (\texttt{template\_retention\_1}) with the default annealing schedule (\texttt{template\_release}) on \texttt{two\_concepts} for both architectures over 20 new renderer/model blocks disjoint from Stages A--C, pairing the two conditions within each block. All models train for 200 epochs, with epoch 200 fixed as the evaluation point. For replicate $b$ and number of patched channels $k$,
+Stage D compares constant template regularization (\texttt{template\_retention\_1}) with the default annealing schedule (\texttt{template\_release}) on \texttt{two\_concepts} for both architectures over 20 new renderer/model blocks disjoint from Stages A--C, pairing the two conditions within each block. All models train for 200 epochs, with epoch 200 fixed as the evaluation point. For block $b$ and number of patched channels $k$,
 \[
 \Delta_b(k)=F_{b}^{\mathrm{annealed}}(k)-F_{b}^{\mathrm{constant}}(k).
 \]
@@ -141,7 +141,7 @@ For the primary analysis, channels are ranked by the standardized mean activatio
 B_b=\frac{\Delta_b(4)+\Delta_b(8)}{2}
 -\frac{\Delta_b(1)+\Delta_b(2)}{2}.
 \]
-A positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require the differences at $k=4$ or $k=8$ themselves to be positive. The primary test is a two-sided one-sample Student $t$ test of $\mathbb E[B_b]=0$ across the 20 block-level contrasts. The prespecified criterion for confirmation requires all planned replicates, a positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values are reported regardless of sign. The two alternative channel-selection rules, TwoLayerCNN, patched-run accuracy, random-channel $U$, and energy-matched $U$ are all prespecified secondary analyses.
+A positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require the differences at $k=4$ or $k=8$ themselves to be positive. The primary test is a two-sided one-sample Student $t$ test of $\mathbb E[B_b]=0$ across the 20 block-level contrasts. The prespecified criterion for confirmation requires all 20 planned blocks, a positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values are reported regardless of sign. The two alternative channel-selection rules, TwoLayerCNN, patched-run accuracy, random-channel $U$, and energy-matched $U$ are all prespecified secondary analyses.
 
 \subsection{Stage E: secondary sensitivity analysis}\label{sec:stage-e-method}
 
@@ -194,7 +194,7 @@ with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. This satisfies the p
 The positive value of $B$ reflects a change in the annealed-minus-constant difference as the number of patched channels increases. The four prespecified channel-count contrasts are shown in Table~\ref{tab:primary-curve}.
 
 \begin{table}[t]
-\caption{Stage-D primary TinyCNN results on 20 new \texttt{two\_concepts} replicates, with conditions paired within replicate and channels ranked by activation difference. Values are annealed-minus-constant differences in the patching effect for selected channels.}
+\caption{Stage-D primary TinyCNN results on 20 new \texttt{two\_concepts} blocks, with conditions paired within block and channels ranked by activation difference. Values are annealed-minus-constant differences in the patching effect for selected channels.}
 \label{tab:primary-curve}
 \centering
 \small
