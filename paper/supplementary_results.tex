@@ -57,7 +57,7 @@ On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual ta
 
 \subsection{Stage-C decomposition of the original selected-minus-random comparison}\label{app:stage-c-decomposition}
 
-Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and is not used as a confirmatory test.
+Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and is not used as the prospective primary test.
 
 {
 \small
@@ -100,4 +100,4 @@ A later post hoc control chose alternative channel sets of the same size whose v
 
 \subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that prospective test and the subsequent 1,200-model secondary sensitivity analysis.
+Stages A--C showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that prospective test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
