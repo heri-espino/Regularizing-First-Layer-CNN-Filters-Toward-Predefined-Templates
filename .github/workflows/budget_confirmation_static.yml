@@ -49,6 +49,7 @@ jobs:
             'studies/cnn_budget_confirmation/run_confirmation.ps1',
             'studies/cnn_exhaustive_robustness/run_exhaustive.ps1',
             'run/run_metric_sensitivity.ps1',
+            'run/stage_metric_sensitivity_results.ps1',
             'studies/cnn_metric_sensitivity/run_metric_sensitivity.ps1'
           )
           foreach ($file in $files) {
