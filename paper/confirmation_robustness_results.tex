@@ -21,37 +21,37 @@ Architecture & Channel selection & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
 \endhead
 \bottomrule
 \endfoot
-TinyCNN & contrast & 1 & -0.3459 & [-0.4033, -0.2885] \\
-TinyCNN & contrast & 2 & -0.3317 & [-0.4082, -0.2552] \\
-TinyCNN & contrast & 4 & -0.0221 & [-0.0424, -0.0019] \\
-TinyCNN & contrast & 8 & +0.0065 & [+0.0037, +0.0093] \\
+TinyCNN & activation contrast & 1 & -0.3459 & [-0.4033, -0.2885] \\
+TinyCNN & activation contrast & 2 & -0.3317 & [-0.4082, -0.2552] \\
+TinyCNN & activation contrast & 4 & -0.0221 & [-0.0424, -0.0019] \\
+TinyCNN & activation contrast & 8 & +0.0065 & [+0.0037, +0.0093] \\
 TinyCNN & AUROC & 1 & -0.3040 & [-0.3662, -0.2418] \\
 TinyCNN & AUROC & 2 & -0.3237 & [-0.3988, -0.2485] \\
 TinyCNN & AUROC & 4 & -0.0332 & [-0.0696, +0.0032] \\
 TinyCNN & AUROC & 8 & +0.0058 & [+0.0026, +0.0091] \\
-TinyCNN & validation patch & 1 & -0.2856 & [-0.3191, -0.2520] \\
-TinyCNN & validation patch & 2 & -0.1733 & [-0.2068, -0.1399] \\
-TinyCNN & validation patch & 4 & -0.0052 & [-0.0202, +0.0098] \\
-TinyCNN & validation patch & 8 & +0.0073 & [+0.0047, +0.0098] \\
-TwoLayerCNN & contrast & 1 & -0.0117 & [-0.0202, -0.0032] \\
-TwoLayerCNN & contrast & 2 & -0.0378 & [-0.0493, -0.0263] \\
-TwoLayerCNN & contrast & 4 & -0.1313 & [-0.1645, -0.0980] \\
-TwoLayerCNN & contrast & 8 & -0.0020 & [-0.0493, +0.0453] \\
+TinyCNN & validation patching & 1 & -0.2856 & [-0.3191, -0.2520] \\
+TinyCNN & validation patching & 2 & -0.1733 & [-0.2068, -0.1399] \\
+TinyCNN & validation patching & 4 & -0.0052 & [-0.0202, +0.0098] \\
+TinyCNN & validation patching & 8 & +0.0073 & [+0.0047, +0.0098] \\
+TwoLayerCNN & activation contrast & 1 & -0.0117 & [-0.0202, -0.0032] \\
+TwoLayerCNN & activation contrast & 2 & -0.0378 & [-0.0493, -0.0263] \\
+TwoLayerCNN & activation contrast & 4 & -0.1313 & [-0.1645, -0.0980] \\
+TwoLayerCNN & activation contrast & 8 & -0.0020 & [-0.0493, +0.0453] \\
 TwoLayerCNN & AUROC & 1 & -0.0141 & [-0.0224, -0.0058] \\
 TwoLayerCNN & AUROC & 2 & -0.0438 & [-0.0565, -0.0311] \\
 TwoLayerCNN & AUROC & 4 & -0.1319 & [-0.1614, -0.1025] \\
 TwoLayerCNN & AUROC & 8 & +0.0104 & [-0.0402, +0.0611] \\
-TwoLayerCNN & validation patch & 1 & -0.0256 & [-0.0380, -0.0131] \\
-TwoLayerCNN & validation patch & 2 & -0.0760 & [-0.1048, -0.0473] \\
-TwoLayerCNN & validation patch & 4 & -0.0883 & [-0.1401, -0.0365] \\
-TwoLayerCNN & validation patch & 8 & +0.0100 & [-0.0015, +0.0214] \\
+TwoLayerCNN & validation patching & 1 & -0.0256 & [-0.0380, -0.0131] \\
+TwoLayerCNN & validation patching & 2 & -0.0760 & [-0.1048, -0.0473] \\
+TwoLayerCNN & validation patching & 4 & -0.0883 & [-0.1401, -0.0365] \\
+TwoLayerCNN & validation patching & 8 & +0.0100 & [-0.0015, +0.0214] \\
 \end{longtable}
 \normalsize
 }
 
 \subsection{Stage-D prespecified contrast}\label{app:stage-d-b}
 
-For every architecture/ranking pair,
+For every architecture/channel-selection pair,
 \[
 B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
 \]
@@ -66,12 +66,12 @@ Positive $B$ indicates that the annealed-minus-constant difference is larger at 
 \toprule
 Architecture & Channel selection & Mean $B$ & 95\% CI & two-sided $p$ \\
 \midrule
-TinyCNN & contrast & +0.33098 & [0.27368, 0.38827] & $2.28\times10^{-10}$ \\
+TinyCNN & activation contrast & +0.33098 & [0.27368, 0.38827] & $2.28\times10^{-10}$ \\
 TinyCNN & AUROC & +0.30014 & [0.24866, 0.35162] & $1.95\times10^{-10}$ \\
-TinyCNN & validation patch & +0.23050 & [0.20442, 0.25658] & $1.31\times10^{-13}$ \\
-TwoLayerCNN & contrast & -0.04189 & [-0.07010, -0.01367] & 0.00580 \\
+TinyCNN & validation patching & +0.23050 & [0.20442, 0.25658] & $1.31\times10^{-13}$ \\
+TwoLayerCNN & activation contrast & -0.04189 & [-0.07010, -0.01367] & 0.00580 \\
 TwoLayerCNN & AUROC & -0.03179 & [-0.05830, -0.00529] & 0.02126 \\
-TwoLayerCNN & validation patch & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
+TwoLayerCNN & validation patching & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -84,7 +84,7 @@ AUROC and validation-patching channel-selection rules show the same broad change
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The validation-energy-matched control selects eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with activation-contrast channel selection, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: singleton alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the selected-minus-control score also changes with the number of patched channels, but it does not replace the selected-channel patching score in the primary analysis.
+The validation-energy-matched control selects eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with activation-contrast channel selection, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the selected-minus-control score also changes with the number of patched channels, but it does not replace the selected-channel patching score in the primary analysis.
 
 \subsection{Stage-E schedule comparisons under activation-contrast ranking}\label{app:stage-e-profiles}
 
@@ -178,7 +178,7 @@ localization IoU & 0 & $10^{-9}$ \\
 selected-channel patching score & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
 random-channel patching score & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
 $U_{\mathrm{random}}$ & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
-counterfactual accuracy & 0 & $10^{-12}$ \\
+patched-run counterfactual accuracy & 0 & $10^{-12}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
