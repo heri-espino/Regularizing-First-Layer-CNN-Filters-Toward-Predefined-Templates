@@ -51,6 +51,20 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def git_blob_for(path):
+    try:
+        root = Path(__file__).resolve().parents[2]
+        rel = Path(path).resolve().relative_to(root)
+        return subprocess.check_output(
+            ["git", "rev-parse", f"HEAD:{rel.as_posix()}"],
+            cwd=root,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip() or None
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        return None
+
+
 def git_commit_for(path):
     try:
         root = Path(__file__).resolve().parents[2]
@@ -316,9 +330,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     protocol = Path(__file__).with_name("PROTOCOL.md")
-    protocol_hash = sha256(protocol)
+    protocol_blob = git_blob_for(protocol)
     protocol_commit = git_commit_for(protocol)
-    analysis_hash = sha256(Path(__file__))
+    analysis_blob = git_blob_for(Path(__file__))
 
     drows, dmodels, dfiles = load_stage(droot, "D")
     erows, emodels, efiles = load_stage(eroot, "E")
@@ -405,8 +419,8 @@ def main():
         "Statistical status: frozen post hoc robustness analysis of saved Stage-D/E checkpoints. No model was retrained and no stored channel ranking was changed.",
         "",
         f"- protocol commit: {protocol_commit or 'unavailable'}",
-        f"- protocol SHA-256: {protocol_hash}",
-        f"- analysis SHA-256: {analysis_hash}",
+        f"- protocol Git blob: {protocol_blob or 'unavailable'}",
+        f"- analysis Git blob: {analysis_blob or 'unavailable'}",
         f"- Stage-D checkpoint evaluations: **{len(dfiles)} / 80**",
         f"- Stage-E checkpoint evaluations: **{len(efiles)} / 1200**",
         "",
@@ -476,8 +490,8 @@ def main():
         "status": "post_hoc_frozen_metric_sensitivity",
         "training_invoked": False,
         "protocol_commit": protocol_commit,
-        "protocol_sha256": protocol_hash,
-        "analysis_sha256": analysis_hash,
+        "protocol_git_blob": protocol_blob,
+        "analysis_git_blob": analysis_blob,
         "stage_d_models": len(dfiles),
         "stage_e_models": len(efiles),
         "primary_metrics": list(PRIMARY_METRICS),
