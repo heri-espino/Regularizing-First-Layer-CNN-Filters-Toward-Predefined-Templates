@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,6 +31,16 @@ PATCH_RTOL = 1e-4
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def git_blob(path: Path) -> str:
+    rel = path.resolve().relative_to(ROOT)
+    return subprocess.check_output(
+        ["git", "rev-parse", f"HEAD:{rel.as_posix()}"],
+        cwd=ROOT,
+        text=True,
+        stderr=subprocess.DEVNULL,
+    ).strip()
 
 
 def atomic_json(path: Path, value) -> None:
@@ -331,9 +342,9 @@ def main():
     evaluator_design = {
         "stage": args.stage,
         "input_training_design_sha256": sha256(spec["training"] / "design.json"),
-        "protocol_sha256": sha256(Path(__file__).with_name("PROTOCOL.md")),
-        "evaluator_sha256": sha256(Path(__file__)),
-        "core_sha256": sha256(Path(core.__file__)),
+        "protocol_git_blob": git_blob(Path(__file__).with_name("PROTOCOL.md")),
+        "evaluator_git_blob": git_blob(Path(__file__)),
+        "core_git_blob": git_blob(Path(core.__file__)),
         "device": args.device,
         "gpu": torch.cuda.get_device_name(0) if args.device == "cuda" else None,
         "batch_size": args.batch_size,
