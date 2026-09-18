@@ -283,7 +283,7 @@ Figure~\ref{fig:kernel-gallery} shows the matched filters themselves. Together, 
 
 \section{Interpretation}\label{sec:interpretation}
 
-Constant template regularization strongly increases filter-template similarity, while the annealed-minus-constant difference in the normalized patching effect varies across the tested channel counts. In the primary TinyCNN setting, the annealed-minus-constant difference is much more negative at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A result at a single channel count therefore does not summarize the regularization-schedule comparison even within the tested models.
+Constant template regularization substantially increases filter-template similarity, while the annealed-minus-constant difference in the normalized patching effect varies across the tested channel counts. In the primary TinyCNN setting, the annealed-minus-constant difference is much more negative at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A result at a single channel count therefore does not summarize the regularization-schedule comparison even within the tested models.
 
 The distinction between the patching effect for selected channels and a comparison against a control baseline also matters. In Stage C, the positive annealed-minus-constant value of $U_{\mathrm{random}}(4)$ occurs even though the patching effect for selected channels is slightly lower under annealed regularization, because the patching effect for random channels decreases more strongly. Reporting the selected-channel and control-channel effects separately avoids attributing a relative difference to the selected channels alone.
 
