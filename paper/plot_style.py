@@ -27,14 +27,14 @@ COLORS = {
 LABELS = {
     "random": "Random",
     "random_unitnorm": "Unit-norm random",
-    "template_init": "Template init.",
+    "template_init": "Initialization only",
     "template_retention_1": "Constant reg.",
     "template_release": "Annealed reg.",
     "retention_0p1": r"Constant $\lambda=0.1$",
     "retention_1": r"Constant $\lambda=1$",
-    "release_early": "Early anneal",
-    "release_default": "Default anneal",
-    "release_late": "Late anneal",
+    "release_early": "Early annealing",
+    "release_default": "Default annealing",
+    "release_late": "Late annealing",
 }
 
 LINESTYLES = {
