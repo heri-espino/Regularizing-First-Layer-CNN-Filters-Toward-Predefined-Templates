@@ -90,7 +90,7 @@ The central conditions are \emph{template initialization only} (\texttt{template
 
 Concept AUROC quantifies how well a first-layer channel discriminates the target concept on held-out test data; the channel is chosen using validation data. Localization IoU measures the overlap between a validation-selected first-layer activation mask and the renderer's visible-object mask. These activation-space measurements are evaluated separately from filter-template similarity.
 
-For activation patching, we use matched counterfactual image pairs. For each pair we run the model on the base image, on the matched counterfactual image, and on a patched base image in which the selected first-layer activation maps are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged. Let $p_0$ be the base output probabilities, $p_1$ the counterfactual output probabilities, and $p_S$ the patched-run probabilities. We quantify the patching effect with the normalized output-restoration score
+For activation patching, we use matched counterfactual image pairs. For each pair we run the model on the base image, on the matched counterfactual image, and on a patched base image in which the selected first-layer activation maps are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged. Let $p_0$ be the base output probabilities, $p_1$ the counterfactual output probabilities, and $p_S$ the patched-run probabilities. We summarize the patching effect with the normalized score
 \[
 F(S)=1-\frac{\sum\lVert p_S-p_1\rVert_2^2}
 {\sum\lVert p_1-p_0\rVert_2^2}.
