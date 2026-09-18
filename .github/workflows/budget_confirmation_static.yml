@@ -10,6 +10,7 @@ on:
       - 'studies/cnn_budget_confirmation/**'
       - 'studies/cnn_exhaustive_robustness/**'
       - 'studies/cnn_metric_sensitivity/**'
+      - 'studies/cnn_architecture_robustness/**'
       - '.github/workflows/budget_confirmation_static.yml'
   workflow_dispatch:
 
@@ -50,7 +51,10 @@ jobs:
             'studies/cnn_exhaustive_robustness/run_exhaustive.ps1',
             'run/run_metric_sensitivity.ps1',
             'run/stage_metric_sensitivity_results.ps1',
-            'studies/cnn_metric_sensitivity/run_metric_sensitivity.ps1'
+            'studies/cnn_metric_sensitivity/run_metric_sensitivity.ps1',
+            'run/run_architecture_robustness.ps1',
+            'run/stage_architecture_robustness_results.ps1',
+            'studies/cnn_architecture_robustness/run_architecture_robustness.ps1'
           )
           foreach ($file in $files) {
             $tokens = $null
@@ -70,8 +74,13 @@ jobs:
           python -m py_compile studies/cnn_exhaustive_robustness/analyze_grid.py
           python -m py_compile studies/cnn_metric_sensitivity/evaluate_metrics.py
           python -m py_compile studies/cnn_metric_sensitivity/analyze_metrics.py
+          python -m py_compile studies/cnn_architecture_robustness/architecture_core.py
+          python -m py_compile studies/cnn_architecture_robustness/train_grid.py
+          python -m py_compile studies/cnn_architecture_robustness/evaluate_grid.py
+          python -m py_compile studies/cnn_architecture_robustness/analyze.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
           test -s studies/cnn_exhaustive_robustness/PROTOCOL.md
           test -s studies/cnn_metric_sensitivity/PROTOCOL.md
+          test -s studies/cnn_architecture_robustness/PROTOCOL.md
