@@ -14,6 +14,7 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 - **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
+- **Frozen metric-sensitivity protocol (checkpoint-only):** [`studies/cnn_metric_sensitivity/PROTOCOL.md`](studies/cnn_metric_sensitivity/PROTOCOL.md)
 - **Study map:** [`studies/README.md`](studies/README.md)
 - **Run helpers:** [`run/README.md`](run/README.md)
 - **Analysis map:** [`analysis/README.md`](analysis/README.md)
@@ -88,7 +89,8 @@ The repository intentionally preserves the experimental record instead of flatte
 | B | 200-epoch retention/release study | `studies/cnn_release_experiment/` |
 | C | Post hoc patch-size and baseline decomposition | `studies/cnn_patch_robustness/`, `studies/cnn_patch_energy_control/` |
 | D | Frozen prospective confirmation | `studies/cnn_budget_confirmation/` |
-| E | Predeclared 1,200-model sensitivity study | `studies/cnn_exhaustive_robustness/` |
+| E | Predeclared sensitivity study on 50 new blocks per setting | `studies/cnn_exhaustive_robustness/` |
+| Metric audit | Frozen post hoc metric-sensitivity analysis of saved Stage-D/E checkpoints; no retraining | `studies/cnn_metric_sensitivity/` |
 | Audit | Independent checkpoint reimplementation | `studies/cnn_checkpoint_audit/` |
 
 The Stage-D primary analysis used 20 previously unused `two_concepts` TinyCNN blocks. The predeclared contrast was
@@ -122,6 +124,20 @@ zsh run/run_paper_experiments.zsh
 ```
 
 These experiments are computationally expensive. Read the corresponding `PROTOCOL.md` before rerunning them.
+
+The final metric-sensitivity study does **not** retrain models. After the Stage-D/E artifacts are present, run:
+
+```powershell
+.\run\run_metric_sensitivity.ps1
+```
+
+or:
+
+```bash
+zsh run/run_metric_sensitivity.zsh
+```
+
+Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated; the manuscript should be rewritten only after this full checkpoint-only analysis is complete.
 
 ## Scope
 
