@@ -1,6 +1,6 @@
 \section{Confirmatory and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before running replicates 4000--4019. The Stage-E protocol was separately specified before running replicates 5000--5049 and remains secondary to Stage D. Within each replicate, conditions are paired through shared generated data and relevant initialization components. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before running replicates 4000--4019. The Stage-E protocol was separately specified before running replicates 5000--5049 and remains secondary to Stage D. Within each replicate, conditions are paired through shared generated data and relevant initialization components. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves. This appendix gives the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
 
@@ -88,7 +88,7 @@ The energy-matched control uses validation replacement energy to select eight al
 
 \subsection{Stage-E schedule comparisons when channels are ranked by activation difference}\label{app:stage-e-profiles}
 
-The four default-annealing rows summarized in Table~\ref{tab:stage-e-main} show the architecture dependence in the main text. The table below gives all five schedule-versus-constant-regularization comparisons for each task/architecture setting. Holm adjustment is performed within each task/architecture/channel-selection family, exactly as prespecified.
+Table~\ref{tab:stage-e-main} in the main text summarizes the default-annealing architecture comparison. The table below gives all five schedule-versus-constant-regularization comparisons for each task/architecture setting. Holm adjustment is performed within each task/architecture/channel-selection family, exactly as prespecified.
 
 {
 \small
@@ -160,7 +160,7 @@ two concepts & TwoLayerCNN & default annealing & 99.26\% & 0.896 \\
 
 \subsection{Independent reimplementation of checkpoint evaluation}\label{app:audit}
 
-The prespecified reimplementation covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol, and all recomputed values fell within the stated tolerances.
+The prespecified reimplementation covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol. All recomputed values then fell within the stated tolerances.
 
 \begin{table}[h]
 \caption{Discrepancies between the original and independently reimplemented checkpoint evaluations. Full-channel and no-op probability errors were both zero.}
