@@ -136,7 +136,7 @@ Stage D compares constant template regularization (\texttt{template\_retention\_
 \[
 \Delta_b(k)=F_{b}^{\mathrm{annealed}}(k)-F_{b}^{\mathrm{constant}}(k).
 \]
-The primary channel-selection rule is the standardized validation activation-difference ranking. The prespecified contrast is
+For the primary analysis, channels are ranked by the standardized mean activation difference on the validation set. The prespecified contrast is
 \[
 B_b=\frac{\Delta_b(4)+\Delta_b(8)}{2}
 -\frac{\Delta_b(1)+\Delta_b(2)}{2}.
@@ -178,13 +178,13 @@ In this setting, constant regularization keeps the first-layer filters close to 
 
 \subsection{The random-channel baseline changes the selected-minus-random patching score}\label{sec:decomposition}
 
-Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: the annealed-minus-constant difference in $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three channel-selection rules. Decomposing $U$ changes the interpretation. Under the activation-difference ranking, the exploratory differences in selected-channel patching score were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-channel differences were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. Thus, $\Delta U(4)=+0.061$ even though the selected-channel score is slightly lower with annealed regularization, because the random-channel score decreases more strongly.
+Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: the annealed-minus-constant difference in $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three channel-selection rules. Decomposing $U$ changes the interpretation. When channels are ranked by activation difference, the exploratory differences in selected-channel patching score were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-channel differences were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. Thus, $\Delta U(4)=+0.061$ even though the selected-channel score is slightly lower with annealed regularization, because the random-channel score decreases more strongly.
 
 The same selected-channel pattern appears under the AUROC and validation-patching channel-selection rules: strongly negative at one or two channels, near zero or slightly negative at four, and slightly positive at eight. An energy-matched control changes the selected-minus-control score but not the selected-channel patching score itself. Matching is generally tight for $k=4$ and $k=8$ but can be poor for single-channel interventions, so the energy-matched analysis remains secondary. This decomposition motivated the use of the selected-channel patching score, rather than $U$, as the Stage-D primary outcome.
 
 \subsection{Prespecified confirmation of sensitivity to the number of patched channels}\label{sec:confirmation}
 
-All 80 planned Stage-D models and all 80 epoch-200 evaluations completed. For the prespecified TinyCNN activation-difference test,
+All 80 planned Stage-D models and all 80 epoch-200 evaluations completed. For the prespecified TinyCNN test, with channels ranked by activation difference,
 \[
 \bar B=0.330976,\qquad
 95\%\ \mathrm{CI}=[0.273680,0.388273],
@@ -194,7 +194,7 @@ with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. The prespecified con
 The positive value of $B$ reflects a change in the annealed-minus-constant difference as the number of patched channels increases. The four prespecified channel-count contrasts are shown in Table~\ref{tab:primary-curve}.
 
 \begin{table}[t]
-\caption{Stage-D primary TinyCNN activation-difference results on 20 new paired \texttt{two\_concepts} replicates. Values are annealed minus constant regularization for the selected-channel patching score.}
+\caption{Stage-D primary TinyCNN results on 20 new paired \texttt{two\_concepts} replicates, with channels ranked by activation difference. Values are annealed minus constant regularization for the selected-channel patching score.}
 \label{tab:primary-curve}
 \centering
 \small
@@ -212,16 +212,16 @@ Patched channels $k$ & $\Delta F_{\mathrm{selected}}$ & 95\% CI \\
 
 Annealed regularization gives substantially lower selected-channel patching scores than constant regularization at $k=1$ and $k=2$, a slightly lower score at $k=4$, and a slightly higher score at $k=8$. Patched-run accuracy on the counterfactual target shows the same broad pattern: the annealed-minus-constant difference is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
 
-The two alternative validation-only channel-selection rules show the same TinyCNN dependence on channel count in the prespecified secondary analyses: $B=0.3001$ for AUROC ranking and $B=0.2305$ for validation-patching ranking, with both marginal 95\% intervals entirely positive. TwoLayerCNN differs. Its activation-difference $B=-0.0419$ (95\% CI $[-0.0701,-0.0137]$), AUROC $B=-0.0318$ ($[-0.0583,-0.0053]$), and validation-patching $B=+0.0116$ ($[-0.0095,0.0327]$). Stage D therefore confirms the prespecified positive channel-count contrast in TinyCNN and shows that the same pattern does not extend to TwoLayerCNN.
+The two alternative validation-only channel-selection rules show the same TinyCNN dependence on channel count in the prespecified secondary analyses: $B=0.3001$ for AUROC ranking and $B=0.2305$ for validation-patching ranking, with both marginal 95\% intervals entirely positive. TwoLayerCNN differs. When channels are ranked by activation difference, its $B=-0.0419$ (95\% CI $[-0.0701,-0.0137]$), AUROC $B=-0.0318$ ($[-0.0583,-0.0053]$), and validation-patching $B=+0.0116$ ($[-0.0095,0.0327]$). Stage D therefore confirms the prespecified positive channel-count contrast in TinyCNN and shows that the same pattern does not extend to TwoLayerCNN.
 
 The energy-matched selected-minus-control score also changes between smaller and larger channel sets in TinyCNN, but it remains secondary because $U$ depends on the chosen baseline and matching quality is heterogeneous. Full-channel and no-op numerical errors were zero.
 
 \subsection{Sensitivity to the number of patched channels differs by architecture}\label{sec:exhaustive}
 
-Stage E completed all 1,200 planned epoch-200 evaluations on 50 new paired replicates. Under the activation-difference ranking and default annealing schedule, the prespecified contrast $B$ relative to constant regularization is positive for TinyCNN on both tasks, but is near zero or negative for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
+Stage E completed all 1,200 planned epoch-200 evaluations on 50 new paired replicates. With channels ranked by activation difference and using the default annealing schedule, the prespecified contrast $B$ relative to constant regularization is positive for TinyCNN on both tasks, but is near zero or negative for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
 
 \begin{table}[t]
-\caption{Stage-E default-annealing contrast $B$ relative to constant regularization under the activation-difference ranking. These are prespecified secondary sensitivity analyses, not additional primary tests.}
+\caption{Stage-E default-annealing contrast $B$ relative to constant regularization when channels are ranked by activation difference. These are prespecified secondary sensitivity analyses, not additional primary tests.}
 \label{tab:stage-e-main}
 \centering
 \small
@@ -237,12 +237,12 @@ Setting & Mean $B$ & 95\% CI & Holm $p$ \\
 \end{tabular}
 \end{table}
 
-The result is not specific to the default schedule. Relative to constant $\lambda=1$ regularization, all five alternative schedules have positive activation-difference $B$ in TinyCNN for both tasks. For \texttt{two\_concepts}/TinyCNN, the values range from $0.1663$ for constant $\lambda=0.1$ to $0.3456$ for template initialization without subsequent regularization. TwoLayerCNN effects are near zero on \texttt{single\_shape} and tend to be negative for annealed schedules on \texttt{two\_concepts}. Because these schedules vary both the timing and duration of regularization, we treat them as a sensitivity analysis rather than as ordered levels of a single intervention.
+The result is not specific to the default schedule. Relative to constant $\lambda=1$ regularization, all five alternative schedules have positive $B$ when channels are ranked by activation difference in TinyCNN for both tasks. For \texttt{two\_concepts}/TinyCNN, the values range from $0.1663$ for constant $\lambda=0.1$ to $0.3456$ for template initialization without subsequent regularization. TwoLayerCNN effects are near zero on \texttt{single\_shape} and tend to be negative for annealed schedules on \texttt{two\_concepts}. Because these schedules vary both the timing and duration of regularization, we treat them as a sensitivity analysis rather than as ordered levels of a single intervention.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig02_patch_size.pdf}
-\caption{Stage-E selected-channel patching scores for $k=1,\ldots,16$ under the activation-difference ranking. Each panel contains all six regularization schedules; lines are means over 50 paired replicates and bands are 95\% $t$ intervals. At $k=16$ all first-layer channels are patched and $F=1$ by construction, providing a sanity check.}
+\caption{Stage-E selected-channel patching scores for $k=1,\ldots,16$ when channels are ranked by activation difference. Each panel contains all six regularization schedules; lines are means over 50 paired replicates and bands are 95\% $t$ intervals. At $k=16$ all first-layer channels are patched and $F=1$ by construction, providing a sanity check.}
 \label{fig:exhaustive-curves}
 \end{figure}
 
@@ -294,7 +294,7 @@ These results concern the sensitivity of the patching measurement to interventio
 \begin{itemize}
 \item Only two related synthetic tasks, two small architectures, one first-layer template bank, one optimizer, and one family of regularization schedules are studied. There is no natural-image benchmark or human-interpretability experiment.
 \item The renderer provides balanced, matched counterfactuals and exact object masks. This control is useful for measurement but simplifies correlations and nuisance structure found in real data.
-\item The confirmed Stage-D result is specific to \texttt{two\_concepts}/TinyCNN, the activation-difference channel ranking, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence broadens the sensitivity analysis but remains secondary.
+\item The confirmed Stage-D result is specific to \texttt{two\_concepts}/TinyCNN, ranking channels by activation difference, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence broadens the sensitivity analysis but remains secondary.
 \item Stage E explores six regularization schedules and all $k=1,\ldots,16$. Holm adjustment is applied only within the prespecified five-comparison families; these analyses should not be used to select favorable post hoc subgroups.
 \item Activation patching replaces complete first-layer feature maps and can create activation combinations that are out of distribution for the model. The normalized patching score is tied to probability outputs, the chosen layer, and the channel-selection rule; other intervention metrics may give different results \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
 \item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are selected-minus-control scores. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. Neither score should replace the directly reported selected-channel patching score.
