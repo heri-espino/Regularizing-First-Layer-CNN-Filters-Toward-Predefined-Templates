@@ -14,7 +14,8 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 - **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
-- **Frozen metric-sensitivity protocol (checkpoint-only):** [`studies/cnn_metric_sensitivity/PROTOCOL.md`](studies/cnn_metric_sensitivity/PROTOCOL.md)
+- **Completed metric-sensitivity analysis:** [`analysis/metric_sensitivity_001/REPORT.md`](analysis/metric_sensitivity_001/REPORT.md)
+- **Frozen Stage-F architecture protocol:** [`studies/cnn_architecture_robustness/PROTOCOL.md`](studies/cnn_architecture_robustness/PROTOCOL.md)
 - **Study map:** [`studies/README.md`](studies/README.md)
 - **Run helpers:** [`run/README.md`](run/README.md)
 - **Analysis map:** [`analysis/README.md`](analysis/README.md)
@@ -91,6 +92,7 @@ The repository intentionally preserves the experimental record instead of flatte
 | D | Frozen prospective confirmation | `studies/cnn_budget_confirmation/` |
 | E | Predeclared sensitivity study on 50 new blocks per setting | `studies/cnn_exhaustive_robustness/` |
 | Metric audit | Frozen post hoc metric-sensitivity analysis of saved Stage-D/E checkpoints; no retraining | `studies/cnn_metric_sensitivity/` |
+| F | Frozen fresh-sample architecture robustness study: 16 architectures, 100 renderer blocks, 4 paired initializations | `studies/cnn_architecture_robustness/` |
 | Audit | Independent checkpoint reimplementation | `studies/cnn_checkpoint_audit/` |
 
 The Stage-D primary analysis used 20 previously unused `two_concepts` TinyCNN blocks. The predeclared contrast was
@@ -125,7 +127,7 @@ zsh run/run_paper_experiments.zsh
 
 These experiments are computationally expensive. Read the corresponding `PROTOCOL.md` before rerunning them.
 
-The final metric-sensitivity study does **not** retrain models. After the Stage-D/E artifacts are present, run:
+The completed metric-sensitivity study does **not** retrain models. After the Stage-D/E artifacts are present, run:
 
 ```powershell
 .\run\run_metric_sensitivity.ps1
@@ -137,7 +139,16 @@ or:
 zsh run/run_metric_sensitivity.zsh
 ```
 
-Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated; the manuscript should be rewritten only after this full checkpoint-only analysis is complete.
+Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated. The completed audit showed that the TinyCNN patch-budget contrast persists under centered-logit fidelity and unnormalized probability error reduction, while architecture remains a major source of heterogeneity.
+
+Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. On Windows:
+
+```powershell
+.\run\run_architecture_robustness.ps1 -Smoke
+.\run\run_architecture_robustness.ps1
+```
+
+Read `studies/cnn_architecture_robustness/PROTOCOL.md` before running it; the design is frozen before Stage-F outcomes.
 
 ## Scope
 
