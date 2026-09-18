@@ -52,13 +52,28 @@ try {
     }
 
     function Get-PythonSha256([string]$Path) {
-        $code = 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest())'
-        $lines = @(Invoke-CnnPython '-c' $code $Path)
-        $value = ($lines | Select-Object -Last 1).ToString().Trim()
-        if (-not $value -or $value.Length -ne 64) {
-            throw "Could not compute SHA-256 with project Python for: $Path"
+        $hashScript = @'
+import hashlib
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+with path.open("rb") as handle:
+    print(hashlib.sha256(handle.read()).hexdigest())
+'@
+        $hashScriptPath = Join-Path ([System.IO.Path]::GetTempPath()) ("cnn_sha256_{0}.py" -f [guid]::NewGuid().ToString('N'))
+        try {
+            [System.IO.File]::WriteAllText($hashScriptPath, $hashScript, [System.Text.Encoding]::UTF8)
+            $lines = @(Invoke-CnnPython $hashScriptPath $Path)
+            $value = ($lines | Select-Object -Last 1).ToString().Trim()
+            if (-not $value -or $value.Length -ne 64) {
+                throw "Could not compute SHA-256 with project Python for: $Path"
+            }
+            return $value
         }
-        return $value
+        finally {
+            Remove-Item $hashScriptPath -Force -ErrorAction SilentlyContinue
+        }
     }
 
     $protocolCommit = (& git log -n 1 --format=%H -- $Protocol).Trim()
