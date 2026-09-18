@@ -10,7 +10,7 @@ from pathlib import Path
 import matplotlib as mpl
 import seaborn as sns
 
-# Color-blind-friendly palette with manuscript-facing regularization labels kept consistent across figures.
+# Color-blind-friendly palette; manuscript-facing regularization labels are defined below and reused across figures.
 COLORS = {
     "random": "#6B7280",
     "random_unitnorm": "#A7ADB7",
