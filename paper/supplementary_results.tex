@@ -53,9 +53,9 @@ two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 \end{tabular}
 \end{table}
 
-On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the patching effect for selected channels and selected-minus-control differences in patching effect.
+On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the selected-channel and control-channel patching effects.
 
-\subsection{Stage-C decomposition of the original selected-minus-random score}\label{app:stage-c-decomposition}
+\subsection{Stage-C decomposition of the original selected-minus-random comparison}\label{app:stage-c-decomposition}
 
 Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and is not used as a confirmatory test.
 
@@ -96,7 +96,7 @@ For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channel
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
 \subsection{Transition to Stage D}\label{app:transition}
 
