@@ -13,9 +13,9 @@
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \newcommand{\pandocbounded}[1]{#1}
 \bibliographystyle{tmlr}
-\hypersetup{pdfauthor={},pdftitle={Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on the Number of Patched Channels}}
+\hypersetup{pdfauthor={},pdftitle={Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Vary with the Number of Patched Channels}}
 
-\title{Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on the Number of Patched Channels}
+\title{Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Vary with the Number of Patched Channels}
 \author{}
 \date{}
 
@@ -82,7 +82,7 @@ All template-based conditions initialize the first convolution from the same tem
 \lambda(e)\frac{\lVert W-W_{\mathrm{anchor}}\rVert_F^2}
 {\lVert W_{\mathrm{anchor}}\rVert_F^2},
 \]
-where the penalty applies only to the first convolution and $W_{\mathrm{anchor}}$ is the initial template bank. Adam uses learning rate 0.003 and batch size 128. No learning-rate scheduler or early stopping is used. With 512 training images, each epoch contains four optimizer steps; Stages B--E train for 200 epochs and use epoch 200 as the fixed final evaluation point.
+where the penalty applies only to the first convolution and $W_{\mathrm{anchor}}$ is the initial template bank. Adam uses learning rate 0.003 and batch size 128. No learning-rate scheduler or early stopping is used. With 512 training images, each epoch contains four optimizer steps. Stages B, D, and E train for 200 epochs and use epoch 200 as the fixed final evaluation point; Stage C reuses Stage-B epoch-200 checkpoints.
 
 The central conditions are \emph{template initialization only} (\texttt{template\_init}), with $\lambda(e)=0$ after initialization; \emph{constant template regularization} (\texttt{template\_retention\_1}), with $\lambda(e)=1$ throughout training; and \emph{annealed template regularization} (\texttt{template\_release}), with $\lambda=1$ through epoch 10, linear decay to zero by epoch 80, and zero thereafter. Stage E additionally includes constant $\lambda=0.1$ regularization and earlier or later annealing schedules.
 
@@ -103,9 +103,9 @@ For the original random-channel comparison, we report
 \[
 U_{\mathrm{random}}(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{random}}(k),
 \]
-where the random baseline averages eight deterministic channel sets of the same size; the random rankings are shared across training conditions within a block. Thus, $U_{\mathrm{random}}$ is the difference in patching effect between the selected channels and random channel sets. A secondary control matches the magnitude of the activation replacement. If $H_j(x)$ is the first-layer activation map for channel $j$, its validation replacement energy for channel set $S$ and concept/group $g$ is
+where the random baseline averages eight deterministic channel sets of the same size; the random rankings are shared across training conditions within a block. Thus, $U_{\mathrm{random}}$ is the difference in patching effect between the selected channels and random channel sets. A secondary control matches the magnitude of the activation replacement. If $H_j(x)$ is the first-layer activation map for channel $j$, define the validation replacement energy of channel set $S$ for concept/group $g$ over base--counterfactual pairs $(x_b,x_c)$ as
 \[
-M_g(S)=\sum_{(b,c):g}\sum_{j\in S}\lVert H_j(x_c)-H_j(x_b)\rVert_F^2.
+M_g(S)=\sum_{(x_b,x_c)\in g}\sum_{j\in S}\lVert H_j(x_c)-H_j(x_b)\rVert_F^2.
 \]
 The control selects eight same-size alternative channel sets whose $M_g$ is closest to that of the selected set, yielding $U_{\mathrm{energy}}$. Because this matching can be poor for single-channel interventions, we report the matching error and do not use this baseline to define the primary result.
 
