@@ -1,6 +1,6 @@
 \section{Historical Stages A--C}\label{app:historical}
 
-Stages A--C precede the prespecified confirmatory experiment reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory analysis was narrowed from a selected-minus-random score to the selected-channel patching score itself.
+Stages A--C precede the prespecified confirmatory experiment reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory analysis was narrowed from a selected-minus-random score to the patching effect for selected channels itself.
 
 \subsection{Stage-A prespecified primary comparisons}\label{app:stage-a}
 
@@ -26,7 +26,7 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 
 \subsection{Stage-B epoch-200 condition means}\label{app:stage-b-endpoints}
 
-The table below gives the Stage-B epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten paired replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
+The table below gives the Stage-B epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
 \caption{Stage-B epoch-200 means for constant and annealed template regularization.}
@@ -53,7 +53,7 @@ two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 \end{tabular}
 \end{table}
 
-On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the selected-channel patching score and selected-minus-control scores.
+On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the patching effect for selected channels and selected-minus-control differences in patching effect.
 
 \subsection{Stage-C decomposition of the original selected-minus-random score}\label{app:stage-c-decomposition}
 
@@ -90,14 +90,14 @@ validation patching & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 \normalsize
 }
 
-When channels are ranked by activation difference, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, the selected-channel patching score itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
+When channels are ranked by activation difference, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly due to the change in the random-channel baseline. At $k=8$, the patching effect for selected channels itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
 
-For \texttt{two\_concepts}/TwoLayerCNN, the selected-channel patching score at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across the number of patched channels rather than on a fixed sign at one value of $k$.
+For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channels at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across the number of patched channels rather than on a fixed sign at one value of $k$.
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-channel annealed-minus-constant contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The energy-matched selected-minus-control score is therefore reported as a secondary analysis.
+A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-channel annealed-minus-constant contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
 \subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C established that constant template regularization preserves high filter-template similarity and that prediction can improve after the regularizer is annealed to zero. They also showed that the annealed-minus-constant patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected-channel and baseline patching scores, the Stage-D protocol was specified around the selected-channel score before new replicates were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
+Stages A--C established that constant template regularization preserves high filter-template similarity and that prediction can improve after the regularizer is annealed to zero. They also showed that the annealed-minus-constant patching comparison changes with the number of patched channels. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
