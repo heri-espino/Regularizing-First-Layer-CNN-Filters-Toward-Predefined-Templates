@@ -77,7 +77,7 @@ def fig1_learning() -> Path:
     metrics = (
         ("val_acc", "Validation accuracy"),
         ("val_ce", "Validation cross-entropy"),
-        ("alignment", "Kernel-template similarity"),
+        ("alignment", "Filter-template similarity"),
     )
 
     fig, axes = plt.subplots(3, 4, figsize=(7.15, 5.15), sharex=True, sharey="row")
@@ -168,7 +168,7 @@ def fig2_patch_size() -> Path:
             ax.set_xlim(1, 16)
             ax.set_ylim(0, 1.025)
             if j == 0:
-                ax.set_ylabel("Selected-channel fidelity")
+                ax.set_ylabel("Selected-channel patching score")
             if i == 1:
                 ax.set_xlabel(r"Patched channels, $k$")
 
@@ -189,9 +189,9 @@ def fig2_patch_size() -> Path:
 def fig3_matching_trajectories() -> Path:
     data = pd.read_csv(ROOT / "analysis/kernel_similarity/results/per_checkpoint.csv")
     metrics = (
-        ("nearest_cosine", "Nearest-template cosine"),
-        ("assignment_cosine", "One-to-one cosine"),
-        ("matching_gap", "Matching gap"),
+        ("nearest_cosine", "Nearest-template cosine similarity"),
+        ("assignment_cosine", "One-to-one cosine similarity"),
+        ("matching_gap", "Difference"),
     )
 
     fig, axes = plt.subplots(3, 4, figsize=(7.15, 5.15), sharex=True, sharey="row")
@@ -290,7 +290,7 @@ def fig4_similarity_matrices() -> Path:
             ax.grid(False)
 
     cbar = fig.colorbar(image, ax=axes.ravel().tolist(), fraction=0.022, pad=0.025)
-    cbar.set_label("Signed cosine")
+    cbar.set_label("Signed cosine similarity")
     cbar.set_ticks([-1, -0.5, 0, 0.5, 1])
     fig.subplots_adjust(left=0.075, right=0.91, top=0.90, bottom=0.14, wspace=0.16, hspace=0.18)
     return save_pdf(fig, OUT / "fig04_similarity_matrices.pdf")
