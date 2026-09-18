@@ -53,11 +53,11 @@ two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 \end{tabular}
 \end{table}
 
-On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under annealed even though $U_{\mathrm{random}}$ is higher under annealed. This discrepancy motivated separate reporting of selected intervention behavior and selected-versus-control scores.
+On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the selected-channel patching score and selected-minus-control scores.
 
 \subsection{Stage-C decomposition of the original selected-minus-random score}\label{app:stage-c-decomposition}
 
-Stage C reused the 80 final Stage-B annealed/retention checkpoints and evaluated three validation-only rankings at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is annealed minus constant retention; intervals are marginal paired 95\% $t$ intervals over ten blocks. Stage C is post hoc and supplies no confirmatory test.
+Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and supplies no confirmatory test.
 
 {
 \small
@@ -74,18 +74,18 @@ Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\
 \endhead
 \bottomrule
 \endfoot
-contrast & 1 & -0.375 & -0.040 & -0.335 & -0.255 \\
-contrast & 2 & -0.163 & -0.062 & -0.101 & -0.185 \\
-contrast & 4 & -0.022 & -0.083 & +0.061 & -0.030 \\
-contrast & 8 & +0.006 & -0.033 & +0.040 & +0.013 \\
+activation contrast & 1 & -0.375 & -0.040 & -0.335 & -0.255 \\
+activation contrast & 2 & -0.163 & -0.062 & -0.101 & -0.185 \\
+activation contrast & 4 & -0.022 & -0.083 & +0.061 & -0.030 \\
+activation contrast & 8 & +0.006 & -0.033 & +0.040 & +0.013 \\
 AUROC & 1 & -0.332 & -0.040 & -0.292 & -0.230 \\
 AUROC & 2 & -0.188 & -0.062 & -0.125 & -0.218 \\
 AUROC & 4 & -0.022 & -0.083 & +0.061 & -0.031 \\
 AUROC & 8 & +0.007 & -0.033 & +0.040 & +0.015 \\
-validation patch & 1 & -0.277 & -0.040 & -0.237 & -0.194 \\
-validation patch & 2 & -0.122 & -0.062 & -0.060 & -0.147 \\
-validation patch & 4 & -0.015 & -0.083 & +0.067 & -0.021 \\
-validation patch & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
+validation patching & 1 & -0.277 & -0.040 & -0.237 & -0.194 \\
+validation patching & 2 & -0.122 & -0.062 & -0.060 & -0.147 \\
+validation patching & 4 & -0.015 & -0.083 & +0.067 & -0.021 \\
+validation patching & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 \end{longtable}
 \normalsize
 }
@@ -100,4 +100,4 @@ A later post hoc control chose alternative channel sets of the same size whose v
 
 \subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C established that template retention preserves alignment and that prediction can improve after the retention penalty is annealedd. They also showed that the annealed-minus-retention patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected and baseline fidelity, the Stage-D protocol was frozen around selected fidelity before new blocks were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
+Stages A--C established that constant template regularization preserves high filter-template similarity and that prediction can improve after the regularizer is annealed to zero. They also showed that the annealed-minus-constant patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected-channel and baseline patching scores, the Stage-D protocol was specified around the selected-channel score before new replicates were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
