@@ -105,96 +105,96 @@ U_{\mathrm{random}}(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{random}}(k),
 \]
 where the random baseline averages eight deterministic channel sets of the same size. A secondary control instead selects same-size channel sets whose validation replacement energy is closest to that of the selected set, yielding $U_{\mathrm{energy}}$. Because this matching can be poor for single-channel interventions, we always report the matching error and do not use this baseline to define the primary result.
 
-\subsection{Experimental stages and inferential roles}\label{sec:stages}
+\subsection{Experimental design and statistical analysis}\label{sec:stages}
 
 \begin{table}[t]
-\caption{Experimental roadmap. Stages D and E use previously unused blocks under protocols frozen before their own outcomes were generated.}
+\caption{Experimental roadmap. Stages D and E use new paired replicates under protocols specified before their outcomes were evaluated.}
 \label{tab:stages}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}lp{0.46\linewidth}p{0.44\linewidth}@{}}
 \toprule
-Stage & Evidence generated & Inferential role \\
+Stage & Evidence generated & Role in the analysis \\
 \midrule
-A & 400 models; 40 epochs; blocks 0--9 & Four locally prospective Holm-adjusted tests; companion outcomes exploratory \\
-B & 200 models; 200 epochs; blocks 2000--2009 & Longitudinal release study; reported contrasts exploratory \\
-C & 80 saved Stage-B checkpoints; 3 rankings; $k\in\{1,2,4,8\}$ & Post hoc measurement sensitivity and decomposition \\
-D & 80 new models; \texttt{two\_concepts}; blocks 4000--4019 & Frozen prospective confirmation; one primary TinyCNN test \\
-E & 1,200 new models; 2 tasks; 2 architectures; 6 prior profiles; blocks 5000--5049 & Predeclared secondary sensitivity study \\
+A & 400 models; 40 epochs; paired replicates 0--9 & Four prespecified Holm-adjusted tests; companion outcomes exploratory \\
+B & 200 models; 200 epochs; paired replicates 2000--2009 & Longitudinal regularization study; reported contrasts exploratory \\
+C & 80 saved Stage-B checkpoints; 3 channel rankings; $k\in\{1,2,4,8\}$ & Post hoc sensitivity analysis and score decomposition \\
+D & 80 new models; \texttt{two\_concepts}; paired replicates 4000--4019 & Prespecified confirmatory experiment; one primary TinyCNN test \\
+E & 1,200 new models; 2 tasks; 2 architectures; 6 regularization schedules; paired replicates 5000--5049 & Prespecified secondary sensitivity analysis \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The stages are not pooled as independent observations of one treatment effect. Conditions share generated contexts and initialization components within block. The block is the unit of paired uncertainty.
+The stages are not pooled as independent observations of a single effect. Conditions within a replicate share generated contexts and initialization components, so the paired replicate is the unit of analysis.
 
-Stage A supplies the initial alignment experiment and control conditions. Stage B extends optimization to 200 epochs and introduces gradual release. Stage C reuses Stage-B checkpoints to test ranking and patch-size sensitivity; it is explicitly post hoc. Its decomposition motivated the frozen Stage-D confirmation protocol before any outcomes from blocks 4000--4019 were generated. Stage E was separately frozen before blocks 5000--5049 and cannot redefine Stage D's primary decision.
+Stage A supplies the initial filter-template similarity experiment and control conditions. Stage B extends training to 200 epochs and introduces annealing of the template regularizer. Stage C reuses Stage-B checkpoints to examine sensitivity to channel-selection rule and number of patched channels; it is explicitly post hoc. Its decomposition motivated the Stage-D protocol, which was specified before outcomes from paired replicates 4000--4019 were generated. Stage E was separately specified before outcomes from paired replicates 5000--5049 and does not alter the Stage-D primary test.
 
-\subsection{Stage D: prospective primary estimand}\label{sec:stage-d-method}
+\subsection{Stage D: prespecified confirmatory test}\label{sec:stage-d-method}
 
-Stage D trains only \texttt{template\_retention\_1} and the default release schedule on \texttt{two\_concepts}, for both architectures, over 20 previously unused blocks. All models train for 200 epochs; epoch 200 is the fixed inferential checkpoint. For block $b$ and number of patched channels $k$,
+Stage D compares constant template regularization (\texttt{template\_retention\_1}) with the default annealing schedule (\texttt{template\_release}) on \texttt{two\_concepts}, for both architectures, over 20 new paired replicates. All models train for 200 epochs, with epoch 200 fixed as the evaluation point. For replicate $b$ and number of patched channels $k$,
 \[
-\Delta_b(k)=F_{b}^{\mathrm{release}}(k)-F_{b}^{\mathrm{retention}}(k).
+\Delta_b(k)=F_{b}^{\mathrm{annealed}}(k)-F_{b}^{\mathrm{constant}}(k).
 \]
-The single primary ranking is the original validation contrast ranking. The predeclared contrast is
+The primary channel-selection rule is the standardized validation activation-contrast ranking. The prespecified contrast is
 \[
 B_b=\frac{\Delta_b(4)+\Delta_b(8)}{2}
 -\frac{\Delta_b(1)+\Delta_b(2)}{2}.
 \]
-A positive $B$ indicates that the release-minus-retention difference is larger at $k=4,8$ than at $k=1,2$. This definition does not require the individual effects at $k=4$ or $k=8$ to be positive. The primary test is a two-sided one-sample Student $t$ test of $E[B]=0$ over 20 blocks. Confirmation requires all planned blocks, positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values must be reported regardless of sign. AUROC and validation-patch rankings, TwoLayerCNN, absolute counterfactual accuracy, random-control $U$, and energy-matched $U$ are all predeclared secondary analyses.
+A positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require the differences at $k=4$ or $k=8$ themselves to be positive. The primary test is a two-sided one-sample Student $t$ test of $E[B]=0$ over the 20 paired replicates. The prespecified confirmation criterion requires all planned replicates, a positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values are reported regardless of sign. The two alternative channel-selection rules, TwoLayerCNN, patched-run accuracy, random-channel $U$, and energy-matched $U$ are all prespecified secondary analyses.
 
-\subsection{Stage E: secondary sensitivity study}\label{sec:stage-e-method}
+\subsection{Stage E: secondary sensitivity analysis}\label{sec:stage-e-method}
 
-Stage E uses 50 previously unused blocks and crosses both tasks, both architectures, and six template-prior profiles: immediate release (\texttt{template\_init}), constant $\lambda=0.1$, constant $\lambda=1$, and early, default, and late release schedules. This yields $50\times2\times2\times6=1{,}200$ trained models. At epoch 200, selected fidelity is measured for every $k=1,\ldots,16$ under all three rankings. Energy-matched controls remain restricted to $k\in\{1,2,4,8\}$.
+Stage E uses 50 new paired replicates and crosses both tasks, both architectures, and six template-regularization schedules: initialization only (\texttt{template\_init}), constant $\lambda=0.1$, constant $\lambda=1$, and early, default, and late annealing schedules. This yields $50\times2\times2\times6=1{,}200$ trained models. At epoch 200, the selected-channel patching score is measured for every $k=1,\ldots,16$ under all three channel-selection rules. Energy-matched controls remain restricted to $k\in\{1,2,4,8\}$.
 
-For each non-reference profile $p$, Stage E computes the same contrast $B$ relative to \texttt{retention\_1}. Five profile-versus-reference tests are Holm-adjusted within each task/architecture/ranking family. These inferences are secondary sensitivity analyses; they do not replace or enlarge the single Stage-D primary test. Release timing is treated as a sensitivity analysis rather than as a monotone dose-response experiment.
+For each non-reference schedule $p$, Stage E computes the same contrast $B$ relative to constant $\lambda=1$ regularization. Five schedule-versus-reference tests are Holm-adjusted within each task/architecture/channel-selection family. These are secondary sensitivity analyses and do not replace or enlarge the single Stage-D primary test. Because the schedules change both the timing and duration of regularization, they are treated as sensitivity analyses rather than as ordered levels of a single treatment.
 
 \subsection{Reproducibility checks}\label{sec:audit}
 
-All Stage-D and Stage-E runs retain source identities, protocol identities, design manifests, and full/no-op patching checks. In addition, a separate checkpoint audit independently reimplemented the central metric calculations for 32 fixed Stage-B checkpoint evaluations and read stored scalar results only after recomputation. The corrected audit passed every frozen tolerance: maximum discrepancies were $2.22\times10^{-16}$ for alignment, $2.39\times10^{-7}$ for selected fidelity, $1.14\times10^{-7}$ for random fidelity, $2.19\times10^{-7}$ for $U$, and zero for ordinary and counterfactual accuracy. Full-patch and no-op probability errors were zero. This validates the sampled recomputations, not unsampled checkpoints or broader scientific claims.
+All Stage-D and Stage-E runs retain source hashes, protocol hashes, run manifests, and full-channel/no-op patching sanity checks. In addition, a separate implementation independently recomputed the main metrics for 32 fixed Stage-B checkpoints and read the stored scalar results only after recomputation. After correction of an audit-only implementation error described in Appendix~\ref{app:audit}, the recomputed values agreed with the stored results within every prespecified tolerance: maximum discrepancies were $2.22\times10^{-16}$ for filter-template similarity, $2.39\times10^{-7}$ for the selected-channel patching score, $1.14\times10^{-7}$ for the random-channel score, $2.19\times10^{-7}$ for $U$, and zero for ordinary and counterfactual accuracy. Full-channel and no-op probability errors were zero. This check applies to the recomputed checkpoints and is not an external replication.
 
 \section{Results}\label{sec:results}
 
-\subsection{Template retention increases alignment without a corrected patching advantage}\label{sec:stage-a-results}
+\subsection{Constant template regularization increases filter-template similarity without a Holm-corrected patching advantage}\label{sec:stage-a-results}
 
-Stage A strongly increases alignment in all four primary retention-versus-initialization comparisons, but none of the four $U$ tests survives Holm correction. For example, on \texttt{two\_concepts}/TinyCNN, constant retention increases alignment by 0.289 but reduces test accuracy by 6.13 percentage points at 40 epochs; the paired $\Delta U=0.0252$ has marginal 95\% interval $[-0.0306,0.0811]$ and Holm-adjusted $p=0.9995$. On \texttt{single\_shape}/TinyCNN the marginal $\Delta U$ interval is positive, but its adjusted $p=0.1633$. The Stage-A results therefore support a strong alignment effect without a Holm-corrected selected-versus-random patching effect.
+Stage A increases filter-template similarity in all four constant-regularization-versus-initialization-only comparisons, but none of the four selected-minus-random $U$ tests survives Holm correction. For example, on \texttt{two\_concepts}/TinyCNN, constant regularization increases filter-template similarity by 0.289 but reduces test accuracy by 6.13 percentage points at 40 epochs; the paired $\Delta U=0.0252$ has marginal 95\% interval $[-0.0306,0.0811]$ and Holm-adjusted $p=0.9995$. On \texttt{single\_shape}/TinyCNN the marginal $\Delta U$ interval is positive, but its adjusted $p=0.1633$. Stage A therefore shows a strong effect on filter-template similarity without a Holm-corrected improvement in the selected-minus-random patching score.
 
-A frozen-feature diagnostic shows that short-horizon prediction deficits need not imply missing predictive information. With validation-selected alternative linear heads, frozen-template TinyCNN mean test accuracy rises from 83.40\% to 99.77\% on \texttt{single\_shape} and from 52.30\% to 81.80\% on \texttt{two\_concepts}. The result diagnoses downstream readout/optimization limitations in the tested models rather than an information-theoretic ceiling.
+A linear-probe diagnostic on frozen first-layer features shows that poor short-horizon accuracy need not imply that the features lack task-relevant information. With validation-selected alternative linear heads, mean TinyCNN test accuracy rises from 83.40\% to 99.77\% on \texttt{single\_shape} and from 52.30\% to 81.80\% on \texttt{two\_concepts}. This points to downstream readout and optimization as important contributors to the early accuracy gap.
 
-\subsection{Releasing the prior improves compositional accuracy while reducing alignment}\label{sec:stage-b-results}
+\subsection{Annealing template regularization improves two-concept accuracy while reducing filter-template similarity}\label{sec:stage-b-results}
 
-Stage B shows heterogeneous early template effects. Relative to unit-normalized random initialization, \texttt{template\_init} improves mean validation accuracy over epochs 1--10 by 3.34 percentage points (95\% interval $[1.25,5.42]$) on \texttt{single\_shape}/TwoLayerCNN, but is 6.84 points worse ($[-10.26,-3.43]$) on \texttt{two\_concepts}/TinyCNN. The data therefore do not support a uniform early-learning advantage from template initialization.
+Stage B shows heterogeneous early effects of template initialization. Relative to unit-normalized random initialization, \texttt{template\_init} improves mean validation accuracy over epochs 1--10 by 3.34 percentage points (95\% interval $[1.25,5.42]$) on \texttt{single\_shape}/TwoLayerCNN, but is 6.84 points worse ($[-10.26,-3.43]$) on \texttt{two\_concepts}/TinyCNN. Thus, template initialization does not provide a consistent early optimization advantage across the tested settings.
 
-Longer optimization removes much of the shallow compositional deficit. On \texttt{two\_concepts}/TinyCNN, \texttt{template\_init} increases from 97.66\% test accuracy at epoch 40 to 99.30\% at epoch 200, matching unit-normalized random initialization at the final checkpoint. Constant retention reaches 98.01\%, while release reaches 99.22\%. The release-versus-retention accuracy gain is 1.21 percentage points (95\% interval $[0.71,1.71]$), while alignment falls from 0.947 to 0.580. In TwoLayerCNN, the corresponding accuracy gain is 0.39 points ($[0.04,0.74]$) and alignment falls from 0.999 to 0.907.
+Longer training removes much of the early TinyCNN accuracy gap on \texttt{two\_concepts}. The initialization-only condition rises from 97.66\% test accuracy at epoch 40 to 99.30\% at epoch 200, matching unit-normalized random initialization at the final checkpoint. Constant template regularization reaches 98.01\%, while annealed regularization reaches 99.22\%. The annealed-minus-constant accuracy difference is 1.21 percentage points (95\% interval $[0.71,1.71]$), while filter-template similarity decreases from 0.947 to 0.580. In TwoLayerCNN, the corresponding accuracy difference is 0.39 points ($[0.04,0.74]$), while filter-template similarity decreases from 0.999 to 0.907.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig01_learning.pdf}
-\caption{Stage-B learning and alignment trajectories over 200 epochs. Curves show block means and bands show block standard deviations. Persistent retention and release separate only after the release schedule begins.}
+\caption{Stage-B learning and filter-template similarity trajectories over 200 epochs. Curves show means across paired replicates and bands show sample standard deviations. The constant- and annealed-regularization conditions diverge only after annealing begins.}
 \label{fig:learning}
 \end{figure}
 
-In the tested schedule, retaining the anchor preserves kernel-template similarity, whereas relaxing it permits lower-alignment solutions with slightly better compositional accuracy. The experiment does not identify reduced alignment as the cause of the accuracy gain.
+In this setting, constant regularization keeps the first-layer filters close to the templates, whereas annealing the penalty allows them to drift farther while slightly improving test accuracy on \texttt{two\_concepts}. The experiment does not establish that reduced filter-template similarity causes the accuracy improvement.
 
-\subsection{The control baseline affects the selected-versus-random fidelity difference}\label{sec:decomposition}
+\subsection{The random-channel baseline changes the selected-minus-random patching score}\label{sec:decomposition}
 
-Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: release-minus-retention $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three rankings. Decomposing the score changes the interpretation. Under the original contrast ranking, the exploratory release-minus-retention selected-fidelity effects were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-fidelity changes were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. The positive $\Delta U(4)=+0.061$ therefore occurs even though selected fidelity is slightly lower under release, because the random-channel baseline decreases more strongly.
+Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: the annealed-minus-constant difference in $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three channel-selection rules. Decomposing $U$ changes the interpretation. Under the activation-contrast ranking, the exploratory differences in selected-channel patching score were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-channel differences were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. Thus, $\Delta U(4)=+0.061$ even though the selected-channel score is slightly lower with annealed regularization, because the random-channel score decreases more strongly.
 
-The same selected-fidelity pattern appears under AUROC and validation-patch rankings: strongly negative at small patch sizes, near zero or slightly negative at four channels, and slightly positive at eight. A validation-energy-matched baseline changes the relative score but not selected fidelity. Matching quality is good for many $k=4$ and $k=8$ settings but can be poor for singleton interventions, so the energy-matched score remains a secondary diagnostic. This decomposition motivated Stage D's use of selected fidelity, rather than $U$, as the primary outcome.
+The same selected-channel pattern appears under the AUROC and validation-patching channel-selection rules: strongly negative at one or two channels, near zero or slightly negative at four, and slightly positive at eight. An energy-matched control changes the selected-minus-control score but not the selected-channel patching score itself. Matching is generally tight for $k=4$ and $k=8$ but can be poor for single-channel interventions, so the energy-matched analysis remains secondary. This decomposition motivated the use of the selected-channel patching score, rather than $U$, as the Stage-D primary outcome.
 
-\subsection{Prospective confirmation across patch sizes}\label{sec:confirmation}
+\subsection{Prespecified confirmation of sensitivity to the number of patched channels}\label{sec:confirmation}
 
-All 80 planned Stage-D models and all 80 final-checkpoint evaluations completed. For the predeclared TinyCNN/contrast test,
+All 80 planned Stage-D models and all 80 epoch-200 evaluations completed. For the prespecified TinyCNN activation-contrast test,
 \[
 \bar B=0.330976,\qquad
 95\%\ \mathrm{CI}=[0.273680,0.388273],
 \]
-with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. The frozen confirmation rule is therefore satisfied.
+with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. The prespecified confirmation criterion is therefore satisfied.
 
-The positive value of $B$ reflects a change in the release-minus-retention difference across patch sizes. The four required individual effects are shown in Table~\ref{tab:primary-curve}.
+The positive value of $B$ reflects a change in the annealed-minus-constant difference as the number of patched channels increases. The four prespecified channel-count contrasts are shown in Table~\ref{tab:primary-curve}.
 
 \begin{table}[t]
-\caption{Stage-D primary TinyCNN/contrast release-minus-retention selected-fidelity effects on 20 previously unused \texttt{two\_concepts} blocks.}
+\caption{Stage-D primary TinyCNN activation-contrast results on 20 new paired \texttt{two\_concepts} replicates. Values are annealed minus constant regularization for the selected-channel patching score.}
 \label{tab:primary-curve}
 \centering
 \small
@@ -210,18 +210,18 @@ Patched channels $k$ & $\Delta F_{\mathrm{selected}}$ & 95\% CI \\
 \end{tabular}
 \end{table}
 
-Release is much less favorable for one- and two-channel interventions than for four- and eight-channel interventions; the estimated effect becomes positive only at $k=8$. Absolute selected-patch counterfactual accuracy follows the same broad pattern: its release-minus-retention effect is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
+Annealed regularization gives substantially lower selected-channel patching scores than constant regularization at $k=1$ and $k=2$, a slightly lower score at $k=4$, and a slightly higher score at $k=8$. Patched-run accuracy on the counterfactual target shows the same broad pattern: the annealed-minus-constant difference is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
 
-The two alternative validation-only rankings show the same TinyCNN dependence on patch size as predeclared secondary analyses: $B=0.3001$ for AUROC ranking and $B=0.2305$ for validation-patch ranking, with both marginal 95\% intervals entirely positive. TwoLayerCNN differs. Its contrast-ranking $B=-0.0419$ (95\% CI $[-0.0701,-0.0137]$), AUROC $B=-0.0318$ ($[-0.0583,-0.0053]$), and validation-patch $B=+0.0116$ ($[-0.0095,0.0327]$). The Stage-D data therefore confirm a positive contrast across patch sizes in the primary TinyCNN setting and show a different pattern in TwoLayerCNN.
+The two alternative validation-only channel-selection rules show the same TinyCNN dependence on channel count in the prespecified secondary analyses: $B=0.3001$ for AUROC ranking and $B=0.2305$ for validation-patching ranking, with both marginal 95\% intervals entirely positive. TwoLayerCNN differs. Its activation-contrast $B=-0.0419$ (95\% CI $[-0.0701,-0.0137]$), AUROC $B=-0.0318$ ($[-0.0583,-0.0053]$), and validation-patching $B=+0.0116$ ($[-0.0095,0.0327]$). Stage D therefore confirms the prespecified positive channel-count contrast in TinyCNN and shows that the same pattern does not extend to TwoLayerCNN.
 
-The energy-matched relative score also separates small and larger patch sizes in TinyCNN, but it remains secondary because the baseline definition changes $U$ and matching error is heterogeneous. Full-patch and no-op numerical errors were zero.
+The energy-matched selected-minus-control score also changes between smaller and larger channel sets in TinyCNN, but it remains secondary because $U$ depends on the chosen baseline and matching quality is heterogeneous. Full-channel and no-op numerical errors were zero.
 
-\subsection{Patch-size effects differ between architectures}\label{sec:exhaustive}
+\subsection{Sensitivity to the number of patched channels differs by architecture}\label{sec:exhaustive}
 
-Stage E completed all 1,200 planned final-checkpoint evaluations on 50 previously unused blocks. Under the original contrast ranking and default release schedule, the predeclared contrast $B$ relative to constant retention is positive for TinyCNN on both tasks and is not positive for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
+Stage E completed all 1,200 planned epoch-200 evaluations on 50 new paired replicates. Under the activation-contrast ranking and default annealing schedule, the prespecified contrast $B$ relative to constant regularization is positive for TinyCNN on both tasks, but is near zero or negative for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
 
 \begin{table}[t]
-\caption{Stage-E default-release contrast $B$ relative to constant retention under the original contrast ranking. These are predeclared secondary sensitivity analyses, not additional primary tests.}
+\caption{Stage-E default-annealing contrast $B$ relative to constant regularization under the activation-contrast ranking. These are prespecified secondary sensitivity analyses, not additional primary tests.}
 \label{tab:stage-e-main}
 \centering
 \small
@@ -237,84 +237,84 @@ Setting & Mean $B$ & 95\% CI & Holm $p$ \\
 \end{tabular}
 \end{table}
 
-The result is not specific to the default schedule. Relative to $\lambda=1$ retention, all five alternative prior profiles have positive contrast-ranking $B$ in TinyCNN for both tasks. For \texttt{two\_concepts}/TinyCNN, the values range from $0.1663$ for constant $\lambda=0.1$ to $0.3456$ for immediate release after template initialization. TwoLayerCNN effects are near zero on \texttt{single\_shape} and tend to be negative for released profiles on \texttt{two\_concepts}. Because release timing changes several aspects of optimization jointly, these ordered schedules are interpreted as a sensitivity analysis rather than as a monotone causal dose law.
+The result is not specific to the default schedule. Relative to constant $\lambda=1$ regularization, all five alternative schedules have positive activation-contrast $B$ in TinyCNN for both tasks. For \texttt{two\_concepts}/TinyCNN, the values range from $0.1663$ for constant $\lambda=0.1$ to $0.3456$ for template initialization without subsequent regularization. TwoLayerCNN effects are near zero on \texttt{single\_shape} and tend to be negative for annealed schedules on \texttt{two\_concepts}. Because these schedules vary both the timing and duration of regularization, we treat them as a sensitivity analysis rather than as ordered levels of a single intervention.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig02_patch_size.pdf}
-\caption{Stage-E selected-fidelity curves for $k=1,\ldots,16$ under the contrast ranking. Each panel contains all six template-prior profiles; lines are means over 50 previously unused blocks and bands are 95\% $t$ intervals. The full-patch boundary at $k=16$ is an integrity check.}
+\caption{Stage-E selected-channel patching scores for $k=1,\ldots,16$ under the activation-contrast ranking. Each panel contains all six regularization schedules; lines are means over 50 paired replicates and bands are 95\% $t$ intervals. At $k=16$ all first-layer channels are patched and $F=1$ by construction, providing a sanity check.}
 \label{fig:exhaustive-curves}
 \end{figure}
 
-Figure~\ref{fig:exhaustive-curves} shows the corresponding selected-fidelity curves. In TinyCNN, the relative ordering of released and retained profiles changes markedly as more channels are patched; in TwoLayerCNN the treatment differences follow a different pattern. Every curve reaches the full-patch boundary at $k=16$, providing an implementation check for the intervention.
+Figure~\ref{fig:exhaustive-curves} shows the corresponding patching-score curves. In TinyCNN, the relative ordering of the regularization schedules changes markedly as more channels are patched; TwoLayerCNN follows a different pattern. Every curve reaches $F=1$ when all 16 first-layer channels are patched, as required by the definition of the score.
 
-Prediction is near saturation on \texttt{single\_shape} for all profiles, so the patch-size differences there are not consequences of large accuracy gaps. On \texttt{two\_concepts}/TinyCNN, constant retention has mean test accuracy 98.05\% and alignment 0.944, whereas default release has 99.45\% and alignment 0.574. On TwoLayerCNN the corresponding accuracies are 99.11\% and 99.26\%, while alignment changes from 0.999 to 0.896. High retained alignment is therefore separable from both ordinary accuracy and the sign of $B$.
+Test accuracy is nearly saturated on \texttt{single\_shape} for all schedules, so the channel-count differences there are not explained by large accuracy gaps. On \texttt{two\_concepts}/TinyCNN, constant regularization has mean test accuracy 98.05\% and filter-template similarity 0.944, whereas the default annealing schedule has 99.45\% accuracy and similarity 0.574. On TwoLayerCNN the corresponding accuracies are 99.11\% and 99.26\%, while filter-template similarity changes from 0.999 to 0.896. High filter-template similarity therefore does not by itself imply either higher test accuracy or the same channel-count dependence in the patching score.
 
-\subsection{One-to-one matching preserves high kernel-template similarity under retention}\label{sec:matching-results}
+\subsection{One-to-one matching confirms distinct template matches under constant regularization}\label{sec:matching-results}
 
-The exploratory matching analysis on the 2,000 saved Stage-B checkpoint states asks whether the high retained-alignment result could be produced by many learned kernels repeatedly selecting the same nearest template. Maximum-weight one-to-one assignment prevents template reuse by allowing each template to be matched at most once. At epoch 200, one-to-one assignment similarity for constant retention ranges from 0.9468 to 0.9999 across the four task/architecture settings, with essentially zero nearest-versus-assignment gap, while release means range from 0.5743 to 0.9425. The high retention alignment therefore persists under the stricter matching rule.
+The exploratory matching analysis on the 2,000 saved Stage-B checkpoint states asks whether the high filter-template similarity under constant regularization could arise because many learned filters repeatedly select the same nearest template. Maximum-weight one-to-one assignment prevents such reuse by matching each learned filter to a distinct template. At epoch 200, one-to-one similarity under constant regularization ranges from 0.9468 to 0.9999 across the four task/architecture settings, with essentially no difference from the nearest-template score, whereas the annealed-regularization means range from 0.5743 to 0.9425. The high similarity under constant regularization therefore persists under the stricter one-to-one matching rule.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig03_matching_trajectories.pdf}
-\caption{Nearest-template alignment, maximum-weight one-to-one alignment, and their gap over all saved Stage-B epochs. All five conditions and four task/architecture settings are shown. Bands are sample SD over ten blocks, not confidence intervals.}
+\caption{Nearest-template similarity, maximum-weight one-to-one similarity, and their difference over all saved Stage-B epochs. All five conditions and four task/architecture settings are shown. Bands are sample standard deviations over ten paired replicates, not confidence intervals.}
 \label{fig:matching-trajectories}
 \end{figure}
 
-Figure~\ref{fig:matching-trajectories} shows the evolution of nearest-template and one-to-one alignment. The nearest-template curve allows template reuse; the one-to-one curve does not. Their small endpoint gap under persistent retention indicates that the high alignment is supported by distinct channel--template assignments rather than by repeated use of a few templates. Release follows a lower-alignment trajectory after the constraint is relaxed, consistent with Figure~\ref{fig:learning}.
+Figure~\ref{fig:matching-trajectories} shows the evolution of nearest-template and one-to-one similarity. The nearest-template score allows template reuse; the one-to-one score does not. Their small difference at epoch 200 under constant regularization indicates that the high similarity is supported by distinct channel--template assignments rather than repeated use of a few templates. The annealed condition moves toward lower template similarity after the penalty begins to decay, consistent with Figure~\ref{fig:learning}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig04_similarity_matrices.pdf}
-\caption{All 256 signed kernel--template cosine similarities for \texttt{two\_concepts}/TinyCNN, fixed block 2000, at initialization and epoch 200. Rows retain original channel indices and columns retain template indices; black crosses mark the maximum-weight one-to-one assignment. Values range from $-1$ to $1$.}
+\caption{All 256 signed filter--template cosine similarities for \texttt{two\_concepts}/TinyCNN, paired replicate 2000, at initialization and epoch 200. Rows retain original channel indices and columns retain template indices; black crosses mark the maximum-weight one-to-one assignment. Values range from $-1$ to $1$.}
 \label{fig:matching-matrices}
 \end{figure}
 
-Figure~\ref{fig:matching-matrices} shows the complete $16\times16$ channel--template similarity matrix for a fixed block. Each black cross marks one pairing used by the assignment score, making the entries that contribute to the one-to-one summary explicit and showing how those pairings change between initialization and epoch 200.
+Figure~\ref{fig:matching-matrices} shows the complete $16\times16$ channel--template similarity matrix for one paired replicate. Each black cross marks a pairing used by the one-to-one assignment, making the entries that contribute to the summary score explicit.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}
-\caption{Original templates and saved first-layer kernels for \texttt{two\_concepts}/TinyCNN, block 2000. Rows are independently reordered by maximum-weight one-to-one matching so that the paired template and learned kernel can be compared directly. The dense kernel cells are rasterized inside the PDF while labels remain vector. The illustration concerns kernel-template similarity, not human interpretability.}
+\caption{Original templates and saved first-layer filters for \texttt{two\_concepts}/TinyCNN, paired replicate 2000. Rows are independently reordered by maximum-weight one-to-one matching so that each template can be compared directly with its assigned learned filter. The dense filter cells are rasterized inside the PDF while labels remain vector. The illustration concerns filter-template similarity, not human interpretability.}
 \label{fig:kernel-gallery}
 \end{figure}
 
-The gallery in Figure~\ref{fig:kernel-gallery} shows the matched filters themselves. Together, Figures~\ref{fig:matching-trajectories}--\ref{fig:kernel-gallery} show that persistent retention keeps a set of learned kernels close to distinct predefined templates, whereas release permits larger drift. These figures do not establish semantic uniqueness, human readability, or the mechanism behind the patching curves. The complete endpoint matching table is retained in Appendix~\ref{app:kernel-matching}.
+The gallery in Figure~\ref{fig:kernel-gallery} shows the matched filters themselves. Together, Figures~\ref{fig:matching-trajectories}--\ref{fig:kernel-gallery} show that constant template regularization keeps learned filters close to distinct predefined templates, whereas annealing the regularizer allows greater drift. These figures do not establish semantic uniqueness, human interpretability, or a mechanism for the activation-patching results. The complete epoch-200 matching table is retained in Appendix~\ref{app:kernel-matching}.
 
 \section{Interpretation}\label{sec:interpretation}
 
-Persistent template retention strongly increases kernel-template similarity, while the release-minus-retention difference measured by activation patching varies with the number of patched channels. In the primary TinyCNN setting, release is much less favorable at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A single patch size therefore does not summarize the release-versus-retention comparison across the tested models.
+Constant template regularization strongly increases filter-template similarity, while the annealed-minus-constant difference in the normalized patching score varies with the number of patched channels. In the primary TinyCNN setting, annealed regularization gives substantially lower scores at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A result at a single channel count therefore does not summarize the regularization-schedule comparison across the tested models.
 
-The distinction between selected-channel fidelity and a selected-versus-control score also matters. In Stage C, the positive release-minus-retention value of $U_{\mathrm{random}}(4)$ occurs even though selected fidelity is slightly lower under release, because random-channel fidelity decreases more strongly. Reporting the selected intervention and its control separately avoids attributing a relative change to the selected channels alone.
+The distinction between the selected-channel patching score and a selected-minus-control score also matters. In Stage C, the positive annealed-minus-constant value of $U_{\mathrm{random}}(4)$ occurs even though the selected-channel score is slightly lower under annealed regularization, because the random-channel score decreases more strongly. Reporting the selected intervention and the control baseline separately avoids attributing a relative change to the selected channels alone.
 
-The experiments support a measurement-level interpretation rather than a mechanistic one. Variation with patch size could reflect redundancy, nonlinear channel interactions, ranking behavior, activation scale, or patched combinations that do not occur naturally. The change in direction between TinyCNN and TwoLayerCNN provides additional evidence that the observed patching pattern should not be treated as a general property of template priors.
+These results concern the sensitivity of the patching measurement to intervention size, not the identification of a unique mechanism. Variation with the number of patched channels could reflect redundancy, nonlinear channel interactions, the channel-selection rule, activation scale, or out-of-distribution combinations of activations. The different pattern in TwoLayerCNN further indicates that the result should not be treated as a general property of template-based regularization.
 
 \section{Limitations}\label{sec:limitations}
 
 \begin{itemize}
-\item Only two related synthetic tasks, two small architectures, one first-layer template bank, and one family of optimizers/schedules are studied. There is no natural-image benchmark or human-readability experiment.
+\item Only two related synthetic tasks, two small architectures, one first-layer template bank, one optimizer, and one family of regularization schedules are studied. There is no natural-image benchmark or human-interpretability experiment.
 \item The renderer provides balanced, matched counterfactuals and exact object masks. This control is useful for measurement but simplifies correlations and nuisance structure found in real data.
-\item The confirmed Stage-D claim is specific to \texttt{two\_concepts}/TinyCNN, the contrast ranking, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence extends the sensitivity analysis but remains secondary.
-\item Stage E explores six prior profiles and all $k=1,\ldots,16$. Holm adjustment is applied only within the predeclared five-profile families; the study is not a license to select arbitrary favorable subgroups.
-\item Activation patching changes complete first-layer feature maps and can create internal combinations that are not on the model's natural activation manifold. Fidelity is tied to probability outputs and the chosen layer/ranking; other intervention metrics may differ \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
-\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are relative scores. The random baseline changes with patch size, while energy matching is imperfect, especially for singleton interventions. Neither relative score should replace the directly reported selected fidelity.
-\item The one-to-one matching result concerns a redundant rank-10 template bank and does not validate human interpretability or independent semantic coverage.
-\item The independent audit covers 32 fixed Stage-B checkpoint evaluations rather than every checkpoint from every stage. Passing the audit supports the sampled implementation but is not external replication.
+\item The confirmed Stage-D result is specific to \texttt{two\_concepts}/TinyCNN, the activation-contrast channel ranking, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence broadens the sensitivity analysis but remains secondary.
+\item Stage E explores six regularization schedules and all $k=1,\ldots,16$. Holm adjustment is applied only within the prespecified five-comparison families; these analyses should not be used to select favorable post hoc subgroups.
+\item Activation patching replaces complete first-layer feature maps and can create activation combinations that are out of distribution for the model. The normalized patching score is tied to probability outputs, the chosen layer, and the channel-selection rule; other intervention metrics may give different results \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
+\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are selected-minus-control scores. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. Neither score should replace the directly reported selected-channel patching score.
+\item The one-to-one matching analysis concerns a redundant rank-10 template bank and does not establish human interpretability or distinct semantic meaning for every filter.
+\item The independent reimplementation check covers 32 fixed Stage-B checkpoints rather than every checkpoint from every stage. Agreement on these checkpoints supports the implementation check but is not an external replication.
 \end{itemize}
 
 \section{Scope and future work}\label{sec:future}
 
-A mechanism-focused follow-up could measure channel redundancy, joint versus singleton effects, subspace-level interventions, activation-scale controls, and architecture-by-patch-size interactions under a predeclared analysis plan. Moving beyond the present renderer would test whether the patch-size dependence persists when concept correlations and nuisance structure are less controlled. Claims about human interpretability would additionally require direct human evaluation rather than inference from kernel-template similarity.
+Future experiments could directly test channel redundancy, joint versus single-channel effects, subspace-level interventions, activation-scale controls, and architecture-by-channel-count interactions under a prespecified analysis plan. Experiments beyond the present renderer would test whether the channel-count dependence persists when concept correlations and nuisance structure are less controlled. Claims about human interpretability would require direct human evaluation rather than inference from filter-template similarity.
 
-Natural-image experiments would address external validity, and larger architectures could help determine whether the TwoLayerCNN result reflects depth, optimization, or a property of this particular network. Alternative intervention targets and output metrics would test whether the confirmed contrast is specific to first-layer probability-space activation patching.
+Natural-image experiments would address external validity, and larger architectures could help determine whether the TwoLayerCNN result reflects depth, optimization, or a property of this particular network. Alternative intervention targets and evaluation metrics would test whether the confirmed contrast is specific to first-layer patching with the present probability-based score.
 
 \section{Conclusion}\label{sec:conclusion}
 
-Persistent template retention produces high first-layer kernel-template similarity in these small CNNs. Activation patching gives a more conditional result. In the prospectively confirmed TinyCNN setting, the release-minus-retention selected-fidelity effect is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model study gives positive values of the same predeclared contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-versus-random analysis also shows that a control baseline can change a relative patching comparison. Kernel-template similarity, selected-channel fidelity, and control-relative scores should therefore be reported as separate measurements, with the number of patched channels and architecture specified as part of the result.
+Constant template regularization produces high first-layer filter-template similarity in these small CNNs. Activation patching gives a more conditional result. In the prespecified TinyCNN confirmation, the annealed-minus-constant difference in selected-channel patching score is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model sensitivity study gives positive values of the same prespecified channel-count contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-minus-random analysis also shows that the control baseline can change a relative patching comparison. Filter-template similarity, selected-channel patching score, and selected-minus-control scores should therefore be reported separately, together with the number of patched channels and the architecture.
 
 \section{Data and code availability}\label{sec:availability}
 
-The experiments use procedurally rendered synthetic images. The research artifact contains renderer, training and evaluation code, frozen protocols, execution manifests, checkpoint-level metrics, complete result tables, and analysis scripts. The Stage-D and Stage-E paper-facing outputs include all planned models and full numerical tables; the independent checkpoint audit protocol and report are also retained. The anonymous manuscript does not link the current working repository because that repository identifies the authors. An anonymized archival artifact and DOI should be prepared before final submission if required by the venue.
+The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, prespecified protocols, run manifests, checkpoint-level metrics, complete result tables, and analysis scripts. The Stage-D and Stage-E outputs include all planned models and full numerical tables, and the independent checkpoint-reimplementation protocol and report are retained. The anonymous manuscript does not link the current working repository because that repository identifies the authors. An anonymized archival artifact and DOI should be prepared before final submission if required by the venue.
 
 \bibliography{../literature/references.bib}
 
