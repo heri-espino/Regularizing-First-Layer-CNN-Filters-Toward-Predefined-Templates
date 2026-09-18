@@ -184,7 +184,7 @@ The same pattern in the selected-channel effect appears under the AUROC and vali
 
 \subsection{Prespecified confirmation of sensitivity to the number of patched channels}\label{sec:confirmation}
 
-All 80 planned Stage-D models and all 80 epoch-200 evaluations completed. For the prespecified TinyCNN test, with channels ranked by activation difference,
+All 80 planned Stage-D models and all 80 epoch-200 evaluations were completed. For the prespecified TinyCNN test, with channels ranked by activation difference,
 \[
 \bar B=0.330976,\qquad
 95\%\ \mathrm{CI}=[0.273680,0.388273],
@@ -252,7 +252,7 @@ Test accuracy is nearly saturated on \texttt{single\_shape} for all schedules, s
 
 \subsection{One-to-one matching gives similar filter-template similarity under constant regularization}\label{sec:matching-results}
 
-To check whether high nearest-template similarity could be driven by repeated matches to the same few templates, we reanalyze the 2,000 saved Stage-B checkpoint states using maximum-weight one-to-one assignment. This matching assigns each learned filter to a distinct template. At epoch 200, one-to-one similarity under constant regularization ranges from 0.9468 to 0.9999 across the four task/architecture settings, with essentially no difference from the nearest-template score, whereas the annealed-regularization means range from 0.5743 to 0.9425. The high similarity under constant regularization is therefore similar under the stricter one-to-one matching rule.
+To check whether high nearest-template similarity could be driven by repeated matches to the same few templates, we reanalyze the 2,000 saved Stage-B checkpoint states using maximum-weight one-to-one assignment. This matching assigns each learned filter to a distinct template. At epoch 200, one-to-one similarity under constant regularization ranges from 0.9468 to 0.9999 across the four task/architecture settings, with essentially no difference from the nearest-template score, whereas the annealed-regularization means range from 0.5743 to 0.9425. The one-to-one score therefore preserves the high similarity seen under constant regularization.
 
 \begin{figure}[t]
 \centering
@@ -297,7 +297,7 @@ These results show that the measured patching effect is sensitive to how many ch
 \item The confirmed Stage-D result is specific to \texttt{two\_concepts}/TinyCNN, ranking channels by activation difference, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence broadens the sensitivity analysis but remains secondary.
 \item Stage E explores six regularization schedules and all $k=1,\ldots,16$. Holm adjustment is applied only within the prespecified five-comparison families; these analyses should not be used to select favorable post hoc subgroups.
 \item Activation patching replaces complete first-layer feature maps and can create activation combinations that are out of distribution for the model. The normalized patching effect is tied to probability outputs, the chosen layer, and the channel-selection rule; other intervention metrics may give different results \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
-\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are selected-minus-control differences in patching effect. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. Neither score should replace the directly reported patching effect for selected channels.
+\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ compare the selected channels with control channel sets. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. We therefore report the patching effect for selected channels separately.
 \item The one-to-one matching analysis concerns a redundant rank-10 template bank and does not show that every filter has a distinct semantic meaning or that the filters are human-interpretable.
 \item The independent reimplementation covers 32 fixed Stage-B checkpoints rather than every checkpoint from every stage. Agreement on these checkpoints supports the reproducibility of the evaluation code but is not an external replication.
 \end{itemize}
@@ -308,11 +308,11 @@ Future experiments could test channel redundancy, joint versus single-channel ef
 
 \section{Conclusion}\label{sec:conclusion}
 
-Constant template regularization produces high first-layer filter-template similarity in these small CNNs. The activation-patching comparison is more conditional. In the prespecified TinyCNN confirmation, the annealed-minus-constant difference in patching effect for selected channels is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model sensitivity analysis gives positive values of the same prespecified channel-count contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-minus-random analysis further shows that a relative patching comparison can change with the control baseline. Similarity to the predefined filters, the patching effect for selected channels, and the corresponding control-channel effect should therefore be reported separately, together with the number of patched channels and the architecture.
+Constant template regularization produces high first-layer filter-template similarity in these small CNNs. Activation patching gives a different picture. In the prespecified TinyCNN confirmation, the annealed-minus-constant difference in patching effect for selected channels is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model sensitivity analysis gives positive values of the same prespecified channel-count contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-minus-random analysis further shows that a relative patching comparison can change with the control baseline. Similarity to the predefined filters, the patching effect for selected channels, and the corresponding control-channel effect should therefore be reported separately, together with the number of patched channels and the architecture.
 
 \section{Data and code availability}\label{sec:availability}
 
-The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, prespecified protocols, run manifests, checkpoint-level metrics, complete result tables, and analysis scripts. The Stage-D and Stage-E outputs include all planned models and full numerical tables, and the independent checkpoint-reimplementation protocol and report are retained. The anonymous manuscript does not link the current working repository because that repository identifies the authors. An anonymized archival artifact and DOI should be prepared before final submission if required by the venue.
+The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, prespecified protocols, run manifests, checkpoint-level metrics, complete result tables, and analysis scripts. The Stage-D and Stage-E outputs include all planned models and full numerical tables, and the independent checkpoint-reimplementation protocol and report are retained. For anonymous review, the manuscript does not link the current working repository because it identifies the authors. An anonymized archival artifact and DOI will be prepared if required by the venue.
 
 \bibliography{../literature/references.bib}
 
