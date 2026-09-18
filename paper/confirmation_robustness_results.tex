@@ -1,16 +1,16 @@
 \section{Confirmatory and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before outcomes from paired replicates 4000--4019 were generated. The Stage-E protocol was separately specified before outcomes from paired replicates 5000--5049 were generated and remains secondary to Stage D. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before running replicates 4000--4019. The Stage-E protocol was separately specified before running replicates 5000--5049 and remains secondary to Stage D. Within each replicate, conditions are paired through shared generated data and relevant initialization components. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
 
-Each entry is the paired difference in selected-channel patching score at epoch 200 (annealed minus constant regularization), averaged over 20 new replicates. Only TinyCNN with channels ranked by activation difference supplies the single primary test; the remaining rows are prespecified secondary analyses.
+Each entry is the within-replicate difference in patching effect for selected channels at epoch 200 (annealed minus constant regularization), averaged over 20 new replicates. Only TinyCNN with channels ranked by activation difference supplies the single primary test; the remaining rows are prespecified secondary analyses.
 
 {
 \small
 \setlength{\tabcolsep}{4pt}
 \begin{longtable}{llrcc}
-\caption{Stage-D annealed-minus-constant differences in selected-channel patching score.}\label{tab:stage-d-full}\\
+\caption{Stage-D annealed-minus-constant differences in patching effect for selected channels.}\label{tab:stage-d-full}\\
 \toprule
 Architecture & Channel selection & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
 \midrule
@@ -78,13 +78,13 @@ TwoLayerCNN & validation patching & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 
 \subsection{Stage-D patched-run accuracy on counterfactual targets}\label{app:stage-d-cf}
 
-Patched-run accuracy on the counterfactual target was retained alongside the normalized patching score. For the primary TinyCNN setting, with channels ranked by activation difference, annealed minus constant regularization is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
+Patched-run accuracy on the counterfactual target was retained alongside the normalized patching effect. For the primary TinyCNN setting, with channels ranked by activation difference, annealed minus constant regularization is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
 
 AUROC and validation-patching channel-selection rules show the same broad change between smaller and larger channel sets. These are secondary outcomes and were not used to define confirmation.
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The validation-energy-matched control selects eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the selected-minus-control score also changes with the number of patched channels, but it does not replace the selected-channel patching score in the primary analysis.
+The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with the number of patched channels, but the primary analysis remains the patching effect for selected channels.
 
 \subsection{Stage-E schedule comparisons when channels are ranked by activation difference}\label{app:stage-e-profiles}
 
@@ -131,7 +131,7 @@ two concepts & TwoLayerCNN & late annealing & -0.04523 & [-0.06854, -0.02192] & 
 
 \subsection{Stage-E epoch-200 accuracy and filter-template similarity}\label{app:stage-e-endpoints}
 
-The comparison below complements the activation-patching results with test accuracy and first-layer filter-template similarity. Values are means over 50 new paired replicates.
+The comparison below complements the activation-patching results with test accuracy and first-layer filter-template similarity. Values are means over 50 new replicates.
 
 \begin{table}[h]
 \caption{Stage-E epoch-200 test accuracy and first-layer filter-template similarity for default annealing versus constant regularization.}
@@ -158,12 +158,12 @@ two concepts & TwoLayerCNN & default annealing & 99.26\% & 0.896 \\
 \end{tabular}
 \end{table}
 
-\subsection{Independent checkpoint reimplementation check}\label{app:audit}
+\subsection{Independent reimplementation of checkpoint evaluation}\label{app:audit}
 
-The prespecified check covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol, and all recomputed values fell within the stated tolerances.
+The prespecified reimplementation covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol, and all recomputed values fell within the stated tolerances.
 
 \begin{table}[h]
-\caption{Discrepancies in the independent checkpoint reimplementation. Full-channel and no-op probability errors were both zero.}
+\caption{Discrepancies between the original and independently reimplemented checkpoint evaluations. Full-channel and no-op probability errors were both zero.}
 \label{tab:audit}
 \centering
 \small
@@ -175,8 +175,8 @@ ordinary accuracy & 0 & $10^{-12}$ \\
 filter-template similarity & $2.22\times10^{-16}$ & $10^{-6}$ \\
 concept AUROC & 0 & $10^{-9}$ \\
 localization IoU & 0 & $10^{-9}$ \\
-selected-channel patching score & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
-random-channel patching score & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
+patching effect for selected channels & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
+patching effect for random channels & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
 $U_{\mathrm{random}}$ & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
 patched-run accuracy & 0 & $10^{-12}$ \\
 \bottomrule
