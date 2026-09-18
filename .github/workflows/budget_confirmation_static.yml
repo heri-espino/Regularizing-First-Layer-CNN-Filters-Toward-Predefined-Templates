@@ -9,6 +9,7 @@ on:
       - 'scripts/use_conda_env.ps1'
       - 'studies/cnn_budget_confirmation/**'
       - 'studies/cnn_exhaustive_robustness/**'
+      - 'studies/cnn_metric_sensitivity/**'
       - '.github/workflows/budget_confirmation_static.yml'
   workflow_dispatch:
 
@@ -35,6 +36,8 @@ jobs:
           zsh -n scripts/use_conda_env.zsh
           zsh -n studies/cnn_budget_confirmation/run_confirmation.zsh
           zsh -n studies/cnn_exhaustive_robustness/run_exhaustive.zsh
+          zsh -n run/run_metric_sensitivity.zsh
+          zsh -n studies/cnn_metric_sensitivity/run_metric_sensitivity.zsh
       - name: Validate PowerShell syntax
         shell: pwsh
         run: |
@@ -44,7 +47,9 @@ jobs:
             'run/run_paper_experiments.ps1',
             'scripts/use_conda_env.ps1',
             'studies/cnn_budget_confirmation/run_confirmation.ps1',
-            'studies/cnn_exhaustive_robustness/run_exhaustive.ps1'
+            'studies/cnn_exhaustive_robustness/run_exhaustive.ps1',
+            'run/run_metric_sensitivity.ps1',
+            'studies/cnn_metric_sensitivity/run_metric_sensitivity.ps1'
           )
           foreach ($file in $files) {
             $tokens = $null
@@ -62,7 +67,10 @@ jobs:
           python -m py_compile studies/cnn_exhaustive_robustness/train_grid.py
           python -m py_compile studies/cnn_exhaustive_robustness/evaluate_grid.py
           python -m py_compile studies/cnn_exhaustive_robustness/analyze_grid.py
+          python -m py_compile studies/cnn_metric_sensitivity/evaluate_metrics.py
+          python -m py_compile studies/cnn_metric_sensitivity/analyze_metrics.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
           test -s studies/cnn_exhaustive_robustness/PROTOCOL.md
+          test -s studies/cnn_metric_sensitivity/PROTOCOL.md
