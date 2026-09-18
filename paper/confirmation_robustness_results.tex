@@ -1,22 +1,22 @@
-\section{Prospective confirmation and Stage-E sensitivity analyses}\label{app:confirmation}
+\section{Confirmatory and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix contains the complete numerical support for Stages D and E. Stage D was frozen before any outcome from blocks 4000--4019 was generated. Stage E was separately frozen before any outcome from blocks 5000--5049 was generated and remains secondary to Stage D. The main text reports the Stage-D primary curve, the default-release Stage-E architecture comparison, and the full selected-fidelity curves; this appendix retains the complete ranking/profile breakdowns, secondary controls, and audit details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix contains the complete numerical support for Stages D and E. The Stage-D protocol was specified before outcomes from paired replicates 4000--4019 were generated. The Stage-E protocol was separately specified before outcomes from paired replicates 5000--5049 were generated and remains secondary to Stage D. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
-\subsection{Stage-D selected-fidelity treatment effects}\label{app:stage-d-full}
+\subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
 
-All entries are release minus constant-retention selected fidelity at epoch 200, paired over 20 previously unused blocks. Only TinyCNN/contrast supplies the single primary test; the remaining rows are predeclared secondary analyses.
+All entries are annealed minus constant-regularization selected-channel patching scores at epoch 200, paired over 20 new replicates. Only TinyCNN with activation-contrast channel selection supplies the single primary test; the remaining rows are prespecified secondary analyses.
 
 {
 \small
 \setlength{\tabcolsep}{4pt}
 \begin{longtable}{llrcc}
-\caption{Stage-D release-minus-retention selected-fidelity effects.}\label{tab:stage-d-full}\\
+\caption{Stage-D annealed-minus-constant differences in selected-channel patching score.}\label{tab:stage-d-full}\\
 \toprule
-Architecture & Ranking & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
+Architecture & Channel selection & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
 \midrule
 \endfirsthead
 \toprule
-Architecture & Ranking & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
+Architecture & Channel selection & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
 \midrule
 \endhead
 \bottomrule
@@ -49,22 +49,22 @@ TwoLayerCNN & validation patch & 8 & +0.0100 & [-0.0015, +0.0214] \\
 \normalsize
 }
 
-\subsection{Stage-D predeclared contrast}\label{app:stage-d-b}
+\subsection{Stage-D prespecified contrast}\label{app:stage-d-b}
 
 For every architecture/ranking pair,
 \[
 B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
 \]
-Positive $B$ indicates that the release-minus-retention difference is larger at $k=4,8$ than at $k=1,2$; it does not require a positive release effect at either larger value of $k$. The TinyCNN/contrast row is the single frozen primary test. All other rows are secondary and do not alter the primary decision.
+Positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require a positive annealing effect at either larger value of $k$. The TinyCNN activation-contrast row is the single prespecified primary test. All other rows are secondary and do not alter the primary conclusion.
 
 \begin{table}[h]
-\caption{Stage-D values of the predeclared contrast $B$. The first row alone is confirmatory.}
+\caption{Stage-D values of the prespecified contrast $B$. The first row alone is confirmatory.}
 \label{tab:stage-d-b}
 \centering
 \small
 \begin{tabular}{llccc}
 \toprule
-Architecture & Ranking & Mean $B$ & 95\% CI & two-sided $p$ \\
+Architecture & Channel selection & Mean $B$ & 95\% CI & two-sided $p$ \\
 \midrule
 TinyCNN & contrast & +0.33098 & [0.27368, 0.38827] & $2.28\times10^{-10}$ \\
 TinyCNN & AUROC & +0.30014 & [0.24866, 0.35162] & $1.95\times10^{-10}$ \\
@@ -76,94 +76,94 @@ TwoLayerCNN & validation patch & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 \end{tabular}
 \end{table}
 
-\subsection{Stage-D absolute counterfactual accuracy}\label{app:stage-d-cf}
+\subsection{Stage-D patched-run counterfactual accuracy}\label{app:stage-d-cf}
 
-Absolute selected-patch counterfactual accuracy was retained to report intervention correctness alongside the relative fidelity measure. For the primary TinyCNN/contrast setting, release minus retention is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
+Patched-run accuracy on the counterfactual target was retained alongside the normalized patching score. For the primary TinyCNN activation-contrast setting, annealed minus constant regularization is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
 
-AUROC and validation-patch rankings show the same broad change between smaller and larger patch sizes. These are secondary outcomes and were not used to define confirmation.
+AUROC and validation-patching channel-selection rules show the same broad change between smaller and larger channel sets. These are secondary outcomes and were not used to define confirmation.
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The validation-energy-matched control selects eight same-size alternative channel sets with replacement energy closest to the selected set, using validation data only. For TinyCNN/contrast, release-minus-retention $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: singleton alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the relative score also changes with patch size, but it is not substituted for selected fidelity in the primary analysis.
+The validation-energy-matched control selects eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with activation-contrast channel selection, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: singleton alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. The control shows that the selected-minus-control score also changes with the number of patched channels, but it does not replace the selected-channel patching score in the primary analysis.
 
-\subsection{Stage-E profile comparisons under contrast ranking}\label{app:stage-e-profiles}
+\subsection{Stage-E schedule comparisons under activation-contrast ranking}\label{app:stage-e-profiles}
 
-The four default-release rows summarized in Table~\ref{tab:stage-e-main} delimit the architecture dependence in the main text. The table below gives the complete five-profile-versus-retention family for each task/architecture setting. Holm adjustment is performed within each task/architecture/ranking family, exactly as predeclared.
+The four default-annealing rows summarized in Table~\ref{tab:stage-e-main} show the architecture dependence in the main text. The table below gives all five schedule-versus-constant-regularization comparisons for each task/architecture setting. Holm adjustment is performed within each task/architecture/channel-selection family, exactly as prespecified.
 
 {
 \small
 \setlength{\tabcolsep}{3.5pt}
 \begin{longtable}{lllccl}
-\caption{Stage-E values of $B$ for every non-reference profile under contrast ranking.}\label{tab:stage-e-profiles}\\
+\caption{Stage-E values of $B$ for every non-reference regularization schedule under activation-contrast channel selection.}\label{tab:stage-e-profiles}\\
 \toprule
-Task & Architecture & Profile vs. retention 1 & Mean $B$ & 95\% CI & Holm $p$ \\
+Task & Architecture & Schedule vs. constant $\lambda=1$ & Mean $B$ & 95\% CI & Holm $p$ \\
 \midrule
 \endfirsthead
 \toprule
-Task & Architecture & Profile vs. retention 1 & Mean $B$ & 95\% CI & Holm $p$ \\
+Task & Architecture & Schedule vs. constant $\lambda=1$ & Mean $B$ & 95\% CI & Holm $p$ \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-single shape & TinyCNN & template init & +0.06804 & [0.05343, 0.08264] & $6.91\times10^{-12}$ \\
-single shape & TinyCNN & retention 0.1 & +0.03871 & [0.02525, 0.05218] & $5.13\times10^{-7}$ \\
-single shape & TinyCNN & release early & +0.06855 & [0.05228, 0.08482] & $1.11\times10^{-10}$ \\
-single shape & TinyCNN & release default & +0.07189 & [0.05444, 0.08934] & $1.43\times10^{-10}$ \\
-single shape & TinyCNN & release late & +0.07955 & [0.06404, 0.09505] & $3.61\times10^{-13}$ \\
-single shape & TwoLayerCNN & template init & +0.00762 & [-0.00793, 0.02317] & 0.9885 \\
-single shape & TwoLayerCNN & retention 0.1 & +0.00031 & [-0.01053, 0.01116] & 1.0000 \\
-single shape & TwoLayerCNN & release early & +0.00003 & [-0.01500, 0.01506] & 1.0000 \\
-single shape & TwoLayerCNN & release default & -0.01018 & [-0.02290, 0.00254] & 0.4569 \\
-single shape & TwoLayerCNN & release late & -0.01237 & [-0.02194, -0.00279] & 0.0621 \\
-two concepts & TinyCNN & template init & +0.34557 & [0.31797, 0.37317] & $5.61\times10^{-29}$ \\
-two concepts & TinyCNN & retention 0.1 & +0.16626 & [0.14002, 0.19251] & $3.71\times10^{-17}$ \\
-two concepts & TinyCNN & release early & +0.32245 & [0.28415, 0.36074] & $1.26\times10^{-21}$ \\
-two concepts & TinyCNN & release default & +0.28619 & [0.25389, 0.31850] & $1.95\times10^{-22}$ \\
-two concepts & TinyCNN & release late & +0.19342 & [0.16432, 0.22253] & $1.20\times10^{-17}$ \\
-two concepts & TwoLayerCNN & template init & -0.00583 & [-0.03214, 0.02049] & 0.6583 \\
-two concepts & TwoLayerCNN & retention 0.1 & -0.01413 & [-0.03880, 0.01054] & 0.5104 \\
-two concepts & TwoLayerCNN & release early & -0.04199 & [-0.06889, -0.01509] & 0.0116 \\
-two concepts & TwoLayerCNN & release default & -0.04156 & [-0.06983, -0.01329] & 0.0144 \\
-two concepts & TwoLayerCNN & release late & -0.04523 & [-0.06854, -0.02192] & 0.00147 \\
+single shape & TinyCNN & initialization only & +0.06804 & [0.05343, 0.08264] & $6.91\times10^{-12}$ \\
+single shape & TinyCNN & constant $\lambda=0.1$ & +0.03871 & [0.02525, 0.05218] & $5.13\times10^{-7}$ \\
+single shape & TinyCNN & early annealing & +0.06855 & [0.05228, 0.08482] & $1.11\times10^{-10}$ \\
+single shape & TinyCNN & default annealing & +0.07189 & [0.05444, 0.08934] & $1.43\times10^{-10}$ \\
+single shape & TinyCNN & late annealing & +0.07955 & [0.06404, 0.09505] & $3.61\times10^{-13}$ \\
+single shape & TwoLayerCNN & initialization only & +0.00762 & [-0.00793, 0.02317] & 0.9885 \\
+single shape & TwoLayerCNN & constant $\lambda=0.1$ & +0.00031 & [-0.01053, 0.01116] & 1.0000 \\
+single shape & TwoLayerCNN & early annealing & +0.00003 & [-0.01500, 0.01506] & 1.0000 \\
+single shape & TwoLayerCNN & default annealing & -0.01018 & [-0.02290, 0.00254] & 0.4569 \\
+single shape & TwoLayerCNN & late annealing & -0.01237 & [-0.02194, -0.00279] & 0.0621 \\
+two concepts & TinyCNN & initialization only & +0.34557 & [0.31797, 0.37317] & $5.61\times10^{-29}$ \\
+two concepts & TinyCNN & constant $\lambda=0.1$ & +0.16626 & [0.14002, 0.19251] & $3.71\times10^{-17}$ \\
+two concepts & TinyCNN & early annealing & +0.32245 & [0.28415, 0.36074] & $1.26\times10^{-21}$ \\
+two concepts & TinyCNN & default annealing & +0.28619 & [0.25389, 0.31850] & $1.95\times10^{-22}$ \\
+two concepts & TinyCNN & late annealing & +0.19342 & [0.16432, 0.22253] & $1.20\times10^{-17}$ \\
+two concepts & TwoLayerCNN & initialization only & -0.00583 & [-0.03214, 0.02049] & 0.6583 \\
+two concepts & TwoLayerCNN & constant $\lambda=0.1$ & -0.01413 & [-0.03880, 0.01054] & 0.5104 \\
+two concepts & TwoLayerCNN & early annealing & -0.04199 & [-0.06889, -0.01509] & 0.0116 \\
+two concepts & TwoLayerCNN & default annealing & -0.04156 & [-0.06983, -0.01329] & 0.0144 \\
+two concepts & TwoLayerCNN & late annealing & -0.04523 & [-0.06854, -0.02192] & 0.00147 \\
 \end{longtable}
 \normalsize
 }
 
-\subsection{Stage-E endpoint alignment and prediction}\label{app:stage-e-endpoints}
+\subsection{Stage-E epoch-200 accuracy and filter-template similarity}\label{app:stage-e-endpoints}
 
-The endpoint comparison below complements the activation-patching results with ordinary prediction and first-layer alignment. Values are means over 50 previously unused blocks.
+The comparison below complements the activation-patching results with test accuracy and first-layer filter-template similarity. Values are means over 50 new paired replicates.
 
 \begin{table}[h]
-\caption{Stage-E endpoint prediction and first-layer alignment for default release versus constant retention.}
+\caption{Stage-E epoch-200 test accuracy and first-layer filter-template similarity for default annealing versus constant regularization.}
 \label{tab:stage-e-endpoints}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{lllrr}
 \toprule
-Task & Architecture & Profile & Test accuracy & Alignment \\
+Task & Architecture & Schedule & Test accuracy & Template similarity \\
 \midrule
-single shape & TinyCNN & retention 1 & 99.98\% & 0.958 \\
-single shape & TinyCNN & release default & 99.99\% & 0.682 \\
+single shape & TinyCNN & constant $\lambda=1$ & 99.98\% & 0.958 \\
+single shape & TinyCNN & default annealing & 99.99\% & 0.682 \\
 \addlinespace[2pt]
-single shape & TwoLayerCNN & retention 1 & 99.98\% & 1.000 \\
-single shape & TwoLayerCNN & release default & 99.99\% & 0.942 \\
+single shape & TwoLayerCNN & constant $\lambda=1$ & 99.98\% & 1.000 \\
+single shape & TwoLayerCNN & default annealing & 99.99\% & 0.942 \\
 \addlinespace[2pt]
-two concepts & TinyCNN & retention 1 & 98.05\% & 0.944 \\
-two concepts & TinyCNN & release default & 99.45\% & 0.574 \\
+two concepts & TinyCNN & constant $\lambda=1$ & 98.05\% & 0.944 \\
+two concepts & TinyCNN & default annealing & 99.45\% & 0.574 \\
 \addlinespace[2pt]
-two concepts & TwoLayerCNN & retention 1 & 99.11\% & 0.999 \\
-two concepts & TwoLayerCNN & release default & 99.26\% & 0.896 \\
+two concepts & TwoLayerCNN & constant $\lambda=1$ & 99.11\% & 0.999 \\
+two concepts & TwoLayerCNN & default annealing & 99.26\% & 0.896 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Independent checkpoint audit}\label{app:audit}
+\subsection{Independent checkpoint reimplementation check}\label{app:audit}
 
-The frozen audit protocol specified 32 Stage-B checkpoint evaluations. All 32 completed after correcting an audit-only implementation error that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The corrected implementation did not alter the frozen audit protocol and passed every tolerance.
+The prespecified check covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol, and all recomputed values fell within the stated tolerances.
 
 \begin{table}[h]
-\caption{Independent checkpoint-audit discrepancies. Full-patch and no-op probability errors were both zero.}
+\caption{Discrepancies in the independent checkpoint reimplementation. Full-channel and no-op probability errors were both zero.}
 \label{tab:audit}
 \centering
 \small
@@ -172,11 +172,11 @@ The frozen audit protocol specified 32 Stage-B checkpoint evaluations. All 32 co
 Metric & Maximum absolute discrepancy & Tolerance \\
 \midrule
 ordinary accuracy & 0 & $10^{-12}$ \\
-alignment & $2.22\times10^{-16}$ & $10^{-6}$ \\
+filter-template similarity & $2.22\times10^{-16}$ & $10^{-6}$ \\
 concept AUROC & 0 & $10^{-9}$ \\
 localization IoU & 0 & $10^{-9}$ \\
-selected fidelity & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
-random fidelity & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
+selected-channel patching score & $2.39\times10^{-7}$ & $2\times10^{-6}$ \\
+random-channel patching score & $1.14\times10^{-7}$ & $2\times10^{-6}$ \\
 $U_{\mathrm{random}}$ & $2.19\times10^{-7}$ & $2\times10^{-6}$ \\
 counterfactual accuracy & 0 & $10^{-12}$ \\
 \bottomrule
