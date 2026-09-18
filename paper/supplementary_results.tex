@@ -74,10 +74,10 @@ Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\
 \endhead
 \bottomrule
 \endfoot
-activation contrast & 1 & -0.375 & -0.040 & -0.335 & -0.255 \\
-activation contrast & 2 & -0.163 & -0.062 & -0.101 & -0.185 \\
-activation contrast & 4 & -0.022 & -0.083 & +0.061 & -0.030 \\
-activation contrast & 8 & +0.006 & -0.033 & +0.040 & +0.013 \\
+activation difference & 1 & -0.375 & -0.040 & -0.335 & -0.255 \\
+activation difference & 2 & -0.163 & -0.062 & -0.101 & -0.185 \\
+activation difference & 4 & -0.022 & -0.083 & +0.061 & -0.030 \\
+activation difference & 8 & +0.006 & -0.033 & +0.040 & +0.013 \\
 AUROC & 1 & -0.332 & -0.040 & -0.292 & -0.230 \\
 AUROC & 2 & -0.188 & -0.062 & -0.125 & -0.218 \\
 AUROC & 4 & -0.022 & -0.083 & +0.061 & -0.031 \\
@@ -90,9 +90,9 @@ validation patching & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 \normalsize
 }
 
-Under activation-contrast channel selection, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, the selected-channel patching score itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
+Under activation-difference channel selection, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, the selected-channel patching score itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
 
-For \texttt{two\_concepts}/TwoLayerCNN, the selected-channel patching score at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation contrast, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across the number of patched channels rather than on a fixed sign at one value of $k$.
+For \texttt{two\_concepts}/TwoLayerCNN, the selected-channel patching score at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across the number of patched channels rather than on a fixed sign at one value of $k$.
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
