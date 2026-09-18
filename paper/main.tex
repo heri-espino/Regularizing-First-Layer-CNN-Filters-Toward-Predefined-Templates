@@ -23,24 +23,24 @@
 \maketitle
 
 \begin{abstract}
-First-layer convolutional filters can remain close to predefined templates after training, but filter-template similarity does not determine how intervening on their activations changes the model output. We study this distinction in two controlled synthetic image tasks and two small CNNs. The first layer is initialized from a fixed template bank and trained either with constant regularization toward that bank or with the same regularization annealed to zero. Constant regularization yields much higher filter-template similarity. The difference in selected-channel patching score between annealed and constant regularization, however, depends strongly on the number of patched channels. In a prespecified confirmatory experiment with 20 new paired replicates of \texttt{two\_concepts}/TinyCNN, the contrast comparing $k=4,8$ with $k=1,2$ is $B=0.33098$ (95\% CI $[0.27368,0.38827]$, $p=2.28\times10^{-10}$). Annealed regularization gives lower patching scores at $k=1,2$, a slightly lower score at $k=4$, and a slightly higher score at $k=8$. A separate 1,200-model sensitivity study over 50 new paired replicates gives positive values of the same contrast for TinyCNN on both tasks and across several regularization schedules, whereas TwoLayerCNN gives different, often negative estimates. An earlier positive selected-minus-random score at $k=4$ is partly explained by a decrease in the random-channel patching score, showing that the conclusion can depend on the control baseline. An independent reimplementation check on 32 checkpoints agrees with the stored results within all prespecified tolerances. Within the tested models, filter-template similarity and activation-patching results therefore capture different properties, and the effect of the regularization schedule depends on the number of patched channels and on architecture. The experiments do not establish a unique mechanism, human interpretability, or natural-image generalization.\footnote{ChatGPT (OpenAI) was used as an assistive tool during experimental planning, code development and debugging, manuscript organization, and language editing. All experimental protocols, analyses, interpretations, and manuscript text were reviewed by the authors, who take full responsibility for the work.}
+We study whether keeping first-layer convolutional filters close to predefined templates is associated with consistent activation-patching effects. In two controlled synthetic image tasks and two small CNNs, we initialize the first layer from a fixed template bank and either keep an $L_2$ penalty toward the initial filters throughout training or anneal that penalty to zero. Constant regularization produces much higher similarity to the predefined filters, but the difference in patching effect between annealed and constant regularization depends strongly on how many channels are patched. In a prespecified confirmatory experiment with 20 new replicates of \texttt{two\_concepts}/TinyCNN, with conditions paired within each replicate, the contrast comparing $k=4,8$ with $k=1,2$ is $B=0.33098$ (95\% CI $[0.27368,0.38827]$, $p=2.28\times10^{-10}$). Annealed regularization gives lower patching effects at $k=1,2$, a slightly lower effect at $k=4$, and a slightly higher effect at $k=8$. A separate 1,200-model sensitivity analysis over 50 new replicates gives positive values of the same contrast for TinyCNN on both tasks and across several regularization schedules, whereas TwoLayerCNN gives different, often negative estimates. An earlier positive value of the selected-minus-random difference at $k=4$ is partly due to a lower patching effect for random channels, showing that the comparison depends on the choice of baseline. An independent reimplementation of the checkpoint evaluation reproduces the original results at 32 checkpoints within all prespecified tolerances. Within the tested models, similarity to the predefined filters and activation patching therefore measure different aspects of the trained networks, and the effect of the regularization schedule depends on both the number of patched channels and the architecture. The experiments do not establish a unique mechanism, human interpretability, or generalization to natural images.\footnote{ChatGPT (OpenAI) was used as an assistive tool during experimental planning, code development and debugging, manuscript organization, and language editing. All experimental protocols, analyses, interpretations, and manuscript text were reviewed by the authors, who take full responsibility for the work.}
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-A first-layer convolutional filter may remain close to a predefined edge, corner, or ring template after training. This weight-space similarity does not by itself determine how replacing the corresponding activations changes the model output. We ask whether keeping first-layer filters close to predefined templates leads to consistent activation-patching effects across different numbers of patched channels. We use activation patching as a functional test of the selected channels, not as evidence that they form a unique causal mechanism.
+A first-layer convolutional filter may remain close to a predefined edge, corner, or ring template after training. Similarity in weight space, however, does not by itself determine the effect of intervening on the corresponding activations. We therefore ask whether keeping first-layer filters close to predefined templates leads to consistent patching effects as the number of patched channels changes. We use activation patching to measure the effect of intervening on selected channels; we do not treat the intervention as evidence for a unique causal mechanism.
 
-The first convolution is initialized from a fixed bank of edge, corner, and ring templates. An $L_2$ penalty toward the initial template weights can be kept constant or annealed to zero during training. Two controlled rendering tasks provide matched counterfactual image pairs, allowing filter-template similarity, predictive performance, concept selectivity and localization, and activation-patching effects to be evaluated separately.
+The first convolution is initialized from a fixed bank of edge, corner, and ring filters. An $L_2$ penalty toward the initial filter weights is either kept constant or annealed to zero during training. Two controlled rendering tasks provide matched counterfactual image pairs, allowing similarity to the predefined filters, predictive performance, concept selectivity and localization, and activation-patching effects to be evaluated separately.
 
-Constant template regularization produces substantially higher filter-template similarity. The patching comparison, however, changes with the number of patched channels. In \texttt{two\_concepts}/TinyCNN, annealed regularization gives much lower patching scores than constant regularization when one or two channels are patched, nearly the same score at four channels, and a slightly higher score at eight. A prespecified contrast comparing these larger and smaller channel sets is positive on new data. A separate 1,200-model study reproduces a positive contrast for TinyCNN across both tasks and several regularization schedules, while TwoLayerCNN does not show the same direction. The effect of the regularization schedule on activation patching therefore changes with the number of patched channels and with architecture.
+Constant template regularization produces substantially higher filter-template similarity. The patching comparison, however, changes with the number of patched channels. In \texttt{two\_concepts}/TinyCNN, annealed regularization gives much lower patching effects than constant regularization when one or two channels are patched, nearly the same score at four channels, and a slightly higher score at eight. A prespecified contrast comparing these larger and smaller channel sets is positive on new data. A separate 1,200-model study reproduces a positive contrast for TinyCNN across both tasks and several regularization schedules, while TwoLayerCNN does not show the same direction. The effect of the regularization schedule on activation patching therefore changes with the number of patched channels and with architecture.
 
-The direct selected-channel analysis was motivated by an exploratory selected-minus-random score,
+The direct analysis of selected channels was motivated by an exploratory comparison with random channels,
 \[
 U(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{control}}(k).
 \]
-At four patched channels, this score appeared to favor annealed regularization in TinyCNN. Decomposing the score showed that the positive difference was driven in substantial part by a decrease in the random-channel baseline rather than by an increase in the selected-channel patching score. We therefore prespecified the Stage-D primary contrast using the selected-channel score alone.
+At four patched channels, this difference appeared to favor annealed regularization in TinyCNN. Examining its two terms showed that the positive value was driven in substantial part by a lower random-channel baseline rather than by a larger patching effect for selected channels. We therefore prespecified the Stage-D primary contrast using the patching effect for selected channels alone.
 
-The study combines a controlled comparison of template initialization, constant template regularization, and annealed template regularization with a prespecified confirmatory test of sensitivity to the number of patched channels and a larger secondary sensitivity study across tasks, architectures, schedules, and all channel counts. An independent checkpoint reimplementation provides a separate check of the main stored measurements. The claims are restricted to the tested synthetic renderer, first-layer interventions, and small CNN family.
+The study combines a controlled comparison of template initialization, constant template regularization, and annealed template regularization with a prespecified confirmatory test of sensitivity to the number of patched channels and a larger secondary sensitivity study across tasks, architectures, schedules, and all channel counts. An independent reimplementation of the checkpoint evaluation provides a separate reproducibility check. The claims are restricted to the tested synthetic renderer, first-layer interventions, and small CNN family.
 
 \section{Related work}\label{sec:related}
 
@@ -54,7 +54,7 @@ Fixed spatial filters can also support strong predictors when later layers are t
 
 Network Dissection and related work measure unit--concept correspondence \citep{bau_2017_network-dissection}, while interventions on concept-related units ask whether those units influence model behavior \citep{bau_2020_causal-units}. Concept Whitening, concept bottleneck models, and concept embedding models impose stronger architectural or supervision assumptions to learn concept-aligned representations \citep{chen_2020_concept-whitening,koh_2020_concept-bottlenecks,zarlenga_2022_concept-embeddings}. TCAV instead measures a model's sensitivity to a concept direction in activation space \citep{kim_2018_tcav}. Our filter-template similarity score is a weight-space measurement and should not be conflated with these activation-space notions.
 
-Activation patching identifies important model components by replacing their activations and measuring the resulting change in model output. Prior work shows that patching results can depend strongly on the corruption or replacement scheme, the evaluation metric, the components being patched, and the intervention granularity \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching,miller_2024_circuit-faithfulness}. Recent work likewise distinguishes whether information is detectable in a representation from whether it functionally influences model outputs \citep{nicolson_2025_explaining-explainability,sharma_2026_encoding-without-influence}. Our contribution is narrower: under a controlled comparison of template-regularization schedules, the annealed-versus-constant difference in selected-channel patching score changes systematically with the number of patched channels and is reproduced in a prespecified experiment on new replicates.
+Activation patching identifies important model components by replacing their activations and measuring the resulting change in model output. Prior work shows that patching results can depend strongly on the corruption or replacement scheme, the evaluation metric, the components being patched, and the intervention granularity \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching,miller_2024_circuit-faithfulness}. Recent work likewise distinguishes whether information is detectable in a representation from whether it functionally influences model outputs \citep{nicolson_2025_explaining-explainability,sharma_2026_encoding-without-influence}. Our contribution is narrower: under a controlled comparison of regularization schedules, the difference in patching effect between annealed and constant regularization changes systematically with the number of patched channels and is reproduced in a prespecified experiment on new replicates.
 
 Formal work on causal abstraction and mechanistic identifiability imposes stronger requirements than our experiment satisfies \citep{geiger_2025_causal-abstraction,meloux_2025_mechanistic-identifiability,sutter_2025_causal-abstraction-limits}. Replacing first-layer activations does not identify a unique mechanism. Accordingly, we interpret $F$ only as a score for the specified patching procedure and output metric, not as a general measure of causal identifiability.
 
@@ -62,7 +62,7 @@ Formal work on causal abstraction and mechanistic identifiability imposes strong
 
 \subsection{Tasks, models, and template bank}\label{sec:tasks-models}
 
-Images are $32\times32$ grayscale procedural renders with balanced labels and matched nuisance contexts. Each paired replicate contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. Matched counterfactual images preserve nuisance context while changing the relevant identity or concept.
+Images are $32\times32$ grayscale procedural renders with balanced labels and matched nuisance variables. Each replicate contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. Matched counterfactual images preserve the nuisance variables while changing the relevant identity or concept.
 
 \texttt{single\_shape} classifies line, circle, triangle, and square. \texttt{two\_concepts} contains two objects and uses the presence of circle and triangle as two binary factors defining four classes. For matched counterfactual pairs, one concept changes while the other is held fixed.
 
@@ -72,7 +72,7 @@ The first-layer template bank contains 16 centered, unit-norm filters: eight edg
 \[
 A=\frac{1}{16}\sum_i\max_j\langle \widehat W_i,\widehat T_j\rangle.
 \]
-A separate exploratory maximum-weight one-to-one assignment analysis prevents multiple learned filters from matching to the same template. It is reported alongside the nearest-template score and does not change the activation-patching conclusions.
+We also compute an exploratory maximum-weight one-to-one assignment, which matches each learned filter to a distinct template. This is reported alongside the nearest-template score and does not change the activation-patching conclusions.
 
 \subsection{Template initialization and regularization}\label{sec:retention}
 
@@ -90,25 +90,25 @@ The central conditions are \emph{template initialization only} (\texttt{template
 
 Concept AUROC quantifies how well a first-layer channel discriminates the target concept on held-out test data; the channel is chosen using validation data. Localization IoU measures the overlap between a validation-selected first-layer activation mask and the renderer's visible-object mask. These activation-space measurements are evaluated separately from filter-template similarity.
 
-For activation patching, we use matched counterfactual image pairs. For each pair we run the model on the base image, on the matched counterfactual image, and on a patched base image in which the selected first-layer activation maps are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged. Let $p_0$ be the base output probabilities, $p_1$ the counterfactual output probabilities, and $p_S$ the patched-run probabilities. We summarize the patching effect with the normalized score
+For activation patching, we use matched counterfactual image pairs. For each pair we run the model on the base image, on the matched counterfactual image, and on a patched base image in which the selected first-layer activation maps are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged. Let $p_0$ be the base output probabilities, $p_1$ the counterfactual output probabilities, and $p_S$ the patched-run probabilities. We quantify the patching effect with the normalized metric
 \[
 F(S)=1-\frac{\sum\lVert p_S-p_1\rVert_2^2}
 {\sum\lVert p_1-p_0\rVert_2^2}.
 \]
 When defined, $F=0$ for a no-op intervention and $F=1$ when all first-layer channels are patched. Values below zero are possible when the patched output moves farther from the counterfactual output than the unpatched base output. This score is specific to the stated output metric and should not be interpreted as a mediated fraction.
 
-Three channel-selection rules use validation data only: (i) the standardized difference in mean activation between concept-positive and concept-negative examples; (ii) absolute deviation of concept AUROC from 0.5; and (iii) the single-channel validation patching score. We also report the accuracy of the patched run on the matched counterfactual target.
+Three channel-selection rules use validation data only: (i) the standardized difference in mean activation between concept-positive and concept-negative examples; (ii) absolute deviation of concept AUROC from 0.5; and (iii) the single-channel validation patching effect. We also report the accuracy of the patched run on the matched counterfactual target.
 
-The original selected-minus-random patching score is
+The original selected-minus-random difference in patching effect is
 \[
 U_{\mathrm{random}}(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{random}}(k),
 \]
-where the random baseline averages eight deterministic channel sets of the same size. A secondary control instead selects same-size channel sets whose validation replacement energy is closest to that of the selected set, yielding $U_{\mathrm{energy}}$. Because this matching can be poor for single-channel interventions, we always report the matching error and do not use this baseline to define the primary result.
+where the random baseline averages eight deterministic channel sets of the same size. Thus, $U_{\mathrm{random}}$ is the difference in patching effect between the selected channels and random channel sets. A secondary control instead selects same-size channel sets whose validation replacement energy is closest to that of the selected set, yielding $U_{\mathrm{energy}}$. Because this matching can be poor for single-channel interventions, we always report the matching error and do not use this baseline to define the primary result.
 
 \subsection{Experimental design and statistical analysis}\label{sec:stages}
 
 \begin{table}[t]
-\caption{Experimental roadmap. Stages D and E use new paired replicates under protocols specified before their outcomes were evaluated.}
+\caption{Experimental roadmap. Stages D and E use new replicates under protocols specified before their outcomes were evaluated.}
 \label{tab:stages}
 \centering
 \footnotesize
@@ -117,22 +117,22 @@ where the random baseline averages eight deterministic channel sets of the same 
 \toprule
 Stage & Evidence generated & Role in the analysis \\
 \midrule
-A & 400 models; 40 epochs; paired replicates 0--9 & Four prespecified Holm-adjusted tests; companion outcomes exploratory \\
-B & 200 models; 200 epochs; paired replicates 2000--2009 & Longitudinal regularization study; reported contrasts exploratory \\
+A & 400 models; 40 epochs; replicates 0--9 & Four prespecified Holm-adjusted tests; companion outcomes exploratory \\
+B & 200 models; 200 epochs; replicates 2000--2009 & Longitudinal regularization study; reported contrasts exploratory \\
 C & 80 saved Stage-B checkpoints; 3 channel rankings; $k\in\{1,2,4,8\}$ & Post hoc sensitivity analysis and score decomposition \\
-D & 80 new models; \texttt{two\_concepts}; paired replicates 4000--4019 & Prespecified confirmatory experiment; one primary TinyCNN test \\
-E & 1,200 new models; 2 tasks; 2 architectures; 6 regularization schedules; paired replicates 5000--5049 & Prespecified secondary sensitivity analysis \\
+D & 80 new models; \texttt{two\_concepts}; replicates 4000--4019 & Prespecified confirmatory experiment; one primary TinyCNN test \\
+E & 1,200 new models; 2 tasks; 2 architectures; 6 regularization schedules; replicates 5000--5049 & Prespecified secondary sensitivity analysis \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The stages are not pooled as independent observations of a single effect. Conditions within a replicate share generated contexts and initialization components, so the paired replicate is the unit of analysis.
+The stages are not pooled as independent observations of a single effect. Within each replicate, experimental conditions share the generated data and relevant initialization components. Conditions are therefore paired within replicate, and the replicate is the unit of analysis.
 
-Stage A supplies the initial filter-template similarity experiment and control conditions. Stage B extends training to 200 epochs and introduces annealing of the template regularizer. Stage C reuses Stage-B checkpoints to examine sensitivity to channel-selection rule and number of patched channels; it is explicitly post hoc. Its decomposition motivated the Stage-D protocol, which was specified before outcomes from paired replicates 4000--4019 were generated. Stage E was separately specified before outcomes from paired replicates 5000--5049 and does not alter the Stage-D primary test.
+Stage A supplies the initial filter-template similarity experiment and control conditions. Stage B extends training to 200 epochs and introduces annealing of the template regularizer. Stage C reuses Stage-B checkpoints to examine sensitivity to channel-selection rule and number of patched channels; it is explicitly post hoc. Its decomposition motivated the Stage-D protocol, which was specified before outcomes from replicates 4000--4019 were generated. Stage E was separately specified before outcomes from replicates 5000--5049 and does not alter the Stage-D primary test.
 
 \subsection{Stage D: prespecified confirmatory test}\label{sec:stage-d-method}
 
-Stage D compares constant template regularization (\texttt{template\_retention\_1}) with the default annealing schedule (\texttt{template\_release}) on \texttt{two\_concepts}, for both architectures, over 20 new paired replicates. All models train for 200 epochs, with epoch 200 fixed as the evaluation point. For replicate $b$ and number of patched channels $k$,
+Stage D compares constant template regularization (\texttt{template\_retention\_1}) with the default annealing schedule (\texttt{template\_release}) on \texttt{two\_concepts} for both architectures over 20 new replicates, pairing the two conditions within each replicate. All models train for 200 epochs, with epoch 200 fixed as the evaluation point. For replicate $b$ and number of patched channels $k$,
 \[
 \Delta_b(k)=F_{b}^{\mathrm{annealed}}(k)-F_{b}^{\mathrm{constant}}(k).
 \]
@@ -141,23 +141,23 @@ For the primary analysis, channels are ranked by the standardized mean activatio
 B_b=\frac{\Delta_b(4)+\Delta_b(8)}{2}
 -\frac{\Delta_b(1)+\Delta_b(2)}{2}.
 \]
-A positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require the differences at $k=4$ or $k=8$ themselves to be positive. The primary test is a two-sided one-sample Student $t$ test of $E[B]=0$ over the 20 paired replicates. The prespecified confirmation criterion requires all planned replicates, a positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values are reported regardless of sign. The two alternative channel-selection rules, TwoLayerCNN, patched-run accuracy, random-channel $U$, and energy-matched $U$ are all prespecified secondary analyses.
+A positive $B$ indicates that the annealed-minus-constant difference is larger at $k=4,8$ than at $k=1,2$; it does not require the differences at $k=4$ or $k=8$ themselves to be positive. The primary test is a two-sided one-sample Student $t$ test of $E[B]=0$ across the 20 replicate-level contrasts. The prespecified criterion for confirmation requires all planned replicates, a positive mean $B$, a two-sided 95\% $t$ interval entirely above zero, and $p<0.05$. The four individual $\Delta(k)$ values are reported regardless of sign. The two alternative channel-selection rules, TwoLayerCNN, patched-run accuracy, random-channel $U$, and energy-matched $U$ are all prespecified secondary analyses.
 
 \subsection{Stage E: secondary sensitivity analysis}\label{sec:stage-e-method}
 
-Stage E uses 50 new paired replicates and crosses both tasks, both architectures, and six template-regularization schedules: initialization only (\texttt{template\_init}), constant $\lambda=0.1$, constant $\lambda=1$, and early, default, and late annealing schedules. This yields $50\times2\times2\times6=1{,}200$ trained models. At epoch 200, the selected-channel patching score is measured for every $k=1,\ldots,16$ under all three channel-selection rules. Energy-matched controls remain restricted to $k\in\{1,2,4,8\}$.
+Stage E uses 50 new replicates and crosses both tasks, both architectures, and six template-regularization schedules: initialization only (\texttt{template\_init}), constant $\lambda=0.1$, constant $\lambda=1$, and early, default, and late annealing schedules. This yields $50\times2\times2\times6=1{,}200$ trained models. At epoch 200, the patching effect for selected channels is measured for every $k=1,\ldots,16$ under all three channel-selection rules. Energy-matched controls remain restricted to $k\in\{1,2,4,8\}$.
 
 For each non-reference schedule $p$, Stage E computes the same contrast $B$ relative to constant $\lambda=1$ regularization. Five schedule-versus-reference tests are Holm-adjusted within each task/architecture/channel-selection family. These are secondary sensitivity analyses and do not change the single Stage-D primary analysis. Because the schedules change both the timing and duration of regularization, they are treated as sensitivity analyses rather than as a single ordered regularization factor.
 
 \subsection{Reproducibility checks}\label{sec:audit}
 
-All Stage-D and Stage-E runs retain source hashes, protocol hashes, run manifests, and full-channel/no-op patching sanity checks. In addition, a separate implementation independently recomputed the main metrics for 32 fixed Stage-B checkpoints and read the stored scalar results only after recomputation. After correction of an error in the independent implementation described in Appendix~\ref{app:audit}, the recomputed values agreed with the stored results within every prespecified tolerance: maximum discrepancies were $2.22\times10^{-16}$ for filter-template similarity, $2.39\times10^{-7}$ for the selected-channel patching score, $1.14\times10^{-7}$ for the random-channel score, $2.19\times10^{-7}$ for $U$, and zero for ordinary accuracy and patched-run accuracy on counterfactual targets. Full-channel and no-op probability errors were zero. This check applies to the recomputed checkpoints and is not an external replication.
+All Stage-D and Stage-E runs retain source hashes, protocol hashes, run manifests, and full-channel/no-op patching sanity checks. In addition, an independent implementation recomputed the main metrics for 32 fixed Stage-B checkpoints without reading the stored scalar outputs until recomputation was complete. After correction of an implementation error described in Appendix~\ref{app:audit}, the recomputed values agreed with the original outputs within every prespecified tolerance: maximum discrepancies were $2.22\times10^{-16}$ for filter-template similarity, $2.39\times10^{-7}$ for the patching effect for selected channels, $1.14\times10^{-7}$ for the random-channel score, $2.19\times10^{-7}$ for $U$, and zero for ordinary accuracy and patched-run accuracy on counterfactual targets. Full-channel and no-op probability errors were zero. This check applies to the recomputed checkpoints and is not an external replication.
 
 \section{Results}\label{sec:results}
 
-\subsection{Constant template regularization increases filter-template similarity without a Holm-corrected patching advantage}\label{sec:stage-a-results}
+\subsection{Constant template regularization increases filter-template similarity without a Holm-corrected selected-minus-random difference}\label{sec:stage-a-results}
 
-Stage A increases filter-template similarity in all four constant-regularization-versus-initialization-only comparisons, but none of the four selected-minus-random $U$ tests survives Holm correction. For example, on \texttt{two\_concepts}/TinyCNN, constant regularization increases filter-template similarity by 0.289 but reduces test accuracy by 6.13 percentage points at 40 epochs; the paired $\Delta U=0.0252$ has marginal 95\% interval $[-0.0306,0.0811]$ and Holm-adjusted $p=0.9995$. On \texttt{single\_shape}/TinyCNN the marginal $\Delta U$ interval is positive, but its adjusted $p=0.1633$. Stage A therefore shows a strong effect on filter-template similarity without a Holm-corrected improvement in the selected-minus-random patching score.
+Stage A increases filter-template similarity in all four constant-regularization-versus-initialization-only comparisons, but none of the four selected-minus-random $U$ tests survives Holm correction. For example, on \texttt{two\_concepts}/TinyCNN, constant regularization increases filter-template similarity by 0.289 but reduces test accuracy by 6.13 percentage points at 40 epochs; the paired $\Delta U=0.0252$ has marginal 95\% interval $[-0.0306,0.0811]$ and Holm-adjusted $p=0.9995$. On \texttt{single\_shape}/TinyCNN the marginal $\Delta U$ interval is positive, but its adjusted $p=0.1633$. Stage A therefore shows a strong increase in filter-template similarity without a Holm-corrected change in the selected-minus-random patching comparison.
 
 A linear-probe analysis on frozen first-layer features shows that poor short-horizon accuracy need not imply that the features lack task-relevant information. With validation-selected alternative linear heads, mean TinyCNN test accuracy rises from 83.40\% to 99.77\% on \texttt{single\_shape} and from 52.30\% to 81.80\% on \texttt{two\_concepts}. This points to downstream readout and optimization as important contributors to the early accuracy gap.
 
@@ -170,17 +170,17 @@ Longer training removes much of the early TinyCNN accuracy gap on \texttt{two\_c
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig01_learning.pdf}
-\caption{Stage-B learning and filter-template similarity trajectories over 200 epochs. Curves show means across paired replicates and bands show sample standard deviations. The constant- and annealed-regularization conditions diverge only after annealing begins.}
+\caption{Stage-B learning and filter-template similarity trajectories over 200 epochs. Curves show means across replicates and bands show sample standard deviations. The constant- and annealed-regularization conditions diverge only after annealing begins.}
 \label{fig:learning}
 \end{figure}
 
 In this setting, constant regularization keeps the first-layer filters close to the templates, whereas annealing the penalty allows them to drift farther while slightly improving test accuracy on \texttt{two\_concepts}. The experiment does not establish that reduced filter-template similarity causes the accuracy improvement.
 
-\subsection{The random-channel baseline changes the selected-minus-random patching score}\label{sec:decomposition}
+\subsection{The random-channel baseline changes the selected-minus-random difference in patching effect}\label{sec:decomposition}
 
-Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: the annealed-minus-constant difference in $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three channel-selection rules. Decomposing $U$ changes the interpretation. When channels are ranked by activation difference, the exploratory differences in selected-channel patching score were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-channel differences were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. Thus, $\Delta U(4)=+0.061$ even though the selected-channel score is slightly lower with annealed regularization, because the random-channel score decreases more strongly.
+Stage C initially showed a sign change in \texttt{two\_concepts}/TinyCNN: the annealed-minus-constant difference in $U_{\mathrm{random}}$ was negative for $k=1,2$ and positive for $k=4,8$ under all three channel-selection rules. Examining the two terms of $U$ changes the interpretation. When channels are ranked by activation difference, the exploratory differences in patching effect for selected channels were $-0.375$, $-0.163$, $-0.022$, and $+0.006$ for $k=1,2,4,8$, respectively, whereas the corresponding random-channel differences were $-0.040$, $-0.062$, $-0.083$, and $-0.033$. Thus, $\Delta U(4)=+0.061$ even though the selected-channel score is slightly lower with annealed regularization, because the random-channel score decreases more strongly.
 
-The same selected-channel pattern appears under the AUROC and validation-patching channel-selection rules: strongly negative at one or two channels, near zero or slightly negative at four, and slightly positive at eight. An energy-matched control changes the selected-minus-control score but not the selected-channel patching score itself. Matching is generally tight for $k=4$ and $k=8$ but can be poor for single-channel interventions, so the energy-matched analysis remains secondary. This decomposition motivated the use of the selected-channel patching score, rather than $U$, as the Stage-D primary outcome.
+The same selected-channel pattern appears under the AUROC and validation-patching channel-selection rules: strongly negative at one or two channels, near zero or slightly negative at four, and slightly positive at eight. An energy-matched control changes the selected-minus-control difference in patching effect but not the patching effect for selected channels itself. Matching is generally tight for $k=4$ and $k=8$ but can be poor for single-channel interventions, so the energy-matched analysis remains secondary. This decomposition motivated the use of the patching effect for selected channels, rather than $U$, as the Stage-D primary outcome.
 
 \subsection{Prespecified confirmation of sensitivity to the number of patched channels}\label{sec:confirmation}
 
@@ -194,7 +194,7 @@ with $t_{19}=12.0905$ and two-sided $p=2.28\times10^{-10}$. The prespecified con
 The positive value of $B$ reflects a change in the annealed-minus-constant difference as the number of patched channels increases. The four prespecified channel-count contrasts are shown in Table~\ref{tab:primary-curve}.
 
 \begin{table}[t]
-\caption{Stage-D primary TinyCNN results on 20 new paired \texttt{two\_concepts} replicates, with channels ranked by activation difference. Values are annealed minus constant regularization for the selected-channel patching score.}
+\caption{Stage-D primary TinyCNN results on 20 new paired \texttt{two\_concepts} replicates, with channels ranked by activation difference. Values are annealed minus constant regularization for the patching effect for selected channels.}
 \label{tab:primary-curve}
 \centering
 \small
@@ -210,15 +210,15 @@ Patched channels $k$ & $\Delta F_{\mathrm{selected}}$ & 95\% CI \\
 \end{tabular}
 \end{table}
 
-Annealed regularization gives substantially lower selected-channel patching scores than constant regularization at $k=1$ and $k=2$, a slightly lower score at $k=4$, and a slightly higher score at $k=8$. Patched-run accuracy on the counterfactual target shows the same broad pattern: the annealed-minus-constant difference is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
+Annealed regularization gives substantially lower patching effects for selected channels than constant regularization at $k=1$ and $k=2$, a slightly lower score at $k=4$, and a slightly higher score at $k=8$. Patched-run accuracy on the counterfactual target shows the same broad pattern: the annealed-minus-constant difference is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$.
 
 The two alternative validation-only channel-selection rules show the same TinyCNN dependence on channel count in the prespecified secondary analyses: $B=0.3001$ for AUROC ranking and $B=0.2305$ for validation-patching ranking, with both marginal 95\% intervals entirely positive. TwoLayerCNN differs. When channels are ranked by activation difference, its $B=-0.0419$ (95\% CI $[-0.0701,-0.0137]$), AUROC $B=-0.0318$ ($[-0.0583,-0.0053]$), and validation-patching $B=+0.0116$ ($[-0.0095,0.0327]$). Stage D therefore confirms the prespecified positive channel-count contrast in TinyCNN and shows that the same pattern does not extend to TwoLayerCNN.
 
-The energy-matched selected-minus-control score also changes between smaller and larger channel sets in TinyCNN, but it remains secondary because $U$ depends on the chosen baseline and matching quality is heterogeneous. Full-channel and no-op numerical errors were zero.
+The selected-minus-control difference using the energy-matched baseline also changes between smaller and larger channel sets in TinyCNN, but it remains secondary because $U$ depends on the chosen baseline and matching quality is heterogeneous. Full-channel and no-op numerical errors were zero.
 
 \subsection{Sensitivity to the number of patched channels differs by architecture}\label{sec:exhaustive}
 
-Stage E completed all 1,200 planned epoch-200 evaluations on 50 new paired replicates. With channels ranked by activation difference and using the default annealing schedule, the prespecified contrast $B$ relative to constant regularization is positive for TinyCNN on both tasks, but is near zero or negative for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
+Stage E completed all 1,200 planned epoch-200 evaluations on 50 new replicates. With channels ranked by activation difference and using the default annealing schedule, the prespecified contrast $B$ relative to constant regularization is positive for TinyCNN on both tasks, but is near zero or negative for TwoLayerCNN. Table~\ref{tab:stage-e-main} summarizes these secondary results.
 
 \begin{table}[t]
 \caption{Stage-E default-annealing contrast $B$ relative to constant regularization when channels are ranked by activation difference. These are prespecified secondary sensitivity analyses, not additional primary tests.}
@@ -242,13 +242,13 @@ The result is not specific to the default schedule. Relative to constant $\lambd
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig02_patch_size.pdf}
-\caption{Stage-E selected-channel patching scores for $k=1,\ldots,16$ when channels are ranked by activation difference. Each panel contains all six regularization schedules; lines are means over 50 paired replicates and bands are 95\% $t$ intervals. At $k=16$ all first-layer channels are patched and $F=1$ by construction, providing a sanity check.}
+\caption{Stage-E patching effects for selected channels for $k=1,\ldots,16$ when channels are ranked by activation difference. Each panel contains all six regularization schedules; lines are means over 50 replicates and bands are 95\% $t$ intervals. At $k=16$ all first-layer channels are patched and $F=1$ by construction, providing a sanity check.}
 \label{fig:exhaustive-curves}
 \end{figure}
 
-Figure~\ref{fig:exhaustive-curves} shows the corresponding patching-score curves. In TinyCNN, the relative ordering of the regularization schedules changes markedly as more channels are patched; TwoLayerCNN follows a different pattern. Every curve reaches $F=1$ when all 16 first-layer channels are patched, as required by the definition of the score.
+Figure~\ref{fig:exhaustive-curves} shows the corresponding patching-effect curves. In TinyCNN, the relative ordering of the regularization schedules changes markedly as more channels are patched; TwoLayerCNN follows a different pattern. Every curve reaches $F=1$ when all 16 first-layer channels are patched, as required by the definition of the score.
 
-Test accuracy is nearly saturated on \texttt{single\_shape} for all schedules, so the channel-count differences there are not explained by large accuracy gaps. On \texttt{two\_concepts}/TinyCNN, constant regularization has mean test accuracy 98.05\% and filter-template similarity 0.944, whereas the default annealing schedule has 99.45\% accuracy and similarity 0.574. On TwoLayerCNN the corresponding accuracies are 99.11\% and 99.26\%, while filter-template similarity changes from 0.999 to 0.896. High filter-template similarity therefore does not by itself imply either higher test accuracy or the same channel-count dependence in the patching score.
+Test accuracy is nearly saturated on \texttt{single\_shape} for all schedules, so the channel-count differences there are not explained by large accuracy gaps. On \texttt{two\_concepts}/TinyCNN, constant regularization has mean test accuracy 98.05\% and filter-template similarity 0.944, whereas the default annealing schedule has 99.45\% accuracy and similarity 0.574. On TwoLayerCNN the corresponding accuracies are 99.11\% and 99.26\%, while filter-template similarity changes from 0.999 to 0.896. High filter-template similarity therefore does not by itself imply either higher test accuracy or the same channel-count dependence in the patching effect.
 
 \subsection{One-to-one matching confirms distinct template matches under constant regularization}\label{sec:matching-results}
 
@@ -257,7 +257,7 @@ The exploratory matching analysis on the 2,000 saved Stage-B checkpoint states a
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig03_matching_trajectories.pdf}
-\caption{Nearest-template similarity, maximum-weight one-to-one similarity, and their difference over all saved Stage-B epochs. All five conditions and four task/architecture settings are shown. Bands are sample standard deviations over ten paired replicates, not confidence intervals.}
+\caption{Nearest-template similarity, maximum-weight one-to-one similarity, and their difference over all saved Stage-B epochs. All five conditions and four task/architecture settings are shown. Bands are sample standard deviations over ten replicates, not confidence intervals.}
 \label{fig:matching-trajectories}
 \end{figure}
 
@@ -266,16 +266,16 @@ Figure~\ref{fig:matching-trajectories} shows the evolution of nearest-template a
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig04_similarity_matrices.pdf}
-\caption{All 256 signed filter--template cosine similarities for \texttt{two\_concepts}/TinyCNN, paired replicate 2000, at initialization and epoch 200. Rows retain original channel indices and columns retain template indices; black crosses mark the maximum-weight one-to-one assignment. Values range from $-1$ to $1$.}
+\caption{All 256 signed filter--template cosine similarities for \texttt{two\_concepts}/TinyCNN, replicate 2000, at initialization and epoch 200. Rows retain original channel indices and columns retain template indices; black crosses mark the maximum-weight one-to-one assignment. Values range from $-1$ to $1$.}
 \label{fig:matching-matrices}
 \end{figure}
 
-Figure~\ref{fig:matching-matrices} shows the complete $16\times16$ channel--template similarity matrix for one paired replicate. Each black cross marks a pairing used by the one-to-one assignment, making the entries that contribute to the summary score explicit.
+Figure~\ref{fig:matching-matrices} shows the complete $16\times16$ channel--template similarity matrix for one replicate. Each black cross marks a pairing used by the one-to-one assignment, making the entries that contribute to the summary score explicit.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}
-\caption{Original templates and saved first-layer filters for \texttt{two\_concepts}/TinyCNN, paired replicate 2000. Rows are independently reordered by maximum-weight one-to-one matching so that each template can be compared directly with its assigned learned filter. The dense filter cells are rasterized inside the PDF while labels remain vector. The illustration concerns filter-template similarity, not human interpretability.}
+\caption{Original templates and saved first-layer filters for \texttt{two\_concepts}/TinyCNN, replicate 2000. Rows are independently reordered by maximum-weight one-to-one matching so that each template can be compared directly with its assigned learned filter. The dense filter cells are rasterized inside the PDF while labels remain vector. The illustration concerns filter-template similarity, not human interpretability.}
 \label{fig:kernel-gallery}
 \end{figure}
 
@@ -283,11 +283,11 @@ The gallery in Figure~\ref{fig:kernel-gallery} shows the matched filters themsel
 
 \section{Interpretation}\label{sec:interpretation}
 
-Constant template regularization strongly increases filter-template similarity, while the annealed-minus-constant difference in the normalized patching score varies with the number of patched channels. In the primary TinyCNN setting, annealed regularization gives substantially lower scores at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A result at a single channel count therefore does not summarize the regularization-schedule comparison across the tested models.
+Constant template regularization strongly increases filter-template similarity, while the annealed-minus-constant difference in the normalized patching effect varies with the number of patched channels. In the primary TinyCNN setting, annealed regularization gives substantially lower scores at one and two patched channels than at four and eight. TwoLayerCNN shows a different pattern. A result at a single channel count therefore does not summarize the regularization-schedule comparison across the tested models.
 
-The distinction between the selected-channel patching score and a selected-minus-control score also matters. In Stage C, the positive annealed-minus-constant value of $U_{\mathrm{random}}(4)$ occurs even though the selected-channel score is slightly lower under annealed regularization, because the random-channel score decreases more strongly. Reporting the selected intervention and the control baseline separately avoids attributing a relative change to the selected channels alone.
+The distinction between the patching effect for selected channels and a comparison against a control baseline also matters. In Stage C, the positive annealed-minus-constant value of $U_{\mathrm{random}}(4)$ occurs even though the selected-channel score is slightly lower under annealed regularization, because the random-channel score decreases more strongly. Reporting the selected-channel and control-channel effects separately avoids attributing a relative difference to the selected channels alone.
 
-These results concern the sensitivity of the patching measurement to intervention size, not the identification of a unique mechanism. Variation with the number of patched channels could reflect redundancy, nonlinear channel interactions, the channel-selection rule, activation scale, or out-of-distribution combinations of activations. The different pattern in TwoLayerCNN further indicates that the result should not be treated as a general property of template-based regularization.
+These results show that the measured patching effect is sensitive to how many channels are intervened on; they do not identify a unique mechanism. Variation with the number of patched channels could reflect redundancy, nonlinear channel interactions, the channel-selection rule, activation scale, or out-of-distribution combinations of activations. The different pattern in TwoLayerCNN further indicates that the result should not be treated as a general property of template-based regularization.
 
 \section{Limitations}\label{sec:limitations}
 
@@ -296,10 +296,10 @@ These results concern the sensitivity of the patching measurement to interventio
 \item The renderer provides balanced, matched counterfactuals and exact object masks. This control is useful for measurement but simplifies correlations and nuisance structure found in real data.
 \item The confirmed Stage-D result is specific to \texttt{two\_concepts}/TinyCNN, ranking channels by activation difference, epoch 200, and $k\in\{1,2,4,8\}$. Stage-E evidence broadens the sensitivity analysis but remains secondary.
 \item Stage E explores six regularization schedules and all $k=1,\ldots,16$. Holm adjustment is applied only within the prespecified five-comparison families; these analyses should not be used to select favorable post hoc subgroups.
-\item Activation patching replaces complete first-layer feature maps and can create activation combinations that are out of distribution for the model. The normalized patching score is tied to probability outputs, the chosen layer, and the channel-selection rule; other intervention metrics may give different results \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
-\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are selected-minus-control scores. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. Neither score should replace the directly reported selected-channel patching score.
+\item Activation patching replaces complete first-layer feature maps and can create activation combinations that are out of distribution for the model. The normalized patching effect is tied to probability outputs, the chosen layer, and the channel-selection rule; other intervention metrics may give different results \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching}.
+\item $U_{\mathrm{random}}$ and $U_{\mathrm{energy}}$ are selected-minus-control differences in patching effect. The random baseline changes with the number of patched channels, while energy matching is imperfect, especially for single-channel interventions. Neither score should replace the directly reported patching effect for selected channels.
 \item The one-to-one matching analysis concerns a redundant rank-10 template bank and does not show that every filter has a distinct semantic meaning or that the filters are human-interpretable.
-\item The independent reimplementation check covers 32 fixed Stage-B checkpoints rather than every checkpoint from every stage. Agreement on these checkpoints supports the implementation check but is not an external replication.
+\item The independent reimplementation covers 32 fixed Stage-B checkpoints rather than every checkpoint from every stage. Agreement on these checkpoints supports the reproducibility of the evaluation code but is not an external replication.
 \end{itemize}
 
 \section{Scope and future work}\label{sec:future}
@@ -310,7 +310,7 @@ Natural-image experiments would address external validity, and larger architectu
 
 \section{Conclusion}\label{sec:conclusion}
 
-Constant template regularization produces high first-layer filter-template similarity in these small CNNs. Activation patching gives a more conditional result. In the prespecified TinyCNN confirmation, the annealed-minus-constant difference in selected-channel patching score is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model sensitivity study gives positive values of the same prespecified channel-count contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-minus-random analysis also shows that the control baseline can change a relative patching comparison. Filter-template similarity, selected-channel patching score, and selected-minus-control scores should therefore be reported separately, together with the number of patched channels and the architecture.
+Constant template regularization produces high first-layer filter-template similarity in these small CNNs. Activation patching gives a more conditional result. In the prespecified TinyCNN confirmation, the annealed-minus-constant difference in patching effect for selected channels is strongly negative at one and two patched channels, close to zero at four, and slightly positive at eight. A separate 1,200-model sensitivity study gives positive values of the same prespecified channel-count contrast for TinyCNN on both tasks, while TwoLayerCNN behaves differently. The selected-minus-random analysis also shows that a relative patching comparison can change with the control baseline. Similarity to the predefined filters, the patching effect for selected channels, and the corresponding control-channel effect should therefore be reported separately, together with the number of patched channels and the architecture.
 
 \section{Data and code availability}\label{sec:availability}
 
