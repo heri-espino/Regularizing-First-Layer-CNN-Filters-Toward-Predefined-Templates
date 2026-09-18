@@ -1,6 +1,6 @@
 \section{Confirmatory and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before running blocks 4000--4019, which are disjoint from Stages A--C. The Stage-E protocol was separately specified before running blocks 5000--5049 and remains secondary to Stage D. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves. This appendix gives the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was frozen in the repository after Stages A--C but before running blocks 4000--4019, which are disjoint from the earlier stages. It was not externally preregistered. The Stage-E protocol was separately specified before running blocks 5000--5049 and remains secondary to Stage D. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves. This appendix gives the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
 
@@ -55,7 +55,7 @@ For every architecture/channel-selection pair,
 \[
 B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
 \]
-Positive $B$ indicates that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ and does not require a positive annealing effect at either larger value. The first TinyCNN row, with channels ranked by activation difference, is the single prespecified primary test. All other rows are secondary and do not alter the primary conclusion.
+Positive $B$ indicates that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ and does not require a positive annealing effect at either larger value. The first TinyCNN row, with channels ranked by activation difference, is the single prespecified primary test. Its 20 block-level $B$ values are all positive (range 0.1452--0.5986). All other rows are secondary and do not alter the primary conclusion.
 
 \begin{table}[h]
 \caption{Stage-D values of the prespecified contrast $B$. The first row alone is confirmatory.}
