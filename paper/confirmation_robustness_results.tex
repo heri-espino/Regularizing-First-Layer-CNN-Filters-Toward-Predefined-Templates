@@ -1,10 +1,10 @@
 \section{Confirmatory and Stage-E sensitivity analyses}\label{app:confirmation}
 
-This appendix contains the complete numerical support for Stages D and E. The Stage-D protocol was specified before outcomes from paired replicates 4000--4019 were generated. The Stage-E protocol was separately specified before outcomes from paired replicates 5000--5049 were generated and remains secondary to Stage D. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was specified before outcomes from paired replicates 4000--4019 were generated. The Stage-E protocol was separately specified before outcomes from paired replicates 5000--5049 were generated and remains secondary to Stage D. The main text reports the Stage-D primary channel-count results, the default-annealing Stage-E architecture comparison, and the full selected-channel patching curves; this appendix retains the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation-check details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
 
-All entries are annealed minus constant-regularization selected-channel patching scores at epoch 200, paired over 20 new replicates. Only TinyCNN with channels ranked by activation difference supplies the single primary test; the remaining rows are prespecified secondary analyses.
+Each entry is the paired difference in selected-channel patching score at epoch 200 (annealed minus constant regularization), averaged over 20 new replicates. Only TinyCNN with channels ranked by activation difference supplies the single primary test; the remaining rows are prespecified secondary analyses.
 
 {
 \small
