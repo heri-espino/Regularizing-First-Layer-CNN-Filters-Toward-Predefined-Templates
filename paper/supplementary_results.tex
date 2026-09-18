@@ -1,10 +1,10 @@
 \section{Historical Stages A--C}\label{app:historical}
 
-Stages A--C precede the prospective confirmation reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory estimand was narrowed from a selected-versus-random score to selected-channel fidelity itself.
+Stages A--C precede the prespecified confirmatory experiment reported in Appendix~\ref{app:confirmation}. They are retained because they explain why the final confirmatory analysis was narrowed from a selected-minus-random score to the selected-channel patching score itself.
 
-\subsection{Stage-A locally prospective primary contrasts}\label{app:stage-a}
+\subsection{Stage-A prespecified primary comparisons}\label{app:stage-a}
 
-Stage A compared \texttt{template\_retention\_1} with \texttt{template\_init} at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and Holm-adjusted as one family. Alignment and accuracy columns are descriptive companion outcomes.
+Stage A compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and Holm-adjusted as one family. Filter-template similarity and accuracy are reported as descriptive companion outcomes.
 
 \begin{table}[h]
 \caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
@@ -14,7 +14,7 @@ Stage A compared \texttt{template\_retention\_1} with \texttt{template\_init} at
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{llrrrr}
 \toprule
-Task & Architecture & $\Delta$ alignment & $\Delta$ acc. (pp) & $\Delta U$ [95\% CI] & Holm $p$ \\
+Task & Architecture & $\Delta$ template similarity & $\Delta$ acc. (pp) & $\Delta U$ [95\% CI] & Holm $p$ \\
 \midrule
 single shape & TinyCNN & +0.268 & -0.23 & +0.0345 [0.0018, 0.0672] & 0.1633 \\
 single shape & TwoLayerCNN & +0.172 & -0.04 & -0.0092 [-0.0513, 0.0329] & 1.0000 \\
@@ -24,40 +24,40 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 \end{tabular}
 \end{table}
 
-\subsection{Stage-B endpoint condition means}\label{app:stage-b-endpoints}
+\subsection{Stage-B epoch-200 condition means}\label{app:stage-b-endpoints}
 
-The table below gives the Stage-B endpoint quantities most relevant to the retention/release comparison. Means are over ten blocks. The full five-condition endpoint tables and checkpoint trajectories remain in the analysis artifact.
+The table below gives the Stage-B epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten paired replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
-\caption{Stage-B final-checkpoint means for constant retention and default release.}
+\caption{Stage-B epoch-200 means for constant and annealed template regularization.}
 \label{tab:stage-b-endpoints}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{lllrrr}
 \toprule
-Task & Architecture & Condition & Accuracy (\%) & Alignment & $U_{\mathrm{random}}$ \\
+Task & Architecture & Condition & Accuracy (\%) & Template similarity & $U_{\mathrm{random}}$ \\
 \midrule
-single shape & TinyCNN & retention 1 & 99.961 & 0.959 & 0.358 \\
-single shape & TinyCNN & release & 100.000 & 0.690 & 0.335 \\
+single shape & TinyCNN & constant $\lambda=1$ & 99.961 & 0.959 & 0.358 \\
+single shape & TinyCNN & annealed & 100.000 & 0.690 & 0.335 \\
 \addlinespace[2pt]
-single shape & TwoLayerCNN & retention 1 & 99.922 & 1.000 & 0.067 \\
-single shape & TwoLayerCNN & release & 99.961 & 0.942 & 0.060 \\
+single shape & TwoLayerCNN & constant $\lambda=1$ & 99.922 & 1.000 & 0.067 \\
+single shape & TwoLayerCNN & annealed & 99.961 & 0.942 & 0.060 \\
 \addlinespace[2pt]
-two concepts & TinyCNN & retention 1 & 98.008 & 0.947 & 0.657 \\
-two concepts & TinyCNN & release & 99.219 & 0.580 & 0.718 \\
+two concepts & TinyCNN & constant $\lambda=1$ & 98.008 & 0.947 & 0.657 \\
+two concepts & TinyCNN & annealed & 99.219 & 0.580 & 0.718 \\
 \addlinespace[2pt]
-two concepts & TwoLayerCNN & retention 1 & 99.141 & 0.999 & 0.061 \\
-two concepts & TwoLayerCNN & release & 99.531 & 0.907 & 0.003 \\
+two concepts & TwoLayerCNN & constant $\lambda=1$ & 99.141 & 0.999 & 0.061 \\
+two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under release even though $U_{\mathrm{random}}$ is higher under release. This discrepancy motivated separate reporting of selected intervention behavior and selected-versus-control scores.
+On \texttt{two\_concepts}/TinyCNN, selected-patch counterfactual accuracy is 93.61\% under constant retention and 90.64\% under annealed even though $U_{\mathrm{random}}$ is higher under annealed. This discrepancy motivated separate reporting of selected intervention behavior and selected-versus-control scores.
 
-\subsection{Stage-C decomposition of the original selected-versus-random score}\label{app:stage-c-decomposition}
+\subsection{Stage-C decomposition of the original selected-minus-random score}\label{app:stage-c-decomposition}
 
-Stage C reused the 80 final Stage-B release/retention checkpoints and evaluated three validation-only rankings at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is release minus constant retention; intervals are marginal paired 95\% $t$ intervals over ten blocks. Stage C is post hoc and supplies no confirmatory test.
+Stage C reused the 80 final Stage-B annealed/retention checkpoints and evaluated three validation-only rankings at $k\in\{1,2,4,8\}$. The central TinyCNN result is reproduced below. Each entry is annealed minus constant retention; intervals are marginal paired 95\% $t$ intervals over ten blocks. Stage C is post hoc and supplies no confirmatory test.
 
 {
 \small
@@ -65,11 +65,11 @@ Stage C reused the 80 final Stage-B release/retention checkpoints and evaluated 
 \begin{longtable}{llrrrr}
 \caption{Stage-C \texttt{two\_concepts}/TinyCNN decomposition.}\label{tab:stage-c-decomp}\\
 \toprule
-Ranking & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
+Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
 \midrule
 \endfirsthead
 \toprule
-Ranking & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
+Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
 \midrule
 \endhead
 \bottomrule
@@ -90,14 +90,14 @@ validation patch & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 \normalsize
 }
 
-Under contrast ranking, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, selected fidelity itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patch rankings show the same broad pattern.
+Under activation-contrast channel selection, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly explained by the change in the random-channel baseline. At $k=8$, the selected-channel patching score itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
 
-For \texttt{two\_concepts}/TwoLayerCNN, selected fidelity at $k=4$ is negative under all three rankings (approximately -0.125, -0.121, and -0.087 for contrast, AUROC, and validation-patch, respectively). Validation-patch selected fidelity becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across patch sizes rather than on a fixed sign at one value of $k$.
+For \texttt{two\_concepts}/TwoLayerCNN, the selected-channel patching score at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation contrast, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated a confirmatory hypothesis based on changes across the number of patched channels rather than on a fixed sign at one value of $k$.
 
 \subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose same-size alternative channel sets with validation replacement energy closest to the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on patch size: singleton sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-fidelity treatment contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The energy-matched score is therefore reported as a secondary diagnostic.
+A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations completed. Matching quality depends strongly on channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. The selected-channel annealed-minus-constant contrast is unchanged by baseline construction and remains the direct quantity used to motivate Stage D. The energy-matched selected-minus-control score is therefore reported as a secondary diagnostic.
 
 \subsection{Transition to Stage D}\label{app:transition}
 
-Stages A--C established that template retention preserves alignment and that prediction can improve after the retention penalty is released. They also showed that the release-minus-retention patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected and baseline fidelity, the Stage-D protocol was frozen around selected fidelity before new blocks were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
+Stages A--C established that template retention preserves alignment and that prediction can improve after the retention penalty is annealedd. They also showed that the annealed-minus-retention patching comparison changes with the number of patched channels. Because the original $U$ sign change combined selected and baseline fidelity, the Stage-D protocol was frozen around selected fidelity before new blocks were generated. Appendix~\ref{app:confirmation} reports that confirmation and the subsequent 1,200-model secondary sensitivity study.
