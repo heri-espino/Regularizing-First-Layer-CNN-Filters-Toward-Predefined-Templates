@@ -10,6 +10,7 @@ This directory contains convenience launchers for reproducing the experiments an
 | `run_kernel_analysis.sh`, `run_kernel_analysis.ps1` | Kernel-template matching analysis |
 | `run_paper_experiments.*` | Stage-D prospective test followed by Stage-E sensitivity study |
 | `run_metric_sensitivity.ps1`, `run_metric_sensitivity.zsh` | Re-evaluate saved Stage-D/E checkpoints under frozen alternative patching metrics; no training |
+| `stage_metric_sensitivity_results.ps1` | Stage completed metric-sensitivity analysis directly from `%LOCALAPPDATA%` into Git when the Windows worktree cannot create new directories |
 
 Examples from the repository root:
 
@@ -31,3 +32,25 @@ On Windows:
 ```
 
 Read the corresponding study `README.md` and frozen `PROTOCOL.md` before launching Stage D/E. The metric-sensitivity helper is checkpoint-only but should also be run only after reading its frozen protocol, because its outputs are intended to be interpreted without redesign after inspection.
+
+
+## Restricted university Windows worktrees
+
+Some university-managed Windows machines allow Git commits but deny creation of new directories inside the checkout. Metric-sensitivity outputs are therefore written to the user-writable default:
+
+```text
+%LOCALAPPDATA%\prior-templates-cnns\results\metric_sensitivity_001
+```
+
+After a completed run, archive the paper-facing outputs without copying them into the worktree:
+
+```powershell
+git pull --ff-only origin main
+.\run\stage_metric_sensitivity_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add metric sensitivity results"
+git push
+```
+
+The staging helper writes the external files into Git's object database and index directly. It does not rerun the experiment and does not require administrator privileges.
