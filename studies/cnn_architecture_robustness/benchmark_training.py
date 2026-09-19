@@ -69,6 +69,12 @@ def make_jobs(root: Path, device: str, workers: int, repeats: int):
     return jobs
 
 
+def prepare_benchmark_data(root: Path):
+    """Create the fixed benchmark dataset before any worker can race on it."""
+    ac.legacy_core.ROOT = root
+    ac.legacy_core.data_for("two_concepts", 6999)
+
+
 def run_cpu(jobs, workers):
     start = time.perf_counter()
     ctx = mp.get_context("spawn")
@@ -121,7 +127,7 @@ def main():
         cpu_root = out / "cpu"
         shutil.rmtree(cpu_root, ignore_errors=True)
         cpu_root.mkdir(parents=True, exist_ok=True)
-        ac.legacy_core.ROOT = cpu_root
+        prepare_benchmark_data(cpu_root)
         jobs = make_jobs(cpu_root, "cpu", args.cpu_workers, args.repeats)
         seconds = run_cpu(jobs, args.cpu_workers)
         results.append(summary(f"cpu_{args.cpu_workers}_workers", seconds, len(jobs)))
@@ -130,7 +136,7 @@ def main():
         cuda_root = out / "cuda"
         shutil.rmtree(cuda_root, ignore_errors=True)
         cuda_root.mkdir(parents=True, exist_ok=True)
-        ac.legacy_core.ROOT = cuda_root
+        prepare_benchmark_data(cuda_root)
         jobs = make_jobs(cuda_root, "cuda", 1, args.repeats)
         seconds = run_cuda(jobs)
         results.append(summary("cuda_sequential", seconds, len(jobs)))
