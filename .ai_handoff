@@ -135,3 +135,32 @@ The completed frozen metric-sensitivity analysis found, in the Stage-D primary T
 The release-minus-retention base-to-counterfactual probability error scale differed by +0.848558 in TinyCNN, so normalization scale clearly differed across treatments, but the patch-budget contrast remained under unnormalized and centered-logit metrics.
 
 Stage-E architecture results were heterogeneous: TinyCNN retained positive effects across both tasks, whereas TwoLayerCNN effects were much weaker, null, or negative depending on task/metric. This is why Stage F prioritizes systematic architecture factors rather than merely adding seeds to the original TinyCNN.
+
+
+## Stage-F runtime benchmark before any design reduction
+
+On 2026-09-18 the user reported operational throughput of approximately 1,000 completed Stage-F models after about 8 hours using the default CPU-multiprocessing launcher. This implies the frozen 25,600-model run would take many days on that workstation.
+
+This observation is **runtime/throughput only**. No Stage-F scientific outcomes were inspected to motivate any design change.
+
+Before reducing the frozen Stage-F design, benchmark implementation speed with:
+
+```powershell
+git pull --ff-only origin main
+.\run\benchmark_architecture_training.ps1
+```
+
+The benchmark:
+
+- writes outside Stage-F results under `%LOCALAPPDATA%\prior-templates-cnns\benchmarks\stage_f_training`;
+- uses a fixed representative architecture set;
+- compares the existing 12-worker CPU strategy against sequential CUDA;
+- trains for the same 200 epochs;
+- does not run patching analysis;
+- is implementation/performance evidence only and must never enter Stage-F inference.
+
+Do not inspect Stage-F patching/scientific outcomes before deciding whether a computational protocol amendment is needed.
+
+If sequential CUDA is not substantially faster, the next engineering option is a separately validated batched/vectorized GPU trainer that preserves the frozen model definitions, seeds, treatment pairing, optimization updates, and outputs. Validate numerical equivalence before using such an optimizer for Stage F.
+
+Do not discard the already completed CPU checkpoints. Any future reuse/migration must preserve provenance and avoid mixing scientifically incompatible training procedures without explicit documentation.
