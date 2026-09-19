@@ -54,7 +54,9 @@ jobs:
             'studies/cnn_metric_sensitivity/run_metric_sensitivity.ps1',
             'run/run_architecture_robustness.ps1',
             'run/stage_architecture_robustness_results.ps1',
-            'studies/cnn_architecture_robustness/run_architecture_robustness.ps1'
+            'studies/cnn_architecture_robustness/run_architecture_robustness.ps1',
+            'run/benchmark_architecture_training.ps1',
+            'studies/cnn_architecture_robustness/run_training_benchmark.ps1'
           )
           foreach ($file in $files) {
             $tokens = $null
@@ -78,6 +80,7 @@ jobs:
           python -m py_compile studies/cnn_architecture_robustness/train_grid.py
           python -m py_compile studies/cnn_architecture_robustness/evaluate_grid.py
           python -m py_compile studies/cnn_architecture_robustness/analyze.py
+          python -m py_compile studies/cnn_architecture_robustness/benchmark_training.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
