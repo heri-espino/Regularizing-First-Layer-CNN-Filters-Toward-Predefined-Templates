@@ -69,7 +69,7 @@ The official Stage-F run uses:
 %LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-As of 2026-09-19, all 25,600 models are trained and the frozen evaluation is in progress. Resume after interruption with:
+Stage F is complete and its paper-facing analysis is archived. The command below remains only as the resumable provenance-preserving launcher:
 
 ```powershell
 .\run\run_architecture_robustness.ps1 `
@@ -94,21 +94,43 @@ git commit -m "analysis: add Stage-F architecture robustness results"
 git push
 ```
 
-Read `../RESEARCH_STATUS.md` before changing any Stage-F workflow.
+Do not modify the frozen Stage-F scientific source retroactively; new analyses belong in separate versioned workflows.
 
 ## Final pre-submission strengthening
 
-Fresh anchor-specificity experiment:
+The fresh anchor-specificity experiment is now frozen and CI-smoke-tested. Run the implementation smoke first:
 
 ```powershell
 .\run\run_anchor_specificity.ps1 -Smoke
+```
+
+Then launch the official full CUDA run:
+
+```powershell
 .\run\run_anchor_specificity.ps1
 ```
 
-Post hoc diagnostics of the already-completed architecture run:
+Default external root:
+
+```text
+%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001
+```
+
+The full design is 25,600 models: 100 fresh blocks × 4 init/anchor replicates × 2 tasks × 4 diagnostic architectures × 4 anchor families × 2 treatments. Training and evaluation are incremental and resumable.
+
+The outcome-informed architecture diagnostics use the already-completed Stage-F evaluator outputs and require no retraining:
 
 ```powershell
 .\run\run_architecture_posthoc.ps1
 ```
 
-After completion, use `stage_anchor_specificity_results.ps1` and `stage_architecture_posthoc_results.ps1` to archive paper-facing outputs directly through Git.
+They add Greenhouse--Geisser/permutation/Friedman omnibus checks, random-channel architecture diagnostics, structural-versus-functional summaries, and an exact architecture-definition table.
+
+After completion, archive only paper-facing outputs:
+
+```powershell
+.\run\stage_anchor_specificity_results.ps1
+.\run\stage_architecture_posthoc_results.ps1
+```
+
+Read the corresponding frozen protocols before interpreting outputs. The anchor-specificity primary structured-vs-pixel-permuted analysis includes a prespecified equivalence test; nonsignificance alone is not evidence of equivalence.
