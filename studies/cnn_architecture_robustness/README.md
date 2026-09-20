@@ -1,6 +1,6 @@
 # Stage F: architecture robustness
 
-> **Live status (2026-09-19):** the official clean CUDA run has completed all **25,600 / 25,600** training jobs and is currently evaluating the frozen first-layer patching grid. Do not inspect/interpret partial Stage-F outcomes or modify the frozen scientific source files while the run may need to resume.
+> **Live status (2026-09-19):** the official clean CUDA run completed all **25,600 / 25,600** training jobs and all frozen evaluations; the analysis is archived under `analysis/architecture_robustness_001/`. Do not inspect/interpret partial Stage-F outcomes or modify the frozen scientific source files while the run may need to resume.
 
 This directory implements the frozen fresh-sample architecture study described in `PROTOCOL.md`.
 
