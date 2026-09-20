@@ -144,29 +144,9 @@ By \cref{eq:channel-count-contrast}, a positive $B$ means only that the annealed
 
 Matched counterfactual image pairs are repeated measurements inside a renderer/model block and are not treated as inferential replicates. Inference is across independently generated renderer blocks. Training conditions are paired within block through shared data and paired initialization components.
 
-\subsection{Evidence roles and prospective architecture study}\label{sec:design}
+\subsection{Statistical design and evidence hierarchy}\label{sec:design}
 
-\Cref{tab:roadmap} separates developmental analyses from prospectively frozen tests. The developmental analyses are preserved because they motivated the eventual estimand, but they are not pooled as independent confirmations.
-
-\begin{table}[t]
-\caption{Evidence roles. Internal stage identifiers used during project development are omitted from the manuscript; analyses are named by their scientific role.}
-\label{tab:roadmap}
-\centering
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}p{0.13\linewidth}p{0.40\linewidth}p{0.39\linewidth}@{}}
-\toprule
-Evidence & Design & Role \\
-\midrule
-Developmental analyses & early training studies and saved-checkpoint decompositions & exploratory; motivated direct selected-channel analysis and $B$ \\
-Prospective channel-count experiment & 20 fresh \texttt{two\_concepts} blocks, TinyCNN primary; protocol frozen before outcomes & single prespecified prospective channel-count test \\
-Schedule/task sensitivity experiment & 50 fresh blocks per task/architecture, six regularization schedules & prespecified secondary sensitivity map \\
-Metric robustness analysis & saved prospective/sensitivity checkpoints; alternative metrics frozen before evaluation & post hoc with respect to original results, but metric definitions frozen before recomputation \\
-Architecture robustness experiment & 100 fresh blocks, four paired initialization replicates, 16 architectures, two tasks & prospectively frozen architecture-heterogeneity study \\
-Checkpoint reproducibility audit & independent recomputation of 32 fixed developmental checkpoints & implementation reproducibility check \\
-\bottomrule
-\end{tabular}
-\end{table}
+The final analysis separates developmental evidence from prospectively frozen tests. Early developmental analyses identified that a selected-minus-control comparison could change through the control term and motivated the direct selected-channel contrast in \cref{eq:channel-count-contrast}; those analyses are not pooled with later fresh-sample tests. The primary prospective channel-count experiment uses 20 new \texttt{two\_concepts} renderer blocks. A separately specified schedule/task sensitivity experiment uses 50 fresh blocks per task/architecture setting. The metric robustness analysis reuses saved prospective and sensitivity checkpoints, with the alternative metric definitions frozen before recomputation. The architecture robustness experiment uses 100 further fresh renderer blocks and was prospectively frozen before any of its outcomes were inspected. Finally, an independent checkpoint audit recomputes central quantities at 32 fixed developmental checkpoints. Throughout, inference is at the renderer-block level appropriate to each analysis rather than at the image-pair, initialization, or model-count level.
 
 The architecture robustness experiment preserves the same first-layer 16-channel intervention tensor, template bank, and validation ranking while varying downstream architecture. The ranking remains the same first-layer global-max activation summary for every architecture, including GAP variants, so architecture and channel-selection rule are not changed together. The 16 variants cross global max pooling (GMP) or global average pooling (GAP) with controlled changes in plain depth (1, 2, or 4), downstream width (16 or 64), residual connectivity, and downstream BatchNorm. Only the downstream computation changes; BatchNorm, when present, is after the intervention point.
 
