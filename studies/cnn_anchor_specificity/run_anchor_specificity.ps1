@@ -37,7 +37,16 @@ try {
     . (Join-Path $RepoRoot 'scripts\use_conda_env.ps1')
 
     if ($Smoke -and $OutputRoot -like '*anchor_specificity_cuda_001') {
-        $OutputRoot = $OutputRoot -replace 'anchor_specificity_cuda_001
+        $OutputRoot = $OutputRoot -replace 'anchor_specificity_cuda_001$', 'anchor_specificity_smoke'
+        # Smoke outputs are implementation-only and intentionally disposable.
+        # Clearing the default smoke root prevents stale source manifests from
+        # blocking a fresh smoke after code/protocol hardening.
+        if (Test-Path -LiteralPath $OutputRoot) {
+            Remove-Item -LiteralPath $OutputRoot -Recurse -Force
+        }
+    }
+
+    $TrainingRoot = Join-Path $OutputRoot 'training'
     $EvaluationRoot = Join-Path $OutputRoot 'evaluation'
     $AnalysisRoot = Join-Path $OutputRoot 'analysis'
     $Manifest = Join-Path $OutputRoot 'execution_manifest.json'
