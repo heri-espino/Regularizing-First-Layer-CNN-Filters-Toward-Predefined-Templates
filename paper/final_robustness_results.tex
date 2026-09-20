@@ -1,0 +1,211 @@
+\section{Final metric and architecture robustness analyses}\label{app:final-robustness}
+
+This appendix gives the complete paper-facing summaries for the two analyses added after the original Stage-D/E manuscript: the frozen metric-sensitivity reanalysis and the prospectively frozen Stage-F architecture study. Machine-readable block-level values, design manifests, integrity checks, and the full control diagnostics are versioned under \texttt{analysis/metric\_sensitivity\_001/} and \texttt{analysis/architecture\_robustness\_001/}. The main text reports only the estimates needed for the central argument.
+
+\subsection{Frozen metric-sensitivity analysis}\label{app:metric-sensitivity}
+
+The metric-sensitivity analysis reuses the saved Stage-D and Stage-E checkpoints. It was designed after the historical probability-fidelity results were known, so it is post hoc with respect to those original results; however, the alternative metric definitions and analysis plan were frozen before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
+
+For the Stage-D primary \texttt{two\_concepts}/TinyCNN/activation-contrast setting, Table~\ref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative primary metrics.
+
+\begin{table}[h]
+\caption{Stage-D TinyCNN pointwise treatment contrasts under the frozen alternative metrics.}
+\label{tab:app-metric-pointwise}
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Metric & $k$ & Mean $\Delta$ & 95\% CI \\
+\midrule
+Centered-logit fidelity & 1 & -0.21134 & [-0.27899, -0.14369] \\
+Centered-logit fidelity & 2 & -0.17452 & [-0.22078, -0.12825] \\
+Centered-logit fidelity & 4 & -0.03405 & [-0.04939, -0.01871] \\
+Centered-logit fidelity & 8 & +0.00595 & [+0.00253, +0.00937] \\
+\addlinespace[2pt]
+Probability error reduction & 1 & -0.22942 & [-0.33033, -0.12852] \\
+Probability error reduction & 2 & +0.04493 & [-0.11443, +0.20428] \\
+Probability error reduction & 4 & +0.75429 & [+0.70327, +0.80530] \\
+Probability error reduction & 8 & +0.85004 & [+0.82915, +0.87093] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The corresponding $B$ contrasts are $+0.178881$ (95\% CI $[+0.127268,+0.230494]$) for centered-logit fidelity and $+0.894411$ (95\% CI $[+0.786301,+1.002522]$) for probability error reduction. Holm-adjusted $p$ values for the two-metric family are $6.95\times10^{-7}$ and $8.59\times10^{-13}$, respectively.
+
+The release-minus-retention base-to-counterfactual error scales are themselves different. In TinyCNN the probability input-effect-scale contrast is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$), and the centered-logit input-effect-scale contrast is $+126.537$ (95\% CI $[+120.845,+132.229]$). In TwoLayerCNN the corresponding contrasts are $+0.062062$ and $+211.368$. Thus the historical normalized metric cannot be treated as though its denominator were constant across treatments.
+
+The same frozen analysis applied to Stage E gives the default-release results in Table~\ref{tab:app-metric-stage-e}.
+
+\begin{table}[h]
+\caption{Stage-E default-release $B$ contrasts under the frozen alternative metrics. Values are release minus constant $\lambda=1$ under the original activation-contrast ranking.}
+\label{tab:app-metric-stage-e}
+\centering
+\small
+\begin{tabular}{llrr}
+\toprule
+Task & Architecture & $B_{\mathrm{clogit}}$ & $B_{R_{\mathrm{prob}}}$ \\
+\midrule
+single shape & TinyCNN & +0.05660 & +0.33747 \\
+single shape & TwoLayerCNN & +0.05700 & -0.01622 \\
+two concepts & TinyCNN & +0.13427 & +0.80239 \\
+two concepts & TwoLayerCNN & -0.01953 & -0.05497 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The maximum absolute discrepancy between recomputed and stored historical probability fidelity is $1.24\times10^{-7}$. Maximum full-patch and no-op logit identity errors are zero.
+
+\subsection{Stage-F primary architecture analyses}\label{app:stage-f-primary}
+
+Stage F uses 100 fresh renderer blocks, four paired initialization replicates per block, 16 downstream architectures, two tasks, and the two central treatments. Initialization replicates are averaged before inference. The primary task is \texttt{two\_concepts}; the inferential unit is therefore the renderer block ($n=100$) for each architecture-level comparison.
+
+\begin{table}[h]
+\caption{Frozen Stage-F repeated-measures architecture omnibus tests on \texttt{two\_concepts}.}
+\label{tab:app-stage-f-omnibus}
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Metric & $F$ & df & partial $\eta^2$ & Holm $p$ \\
+\midrule
+centered\_logit\_fidelity & 77.09 & 15, 1485 & 0.438 & $2.40\times10^{-173}$ \\
+prob\_error\_reduction & 656.70 & 15, 1485 & 0.869 & 0 (machine precision) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For probability error reduction, the computed upper-tail $p$ value is numerically zero at double precision; this is reported as a machine-precision underflow rather than a literal probability of zero.
+
+\begin{table}[h]
+\caption{Frozen Stage-F fresh bridge contrast, \texttt{tiny\_gmp} minus \texttt{plain2\_w16\_gmp}.}
+\label{tab:app-stage-f-bridge}
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Metric & Mean difference in $B$ & 95\% CI & Holm $p$ \\
+\midrule
+centered\_logit\_fidelity & +0.16226 & [+0.14970, +0.17481] & $1.66\times10^{-45}$ \\
+prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Stage-F architecture estimates}\label{app:stage-f-architectures}
+
+Table~\ref{tab:app-stage-f-all-architectures} reports every architecture mean and marginal 95\% $t$ interval for the two frozen primary metrics.
+
+{\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{lrrrr}
+\caption{Stage-F \texttt{two\_concepts} architecture means for $B$.}\label{tab:app-stage-f-all-architectures}\\
+\toprule
+Architecture & $B_{\mathrm{clogit}}$ & 95\% CI & $B_{R_{\mathrm{prob}}}$ & 95\% CI \\
+\midrule
+\endfirsthead
+\toprule
+Architecture & $B_{\mathrm{clogit}}$ & 95\% CI & $B_{R_{\mathrm{prob}}}$ & 95\% CI \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+tiny\_gmp & +0.1456 & [+0.1352, +0.1560] & +0.8315 & [+0.8122, +0.8508] \\
+tiny\_gap & +0.0849 & [+0.0764, +0.0934] & +0.0944 & [+0.0901, +0.0986] \\
+plain2\_w16\_gmp & -0.0167 & [-0.0227, -0.0106] & -0.0581 & [-0.0757, -0.0404] \\
+plain2\_w16\_gap & +0.0936 & [+0.0734, +0.1139] & +0.3348 & [+0.3207, +0.3488] \\
+plain4\_w16\_gmp & -0.0168 & [-0.0211, -0.0124] & -0.0561 & [-0.0675, -0.0447] \\
+plain4\_w16\_gap & +0.0277 & [+0.0138, +0.0416] & +0.1160 & [+0.0992, +0.1328] \\
+plain2\_w64\_gmp & -0.0072 & [-0.0113, -0.0031] & -0.0021 & [-0.0152, +0.0111] \\
+plain2\_w64\_gap & +0.2213 & [+0.2022, +0.2404] & +0.3247 & [+0.3045, +0.3449] \\
+plain4\_w64\_gmp & -0.0049 & [-0.0068, -0.0029] & -0.0238 & [-0.0282, -0.0194] \\
+plain4\_w64\_gap & +0.0511 & [+0.0408, +0.0614] & +0.0013 & [-0.0150, +0.0176] \\
+res4\_w16\_gmp & -0.0175 & [-0.0216, -0.0133] & -0.0448 & [-0.0554, -0.0342] \\
+res4\_w16\_gap & +0.0444 & [+0.0276, +0.0611] & +0.0974 & [+0.0756, +0.1192] \\
+bn2\_w16\_gmp & +0.0165 & [+0.0024, +0.0306] & +0.0127 & [-0.0128, +0.0382] \\
+bn2\_w16\_gap & -0.1382 & [-0.1960, -0.0804] & -0.0390 & [-0.0706, -0.0074] \\
+bn4\_w16\_gmp & +0.0132 & [+0.0063, +0.0201] & -0.0023 & [-0.0163, +0.0116] \\
+bn4\_w16\_gap & +0.1445 & [+0.1177, +0.1713] & +0.0757 & [+0.0532, +0.0983] \\
+\end{longtable}
+\normalsize
+}
+
+\subsection{Prespecified Stage-F architecture-factor contrasts}\label{app:stage-f-factors}
+
+Table~\ref{tab:app-stage-f-factors} gives all prespecified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as frozen in the Stage-F protocol. The signs are alternative architecture minus reference architecture as named in each row.
+
+{\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}{p{.10\linewidth}p{.34\linewidth}rrrr}
+\caption{Stage-F architecture-factor contrasts.}\label{tab:app-stage-f-factors}\\
+\toprule
+Family & Contrast & $\Delta B_{\mathrm{clogit}}$ & Holm $p$ & $\Delta B_{R_{\mathrm{prob}}}$ & Holm $p$ \\
+\midrule
+\endfirsthead
+\toprule
+Family & Contrast & $\Delta B_{\mathrm{clogit}}$ & Holm $p$ & $\Delta B_{R_{\mathrm{prob}}}$ & Holm $p$ \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+pooling & tiny: GAP - GMP & -0.0607 & $7.25\times10^{-14}$ & -0.7372 & $4.41\times10^{-88}$ \\
+pooling & plain2\_w16: GAP - GMP & +0.1103 & $3.42\times10^{-17}$ & +0.3929 & $3.70\times10^{-56}$ \\
+pooling & plain4\_w16: GAP - GMP & +0.0445 & $7.53\times10^{-8}$ & +0.1721 & $4.57\times10^{-28}$ \\
+pooling & plain2\_w64: GAP - GMP & +0.2285 & $5.03\times10^{-40}$ & +0.3268 & $2.56\times10^{-46}$ \\
+pooling & plain4\_w64: GAP - GMP & +0.0560 & $1.60\times10^{-17}$ & +0.0251 & 0.0073 \\
+pooling & res4\_w16: GAP - GMP & +0.0618 & $2.17\times10^{-10}$ & +0.1422 & $3.48\times10^{-19}$ \\
+pooling & bn2\_w16: GAP - GMP & -0.1547 & $1.17\times10^{-6}$ & -0.0517 & 0.0146 \\
+pooling & bn4\_w16: GAP - GMP & +0.1313 & $4.09\times10^{-15}$ & +0.0780 & $1.34\times10^{-7}$ \\
+depth & GMP: plain2 - tiny & -0.1623 & $6.62\times10^{-45}$ & -0.8896 & $6.48\times10^{-82}$ \\
+depth & GAP: plain2 - tiny & +0.0087 & 0.6905 & +0.2404 & $4.30\times10^{-57}$ \\
+depth & GMP: plain4 - plain2 & -0.0001 & 0.9845 & +0.0019 & 0.8552 \\
+depth & GAP: plain4 - plain2 & -0.0659 & $6.12\times10^{-7}$ & -0.2188 & $1.41\times10^{-36}$ \\
+width & depth2 GMP: w64 - w16 & +0.0095 & 0.0095 & +0.0560 & $1.40\times10^{-6}$ \\
+width & depth2 GAP: w64 - w16 & +0.1277 & $1.51\times10^{-17}$ & -0.0100 & 0.3637 \\
+width & depth4 GMP: w64 - w16 & +0.0119 & $2.14\times10^{-6}$ & +0.0323 & $1.82\times10^{-6}$ \\
+width & depth4 GAP: w64 - w16 & +0.0234 & 0.0095 & -0.1147 & $8.27\times10^{-16}$ \\
+residual & GMP: residual4 - plain4 & -0.0007 & 0.7775 & +0.0113 & 0.1961 \\
+residual & GAP: residual4 - plain4 & +0.0166 & 0.1943 & -0.0186 & 0.1961 \\
+batchnorm & depth2 GMP: BN - noBN & +0.0332 & $1.09\times10^{-5}$ & +0.0708 & $3.31\times10^{-5}$ \\
+batchnorm & depth2 GAP: BN - noBN & -0.2318 & $2.67\times10^{-11}$ & -0.3738 & $1.92\times10^{-37}$ \\
+batchnorm & depth4 GMP: BN - noBN & +0.0299 & $4.90\times10^{-11}$ & +0.0538 & $2.61\times10^{-7}$ \\
+batchnorm & depth4 GAP: BN - noBN & +0.1168 & $2.67\times10^{-11}$ & -0.0403 & 0.0036 \\
+\end{longtable}
+\normalsize
+}
+
+The residual-versus-plain contrasts are the cleanest null factor family: all four primary-metric/pooling combinations have intervals spanning zero after the frozen family correction. Pooling, depth, width, and BatchNorm show multiple nonzero contrasts, but directions vary by backbone and metric. The data therefore support architecture dependence without supporting a single architecture-independent component effect.
+
+\subsection{Secondary \texttt{single\_shape} architecture map}\label{app:stage-f-single}
+
+The secondary task also shows substantial variation across architectures, but its sign pattern differs in several settings. Table~\ref{tab:app-stage-f-single} is included to make that task dependence visible rather than pooling the two tasks.
+
+\begin{table}[h]
+\caption{Stage-F \texttt{single\_shape} mean $B$ by architecture.}
+\label{tab:app-stage-f-single}
+\centering
+\scriptsize
+\begin{tabular}{lrr}
+\toprule
+Architecture & $B_{\mathrm{clogit}}$ & $B_{R_{\mathrm{prob}}}$ \\
+\midrule
+tiny\_gmp & +0.0569 & +0.3459 \\
+tiny\_gap & -0.0135 & +0.2644 \\
+plain2\_w16\_gmp & +0.0525 & -0.0203 \\
+plain2\_w16\_gap & +0.0449 & +0.2026 \\
+plain4\_w16\_gmp & +0.0143 & +0.0115 \\
+plain4\_w16\_gap & +0.1551 & +0.1475 \\
+plain2\_w64\_gmp & +0.0321 & -0.0463 \\
+plain2\_w64\_gap & +0.0432 & +0.1525 \\
+plain4\_w64\_gmp & +0.0021 & +0.0015 \\
+plain4\_w64\_gap & +0.0808 & +0.0923 \\
+res4\_w16\_gmp & +0.0139 & +0.0194 \\
+res4\_w16\_gap & +0.1539 & +0.1241 \\
+bn2\_w16\_gmp & +0.0668 & +0.1155 \\
+bn2\_w16\_gap & -0.2701 & -0.0340 \\
+bn4\_w16\_gmp & +0.0028 & +0.0102 \\
+bn4\_w16\_gap & +0.3773 & +0.0383 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Stage-F maximum full-patch and no-op logit identity errors are zero. Initialization-dispersion summaries, input-effect-scale contrasts, random-channel controls, replacement-energy controls, and block-level values are retained in the versioned analysis tables.
