@@ -143,7 +143,7 @@ zsh run/run_metric_sensitivity.zsh
 
 Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated. The completed audit showed that the TinyCNN patch-budget contrast persists under centered-logit fidelity and unnormalized probability error reduction, while architecture remains a major source of heterogeneity.
 
-Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. The official run is a clean CUDA run under `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. As of 2026-09-19, all 25,600 models have finished training and the frozen patching evaluation is in progress. See `RESEARCH_STATUS.md` for the exact live state and resume command.
+Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. The official run is a clean CUDA run under `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. As of 2026-09-20, all 25,600 models and all frozen evaluations are complete; the Stage-F analysis is archived under `analysis/architecture_robustness_001/`. See `RESEARCH_STATUS.md` for the exact live state and resume command.
 
 ## Scope
 
