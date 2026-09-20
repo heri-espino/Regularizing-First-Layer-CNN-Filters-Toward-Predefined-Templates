@@ -37,11 +37,11 @@ The original CPU-multiprocessing default was benchmarked and found to be much sl
 Resume the official run after interruption with:
 
 ```powershell
-.\run\run_architecture_robustness.ps1 \`
-  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" \`
-  -TrainDevice cuda \`
-  -TrainWorkers 1 \`
-  -EvalDevice cuda \`
+.\run\run_architecture_robustness.ps1 `
+  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" `
+  -TrainDevice cuda `
+  -TrainWorkers 1 `
+  -EvalDevice cuda `
   -EvalBatchSize 256
 ```
 
