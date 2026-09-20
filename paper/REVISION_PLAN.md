@@ -1,7 +1,6 @@
 # Manuscript revision plan after Stage F
 
-Status: planned revision only.  
-Do not execute the outcome-dependent parts of this plan until the frozen Stage-F evaluation and analysis are complete.
+Status: **Stage F complete; revision can now be executed.**
 
 The current `paper/main.tex` is intentionally retained as a pre-Stage-F snapshot.
 
@@ -429,4 +428,32 @@ The final manuscript should leave a reader with one clear message:
 
 > A first-layer template prior can strongly stabilize filter structure without producing a simple, architecture-independent activation-patching signature. The measured release-versus-retention functional difference depends on intervention granularity, survives alternative output metrics in TinyCNN, and must be interpreted together with downstream architecture.
 
-The exact architecture clause must be updated from the frozen Stage-F results rather than predicted in advance.
+The frozen Stage-F results now support an architecture-dependent conclusion. Pooling and the first downstream convolution are major modifiers, but their directions interact with backbone, normalization, task, and metric; the revision should preserve that interaction rather than reduce it to a single main-effect slogan.
+
+## 17. Observed Stage-F branch to use in the revision
+
+Stage F follows **Branch A (strong architecture heterogeneity)**, with an important interaction-rich version of the pooling/depth story.
+
+Primary omnibus architecture heterogeneity is large under both frozen metrics:
+
+- centered-logit fidelity: F(15,1485)=77.0874, partial eta^2=0.4378;
+- probability error reduction: F(15,1485)=656.7002, partial eta^2=0.8690.
+
+The fresh TinyCNN-vs-plain2 GMP bridge is strongly positive under both metrics, so the historical architecture difference replicates prospectively.
+
+The manuscript should emphasize:
+
+1. architecture dependence is now a primary fresh-sample result, not merely Stage-E sensitivity;
+2. pooling is a strong modifier, but GAP-minus-GMP reverses sign for Tiny and BN2 versus most multi-layer plain/residual backbones;
+3. under GMP, adding the first downstream convolution causes the dominant Tiny-to-plain2 shift, while plain4-minus-plain2 is approximately null;
+4. width is secondary and metric dependent;
+5. residual connectivity is a useful negative result;
+6. BatchNorm is strongly context dependent;
+7. the two primary metrics agree on architecture heterogeneity and the Tiny-vs-plain2 bridge, but differ in some factor-level details;
+8. single_shape should be used as a secondary scope check, not merged with two_concepts.
+
+A good final title direction is now:
+
+> **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**
+
+This title is still a working recommendation until the full manuscript wording is revised.
