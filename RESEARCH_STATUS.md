@@ -104,9 +104,9 @@ The bank has rank 10 because some edge directions are redundant.
 
 Filter-template similarity is summarized by the mean best signed centered cosine:
 
-[
+$$
 A=\frac1{16}\sum_i\max_j\langle\widehat W_i,\widehat T_j\rangle.
-]
+$$
 
 This is a **weight-space** similarity measurement. It should not be equated with concept representation, human interpretability, or functional causal importance.
 
@@ -116,14 +116,14 @@ All template-based conditions initialize the first convolution from the same ban
 
 The regularized objective is:
 
-[
+$$
 \mathcal L
 =
 \mathcal L_{CE}
 +
 \lambda(e)
 \frac{\|W-W_{anchor}\|_F^2}{\|W_{anchor}\|_F^2}.
-]
+$$
 
 Central conditions:
 
@@ -139,13 +139,13 @@ Patching occurs **after the first convolution and ReLU**. For a matched base/cou
 
 Historically, with output probabilities (p_0,p_1,p_S), the main metric was:
 
-[
+$$
 F_{prob}(S)
 =
 1-
 \frac{\sum\|p_S-p_1\|_2^2}
      {\sum\|p_1-p_0\|_2^2}.
-]
+$$
 
 Interpretation:
 
@@ -247,24 +247,24 @@ Stage D froze a primary contrast before generating/evaluating blocks 4000--4019.
 
 For block (b):
 
-[
+$$
 \Delta_b(k)=F_b^{release}(k)-F_b^{retention}(k)
-]
+$$
 
 and
 
-[
+$$
 B_b=
 \frac{\Delta_b(4)+\Delta_b(8)}2
 -
 \frac{\Delta_b(1)+\Delta_b(2)}2.
-]
+$$
 
 A positive (B) means only that the release-minus-retention difference is larger for (k=4,8) than for (k=1,2). It does **not** imply monotonicity or that release is absolutely better at every larger budget.
 
 Primary TinyCNN / `two_concepts` / contrast-ranking result:
 
-[
+$$
 B=+0.330976,
 \quad
 95\%\ CI=[+0.273680,+0.388273],
@@ -272,7 +272,7 @@ B=+0.330976,
 t_{19}=12.0905,
 \quad
 p=2.28\times10^{-10}.
-]
+$$
 
 All 20 block-level (B_b) values were positive.
 
@@ -334,29 +334,29 @@ It introduced two primary robustness metrics.
 
 Raw logits admit a common additive offset that leaves probabilities unchanged. Center logits per example:
 
-[
+$$
 \widetilde\ell
 =
 \ell-\mathrm{mean}(\ell)\mathbf 1.
-]
+$$
 
 Then:
 
-[
+$$
 F_{clogit}(S)
 =
 1-
 \frac{\sum\|\widetilde\ell_S-\widetilde\ell_1\|_2^2}
      {\sum\|\widetilde\ell_1-\widetilde\ell_0\|_2^2}.
-]
+$$
 
 ### Unnormalized absolute probability error reduction
 
-[
+$$
 R_{prob}(S)
 =
 E_0^{prob}-E_S^{prob}.
-]
+$$
 
 This removes division by (E_0^{prob}) entirely.
 
@@ -425,7 +425,7 @@ how does **downstream architecture** change the release-versus-retention patch-b
 
 ### Scale
 
-[
+$$
 100\ blocks
 \times4\ init\ replicates
 \times2\ tasks
@@ -433,7 +433,7 @@ how does **downstream architecture** change the release-versus-retention patch-b
 \times16\ architectures
 =
 25,600\ models.
-]
+$$
 
 Fresh renderer blocks are 6000--6099.
 
@@ -464,29 +464,29 @@ Historical probability fidelity is retained as a secondary bridge metric.
 
 For metric (M):
 
-[
+$$
 \Delta^M_{b,s,a,t}(k)
 =
 M^{release}_{b,s,a,t}(k)
 -
 M^{retention}_{b,s,a,t}(k),
-]
+$$
 
-[
+$$
 B^M_{b,s,a,t}
 =
 \frac{\Delta^M(4)+\Delta^M(8)}2
 -
 \frac{\Delta^M(1)+\Delta^M(2)}2.
-]
+$$
 
 Average the four initialization replicates:
 
-[
+$$
 \bar B^M_{b,a,t}
 =
 \frac14\sum_{s=0}^3 B^M_{b,s,a,t}.
-]
+$$
 
 ### Frozen primary analyses
 
@@ -558,6 +558,22 @@ Use literature terminology such as:
 - filter kernels.
 
 Avoid inventing stronger terminology such as “interpretable filters” unless the evidence specifically supports it.
+
+## 9.1 Publication target and remaining reviewer risks
+
+The current manuscript uses the anonymous TMLR style, so the working publication target is **TMLR**.
+
+Stage F addresses the architecture-generalization weakness inside a controlled small-CNN family, but it does not remove every likely reviewer concern. Remaining risks that should stay visible during the final rewrite are:
+
+- **synthetic-only external validity**: no natural-image result is currently claimed;
+- **small-model scope**: even Stage F remains a controlled small-CNN family;
+- **off-manifold intervention concern**: replacing internal activation maps can create states the network would not naturally encounter;
+- **historical metric choice**: the original normalized probability metric has treatment-dependent denominator scale, although the TinyCNN contrast survives centered-logit and unnormalized probability metrics;
+- **architecture-factor interpretation**: matched Stage-F contrasts improve control, but changes in depth, width, residual structure, normalization, and pooling should still be interpreted within the frozen model family rather than as universal causal laws;
+- **paper complexity**: the large staged history can itself become a reviewer liability if the main manuscript reads as a sequence of rescued hypotheses rather than a coherent measurement study;
+- **artifact/release polish**: before submission, the final paper-facing Stage-F outputs, figure generation, anonymous artifact presentation if required, and citation metadata should be checked together.
+
+The response to these risks should primarily be **scope discipline and presentation**, not automatically another experiment.
 
 ## 10. Claims the paper can currently support
 
