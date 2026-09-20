@@ -217,3 +217,16 @@ The main visual narrative is now:
 3. `paper/build_main_results_figure.py`, which combines the prospective channel-count curves across three metrics with the 16-architecture forest plots. The redundant main-text pointwise/metric/architecture tables were moved out of the main narrative; complete numerical tables remain in the appendices.
 
 `paper/build.py` regenerates both manuscript-generated figures deterministically on each build.
+
+## Pre-submission strengthening now in progress
+
+The current manuscript is **not considered submission-ready** after a strict referee pass.
+
+Two frozen workflows were added on 2026-09-20:
+
+1. `studies/cnn_anchor_specificity/` — fresh 25,600-model experiment on blocks 7000--7099 testing structured templates against an exactly Gram/rank/spectrum-matched pixel-permuted bank plus random rank-10 and full-rank banks. This is the decisive test of whether the phenomenon is template-specific or generic to anchor retention/release.
+2. `studies/cnn_architecture_posthoc/` — outcome-informed reanalysis of the completed architecture study using Greenhouse--Geisser correction, within-block permutation tests, Friedman tests, random-channel B, and structural-versus-functional alignment/B diagnostics. No retraining.
+
+Do not rewrite the final abstract/title around anchor specificity until the fresh experiment finishes. Do not call the post hoc diagnostics prospective.
+
+Do not add a public/natural-image dataset yet. Reassess external validation only after anchor-specificity determines the paper's final scientific identity.
