@@ -1,6 +1,6 @@
 # AI handoff
 
-Last updated: 2026-09-19
+Last updated: 2026-09-20
 
 ## Read this first
 
@@ -14,7 +14,7 @@ Do not reconstruct the project from chat history if these files are available.
 
 ## Live critical state
 
-Stage F is currently active.
+Stage F is complete and archived.
 
 Official run root:
 
@@ -22,12 +22,12 @@ Official run root:
 %LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-Current status as of 2026-09-19:
+Current status as of 2026-09-20:
 
 - training: **25,600 / 25,600 complete**;
-- evaluation: **in progress**;
-- frozen analysis: not yet interpreted;
-- Stage-F scientific outcomes must not be inferred from partial evaluation files.
+- evaluation: **25,600 / 25,600 complete**;
+- frozen analysis: complete and archived in `analysis/architecture_robustness_001/`;
+- maximum full-patch and no-op logit identity errors: 0.
 
 The official Stage-F run is the clean CUDA run. An earlier CPU attempt under `architecture_robustness_001` produced roughly 1,000 completed checkpoints before being stopped for throughput reasons. Do **not** merge those CPU-partial artifacts into the official Stage-F result.
 
@@ -49,9 +49,9 @@ conda activate prior-templates-cnns
 
 Training will skip all 25,600 completed models. Evaluation skips completed per-model JSONs.
 
-## Do not modify live Stage-F source files
+## Stage-F source provenance
 
-Until the official run and frozen analysis finish, do not edit:
+The following files define the completed frozen Stage-F implementation and should not be retroactively modified without explicit versioned provenance:
 
 - `studies/cnn_architecture_robustness/PROTOCOL.md`
 - `architecture_core.py`
@@ -59,9 +59,7 @@ Until the official run and frozen analysis finish, do not edit:
 - `evaluate_grid.py`
 - `analyze.py`
 
-The execution manifest records source hashes. Changing these files can make the existing output root non-resumable or destroy provenance.
-
-Documentation and archival-helper changes are safe.
+The execution manifest records source hashes. Do not rewrite history by changing the frozen design after results. Future implementation changes must be versioned as new work.
 
 ## Stage-F design in one line
 
@@ -127,6 +125,21 @@ Inspect primary outputs before secondary mechanistic narratives:
 
 Do not cherry-pick architecture families.
 
+
+## Completed Stage-F result
+
+Primary two_concepts architecture omnibus:
+
+- centered-logit fidelity: F(15,1485)=77.0874, partial eta^2=0.4378, Holm p=2.40e-173;
+- probability error reduction: F(15,1485)=656.7002, partial eta^2=0.8690, p numerically underflowed to 0.
+
+Fresh bridge tiny_gmp - plain2_w16_gmp:
+
+- centered-logit B difference +0.162258, 95% CI [+0.149701,+0.174815];
+- probability-error B difference +0.889596, 95% CI [+0.862118,+0.917073].
+
+Interpretation: architecture dependence is decisively reproduced. Pooling is a major modifier but its direction flips by backbone; under GMP the first downstream convolution explains most of the Tiny-vs-plain difference, while additional plain depth from 2 to 4 adds little. Residual connectivity is not a major driver. BatchNorm and width are context/metric dependent. See `RESEARCH_STATUS.md` for the full interpretation.
+
 ## Manuscript
 
 `paper/main.tex` is intentionally a pre-Stage-F snapshot.
@@ -180,4 +193,4 @@ Archival helpers stage external paper-facing files directly through Git object/i
 
 ## Final instruction to a future agent
 
-Before proposing any new experiment, first read the completed Stage-F results and `paper/REVISION_PLAN.md`. The default next step after Stage F is **paper synthesis, not another experimental stage**.
+Stage F is complete. The default next step is **paper synthesis and revision, not another experimental stage**. Read `RESEARCH_STATUS.md`, the Stage-F report, and `paper/REVISION_PLAN.md` before editing the manuscript.
