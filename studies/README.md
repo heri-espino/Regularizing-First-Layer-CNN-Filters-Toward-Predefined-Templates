@@ -36,3 +36,10 @@ Stage F was motivated by the completed metric audit: the TinyCNN patch-budget co
 ## Live Stage-F status
 
 As of 2026-09-19, the clean CUDA Stage-F run has completed all 25,600 training jobs and is evaluating all saved checkpoints. The official external root is `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. The earlier CPU-partial root is not part of the official analysis. See `../RESEARCH_STATUS.md` and `../.ai_handoff` before touching the live study.
+
+## Pre-submission strengthening
+
+- `cnn_anchor_specificity/` — prospectively frozen fresh-sample anchor-specificity experiment; tests whether spatial template structure matters beyond exactly matched bank geometry.
+- `cnn_architecture_posthoc/` — frozen outcome-informed diagnostic analysis of the completed architecture study; robust omnibus, random-channel, and structure/function diagnostics.
+
+These are the active final strengthening workflows before submission. The manuscript should not be treated as final until their results are incorporated.
