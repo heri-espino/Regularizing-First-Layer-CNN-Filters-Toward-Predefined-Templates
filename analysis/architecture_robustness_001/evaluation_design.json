@@ -1,0 +1,37 @@
+{
+  "study": "cnn_architecture_robustness_stage_f_evaluation",
+  "training_design_sha256": "cb3eaf4ff1791fbac28819617e1d83fdad684c4a4103406be27100bfc383784a",
+  "protocol_sha256": "fa88b9c09ca68e940165292e440f58d8b50418fbf70db2cd74c0065c9703f54c",
+  "architecture_core_sha256": "5fd97b05696cc2921750511eab8c09c56b4ba3f2379974f663396a5c02e619c0",
+  "evaluator_sha256": "bcf80ef304aa29d0af1a2264a59ac357c607b7d1363ee901e6132fb56232cdbd",
+  "device": "cuda",
+  "batch_size": 256,
+  "budgets": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "energy_matched_budgets": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "random_controls": 8,
+  "ranking": "validation_standardized_activation_contrast",
+  "expected_models": 25600,
+  "trains_models": false
+}

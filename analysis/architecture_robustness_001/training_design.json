@@ -1,0 +1,185 @@
+{
+  "study": "cnn_architecture_robustness_stage_f",
+  "protocol_status": "prospectively_frozen_fresh_sample",
+  "start_block": 6000,
+  "blocks": 100,
+  "init_reps": 4,
+  "epochs": 200,
+  "tasks": [
+    "single_shape",
+    "two_concepts"
+  ],
+  "architectures": [
+    "tiny_gmp",
+    "tiny_gap",
+    "plain2_w16_gmp",
+    "plain2_w16_gap",
+    "plain4_w16_gmp",
+    "plain4_w16_gap",
+    "plain2_w64_gmp",
+    "plain2_w64_gap",
+    "plain4_w64_gmp",
+    "plain4_w64_gap",
+    "res4_w16_gmp",
+    "res4_w16_gap",
+    "bn2_w16_gmp",
+    "bn2_w16_gap",
+    "bn4_w16_gmp",
+    "bn4_w16_gap"
+  ],
+  "architecture_specs": {
+    "tiny_gmp": {
+      "total_depth": 1,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "none",
+      "batchnorm": false,
+      "parameters": 1364
+    },
+    "tiny_gap": {
+      "total_depth": 1,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "none",
+      "batchnorm": false,
+      "parameters": 1364
+    },
+    "plain2_w16_gmp": {
+      "total_depth": 2,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 3684
+    },
+    "plain2_w16_gap": {
+      "total_depth": 2,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 3684
+    },
+    "plain4_w16_gmp": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 8324
+    },
+    "plain4_w16_gap": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 8324
+    },
+    "plain2_w64_gmp": {
+      "total_depth": 2,
+      "width": 64,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 10836
+    },
+    "plain2_w64_gap": {
+      "total_depth": 2,
+      "width": 64,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 10836
+    },
+    "plain4_w64_gmp": {
+      "total_depth": 4,
+      "width": 64,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 84692
+    },
+    "plain4_w64_gap": {
+      "total_depth": 4,
+      "width": 64,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": false,
+      "parameters": 84692
+    },
+    "res4_w16_gmp": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "residual",
+      "batchnorm": false,
+      "parameters": 8324
+    },
+    "res4_w16_gap": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "residual",
+      "batchnorm": false,
+      "parameters": 8324
+    },
+    "bn2_w16_gmp": {
+      "total_depth": 2,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": true,
+      "parameters": 3700
+    },
+    "bn2_w16_gap": {
+      "total_depth": 2,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": true,
+      "parameters": 3700
+    },
+    "bn4_w16_gmp": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "max",
+      "connectivity": "plain",
+      "batchnorm": true,
+      "parameters": 8372
+    },
+    "bn4_w16_gap": {
+      "total_depth": 4,
+      "width": 16,
+      "pooling": "avg",
+      "connectivity": "plain",
+      "batchnorm": true,
+      "parameters": 8372
+    }
+  },
+  "treatments": [
+    "retention_1",
+    "release_default"
+  ],
+  "treatment_specs": {
+    "retention_1": {
+      "kind": "constant",
+      "lambda": 1.0
+    },
+    "release_default": {
+      "kind": "linear_release",
+      "start": 10,
+      "end": 80
+    }
+  },
+  "lr": 0.003,
+  "batch_size": 128,
+  "master_seed": 2026090617,
+  "paired_treatment_initialization": true,
+  "device": "cuda",
+  "workers": 1,
+  "threads_per_worker": 1,
+  "protocol_sha256": "fa88b9c09ca68e940165292e440f58d8b50418fbf70db2cd74c0065c9703f54c",
+  "architecture_core_sha256": "5fd97b05696cc2921750511eab8c09c56b4ba3f2379974f663396a5c02e619c0",
+  "trainer_sha256": "d4ea3adea8c15564398cdad2f51f2b4455434438aafff1c83a21790a1c45709f"
+}

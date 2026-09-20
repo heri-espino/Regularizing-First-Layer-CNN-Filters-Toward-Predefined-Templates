@@ -1,0 +1,3 @@
+task,metric,n_blocks,n_architectures,df_architecture,df_error,F,p_two_sided_equivalent_upper_tail,ss_architecture,ss_block,ss_error,partial_eta_squared,p_holm_two_metric_family
+two_concepts,centered_logit_fidelity,100,16,15,1485,77.08739226445071,2.4019133227418722e-173,10.71144199548371,1.1579075905055023,13.75624114920167,0.43777916904283354,2.4019133227418722e-173
+two_concepts,prob_error_reduction,100,16,15,1485,656.7001593921728,0.0,78.46095383142627,1.0324463001135185,11.828281626276366,0.8689956608191959,0.0

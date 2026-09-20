@@ -1,0 +1,21 @@
+﻿{
+    "created_utc":  "2026-09-19T02:05:38.6864222Z",
+    "repo_head_at_launch":  "fc7388d12c5b2b016a0f683ba64900a95d93d055",
+    "protocol_commit":  "6dccf0948204e4af05d232f4d944b7b3903e5387",
+    "protocol_git_blob":  "de00c0efc1c46fa2ad034c71d2a353ee590584ad",
+    "source_git_blobs":  {
+                             "protocol":  "de00c0efc1c46fa2ad034c71d2a353ee590584ad",
+                             "architecture_core":  "8dd7adb5ad28c84dfe349e38ea6a8fb86d1babc4",
+                             "trainer":  "b38e63f7c55d8afe8c7eedbfea0aac3fe7803333",
+                             "evaluator":  "954657cbbffcd2dc79c77b96c19368acff2424a5",
+                             "analyzer":  "7aee9bdd05e089b1401ca7a06d8dc97366509505",
+                             "legacy_core":  "753cb5121971e2a57b3c4dce9ccd84d9be3a403f"
+                         },
+    "output_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001",
+    "train_device":  "cuda",
+    "train_workers":  1,
+    "threads_per_worker":  1,
+    "eval_device":  "cuda",
+    "eval_batch_size":  256,
+    "smoke":  false
+}

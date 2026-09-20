@@ -1,0 +1,32 @@
+{
+  "study": "cnn_architecture_robustness_stage_f",
+  "status": "prospectively_frozen_fresh_sample",
+  "models": 25600,
+  "renderer_blocks": 100,
+  "init_reps": 4,
+  "architectures": [
+    "tiny_gmp",
+    "tiny_gap",
+    "plain2_w16_gmp",
+    "plain2_w16_gap",
+    "plain4_w16_gmp",
+    "plain4_w16_gap",
+    "plain2_w64_gmp",
+    "plain2_w64_gap",
+    "plain4_w64_gmp",
+    "plain4_w64_gap",
+    "res4_w16_gmp",
+    "res4_w16_gap",
+    "bn2_w16_gmp",
+    "bn2_w16_gap",
+    "bn4_w16_gmp",
+    "bn4_w16_gap"
+  ],
+  "primary_task": "two_concepts",
+  "primary_metrics": [
+    "centered_logit_fidelity",
+    "prob_error_reduction"
+  ],
+  "maximum_full_patch_logit_error": 0.0,
+  "maximum_noop_logit_error": 0.0
+}

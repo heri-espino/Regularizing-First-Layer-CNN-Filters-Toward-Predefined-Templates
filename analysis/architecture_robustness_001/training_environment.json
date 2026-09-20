@@ -1,0 +1,9 @@
+{
+  "python": "3.11.16 | packaged by Anaconda, Inc. | (main, Aug 27 2026, 14:36:16) [MSC v.1942 64 bit (AMD64)]",
+  "torch": "2.11.0+cu128",
+  "numpy": "2.4.6",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "cpu_count": 32,
+  "cuda_available": true,
+  "gpu": "NVIDIA RTX 4500 Ada Generation"
+}
