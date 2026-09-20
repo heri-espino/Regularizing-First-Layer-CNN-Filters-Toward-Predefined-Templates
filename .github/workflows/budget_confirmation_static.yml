@@ -11,6 +11,8 @@ on:
       - 'studies/cnn_exhaustive_robustness/**'
       - 'studies/cnn_metric_sensitivity/**'
       - 'studies/cnn_architecture_robustness/**'
+      - 'studies/cnn_anchor_specificity/**'
+      - 'studies/cnn_architecture_posthoc/**'
       - '.github/workflows/budget_confirmation_static.yml'
   workflow_dispatch:
 
@@ -56,7 +58,13 @@ jobs:
             'run/stage_architecture_robustness_results.ps1',
             'studies/cnn_architecture_robustness/run_architecture_robustness.ps1',
             'run/benchmark_architecture_training.ps1',
-            'studies/cnn_architecture_robustness/run_training_benchmark.ps1'
+            'studies/cnn_architecture_robustness/run_training_benchmark.ps1',
+            'run/run_anchor_specificity.ps1',
+            'run/stage_anchor_specificity_results.ps1',
+            'studies/cnn_anchor_specificity/run_anchor_specificity.ps1',
+            'run/run_architecture_posthoc.ps1',
+            'run/stage_architecture_posthoc_results.ps1',
+            'studies/cnn_architecture_posthoc/run_architecture_posthoc.ps1'
           )
           foreach ($file in $files) {
             $tokens = $null
@@ -81,9 +89,57 @@ jobs:
           python -m py_compile studies/cnn_architecture_robustness/evaluate_grid.py
           python -m py_compile studies/cnn_architecture_robustness/analyze.py
           python -m py_compile studies/cnn_architecture_robustness/benchmark_training.py
+          python -m py_compile studies/cnn_anchor_specificity/anchor_core.py
+          python -m py_compile studies/cnn_anchor_specificity/train_grid.py
+          python -m py_compile studies/cnn_anchor_specificity/evaluate_grid.py
+          python -m py_compile studies/cnn_anchor_specificity/analyze.py
+          python -m py_compile studies/cnn_architecture_posthoc/analyze.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
           test -s studies/cnn_exhaustive_robustness/PROTOCOL.md
           test -s studies/cnn_metric_sensitivity/PROTOCOL.md
           test -s studies/cnn_architecture_robustness/PROTOCOL.md
+          test -s studies/cnn_anchor_specificity/PROTOCOL.md
+          test -s studies/cnn_architecture_posthoc/PROTOCOL.md
+
+  anchor-specificity-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install scientific dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy scipy pandas pillow
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify anchor invariants
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'studies/cnn_anchor_specificity')
+          import anchor_core as ac
+          base = ac.structured_bank().reshape(16,81)
+          for block in (7000, 7001):
+              for rep in (0, 1):
+                  for family in ac.ANCHORS:
+                      d = ac.verify_anchor(family, block, rep)
+                      print(block, rep, family, d['rank'])
+                  p = ac.anchor_bank('pixel_permuted_template', block, rep).reshape(16,81)
+                  import numpy as np
+                  assert np.max(np.abs(base @ base.T - p @ p.T)) < 5e-6
+          print('anchor invariants: PASS')
+          PY
+      - name: One-epoch training/evaluation smoke
+        run: |
+          rm -rf /tmp/anchor-specificity-smoke
+          python studies/cnn_anchor_specificity/train_grid.py \
+            --output /tmp/anchor-specificity-smoke/training \
+            --start-block 7000 --blocks 1 --init-reps 1 --epochs 1 \
+            --device cpu --workers 1 --threads-per-worker 1 --smoke
+          python studies/cnn_anchor_specificity/evaluate_grid.py \
+            --input /tmp/anchor-specificity-smoke/training \
+            --output /tmp/anchor-specificity-smoke/evaluation \
+            --device cpu --batch-size 128 --smoke
