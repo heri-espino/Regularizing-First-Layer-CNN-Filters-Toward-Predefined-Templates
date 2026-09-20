@@ -2,7 +2,7 @@ param(
     [string]$SourceRoot = $(if ($env:STAGE_F_ROOT) {
         $env:STAGE_F_ROOT
     } else {
-        Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'prior-templates-cnns\results\architecture_robustness_001'
+        Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'prior-templates-cnns\results\architecture_robustness_cuda_001'
     }),
     [string]$DestinationPrefix = 'analysis/architecture_robustness_001'
 )
