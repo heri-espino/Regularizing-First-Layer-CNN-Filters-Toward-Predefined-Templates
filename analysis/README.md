@@ -6,10 +6,10 @@ This directory contains the paper-facing numerical summaries, figures, and audit
 
 | Directory | Contents |
 |---|---|
-| `budget_confirmation_001/` | Stage-D prospective confirmation, per-block effects, primary contrast, integrity checks |
+| `budget_confirmation_001/` | Stage-D prespecified prospective test, per-block effects, primary contrast, integrity checks |
 | `exhaustive_robustness_001/` | Stage-E 1,200-model sensitivity study, full patch-size curves, profile comparisons, energy controls |
 | `metric_sensitivity_001/` | Frozen post hoc checkpoint-only comparison of probability, centered-logit, and unnormalized patching metrics |
-| `architecture_robustness_001/` | Stage-F paper-facing architecture robustness outputs after the frozen 25,600-model run completes |
+| `architecture_robustness_001/` | Reserved paper-facing archive for Stage-F outputs; official raw run is external under `architecture_robustness_cuda_001` and evaluation is currently in progress |
 | `checkpoint_audit/` | Independent checkpoint reimplementation audit |
 | `retention_release_001/` | Stage-B learning and alignment trajectories |
 | `patch_robustness_gpu_001/` | Stage-C patch-size/ranking sensitivity and selected-vs-control decomposition |
@@ -20,7 +20,7 @@ The reports most closely aligned with the final manuscript are:
 - `budget_confirmation_001/REPORT.md`
 - `exhaustive_robustness_001/REPORT.md`
 - `metric_sensitivity_001/REPORT.md`
-- `architecture_robustness_001/REPORT.md` after Stage F completes
+- `architecture_robustness_001/REPORT.md` after the official CUDA Stage F completes and is archived
 - `checkpoint_audit/AUDIT_REPORT.md`
 - `kernel_similarity/results/REPORT.md`
 
