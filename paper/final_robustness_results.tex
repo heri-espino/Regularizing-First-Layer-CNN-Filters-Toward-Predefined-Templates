@@ -133,9 +133,10 @@ bn4\_w16\_gap & +0.1445 & [+0.1177, +0.1713] & +0.0757 & [+0.0532, +0.0983] \\
 
 Table~\ref{tab:app-stage-f-factors} gives all prespecified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as frozen in the Stage-F protocol. The signs are alternative architecture minus reference architecture as named in each row.
 
+\begin{landscape}
 {\scriptsize
-\setlength{\tabcolsep}{2.5pt}
-\begin{longtable}{p{.10\linewidth}p{.34\linewidth}rrrr}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{p{.10\linewidth}p{.38\linewidth}rrrr}
 \caption{Stage-F architecture-factor contrasts.}\label{tab:app-stage-f-factors}\\
 \toprule
 Family & Contrast & $\Delta B_{\mathrm{clogit}}$ & Holm $p$ & $\Delta B_{R_{\mathrm{prob}}}$ & Holm $p$ \\
@@ -172,6 +173,7 @@ batchnorm & depth4 GAP: BN - noBN & +0.1168 & $2.67\times10^{-11}$ & -0.0403 & 0
 \end{longtable}
 \normalsize
 }
+\end{landscape}
 
 The residual-versus-plain contrasts are the cleanest null factor family: all four primary-metric/pooling combinations have intervals spanning zero after the frozen family correction. Pooling, depth, width, and BatchNorm show multiple nonzero contrasts, but directions vary by backbone and metric. The data therefore support architecture dependence without supporting a single architecture-independent component effect.
 
