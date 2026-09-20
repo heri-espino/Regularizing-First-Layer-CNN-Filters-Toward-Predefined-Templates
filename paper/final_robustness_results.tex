@@ -34,11 +34,11 @@ The corresponding $B$ contrasts are $+0.178881$ (95\% CI $[+0.127268,+0.230494]$
 
 The release-minus-retention base-to-counterfactual error scales are themselves different. In TinyCNN the probability input-effect-scale contrast is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$), and the centered-logit input-effect-scale contrast is $+126.537$ (95\% CI $[+120.845,+132.229]$). In TwoLayerCNN the corresponding contrasts are $+0.062062$ and $+211.368$. Thus the historical normalized metric cannot be treated as though its denominator were constant across treatments.
 
-The same frozen analysis applied to the schedule/task sensitivity experiment gives the default-release results in \Cref{tab:app-metric-stage-e}.
+The same frozen analysis applied to the schedule/task sensitivity experiment gives the default-release results in \Cref{tab:app-metric-sensitivity}.
 
 \begin{table}[h]
 \caption{Schedule/task sensitivity default-release $B$ contrasts under the frozen alternative metrics. Values are release minus constant $\lambda=1$ under the original activation-contrast ranking.}
-\label{tab:app-metric-stage-e}
+\label{tab:app-metric-sensitivity}
 \centering
 \small
 \begin{tabular}{llrr}
@@ -55,13 +55,13 @@ two concepts & TwoLayerCNN & -0.01953 & -0.05497 \\
 
 The maximum absolute discrepancy between recomputed and stored historical probability fidelity is $1.24\times10^{-7}$. Maximum full-patch and no-op logit identity errors are zero.
 
-\subsection{Primary architecture robustness analyses}\label{app:stage-f-primary}
+\subsection{Primary architecture robustness analyses}\label{app:architecture-primary}
 
 The architecture robustness experiment uses 100 fresh renderer blocks, four paired initialization replicates per block, 16 downstream architectures, two tasks, and the two central treatments. Initialization replicates are averaged before inference. The primary task is \texttt{two\_concepts}; the inferential unit is therefore the renderer block ($n=100$) for each architecture-level comparison.
 
 \begin{table}[h]
 \caption{Frozen repeated-measures architecture omnibus tests on \texttt{two\_concepts}.}
-\label{tab:app-stage-f-omnibus}
+\label{tab:app-architecture-omnibus}
 \centering
 \small
 \begin{tabular}{lrrrr}
@@ -78,7 +78,7 @@ For probability error reduction, the computed upper-tail $p$ value is numericall
 
 \begin{table}[h]
 \caption{Frozen fresh-sample architecture bridge contrast, \texttt{tiny\_gmp} minus \texttt{plain2\_w16\_gmp}.}
-\label{tab:app-stage-f-bridge}
+\label{tab:app-architecture-bridge}
 \centering
 \small
 \begin{tabular}{lrrr}
@@ -91,14 +91,14 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 \end{tabular}
 \end{table}
 
-\subsection{Architecture-specific estimates}\label{app:stage-f-architectures}
+\subsection{Architecture-specific estimates}\label{app:architecture-estimates}
 
-\Cref{tab:app-stage-f-all-architectures} reports every architecture mean and marginal 95\% $t$ interval for the two frozen primary metrics.
+\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two frozen primary metrics.
 
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{lrrrr}
-\caption{\texttt{two\_concepts} architecture means for $B$.}\label{tab:app-stage-f-all-architectures}\\
+\caption{\texttt{two\_concepts} architecture means for $B$.}\label{tab:app-architecture-estimates}\\
 \toprule
 Architecture & $B_{\mathrm{clogit}}$ & 95\% CI & $B_{R_{\mathrm{prob}}}$ & 95\% CI \\
 \midrule
@@ -129,15 +129,15 @@ bn4\_w16\_gap & +0.1445 & [+0.1177, +0.1713] & +0.0757 & [+0.0532, +0.0983] \\
 \normalsize
 }
 
-\subsection{Prespecified architecture-factor contrasts}\label{app:stage-f-factors}
+\subsection{Prespecified architecture-factor contrasts}\label{app:architecture-factors}
 
-\Cref{tab:app-stage-f-factors} gives all prespecified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as frozen in the architecture robustness protocol. The signs are alternative architecture minus reference architecture as named in each row.
+\Cref{tab:app-architecture-factors} gives all prespecified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as frozen in the architecture robustness protocol. The signs are alternative architecture minus reference architecture as named in each row.
 
 \begin{landscape}
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{p{.10\linewidth}p{.38\linewidth}rrrr}
-\caption{Architecture-factor contrasts.}\label{tab:app-stage-f-factors}\\
+\caption{Architecture-factor contrasts.}\label{tab:app-architecture-factors}\\
 \toprule
 Family & Contrast & $\Delta B_{\mathrm{clogit}}$ & Holm $p$ & $\Delta B_{R_{\mathrm{prob}}}$ & Holm $p$ \\
 \midrule
@@ -177,13 +177,13 @@ batchnorm & depth4 GAP: BN - noBN & +0.1168 & $2.67\times10^{-11}$ & -0.0403 & 0
 
 The residual-versus-plain contrasts are the cleanest null factor family: all four primary-metric/pooling combinations have intervals spanning zero after the frozen family correction. Pooling, depth, width, and BatchNorm show multiple nonzero contrasts, but directions vary by backbone and metric. The data therefore support architecture dependence without supporting a single architecture-independent component effect.
 
-\subsection{Secondary \texttt{single\_shape} architecture map}\label{app:stage-f-single}
+\subsection{Secondary \texttt{single\_shape} architecture map}\label{app:architecture-single}
 
-The secondary task also shows substantial variation across architectures, but its sign pattern differs in several settings. \Cref{tab:app-stage-f-single} is included to make that task dependence visible rather than pooling the two tasks.
+The secondary task also shows substantial variation across architectures, but its sign pattern differs in several settings. \Cref{tab:app-architecture-single} is included to make that task dependence visible rather than pooling the two tasks.
 
 \begin{table}[h]
 \caption{\texttt{single\_shape} mean $B$ by architecture.}
-\label{tab:app-stage-f-single}
+\label{tab:app-architecture-single}
 \centering
 \scriptsize
 \begin{tabular}{lrr}
