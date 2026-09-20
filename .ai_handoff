@@ -230,3 +230,41 @@ Two frozen workflows were added on 2026-09-20:
 Do not rewrite the final abstract/title around anchor specificity until the fresh experiment finishes. Do not call the post hoc diagnostics prospective.
 
 Do not add a public/natural-image dataset yet. Reassess external validation only after anchor-specificity determines the paper's final scientific identity.
+
+
+## Current next experiment: anchor specificity
+
+The final fresh-sample strengthening experiment is frozen under `studies/cnn_anchor_specificity/PROTOCOL.md`.
+
+Design:
+
+- blocks 7000--7099;
+- 4 init/anchor replicates;
+- tasks: single_shape, two_concepts;
+- architectures: tiny_gmp, tiny_gap, plain2_w16_gmp, plain2_w16_gap;
+- treatments: retention_1, release_default;
+- anchors: structured_template, pixel_permuted_template, random_rank10, random_fullrank;
+- total: 25,600 models;
+- primary metrics: centered-logit fidelity and probability error reduction;
+- primary specificity contrast: structured minus pixel-permuted, averaged over the four diagnostic architectures;
+- companion TOST equivalence margins frozen before the full run;
+- selected-channel and random-channel versions are both evaluated.
+
+The pixel-permuted control preserves the structured bank's complete Gram matrix, rank, singular spectrum, row norms, and row coefficient multisets while destroying the original 2D spatial arrangement.
+
+Run only after pulling the latest `main`:
+
+```powershell
+.\run\run_anchor_specificity.ps1 -Smoke
+.\run\run_anchor_specificity.ps1
+```
+
+Do not inspect partial full-run scientific outcomes. Completed models/evaluations are persisted incrementally and skipped on relaunch.
+
+In parallel or before the full run, run the outcome-informed existing-data diagnostics:
+
+```powershell
+.\run\run_architecture_posthoc.ps1
+```
+
+These diagnostics are explicitly post hoc and must never be described as prospective.
