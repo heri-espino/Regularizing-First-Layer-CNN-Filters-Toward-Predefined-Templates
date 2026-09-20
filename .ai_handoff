@@ -153,7 +153,7 @@ Key planned changes:
 - add Stage F as the architecture centerpiece;
 - reorganize results around scientific questions rather than chronological stages;
 - move exhaustive schedules/rankings/controls to appendix;
-- reconsider title only after Stage-F results;
+- manuscript title revised to include both channel count and architecture;
 - retain strong scope limitations.
 
 ## Scientific claim discipline
@@ -193,4 +193,4 @@ Archival helpers stage external paper-facing files directly through Git object/i
 
 ## Final instruction to a future agent
 
-Stage F is complete. The default next step is **paper synthesis and revision, not another experimental stage**. Read `RESEARCH_STATUS.md`, the Stage-F report, and `paper/REVISION_PLAN.md` before editing the manuscript.
+Stage F is complete and `paper/main.tex` has been restructured around the final evidence. The default next step is **manuscript critique/polish, not another experimental stage**. Read `RESEARCH_STATUS.md`, the Stage-F report, and `paper/REVISION_PLAN.md` before editing the manuscript.
