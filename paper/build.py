@@ -34,6 +34,7 @@ FIGURES = tuple(
         "fig03_matching_trajectories.pdf",
         "fig04_similarity_matrices.pdf",
         "fig05_kernel_gallery.pdf",
+        "fig06_main_results.pdf",
     )
 )
 
@@ -74,8 +75,11 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     if clean_first:
         clean(output)
 
-    from build_overview_figure import build_figure
-    build_figure()
+    from build_overview_figure import build_figure as build_overview_figure
+    from build_main_results_figure import build_figure as build_main_results_figure
+
+    build_overview_figure()
+    build_main_results_figure()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
