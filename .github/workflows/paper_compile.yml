@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install figure dependencies
+        run: python -m pip install numpy matplotlib pillow
       - name: Install TeX
         run: |
           sudo apt-get update
