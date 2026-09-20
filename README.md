@@ -17,7 +17,9 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
 - **Completed metric-sensitivity analysis:** [`analysis/metric_sensitivity_001/REPORT.md`](analysis/metric_sensitivity_001/REPORT.md)
-- **Frozen Stage-F architecture protocol:** [`studies/cnn_architecture_robustness/PROTOCOL.md`](studies/cnn_architecture_robustness/PROTOCOL.md)
+- **Completed architecture robustness:** [`analysis/architecture_robustness_001/REPORT.md`](analysis/architecture_robustness_001/REPORT.md)
+- **Anchor-specificity protocol:** [`studies/cnn_anchor_specificity/PROTOCOL.md`](studies/cnn_anchor_specificity/PROTOCOL.md)
+- **Post hoc architecture diagnostics:** [`studies/cnn_architecture_posthoc/PROTOCOL.md`](studies/cnn_architecture_posthoc/PROTOCOL.md)
 - **Study map:** [`studies/README.md`](studies/README.md)
 - **Run helpers:** [`run/README.md`](run/README.md)
 - **Analysis map:** [`analysis/README.md`](analysis/README.md)
@@ -144,6 +146,30 @@ zsh run/run_metric_sensitivity.zsh
 Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated. The completed audit showed that the TinyCNN patch-budget contrast persists under centered-logit fidelity and unnormalized probability error reduction, while architecture remains a major source of heterogeneity.
 
 Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. The official run is a clean CUDA run under `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. As of 2026-09-20, all 25,600 models and all frozen evaluations are complete; the Stage-F analysis is archived under `analysis/architecture_robustness_001/`. See `RESEARCH_STATUS.md` for the exact live state and resume command.
+
+## Final pre-submission experiment
+
+The active fresh-sample experiment tests whether the patch-budget phenomenon specifically depends on the designed edge/corner/ring spatial structure or instead reflects anchor retention/release more generally.
+
+It compares four frozen anchor families: the original structured bank, a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, a generic random rank-10 bank, and a generic full-rank bank. The full design contains 25,600 models on fresh blocks 7000--7099.
+
+On Windows:
+
+```powershell
+git pull --ff-only origin main
+.\run\run_anchor_specificity.ps1 -Smoke
+.\run\run_anchor_specificity.ps1
+```
+
+The experiment is incremental/resumable and writes outside the worktree under `%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001`.
+
+A separate existing-data diagnostic can be run without retraining:
+
+```powershell
+.\run\run_architecture_posthoc.ps1
+```
+
+Read the frozen protocols before interpreting either output.
 
 ## Scope
 
