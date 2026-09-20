@@ -19,6 +19,8 @@ MASTER = legacy_core.MASTER
 TASKS = tuple(legacy_core.TASKS)
 ARCHS = ("tiny_gmp", "tiny_gap", "plain2_w16_gmp", "plain2_w16_gap")
 TREATMENTS = ("retention_1", "release_default")
+RANK_TOL = 1e-6
+
 ANCHORS = (
     "structured_template",
     "pixel_permuted_template",
@@ -89,7 +91,7 @@ def random_rank10_bank(block: int, init_rep: int) -> np.ndarray:
     coeff = rng.standard_normal((16, 10))
     bank = coeff @ basis.T
     out = _center_normalize_rows(bank.reshape(16, 9, 9))
-    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=1e-6)
+    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=RANK_TOL)
     if rank != 10:
         raise AssertionError(f"Expected random rank-10 bank, got rank={rank}")
     return out
@@ -98,7 +100,7 @@ def random_rank10_bank(block: int, init_rep: int) -> np.ndarray:
 def random_fullrank_bank(block: int, init_rep: int) -> np.ndarray:
     rng = np.random.default_rng(anchor_seed(block, init_rep, "random_fullrank"))
     out = _center_normalize_rows(rng.standard_normal((16, 9, 9)))
-    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=1e-8)
+    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=RANK_TOL)
     if rank != 16:
         raise AssertionError(f"Expected full-rank random bank, got rank={rank}")
     return out
@@ -122,7 +124,7 @@ def bank_diagnostics(bank: np.ndarray) -> dict:
     singular = np.linalg.svd(centered, compute_uv=False)
     gram = centered @ centered.T
     return {
-        "rank": int(np.linalg.matrix_rank(centered, tol=1e-6)),
+        "rank": int(np.linalg.matrix_rank(centered, tol=RANK_TOL)),
         "max_abs_row_mean": float(np.abs(matrix.mean(axis=1)).max()),
         "max_abs_row_norm_error": float(np.abs(np.linalg.norm(matrix, axis=1) - 1.0).max()),
         "singular_values": [float(x) for x in singular],
