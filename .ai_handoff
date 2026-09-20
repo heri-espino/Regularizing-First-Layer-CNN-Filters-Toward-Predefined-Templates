@@ -1,166 +1,183 @@
 # AI handoff
 
-## Machine / permissions constraints
+Last updated: 2026-09-19
 
-The user frequently runs this repository on university-managed Windows machines without administrator privileges. Treat the working tree as potentially **partially non-writable** even when Git itself can modify existing files and create commits.
+## Read this first
 
-Observed behavior on 2026-09-18:
+The durable scientific state is in:
 
-- existing tracked files can be edited and committed;
-- Git can write to `.git/` and push normally;
-- creating a new directory such as `analysis/metric_sensitivity_001/` from PowerShell can fail with `UnauthorizedAccessException`;
-- experiment outputs under `%LOCALAPPDATA%\prior-templates-cnns\results\...` are writable;
-- therefore `git add .` does **not** capture experiment outputs stored in `%LOCALAPPDATA%`.
+1. `RESEARCH_STATUS.md`
+2. `paper/REVISION_PLAN.md`
+3. `studies/cnn_architecture_robustness/PROTOCOL.md`
 
-Do not tell the user to rerun a completed experiment merely because its outputs were written outside the repository or because a paper-facing directory cannot be created in the worktree.
+Do not reconstruct the project from chat history if these files are available.
 
-## Required workflow for experiment outputs
+## Live critical state
 
-Before launching a long experiment on Windows:
+Stage F is currently active.
 
-1. Verify and record the output root.
-2. Prefer a user-writable external location such as
-   `%LOCALAPPDATA%\prior-templates-cnns\results\<study>`.
-3. Keep raw/checkpoint-heavy outputs there.
-4. After completion, archive only the paper-facing analysis products and provenance required by the study.
-5. If the worktree refuses creation of new directories, stage external files directly into the Git index with the repository helper rather than copying them into the worktree.
+Official run root:
 
-For the metric-sensitivity study use:
-
-```powershell
-.\run\stage_metric_sensitivity_results.ps1
-git status
-git commit -m "analysis: add metric sensitivity results"
-git push
+```text
+%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-The staging helper uses `git hash-object -w` plus `git update-index --cacheinfo`, so it can add files from `%LOCALAPPDATA%` without creating the destination directory in the worktree. It also marks those index entries `skip-worktree` locally after staging so the university ACL does not immediately appear as unstaged deletions.
+Current status as of 2026-09-19:
 
-On a normal writable clone the committed files will materialize normally.
+- training: **25,600 / 25,600 complete**;
+- evaluation: **in progress**;
+- frozen analysis: not yet interpreted;
+- Stage-F scientific outcomes must not be inferred from partial evaluation files.
 
-## Metric-sensitivity experiment status
+The official Stage-F run is the clean CUDA run. An earlier CPU attempt under `architecture_robustness_001` produced roughly 1,000 completed checkpoints before being stopped for throughput reasons. Do **not** merge those CPU-partial artifacts into the official Stage-F result.
 
-Study: `studies/cnn_metric_sensitivity/`.
+### Resume after server restart
 
-The frozen metric-sensitivity evaluation completed successfully on a university workstation on 2026-09-18. Default output root:
-
-`%LOCALAPPDATA%\prior-templates-cnns\results\metric_sensitivity_001`
-
-Expected completed artifacts include:
-
-- `execution_manifest.json`
-- `stage_d/design.json`
-- `stage_d/EVAL_COMPLETE.json`
-- `stage_e/design.json`
-- `stage_e/EVAL_COMPLETE.json`
-- all files under `analysis/`, including `REPORT.md`, `summary.json`, aggregate CSVs and block-level CSVs.
-
-Do not archive `stage_d/runs/` or `stage_e/runs/` in Git unless there is a specific reproducibility reason. They contain the large per-model evaluation record and are not required for the paper-facing analysis snapshot.
-
-The results have not yet been inspected in this handoff. Once archived, read at minimum:
-
-- `analysis/metric_sensitivity_001/REPORT.md`
-- `stage_d_primary_metric_robustness.csv`
-- `stage_d_treatment_contrasts.csv`
-- `stage_d_input_effect_scale_contrasts.csv`
-- `stage_e_budget_contrasts_B.csv`
-- `summary.json`
-
-Do not rewrite the manuscript until those results are inspected.
-
-## Future experiments
-
-Compute cost is not a practical constraint for the user; university machines include high-end CPUs and GPUs. Do not optimize future experiments merely for minimal runtime.
-
-The next proposed study is a new, prospectively frozen architecture-robustness experiment (Stage F). It should use fresh blocks/seeds and systematically vary downstream CNN architecture while preserving the same 16-channel first layer and template bank so that intervention budget `k=1,...,16` remains comparable. Candidate factors include depth, GAP versus GMP, downstream width, residual mixing, and downstream normalization.
-
-Freeze the protocol before running Stage F. Do not alter Stage-D/E or the completed metric-sensitivity protocol based on Stage-F outcomes.
-
-
-## Stage F frozen architecture robustness study
-
-The Stage-F protocol was committed **before Stage-F implementation and before any Stage-F outcomes**:
-
-- protocol path: `studies/cnn_architecture_robustness/PROTOCOL.md`
-- protocol commit: `6dccf0948204e4af05d232f4d944b7b3903e5387`
-
-Do not modify the scientific design after outcomes are inspected. Pure implementation fixes are allowed only if they preserve the frozen estimands/design and are documented.
-
-Frozen full design:
-
-- 100 fresh renderer blocks, 6000--6099;
-- 4 paired initialization replicates;
-- 2 tasks;
-- 2 treatments: constant `retention_1` and `release_default`;
-- 16 architectures;
-- 25,600 trained models;
-- fixed 16-channel 9x9 template-initialized first layer and first-layer ReLU patch point;
-- k=1,...,16;
-- primary task `two_concepts`;
-- primary metrics centered-logit fidelity and unnormalized probability error reduction;
-- renderer block is the inferential unit after averaging init replicates;
-- primary omnibus architecture-heterogeneity tests plus a fresh-sample TinyCNN-vs-TwoLayer-form bridge contrast.
-
-Default external result root:
-
-`%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_001`
-
-Run:
+From the repository root:
 
 ```powershell
 git pull --ff-only origin main
-.\run\run_architecture_robustness.ps1 -Smoke
-.\run\run_architecture_robustness.ps1
+conda activate prior-templates-cnns
+
+.\run\run_architecture_robustness.ps1 `
+  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" `
+  -TrainDevice cuda `
+  -TrainWorkers 1 `
+  -EvalDevice cuda `
+  -EvalBatchSize 256
 ```
 
-After completion on a restricted worktree:
+Training will skip all 25,600 completed models. Evaluation skips completed per-model JSONs.
+
+## Do not modify live Stage-F source files
+
+Until the official run and frozen analysis finish, do not edit:
+
+- `studies/cnn_architecture_robustness/PROTOCOL.md`
+- `architecture_core.py`
+- `train_grid.py`
+- `evaluate_grid.py`
+- `analyze.py`
+
+The execution manifest records source hashes. Changing these files can make the existing output root non-resumable or destroy provenance.
+
+Documentation and archival-helper changes are safe.
+
+## Stage-F design in one line
+
+100 fresh renderer blocks × 4 paired initialization replicates × 2 tasks × 2 treatments × 16 architectures = 25,600 models. The inferential unit remains the renderer block after averaging the four initialization replicates.
+
+Primary task: `two_concepts`.
+
+Primary metrics:
+
+- centered-logit fidelity;
+- unnormalized probability reconstruction-error reduction.
+
+Primary tests:
+
+- repeated-measures architecture omnibus for each primary metric;
+- fresh-sample `tiny_gmp - plain2_w16_gmp` bridge contrast.
+
+## Why Stage F exists
+
+Known before Stage F:
+
+- Stage-D TinyCNN prospective probability-fidelity contrast: (B=0.330976), CI [0.273680, 0.388273].
+- Metric audit: TinyCNN centered-logit (B=0.178881), CI [0.127268, 0.230494].
+- Metric audit: TinyCNN unnormalized probability-error (B=0.894411), CI [0.786301, 1.002522].
+- Original normalization denominator/input-effect scale differs strongly across treatments.
+- Stage E shows TinyCNN positive channel-count contrasts but TwoLayerCNN much weaker/negative patterns.
+
+Therefore Stage F asks which downstream architecture factors condition the phenomenon while preserving the exact same first-layer patch space.
+
+## Runtime history
+
+Benchmark:
+
+- CPU 12 workers: 110.13 models/hour.
+- CUDA sequential: 1167.55 models/hour.
+- CUDA ≈10.6× faster.
+
+The benchmark is implementation evidence only.
+
+## After Stage F completes
+
+Let the frozen launcher finish `analyze.py`. Then archive from the CUDA root:
 
 ```powershell
-.\run\stage_architecture_robustness_results.ps1
+.\run\stage_architecture_robustness_results.ps1 `
+  -SourceRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001"
+
 git diff --cached --stat
 git status
 git commit -m "analysis: add Stage-F architecture robustness results"
 git push
 ```
 
-Do not commit the 25,600 raw checkpoints or per-model evaluation JSONs unless explicitly needed. Archive the paper-facing `analysis/` outputs and provenance using the staging helper.
+Inspect primary outputs before secondary mechanistic narratives:
 
-### Metric-sensitivity result motivating Stage F
+1. `REPORT.md`
+2. `primary_architecture_omnibus.csv`
+3. `primary_bridge_contrast.csv`
+4. `architecture_B_summary.csv`
+5. `architecture_factor_contrasts.csv`
+6. `treatment_delta_curves.csv`
+7. denominator, initialization-dispersion, and control diagnostics.
 
-The completed frozen metric-sensitivity analysis found, in the Stage-D primary TinyCNN/two_concepts/contrast setting:
+Do not cherry-pick architecture families.
 
-- centered-logit B = +0.178881, 95% CI [+0.127268, +0.230494];
-- unnormalized probability-error-reduction B = +0.894411, 95% CI [+0.786301, +1.002522].
+## Manuscript
 
-The release-minus-retention base-to-counterfactual probability error scale differed by +0.848558 in TinyCNN, so normalization scale clearly differed across treatments, but the patch-budget contrast remained under unnormalized and centered-logit metrics.
+`paper/main.tex` is intentionally a pre-Stage-F snapshot.
 
-Stage-E architecture results were heterogeneous: TinyCNN retained positive effects across both tasks, whereas TwoLayerCNN effects were much weaker, null, or negative depending on task/metric. This is why Stage F prioritizes systematic architecture factors rather than merely adding seeds to the original TinyCNN.
+Do not perform the outcome-dependent rewrite until Stage F is complete. Follow `paper/REVISION_PLAN.md`.
 
+Key planned changes:
 
-## Stage-F runtime benchmark before any design reduction
+- integrate metric-sensitivity audit prominently;
+- explicitly discuss treatment-dependent normalization scale;
+- add Stage F as the architecture centerpiece;
+- reorganize results around scientific questions rather than chronological stages;
+- move exhaustive schedules/rankings/controls to appendix;
+- reconsider title only after Stage-F results;
+- retain strong scope limitations.
 
-On 2026-09-18 the user reported operational throughput of approximately 1,000 completed Stage-F models after about 8 hours using the default CPU-multiprocessing launcher. This implies the frozen 25,600-model run would take many days on that workstation.
+## Scientific claim discipline
 
-This observation is **runtime/throughput only**. No Stage-F scientific outcomes were inspected to motivate any design change.
+The paper can argue that:
 
-Before reducing the frozen Stage-F design, benchmark implementation speed with:
+- constant regularization preserves template-like weights;
+- structural similarity does not imply a simple functional patching signature;
+- the TinyCNN release-vs-retention comparison depends on channel count;
+- that channel-count pattern survives alternative output metrics;
+- architecture is a major unresolved conditioning variable being tested prospectively in Stage F.
 
-```powershell
-git pull --ff-only origin main
-.\run\benchmark_architecture_training.ps1
+Do not claim:
+
+- unique causal mechanism;
+- mediated fraction;
+- natural-image generalization;
+- human interpretability from filter appearance;
+- architecture-independent behavior;
+- that metric sensitivity or patching granularity sensitivity is itself novel.
+
+Use “prespecified prospective test/follow-up” rather than generic “confirmatory” wording in new manuscript prose.
+
+## Machine / permission constraints
+
+University Windows worktrees may be partially non-writable even when Git can commit.
+
+Use user-writable external roots under:
+
+```text
+%LOCALAPPDATA%\prior-templates-cnns\...
 ```
 
-The benchmark:
+Do not tell the user to rerun completed experiments because outputs are external.
 
-- writes outside Stage-F results under `%LOCALAPPDATA%\prior-templates-cnns\benchmarks\stage_f_training`;
-- uses a fixed representative architecture set;
-- compares the existing 12-worker CPU strategy against sequential CUDA;
-- trains for the same 200 epochs;
-- does not run patching analysis;
-- is implementation/performance evidence only and must never enter Stage-F inference.
+Archival helpers stage external paper-facing files directly through Git object/index operations when the worktree cannot create directories.
 
-Do not inspect Stage-F patching/scientific outcomes before deciding whether a computational protocol amendment is needed.
+## Final instruction to a future agent
 
-If sequential CUDA is not substantially faster, the next engineering option is a separately validated batched/vectorized GPU trainer that preserves the frozen model definitions, seeds, treatment pairing, optimization updates, and outputs. Validate numerical equivalence before using such an optimizer for Stage F.
-
-Do not discard the already completed CPU checkpoints. Any future reuse/migration must preserve provenance and avoid mixing scientifically incompatible training procedures without explicit documentation.
+Before proposing any new experiment, first read the completed Stage-F results and `paper/REVISION_PLAN.md`. The default next step after Stage F is **paper synthesis, not another experimental stage**.
