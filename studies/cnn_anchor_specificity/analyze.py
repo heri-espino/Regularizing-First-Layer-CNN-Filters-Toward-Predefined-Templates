@@ -21,6 +21,12 @@ PRIMARY_METRICS = ("centered_logit_fidelity", "prob_error_reduction")
 BUDGETS = (1, 2, 4, 8)
 N_PERM = 100_000
 PERM_SEED = 20260920
+# Frozen before Stage-G outcomes. Each margin is 20% of the historical Stage-F
+# mean absolute B across the same four diagnostic architectures.
+EQUIVALENCE_MARGINS = {
+    "centered_logit_fidelity": 0.017040331170505053,
+    "prob_error_reduction": 0.06593636028899892,
+}
 
 
 def interval(x):
@@ -43,6 +49,46 @@ def one_sample(x):
         return {**q, "t_stat": np.nan, "p_two_sided": np.nan}
     z = ttest_1samp(x, 0.0)
     return {**q, "t_stat": float(z.statistic), "p_two_sided": float(z.pvalue)}
+
+
+def equivalence_tost(x, margin, alpha=0.05):
+    x = np.asarray(x, dtype=float)
+    x = x[np.isfinite(x)]
+    if len(x) < 2:
+        return {
+            "equivalence_margin": float(margin),
+            "equivalence_ci90_low": np.nan,
+            "equivalence_ci90_high": np.nan,
+            "equivalence_p_lower": np.nan,
+            "equivalence_p_upper": np.nan,
+            "equivalence_p_tost": np.nan,
+            "equivalent_at_alpha_0_05": False,
+        }
+    n = len(x)
+    mean = float(x.mean())
+    sd = float(x.std(ddof=1))
+    se = sd / np.sqrt(n)
+    crit = float(student_t.ppf(1.0 - alpha, n - 1))
+    ci_low = mean - crit * se
+    ci_high = mean + crit * se
+    if se == 0:
+        p_lower = 0.0 if mean > -margin else 1.0
+        p_upper = 0.0 if mean < margin else 1.0
+    else:
+        t_lower = (mean + margin) / se
+        t_upper = (mean - margin) / se
+        p_lower = float(student_t.sf(t_lower, n - 1))
+        p_upper = float(student_t.cdf(t_upper, n - 1))
+    p_tost = max(p_lower, p_upper)
+    return {
+        "equivalence_margin": float(margin),
+        "equivalence_ci90_low": float(ci_low),
+        "equivalence_ci90_high": float(ci_high),
+        "equivalence_p_lower": float(p_lower),
+        "equivalence_p_upper": float(p_upper),
+        "equivalence_p_tost": float(p_tost),
+        "equivalent_at_alpha_0_05": bool(p_tost < alpha),
+    }
 
 
 def holm_adjust(values):
@@ -228,9 +274,18 @@ def spatial_contrasts(block_b, value_kind):
         structured = p.xs("structured_template", level="anchor_family", axis=1).reindex(columns=ac.ARCHS)
         permuted = p.xs("pixel_permuted_template", level="anchor_family", axis=1).reindex(columns=ac.ARCHS)
         d = (structured - permuted).mean(axis=1)
-        q = one_sample(d.to_numpy(float))
-        q["p_signflip"] = signflip_p(d.to_numpy(float), seed=PERM_SEED + PRIMARY_METRICS.index(metric) + (100 if value_kind=="random" else 0))
-        rec.append({"task": PRIMARY_TASK, "metric": metric, "value_kind": value_kind, "contrast": "structured - pixel_permuted averaged over architectures", **q})
+        values = d.to_numpy(float)
+        q = one_sample(values)
+        q["p_signflip"] = signflip_p(values, seed=PERM_SEED + PRIMARY_METRICS.index(metric) + (100 if value_kind=="random" else 0))
+        eq = equivalence_tost(values, EQUIVALENCE_MARGINS[metric])
+        rec.append({
+            "task": PRIMARY_TASK,
+            "metric": metric,
+            "value_kind": value_kind,
+            "contrast": "structured - pixel_permuted averaged over architectures",
+            **q,
+            **eq,
+        })
         per.extend({
             "task": PRIMARY_TASK, "metric": metric, "value_kind": value_kind,
             "block": int(b), "difference": float(v)
@@ -238,6 +293,9 @@ def spatial_contrasts(block_b, value_kind):
     out = pd.DataFrame(rec)
     if value_kind == "selected":
         out["p_holm_two_metric_family"] = holm_adjust(out.p_signflip.to_numpy(float))
+        out["equivalence_p_tost_holm_two_metric_family"] = holm_adjust(
+            out.equivalence_p_tost.to_numpy(float)
+        )
     return out, pd.DataFrame(per)
 
 
@@ -386,13 +444,15 @@ def main():
         "",
         "## Primary spatial-template specificity",
         "",
-        "| Metric | mean structured-pixelperm B | 95% CI | sign-flip p | Holm p |",
-        "|---|---:|---:|---:|---:|",
+        "| Metric | mean structured-pixelperm B | 95% CI | sign-flip Holm p | equivalence margin | 90% CI | equivalence Holm p |",
+        "|---|---:|---:|---:|---:|---:|---:|",
     ]
     for _, r in spatial_selected.iterrows():
         lines.append(
             f"| {r.metric} | {r['mean']:+.6f} | [{r.ci_low:+.6f}, {r.ci_high:+.6f}] | "
-            f"{r.p_signflip:.3g} | {r.p_holm_two_metric_family:.3g} |"
+            f"{r.p_holm_two_metric_family:.3g} | {r.equivalence_margin:.6f} | "
+            f"[{r.equivalence_ci90_low:+.6f}, {r.equivalence_ci90_high:+.6f}] | "
+            f"{r.equivalence_p_tost_holm_two_metric_family:.3g} |"
         )
     lines += [
         "",
@@ -425,7 +485,7 @@ def main():
         f"- maximum no-op logit error: **{max_noop:.6g}**",
         f"- maximum pixel-permuted Gram error: **{checks.anchor_max_abs_gram_error_vs_structured.max(skipna=True):.6g}**",
         "",
-        "Either a null or non-null structured-vs-pixel-permuted result is informative. Interpret according to the frozen protocol; do not redefine template specificity after seeing outcomes.",
+        "Interpretation rule: a nonzero difference test supports spatial-structure sensitivity; equivalence requires the frozen TOST margin; if neither criterion is met, the result is inconclusive rather than evidence of no difference.",
     ]
     (out / "REPORT.md").write_text("\n".join(lines) + "\n")
 
