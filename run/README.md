@@ -95,3 +95,20 @@ git push
 ```
 
 Read `../RESEARCH_STATUS.md` before changing any Stage-F workflow.
+
+## Final pre-submission strengthening
+
+Fresh anchor-specificity experiment:
+
+```powershell
+.\run\run_anchor_specificity.ps1 -Smoke
+.\run\run_anchor_specificity.ps1
+```
+
+Post hoc diagnostics of the already-completed architecture run:
+
+```powershell
+.\run\run_architecture_posthoc.ps1
+```
+
+After completion, use `stage_anchor_specificity_results.ps1` and `stage_architecture_posthoc_results.ps1` to archive paper-facing outputs directly through Git.
