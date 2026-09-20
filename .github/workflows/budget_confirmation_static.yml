@@ -132,6 +132,20 @@ jobs:
                   assert np.max(np.abs(base @ base.T - p @ p.T)) < 5e-6
           print('anchor invariants: PASS')
           PY
+      - name: Verify frozen equivalence helper
+        run: |
+          python - <<'PY'
+          import sys
+          import numpy as np
+          sys.path.insert(0, 'studies/cnn_anchor_specificity')
+          import analyze
+          for metric, margin in analyze.EQUIVALENCE_MARGINS.items():
+              inside = analyze.equivalence_tost(np.zeros(100), margin)
+              outside = analyze.equivalence_tost(np.full(100, 2.0 * margin), margin)
+              assert inside['equivalent_at_alpha_0_05'], (metric, inside)
+              assert not outside['equivalent_at_alpha_0_05'], (metric, outside)
+          print('equivalence helper: PASS')
+          PY
       - name: One-epoch training/evaluation smoke
         run: |
           rm -rf /tmp/anchor-specificity-smoke
