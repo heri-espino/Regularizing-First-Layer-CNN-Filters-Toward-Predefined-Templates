@@ -14,6 +14,7 @@ This directory contains convenience launchers for reproducing the experiments an
 | `run_architecture_robustness.ps1` | Run the frozen Stage-F 25,600-model architecture robustness study |
 | `stage_architecture_robustness_results.ps1` | Archive only Stage-F paper-facing outputs from the official external CUDA root directly into Git |
 | `benchmark_architecture_training.ps1` | Implementation-only CPU-vs-CUDA Stage-F training throughput benchmark |
+| `status_anchor_specificity.ps1` | Report outcome-blind training/evaluation completion counts for the anchor-specificity run |
 
 Examples from the repository root:
 
@@ -117,6 +118,12 @@ Default external root:
 ```
 
 The full design is 25,600 models: 100 fresh blocks × 4 init/anchor replicates × 2 tasks × 4 diagnostic architectures × 4 anchor families × 2 treatments. Training and evaluation are incremental and resumable.
+
+Check progress without opening partial scientific results:
+
+```powershell
+.\run\status_anchor_specificity.ps1
+```
 
 The outcome-informed architecture diagnostics use the already-completed Stage-F evaluator outputs and require no retraining:
 
