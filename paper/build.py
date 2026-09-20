@@ -74,10 +74,8 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     if clean_first:
         clean(output)
 
-    overview = PAPER_DIR / "figures" / "fig00_overview.pdf"
-    if not overview.is_file() or overview.stat().st_size == 0:
-        from build_overview_figure import build_figure
-        build_figure()
+    from build_overview_figure import build_figure
+    build_figure()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
