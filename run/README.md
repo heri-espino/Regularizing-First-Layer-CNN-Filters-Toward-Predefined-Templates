@@ -72,11 +72,11 @@ The official Stage-F run uses:
 As of 2026-09-19, all 25,600 models are trained and the frozen evaluation is in progress. Resume after interruption with:
 
 ```powershell
-.\run\run_architecture_robustness.ps1 \`
-  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" \`
-  -TrainDevice cuda \`
-  -TrainWorkers 1 \`
-  -EvalDevice cuda \`
+.\run\run_architecture_robustness.ps1 `
+  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" `
+  -TrainDevice cuda `
+  -TrainWorkers 1 `
+  -EvalDevice cuda `
   -EvalBatchSize 256
 ```
 
