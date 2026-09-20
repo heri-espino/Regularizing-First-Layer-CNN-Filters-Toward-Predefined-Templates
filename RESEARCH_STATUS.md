@@ -1,6 +1,6 @@
 # Research status and scientific handoff
 
-Last updated: 2026-09-19
+Last updated: 2026-09-20
 
 This document is the durable scientific state of the project. A new researcher or AI agent should read this file, `.ai_handoff`, `paper/REVISION_PLAN.md`, and the frozen protocols before changing experiments or rewriting the manuscript.
 
@@ -12,7 +12,7 @@ The intended contribution is **empirical and measurement-focused**. The paper do
 
 ## 2. Current live state
 
-### Stage F is running
+### Stage F is complete
 
 The official Stage-F run is:
 
@@ -20,12 +20,14 @@ The official Stage-F run is:
 %LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-As of 2026-09-19:
+As of 2026-09-20:
 
-- **training is complete: 25,600 / 25,600 models**;
+- **training complete: 25,600 / 25,600 models**;
+- **evaluation complete: 25,600 / 25,600 models**;
+- the frozen Stage-F analysis has completed and been archived under `analysis/architecture_robustness_001/`;
 - training used sequential CUDA on an NVIDIA RTX 4500 Ada Generation;
-- **evaluation is in progress** over all 25,600 final checkpoints;
-- no Stage-F scientific outcome should be interpreted until the frozen evaluator finishes and the frozen analysis is run;
+- maximum full-patch logit identity error = 0;
+- maximum no-op logit identity error = 0;
 - Stage-F raw checkpoints and per-model evaluator JSONs remain outside the repository.
 
 The run was launched with the frozen design and a clean CUDA output root. If the server is restarted, resume with exactly:
@@ -39,7 +41,7 @@ The run was launched with the frozen design and a clean CUDA output root. If the
   -EvalBatchSize 256
 ```
 
-The training phase will skip all completed models and the evaluator will skip already completed evaluation JSONs.
+The run is complete. The resume command is retained only for provenance/recovery; completed training and evaluation artifacts are skipped automatically.
 
 **Do not modify** any of the following while the official Stage-F run may need to resume:
 
@@ -514,20 +516,115 @@ Secondary paired block-level contrasts decompose:
 
 These help locate where architecture heterogeneity arises. They should not be turned into a post hoc winner ranking.
 
-### Stage-F interpretation logic
+### Stage-F observed primary results
 
-The goal is **not** to make every architecture support the TinyCNN result.
+Stage F found strong architecture heterogeneity on the frozen primary `two_concepts` task under **both** primary metrics.
 
-Scientifically useful outcomes include:
+Repeated-measures omnibus tests across 16 architectures:
 
-- **pooling dependence**: GMP and GAP differ strongly;
-- **depth dependence**: the contrast changes as downstream depth increases;
-- **width dependence**: capacity changes the contrast;
-- **normalization/residual dependence**;
-- **broad invariance**: the effect persists across many architectures;
-- **metric dependence**: centered-logit and absolute probability metrics disagree in some architecture families.
+| metric | F(15,1485) | partial eta^2 | Holm-adjusted p |
+|---|---:|---:|---:|
+| centered-logit fidelity | 77.0874 | 0.4378 | 2.40e-173 |
+| probability error reduction | 656.7002 | 0.8690 | numerically underflowed to 0 |
 
-Any of these can sharpen the paper. Stage F should map the **boundary of the phenomenon**, not manufacture universal support.
+The fresh TinyCNN-vs-TwoLayer-form bridge also strongly replicated the architecture difference:
+
+| metric | mean B difference: tiny_gmp - plain2_w16_gmp | 95% CI |
+|---|---:|---:|
+| centered-logit fidelity | +0.162258 | [+0.149701,+0.174815] |
+| probability error reduction | +0.889596 | [+0.862118,+0.917073] |
+
+The corresponding architecture means were:
+
+- `tiny_gmp`: B = +0.145577 centered-logit; +0.831512 probability-error reduction;
+- `plain2_w16_gmp`: B = -0.016681 centered-logit; -0.058084 probability-error reduction.
+
+Thus the architecture difference first suggested by Stage E was **prospectively reproduced on 100 fresh renderer blocks** and is not specific to the historical normalized probability metric.
+
+### Stage-F architecture-factor interpretation
+
+The strongest qualitative lesson is not a single monotone architecture factor. Instead, the channel-count contrast depends on **interactions among downstream pooling, depth, normalization, and metric**.
+
+#### Pooling is important, but its direction depends on the backbone
+
+For `two_concepts`, GAP minus GMP is:
+
+- Tiny: -0.06065 centered-logit; -0.73715 probability-error reduction;
+- Plain depth-2 width-16: +0.11030; +0.39286;
+- Plain depth-4 width-16: +0.04447; +0.17214;
+- Plain depth-2 width-64: +0.22850; +0.32679;
+- Plain depth-4 width-64: +0.05598; +0.02511;
+- Residual depth-4 width-16: +0.06183; +0.14220;
+- BN depth-2 width-16: -0.15467; -0.05170;
+- BN depth-4 width-16: +0.13133; +0.07805.
+
+All eight pooling-family contrasts are Holm-significant for both primary metrics.
+
+Therefore the correct paper-level statement is:
+
+> spatial aggregation strongly conditions the patch-budget treatment contrast, but there is no architecture-independent direction for GAP versus GMP.
+
+In particular, TinyCNN is unusual: GMP produces a much larger positive unnormalized-probability B than GAP, whereas most multi-layer plain/residual backbones show the opposite sign for GAP-minus-GMP.
+
+#### Depth has a large interaction with pooling
+
+Under GMP:
+
+- plain2 - tiny = -0.16226 centered-logit and -0.88960 probability-error reduction;
+- plain4 - plain2 is approximately zero under both primary metrics.
+
+This indicates that the **first added downstream convolution** accounts for nearly all of the Tiny-vs-plain depth difference under GMP; adding further plain depth from 2 to 4 does little under GMP.
+
+Under GAP:
+
+- plain2 - tiny is near zero for centered-logit fidelity but +0.24041 for probability-error reduction;
+- plain4 - plain2 is negative under both metrics.
+
+Depth is therefore not a single monotone causal factor; it interacts with pooling and metric.
+
+#### Width is secondary and metric-dependent
+
+Increasing width 16->64 produces small-to-moderate changes. Centered-logit contrasts are positive in all four frozen width comparisons, while probability-error reduction is positive under GMP but null/negative under some GAP comparisons. Width does not explain the dominant Tiny-vs-plain2 GMP contrast.
+
+#### Residual connectivity is not a major driver here
+
+Residual4 - plain4 intervals include zero for both GMP and GAP under both primary metrics after the frozen family correction. This is one of the cleanest negative findings of Stage F.
+
+#### BatchNorm strongly changes some settings, but not with a universal direction
+
+At depth 2 with GAP, BatchNorm sharply reduces B under both metrics. At depth 4 with GAP, centered-logit B increases but probability-error-reduction B decreases. Under GMP, BN produces modest positive changes. Therefore normalization is another interaction term, not a simple main effect.
+
+### Stage-F metric and scale interpretation
+
+Architecture heterogeneity is visible under both:
+
+1. normalized centered-logit fidelity;
+2. unnormalized probability reconstruction-error reduction.
+
+This is important because their scaling conventions differ.
+
+The unnormalized probability measure also exposes large architecture-specific differences in the release-minus-retention base-to-counterfactual output scale. For example on `two_concepts`, the probability input-effect-scale contrast is approximately:
+
+- `tiny_gmp`: +0.8375;
+- `tiny_gap`: +0.1901;
+- `plain2_w16_gap`: +0.7420;
+- `plain2_w16_gmp`: +0.0611.
+
+Thus absolute probability-error magnitudes should not be interpreted as architecture-invariant units. The architecture result is strengthened by the fact that the centered-logit normalized metric also shows strong heterogeneity and the same fresh Tiny-vs-plain2 bridge.
+
+### Secondary task
+
+The `single_shape` task also shows substantial architecture dependence, but several architecture/metric combinations differ qualitatively from `two_concepts`. This supports the paper's scope claim: architecture and task both condition the observed patching comparison.
+
+### Final Stage-F interpretation
+
+Stage F should **not** be summarized as “GAP fixes the effect,” “depth destroys the effect,” or “one architecture is correct.”
+
+The defensible conclusion is:
+
+> the release-versus-retention activation-patching comparison is strongly architecture-dependent. Pooling and the first downstream convolution produce especially large changes, but their effects interact with backbone structure, normalization, task, and output metric.
+
+This is a stronger and more interesting result than universal replication because it maps a reproducible boundary of the measurement phenomenon.
 
 ## 9. Novelty and positioning
 
@@ -721,4 +818,4 @@ The result-staging helpers use `git hash-object` and `git update-index --cachein
 
 ## 18. One-line handoff
 
-**Stage F training is complete and its frozen CUDA evaluation is running; do not change the Stage-F scientific code, do not inspect/interpret partial Stage-F outcomes, and after completion use the frozen analysis to determine how architecture conditions a channel-count-dependent activation-patching comparison that already survived a prospective TinyCNN test and alternative output metrics.**
+**Stage F is complete: the TinyCNN-vs-TwoLayer-form architecture gap replicated prospectively under both primary metrics, and the broader 16-architecture grid shows strong architecture heterogeneity driven by interactions among pooling, downstream depth, normalization, task, and metric. The default next step is manuscript synthesis, not another experimental stage.**
