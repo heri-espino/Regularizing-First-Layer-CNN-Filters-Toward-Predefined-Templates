@@ -1,5 +1,7 @@
 # Stage F: architecture robustness
 
+> **Live status (2026-09-19):** the official clean CUDA run has completed all **25,600 / 25,600** training jobs and is currently evaluating the frozen first-layer patching grid. Do not inspect/interpret partial Stage-F outcomes or modify the frozen scientific source files while the run may need to resume.
+
 This directory implements the frozen fresh-sample architecture study described in `PROTOCOL.md`.
 
 ## Design
@@ -22,38 +24,35 @@ The frozen metric-sensitivity analysis showed a strong TinyCNN patch-budget trea
 
 ## Windows / university machine
 
-The default full output is deliberately outside the repository:
+The official full CUDA output is deliberately outside the repository:
 
 ```text
-%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_001
+%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-Run a small smoke test first:
+An earlier CPU-partial run exists under `architecture_robustness_001`; it is not part of the official Stage-F analysis.
+
+The original CPU-multiprocessing default was benchmarked and found to be much slower than sequential CUDA on the university workstation: 110.13 versus 1167.55 models/hour. The official run therefore uses CUDA training and evaluation.
+
+Resume the official run after interruption with:
 
 ```powershell
-.\run\run_architecture_robustness.ps1 -Smoke
+.\run\run_architecture_robustness.ps1 \`
+  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" \`
+  -TrainDevice cuda \`
+  -TrainWorkers 1 \`
+  -EvalDevice cuda \`
+  -EvalBatchSize 256
 ```
 
-Then run the frozen full experiment:
-
-```powershell
-.\run\run_architecture_robustness.ps1
-```
-
-The default uses CPU multiprocessing for training and CUDA for evaluation. This is intentional: the networks are small enough that many concurrent CPU training jobs can use the workstation efficiently, whereas the full patching evaluation benefits from the GPU.
-
-Override resources if needed:
-
-```powershell
-.\run\run_architecture_robustness.ps1 -TrainWorkers 16 -ThreadsPerWorker 1 -EvalBatchSize 512
-```
+All completed training checkpoints and evaluation JSONs are skipped automatically.
 
 Do not change blocks, architecture grid, treatments, metrics, or primary analysis after inspecting Stage-F outcomes.
 
 ## Outputs
 
 ```text
-architecture_robustness_001/
+architecture_robustness_cuda_001/
 ├── execution_manifest.json
 ├── training/
 │   ├── design.json
@@ -92,3 +91,7 @@ git push
 ```
 
 This staging helper does not require creating a new folder in the worktree.
+
+## Source-freeze warning
+
+The execution manifest records the committed blobs for `PROTOCOL.md`, `architecture_core.py`, `train_grid.py`, `evaluate_grid.py`, `analyze.py`, and the legacy core. While the official evaluation is incomplete, do not edit those files. Documentation-only changes do not alter the live scientific run.
