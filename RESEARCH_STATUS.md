@@ -672,6 +672,50 @@ Stage F addresses the architecture-generalization weakness inside a controlled s
 
 The response to these risks should primarily be **scope discipline and presentation**, not automatically another experiment.
 
+## 9.2 Current pre-submission strengthening plan
+
+A strict referee pass after the completed architecture study identified two remaining questions that materially affect the paper's scientific identity. The manuscript should **not be submitted yet**.
+
+### Fresh anchor-specificity experiment
+
+Frozen protocol: `studies/cnn_anchor_specificity/PROTOCOL.md`.
+
+The experiment uses 100 fresh blocks (7000--7099), four init/anchor replicates, both tasks, four diagnostic architectures, two treatments, and four anchor families:
+
+1. the structured edge/corner/ring bank;
+2. a common random pixel permutation of that bank, preserving its Gram matrix, rank, singular spectrum, row norms, and coefficient multisets exactly while destroying 2D spatial arrangement;
+3. a generic random rank-10 bank;
+4. a generic full-rank random bank.
+
+Total: **25,600 new models**.
+
+The primary frozen question is whether structured templates differ from the exactly Gram/rank-matched pixel-permuted control. This distinguishes spatial template structure from generic anchor retention/release.
+
+### Post hoc architecture diagnostics
+
+Frozen protocol: `studies/cnn_architecture_posthoc/PROTOCOL.md`.
+
+This uses the completed Stage-F evaluator outputs only; no retraining.
+
+It will report:
+
+- Greenhouse--Geisser-corrected repeated-measures inference;
+- 100,000-permutation within-block architecture omnibus tests;
+- Friedman sensitivity tests;
+- architecture dependence for the eight random channel-order controls;
+- selected-vs-random architecture patterns;
+- random-channel TinyGMP-vs-Plain2 bridge;
+- direct template-alignment-retention versus functional-B summaries/correlations;
+- an exact architecture-definition table.
+
+This analysis is explicitly outcome-informed and post hoc.
+
+### External benchmark decision
+
+Do not add an external dataset merely to increase experiment count.
+
+After the two analyses above, reassess whether a public controlled benchmark with known factors would add information. The design should depend on whether anchor structure proves specific or generic. A public bridge is optional; it is not a prerequisite if the final paper is framed narrowly as a controlled measurement study and the existing claims remain appropriately scoped.
+
 ## 10. Claims the paper can currently support
 
 Before Stage F results, the strongest defensible claims are:
