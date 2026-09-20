@@ -335,3 +335,18 @@ Crucially, either outcome is scientifically useful:
 
 - if structured and pixel-permuted anchors behave similarly, the paper should pivot away from template-specificity and present predefined templates as a controlled case study of anchor-retention/patching measurement behavior;
 - if they differ reproducibly, the paper gains direct evidence that spatial template structure contributes beyond bank rank/Gram geometry.
+
+## Protocol amendment 1 — numerical rank tolerance (2026-09-20)
+
+This amendment was committed during implementation validation and **before any Stage-G scientific outcome was generated or inspected**.
+
+The original template bank is rank 10 in double precision. The experiment stores first-layer banks as float32; float32 rounding lifts the six algebraically zero singular values to approximately 1e-8, which can cause `numpy.linalg.matrix_rank(..., tol=1e-8)` to report rank 16 spuriously.
+
+All Stage-G anchor-rank integrity checks therefore define numerical rank using an **absolute singular-value tolerance of 1e-6**. This leaves the scientific design unchanged:
+
+- structured template: numerical rank 10;
+- pixel-permuted template: numerical rank 10 with the same Gram matrix;
+- random-rank10: numerical rank 10;
+- random-fullrank: numerical rank 16.
+
+This amendment changes only the implementation-level numerical tolerance used to verify the frozen anchor construction.
