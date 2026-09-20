@@ -8,10 +8,12 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 
 ## Start here
 
+- **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
+- **Post-Stage-F manuscript revision plan:** [`paper/REVISION_PLAN.md`](paper/REVISION_PLAN.md)
 - **Paper:** [`paper/main.tex`](paper/main.tex)
 - **Build:** `python paper/build.py`
 - **Publication figures:** `python paper/build_figures.py`
-- **Prospective confirmation (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
+- **Prospective test (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
 - **Completed metric-sensitivity analysis:** [`analysis/metric_sensitivity_001/REPORT.md`](analysis/metric_sensitivity_001/REPORT.md)
@@ -89,7 +91,7 @@ The repository intentionally preserves the experimental record instead of flatte
 | A | Initial alignment and intervention study | `studies/cnn_causal_milestone/` |
 | B | 200-epoch retention/release study | `studies/cnn_release_experiment/` |
 | C | Post hoc patch-size and baseline decomposition | `studies/cnn_patch_robustness/`, `studies/cnn_patch_energy_control/` |
-| D | Frozen prospective confirmation | `studies/cnn_budget_confirmation/` |
+| D | Frozen prespecified prospective test | `studies/cnn_budget_confirmation/` |
 | E | Predeclared sensitivity study on 50 new blocks per setting | `studies/cnn_exhaustive_robustness/` |
 | Metric audit | Frozen post hoc metric-sensitivity analysis of saved Stage-D/E checkpoints; no retraining | `studies/cnn_metric_sensitivity/` |
 | F | Frozen fresh-sample architecture robustness study: 16 architectures, 100 renderer blocks, 4 paired initializations | `studies/cnn_architecture_robustness/` |
@@ -141,14 +143,7 @@ zsh run/run_metric_sensitivity.zsh
 
 Its protocol was frozen before any centered-logit or unnormalized-error outputs were generated. The completed audit showed that the TinyCNN patch-budget contrast persists under centered-logit fidelity and unnormalized probability error reduction, while architecture remains a major source of heterogeneity.
 
-Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. On Windows:
-
-```powershell
-.\run\run_architecture_robustness.ps1 -Smoke
-.\run\run_architecture_robustness.ps1
-```
-
-Read `studies/cnn_architecture_robustness/PROTOCOL.md` before running it; the design is frozen before Stage-F outcomes.
+Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. The official run is a clean CUDA run under `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. As of 2026-09-19, all 25,600 models have finished training and the frozen patching evaluation is in progress. See `RESEARCH_STATUS.md` for the exact live state and resume command.
 
 ## Scope
 
