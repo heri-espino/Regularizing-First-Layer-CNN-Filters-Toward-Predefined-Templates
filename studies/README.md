@@ -33,13 +33,13 @@ Historical source files are kept in place even when later code superseded them. 
 
 Stage F was motivated by the completed metric audit: the TinyCNN patch-budget contrast remained under centered-logit and unnormalized probability-error metrics, while TwoLayerCNN showed substantially weaker or different behavior. Stage F therefore uses fresh data blocks and multiple paired initializations to decompose architecture effects prospectively.
 
-## Live Stage-F status
+## Completed architecture robustness
 
-As of 2026-09-19, the clean CUDA Stage-F run has completed all 25,600 training jobs and is evaluating all saved checkpoints. The official external root is `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. The earlier CPU-partial root is not part of the official analysis. See `../RESEARCH_STATUS.md` and `../.ai_handoff` before touching the live study.
+The clean CUDA architecture-robustness run is complete: all 25,600 training jobs, frozen evaluations, and frozen analyses finished successfully. Paper-facing outputs are archived under `../analysis/architecture_robustness_001/`. The earlier CPU-partial root is not part of the official analysis.
 
 ## Pre-submission strengthening
 
 - `cnn_anchor_specificity/` — prospectively frozen fresh-sample anchor-specificity experiment; tests whether spatial template structure matters beyond exactly matched bank geometry.
 - `cnn_architecture_posthoc/` — frozen outcome-informed diagnostic analysis of the completed architecture study; robust omnibus, random-channel, and structure/function diagnostics.
 
-These are the active final strengthening workflows before submission. The manuscript should not be treated as final until their results are incorporated.
+These are the active final strengthening workflows before submission. The anchor-specificity experiment now includes a frozen equivalence companion so that a nonsignificant structured-vs-pixel-permuted difference cannot be misread as equivalence. The manuscript should not be treated as final until these results are incorporated.
