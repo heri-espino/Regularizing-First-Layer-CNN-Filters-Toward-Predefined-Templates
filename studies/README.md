@@ -1,5 +1,7 @@
 # Study map
 
+For the current live state and cross-stage interpretation, read [`../RESEARCH_STATUS.md`](../RESEARCH_STATUS.md) first.
+
 The manuscript combines several experiments with different inferential roles. The directories are preserved separately so that frozen protocols, source hashes, and execution history remain traceable.
 
 | Stage | Directory | Role in the paper |
@@ -21,7 +23,7 @@ The manuscript combines several experiments with different inferential roles. Th
 2. Read `cnn_budget_confirmation/PROTOCOL.md` and `../analysis/budget_confirmation_001/REPORT.md` for the prospective primary result.
 3. Read `cnn_exhaustive_robustness/PROTOCOL.md` and `../analysis/exhaustive_robustness_001/REPORT.md` for the larger secondary sensitivity study.
 4. Read `cnn_metric_sensitivity/PROTOCOL.md` and `../analysis/metric_sensitivity_001/REPORT.md` for the completed metric audit.
-5. Read `cnn_architecture_robustness/PROTOCOL.md` before running Stage F; its design was frozen before any Stage-F outcomes.
+5. Read `cnn_architecture_robustness/PROTOCOL.md` for Stage F. Training is complete and the frozen CUDA evaluation is in progress; do not inspect partial outcomes or modify its scientific source files.
 6. Read `cnn_checkpoint_audit/AUDIT_PROTOCOL.md` and `../analysis/checkpoint_audit/AUDIT_REPORT.md` for the independent implementation check.
 7. Return to Stages A--C when tracing how the Stage-D estimand was developed.
 
@@ -30,3 +32,7 @@ Stages A--C motivated the final analysis but are not treated as independent conf
 Historical source files are kept in place even when later code superseded them. This is deliberate: the repository is an archival research record, not a single production package.
 
 Stage F was motivated by the completed metric audit: the TinyCNN patch-budget contrast remained under centered-logit and unnormalized probability-error metrics, while TwoLayerCNN showed substantially weaker or different behavior. Stage F therefore uses fresh data blocks and multiple paired initializations to decompose architecture effects prospectively.
+
+## Live Stage-F status
+
+As of 2026-09-19, the clean CUDA Stage-F run has completed all 25,600 training jobs and is evaluating all saved checkpoints. The official external root is `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. The earlier CPU-partial root is not part of the official analysis. See `../RESEARCH_STATUS.md` and `../.ai_handoff` before touching the live study.
