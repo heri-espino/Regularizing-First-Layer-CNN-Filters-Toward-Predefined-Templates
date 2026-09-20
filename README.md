@@ -2,7 +2,7 @@
 
 Research artifact for:
 
-> **Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels**
+> **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**
 
 This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior**: persistent template retention strongly preserves template-like kernels, while the measured release-versus-retention effect changes with the number of patched channels and with architecture.
 
