@@ -23,9 +23,10 @@ The main paper now begins with a reproducible overview showing representative re
 
 ```bash
 python paper/build_overview_figure.py
+python paper/build_main_results_figure.py
 ```
 
-`paper/build.py` regenerates this overview automatically on every manuscript build.
+`paper/build.py` regenerates both the overview and the central results figure automatically on every manuscript build.
 
 The remaining archived publication figures are regenerated from saved experimental artifacts with:
 
@@ -34,7 +35,7 @@ python -m pip install -e ".[experiments]"
 python paper/build_figures.py
 ```
 
-The revised main text uses the learned-kernel gallery as the principal structural visualization; the historical learning-curve and robustness figures remain available in the artifact and appendices.
+The revised main text uses three primary figures: (1) the renderer/template/patching overview, (2) the learned-kernel gallery, and (3) `fig06_main_results.pdf`, a central robustness figure combining prospective channel-count curves with the 16-architecture forest plots. Historical learning-curve and auxiliary robustness figures remain available in the artifact and appendices.
 
 `plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. Figure-generation scripts are presentation-only: they do not retrain models or redefine any analysis.
 
