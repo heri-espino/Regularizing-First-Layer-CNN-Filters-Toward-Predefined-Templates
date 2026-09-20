@@ -750,86 +750,194 @@ Do not infer evidence from model count. The unit of inference is the independent
 
 ## 12. Current manuscript state
 
-`paper/main.tex` is a **pre-Stage-F manuscript snapshot**.
+`paper/main.tex` has been fully restructured around the final scientific questions rather than the internal Stage A--F chronology.
 
-It currently contains Stages A--E and the checkpoint audit, but it does not yet fully integrate:
+Current manuscript conventions:
 
-- the completed metric-sensitivity audit;
-- the denominator-scale finding;
-- Stage F;
-- the final architecture-factor interpretation.
+- title: **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**;
+- no visible Stage A/B/C/D/E/F identifiers in manuscript-facing prose;
+- descriptive experiment names are used instead;
+- `cleveref` is used for cross-references;
+- every displayed equation is numbered and labeled;
+- the main paper uses three principal figures:
+  1. renderer + template bank + patching overview;
+  2. learned-kernel gallery;
+  3. channel-count + architecture central robustness figure;
+- complete numerical robustness tables are retained in appendices rather than duplicated in the main text.
 
-Do not rewrite the manuscript while Stage-F evaluation is incomplete. The planned revision is documented in `paper/REVISION_PLAN.md`.
+The current paper is intentionally **not considered submission-ready** until the final anchor-specificity experiment and post hoc architecture diagnostics are incorporated.
 
-The revised manuscript title is:
+## 13. Active pre-submission strengthening
 
-> Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture
+### 13.1 Anchor-specificity experiment
 
-This title reflects the two prospectively supported conditioning variables now central to the paper: number of patched channels and downstream architecture.
+Frozen protocol:
 
-## 13. What happens after Stage F finishes
+`studies/cnn_anchor_specificity/PROTOCOL.md`
 
-1. Confirm evaluation completion:
-   `evaluation/GRID_COMPLETE.json`.
-2. Allow the frozen launcher to run `analyze.py`.
-3. Archive paper-facing outputs from the official CUDA root:
-   ```powershell
-   .\run\stage_architecture_robustness_results.ps1 `
-     -SourceRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001"
-   ```
-4. Inspect, in this order:
-   - `REPORT.md`;
-   - `primary_architecture_omnibus.csv`;
-   - `primary_bridge_contrast.csv`;
-   - `architecture_B_summary.csv`;
-   - `architecture_factor_contrasts.csv`;
-   - `treatment_delta_curves.csv`;
-   - `input_effect_scale_contrasts.csv`;
-   - `initialization_dispersion_summary.csv`;
-   - `control_diagnostics.csv`.
-5. Do not cherry-pick architecture families.
-6. Summarize the frozen primary analyses before looking for mechanistic narratives in secondary contrasts.
-7. Update `paper/REVISION_PLAN.md` with observed Stage-F conclusions.
-8. Rewrite the manuscript.
-9. Rebuild figures and paper.
-10. Perform a final strict referee pass focused on claim/evidence alignment and whether every inferential role is labeled correctly.
-11. Prefer stopping experimentation after Stage F unless the completed paper exposes a concrete fatal gap. More experiments should not be added merely to make the artifact larger.
+Official external output root:
 
-## 14. Paper-level objective after Stage F
+`%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001`
 
-The final paper should be simpler than the experimental history.
+Design:
 
-The main narrative should become approximately:
+- fresh renderer blocks 7000--7099;
+- 4 init/anchor replicates;
+- 2 tasks;
+- 4 diagnostic architectures;
+- 4 anchor families;
+- 2 treatments;
+- 200 epochs;
+- total: **25,600 models**.
 
-1. A structured prior strongly preserves template-like first-layer weights.
-2. Functional activation-patching comparisons do not track that structural similarity in a simple way.
-3. The release-vs-retention comparison depends on how many first-layer channels are patched.
-4. This dependence survives alternative output metrics, including one without the original denominator.
-5. Architecture substantially conditions the observed pattern; Stage F maps which downstream factors matter.
-6. Therefore structural similarity and functional patching measurements should be reported as distinct objects, and patching conclusions should be checked across intervention granularity and relevant architecture choices.
+Anchor families:
 
-The paper should not read like “Stage A, then B, then C, then D...” in the main narrative. That chronology belongs in the methods/appendix. The main text should organize evidence around scientific questions.
+1. structured edge/corner/ring templates;
+2. pixel-permuted templates preserving the complete Gram matrix, rank, singular spectrum, row norms, and row coefficient multisets;
+3. generic random rank-10 anchors;
+4. generic random full-rank anchors.
 
-## 15. Recommended final evidence hierarchy
+The primary scientific contrast is structured minus pixel-permuted, averaged across the four diagnostic architectures on `two_concepts`. It isolates spatial arrangement while holding the structured bank's channel geometry and rank fixed.
 
-Main text should prioritize:
+The primary selected-channel difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics.
 
-1. structural retention result;
-2. Stage-D prospective channel-count contrast;
-3. metric-sensitivity result;
-4. Stage-F architecture result;
-5. one compact Stage-E robustness figure/table.
+A formal TOST equivalence companion is also frozen. The margins were fixed before the full experiment using 20% of the historical architecture-study mean absolute B across the same four architecture forms:
 
-Move most of the following to appendix/supplement:
+- centered-logit fidelity: **0.017040331170505053**;
+- probability error reduction: **0.06593636028899892**.
 
-- full schedule grid;
-- alternative rankings;
-- random and energy-matched details;
-- full k curves for every secondary combination;
-- audit implementation history;
-- exhaustive block-level tables.
+Interpretation is fixed:
 
-This keeps the paper readable while preserving the full research record in the repository.
+- significant difference test -> evidence that spatial arrangement changes the contrast;
+- significant equivalence test -> evidence of practical equivalence within the frozen margin;
+- neither -> inconclusive.
+
+A nonsignificant difference alone is never evidence of equivalence.
+
+The same anchor-specificity diagnostics are also computed for the eight random channel-order controls as a prespecified ranking-independence robustness check.
+
+Implementation validation is complete. GitHub Actions verifies:
+
+- Python compilation;
+- PowerShell syntax;
+- anchor centering/unit norm/rank;
+- structured-versus-pixel-permuted Gram preservation;
+- paired downstream initialization across anchor families;
+- frozen equivalence helper;
+- one-epoch CPU training/evaluation smoke.
+
+The final validation workflow passed before the official full run.
+
+Run from Windows:
+
+```powershell
+git pull --ff-only origin main
+conda activate prior-templates-cnns
+nvidia-smi
+
+.\run\run_anchor_specificity.ps1 -Smoke
+.\run\run_anchor_specificity.ps1
+```
+
+Check progress without inspecting partial scientific outcomes:
+
+```powershell
+.\run\status_anchor_specificity.ps1
+```
+
+The full run is incremental and resumable. After interruption or reboot, rerun the exact same full command; completed checkpoints/evaluations are skipped.
+
+Do not inspect partial full-run outcome JSONs.
+
+After full completion:
+
+```powershell
+.\run\stage_anchor_specificity_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add anchor specificity results"
+git push
+```
+
+Do **not** use `git add .` for these externally staged results.
+
+### 13.2 Post hoc architecture diagnostics
+
+Frozen diagnostic protocol:
+
+`studies/cnn_architecture_posthoc/PROTOCOL.md`
+
+This is explicitly outcome-informed/post hoc and uses the already-completed architecture evaluator outputs. It retrains no models.
+
+It adds:
+
+- Greenhouse--Geisser-corrected repeated-measures inference;
+- 100,000-permutation within-block architecture omnibus tests;
+- Friedman rank-based sensitivity tests;
+- architecture heterogeneity for random channel orders;
+- selected-versus-random architecture summaries;
+- random-channel TinyGMP-vs-Plain2 bridge;
+- direct template-retention-difference versus functional-B summaries/correlations;
+- exact machine-generated architecture definitions and parameter counts.
+
+Run:
+
+```powershell
+.\run\run_architecture_posthoc.ps1
+```
+
+After completion:
+
+```powershell
+.\run\stage_architecture_posthoc_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add post hoc architecture diagnostics"
+git push
+```
+
+These outputs must always be described as post hoc diagnostics, never prospective confirmation.
+
+## 14. Decision rule after anchor specificity
+
+The final identity of the manuscript depends on the frozen anchor-specificity result.
+
+### If spatial structure differs from the matched control
+
+If structured versus pixel-permuted anchors show a reproducible nonzero difference, the paper can retain predefined spatial structure as a scientifically relevant component.
+
+The manuscript should state narrowly that, in the tested controlled setting, the designed 2D template arrangement changes the release-versus-retention patch-budget comparison beyond bank Gram/rank/spectrum geometry.
+
+### If practical equivalence is supported
+
+If the frozen TOST supports practical equivalence, the paper should pivot away from template-specificity.
+
+Predefined templates become the controlled experimental case rather than the proposed mechanism. A stronger title direction would be:
+
+> Activation-Patching Comparisons Depend on Channel Budget and Downstream Architecture in Anchor-Regularized CNNs
+
+The main contribution would then be measurement sensitivity under anchor retention/release rather than special properties of edge/corner/ring filters.
+
+### If neither difference nor equivalence is established
+
+Do not force either story. Treat template-specificity as unresolved and frame predefined templates as the controlled case study.
+
+## 15. Final evidence hierarchy after strengthening
+
+The main manuscript should remain compact.
+
+Main-text evidence should prioritize:
+
+1. structural anchor/template retention;
+2. prospective channel-count contrast;
+3. metric robustness of the prespecified B contrast;
+4. architecture robustness;
+5. random-channel ranking-independence diagnostic if supported by the frozen post hoc analysis;
+6. anchor-specificity result, because it determines whether template structure belongs in the scientific claim.
+
+Keep exhaustive schedules, rankings, energy controls, block-level tables, full architecture definitions, and implementation diagnostics in appendices/artifact.
+
+Do not turn the manuscript back into a chronological sequence of internal stages.
 
 ## 16. Repository and machine constraints
 
@@ -841,25 +949,26 @@ Observed constraints:
 - Git can still commit/push;
 - creating new worktree directories may fail with `UnauthorizedAccessException`;
 - `%LOCALAPPDATA%\prior-templates-cnns\...` is writable;
-- therefore long experiment outputs live outside the repo.
+- long experiment outputs therefore live outside the repo.
 
-Do not tell the user to rerun a completed experiment merely because the results are outside the worktree.
+Do not tell the user to rerun completed experiments merely because outputs are external.
 
-The result-staging helpers use `git hash-object` and `git update-index --cacheinfo` to archive external paper-facing files without requiring the destination directory to be created normally.
+Paper-facing result-staging helpers use `git hash-object` and `git update-index --cacheinfo` to archive external files without requiring creation of worktree directories.
 
 ## 17. Source-of-truth reading order for a new agent
 
-1. `RESEARCH_STATUS.md` — current scientific state.
-2. `.ai_handoff` — current operational instructions.
-3. `paper/REVISION_PLAN.md` — post-Stage-F manuscript plan.
-4. `studies/cnn_architecture_robustness/PROTOCOL.md` — frozen live Stage-F design.
-5. `analysis/metric_sensitivity_001/REPORT.md` — latest completed methodological audit.
-6. `analysis/budget_confirmation_001/REPORT.md` — Stage-D prospective result.
-7. `analysis/exhaustive_robustness_001/REPORT.md` — Stage-E robustness map.
-8. `analysis/checkpoint_audit/AUDIT_REPORT.md` — implementation audit.
-9. `paper/main.tex` — pre-Stage-F manuscript snapshot.
-10. Earlier Stage A--C materials only when tracing historical development.
+1. `RESEARCH_STATUS.md` — current scientific and operational state.
+2. `.ai_handoff` — concise operational handoff.
+3. `studies/cnn_anchor_specificity/PROTOCOL.md` — active fresh-sample specificity experiment.
+4. `studies/cnn_architecture_posthoc/PROTOCOL.md` — active existing-data diagnostic analysis.
+5. `paper/main.tex` — current restructured manuscript.
+6. `analysis/architecture_robustness_001/REPORT.md` — completed architecture result.
+7. `analysis/metric_sensitivity_001/REPORT.md` — completed metric robustness.
+8. `analysis/budget_confirmation_001/REPORT.md` — prospective channel-count result.
+9. `analysis/exhaustive_robustness_001/REPORT.md` — schedule/task sensitivity map.
+10. `analysis/checkpoint_audit/AUDIT_REPORT.md` — independent implementation audit.
+11. Earlier developmental studies only when tracing provenance.
 
 ## 18. One-line handoff
 
-**Stage F is complete: the TinyCNN-vs-TwoLayer-form architecture gap replicated prospectively under both primary metrics, and the broader 16-architecture grid shows strong architecture heterogeneity driven by interactions among pooling, downstream depth, normalization, task, and metric. The default next step is manuscript synthesis, not another experimental stage.**
+**The architecture and metric robustness work is complete and the manuscript has been restructured; the active final fresh-sample experiment is the 25,600-model anchor-specificity study, paired with a no-retraining post hoc architecture diagnostic. The paper should not be submitted until both are incorporated, and the anchor-specificity outcome determines whether the final claim remains template-specific or pivots to generic anchor-regularization/activation-patching sensitivity.**
