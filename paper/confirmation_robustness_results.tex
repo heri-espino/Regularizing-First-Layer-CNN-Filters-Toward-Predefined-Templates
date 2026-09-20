@@ -1,8 +1,8 @@
-\section{Prospective Stage-D and Stage-E sensitivity analyses}\label{app:confirmation}
+\section{Prospective channel-count and schedule/task sensitivity analyses}\label{app:confirmation}
 
-This appendix reports the full numerical results for Stages D and E. The Stage-D protocol was frozen in the repository after Stages A--C but before running blocks 4000--4019, which are disjoint from the earlier stages. It was not externally preregistered. The Stage-E protocol was separately specified before running blocks 5000--5049 and remains secondary to Stage D. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The revised main text reports the Stage-D primary channel-count result and uses Stage E only as a compact secondary robustness map. This appendix preserves the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for the prospective channel-count experiment and the subsequent schedule/task sensitivity experiment. The prospective protocol was frozen in the repository after the developmental analyses but before running blocks 4000--4019, which are disjoint from the earlier data. It was not externally preregistered. The schedule/task sensitivity protocol was separately specified before running blocks 5000--5049 and remains secondary to the prospective channel-count test. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The revised main text reports the primary prospective channel-count result and uses the schedule/task analysis only as a compact secondary robustness map. This appendix preserves the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. Machine-readable tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
-\subsection{Stage-D selected-channel patching results}\label{app:stage-d-full}
+\subsection{Prospective selected-channel patching results}\label{app:stage-d-full}
 
 Each entry is the within-block difference in patching effect for selected channels at epoch 200 (annealed minus constant regularization), averaged over 20 new blocks. Only TinyCNN with channels ranked by activation difference supplies the single primary prospective test; the remaining rows are prespecified secondary analyses.
 
@@ -10,7 +10,7 @@ Each entry is the within-block difference in patching effect for selected channe
 \small
 \setlength{\tabcolsep}{4pt}
 \begin{longtable}{llrcc}
-\caption{Stage-D annealed-minus-constant differences in patching effect for selected channels.}\label{tab:stage-d-full}\\
+\caption{Prospective annealed-minus-constant differences in patching effect for selected channels.}\label{tab:stage-d-full}\\
 \toprule
 Architecture & Channel selection & $k$ & Mean $\Delta F$ & 95\% $t$ interval \\
 \midrule
@@ -49,16 +49,17 @@ TwoLayerCNN & validation patching & 8 & +0.0100 & [-0.0015, +0.0214] \\
 \normalsize
 }
 
-\subsection{Stage-D prespecified contrast}\label{app:stage-d-b}
+\subsection{Prespecified prospective channel-count contrast}\label{app:stage-d-b}
 
 For every architecture/channel-selection pair,
-\[
+\begin{equation}
+\label{eq:app-channel-count-contrast}
 B=\frac{\Delta F(4)+\Delta F(8)}{2}-\frac{\Delta F(1)+\Delta F(2)}{2}.
-\]
+\end{equation}
 Positive $B$ indicates that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ and does not require a positive annealing effect at either larger value. The first TinyCNN row, with channels ranked by activation difference, is the single prespecified primary test. Its 20 block-level $B$ values are all positive (range 0.1452--0.5986). All other rows are secondary and do not alter the primary conclusion.
 
 \begin{table}[h]
-\caption{Stage-D values of the prespecified contrast $B$. The first row alone is the primary prospective test.}
+\caption{Prospective values of the prespecified contrast $B$. The first row alone is the primary prospective test.}
 \label{tab:stage-d-b}
 \centering
 \small
@@ -76,7 +77,7 @@ TwoLayerCNN & validation patching & +0.01162 & [-0.00949, 0.03273] & 0.26368 \\
 \end{tabular}
 \end{table}
 
-\subsection{Stage-D patched-run accuracy on counterfactual targets}\label{app:stage-d-cf}
+\subsection{Prospective patched-run accuracy on counterfactual targets}\label{app:stage-d-cf}
 
 Patched-run accuracy on the counterfactual target was retained alongside the normalized patching effect. For the primary TinyCNN setting, with channels ranked by activation difference, annealed minus constant regularization is $-0.2009$ at $k=1$, $-0.3626$ at $k=2$, $-0.0241$ at $k=4$, and $+0.0140$ at $k=8$. The corresponding 95\% intervals are $[-0.2551,-0.1466]$, $[-0.4400,-0.2852]$, $[-0.0524,0.0042]$, and $[0.0086,0.0193]$.
 
@@ -86,15 +87,15 @@ AUROC and validation-patching channel-selection rules show the same broad change
 
 The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with the number of patched channels, but the primary analysis remains the patching effect for selected channels.
 
-\subsection{Stage-E schedule comparisons when channels are ranked by activation difference}\label{app:stage-e-profiles}
+\subsection{Schedule sensitivity when channels are ranked by activation difference}\label{app:stage-e-profiles}
 
-The revised main text uses Stage E only as a compact secondary robustness map. The table below gives all five schedule-versus-constant-regularization comparisons for each task/architecture setting. Holm adjustment is performed within each task/architecture/channel-selection family, exactly as prespecified.
+The revised main text uses the schedule/task experiment only as a compact secondary robustness map. The table below gives all five schedule-versus-constant-regularization comparisons for each task/architecture setting. Holm adjustment is performed within each task/architecture/channel-selection family, exactly as prespecified.
 
 {
 \small
 \setlength{\tabcolsep}{3.5pt}
 \begin{longtable}{lllccl}
-\caption{Stage-E values of $B$ for every non-reference regularization schedule when channels are ranked by activation difference.}\label{tab:stage-e-profiles}\\
+\caption{Schedule-sensitivity values of $B$ for every non-reference regularization schedule when channels are ranked by activation difference.}\label{tab:stage-e-profiles}\\
 \toprule
 Task & Architecture & Schedule vs. constant $\lambda=1$ & Mean $B$ & 95\% CI & Holm $p$ \\
 \midrule
@@ -129,12 +130,12 @@ two concepts & TwoLayerCNN & late annealing & -0.04523 & [-0.06854, -0.02192] & 
 \normalsize
 }
 
-\subsection{Stage-E epoch-200 accuracy and filter-template similarity}\label{app:stage-e-endpoints}
+\subsection{Schedule/task sensitivity endpoints at epoch 200}\label{app:stage-e-endpoints}
 
 The comparison below complements the activation-patching results with test accuracy and first-layer filter-template similarity. Values are means over 50 new replicates.
 
 \begin{table}[h]
-\caption{Stage-E epoch-200 test accuracy and first-layer filter-template similarity for default annealing versus constant regularization.}
+\caption{Schedule/task sensitivity test accuracy and first-layer filter-template similarity for default annealing versus constant regularization.}
 \label{tab:stage-e-endpoints}
 \centering
 \footnotesize
@@ -160,7 +161,7 @@ two concepts & TwoLayerCNN & default annealing & 99.26\% & 0.896 \\
 
 \subsection{Independent reimplementation of checkpoint evaluation}\label{app:audit}
 
-The prespecified reimplementation covered 32 Stage-B checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol. All recomputed values then fell within the stated tolerances.
+The prespecified reimplementation covered 32 developmental checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the prespecified protocol. All recomputed values then fell within the stated tolerances.
 
 \begin{table}[h]
 \caption{Discrepancies between the original and independently reimplemented checkpoint evaluations. Full-channel and no-op probability errors were both zero.}
