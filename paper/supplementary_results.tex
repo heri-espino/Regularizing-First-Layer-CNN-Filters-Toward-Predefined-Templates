@@ -1,13 +1,13 @@
-\section{Historical Stages A--C}\label{app:historical}
+\section{Developmental analyses motivating the prospective estimand}\label{app:historical}
 
-Stages A--C precede the prespecified prospective Stage-D experiment reported in Appendix~\ref{app:confirmation}. They are retained to show why the prospective primary analysis ultimately used the patching effect for selected channels rather than the selected-minus-random comparison.
+These developmental analyses precede the prespecified prospective channel-count experiment reported in \Cref{app:confirmation}. They are retained to show why the prospective primary analysis ultimately used the patching effect for selected channels rather than the selected-minus-random comparison.
 
-\subsection{Stage-A prespecified primary comparisons}\label{app:stage-a}
+\subsection{Early 40-epoch comparisons}\label{app:stage-a}
 
-Stage A compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and were Holm-adjusted as one family. Filter-template similarity and accuracy are also reported descriptively.
+The initial 40-epoch analysis compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the Stage-A outcomes were inspected and were Holm-adjusted as one family. Filter-template similarity and accuracy are also reported descriptively.
 
 \begin{table}[h]
-\caption{Complete Stage-A primary family. The positive marginal interval in the first row does not survive Holm adjustment.}
+\caption{Complete early four-comparison family. The positive marginal interval in the first row does not survive Holm adjustment.}
 \label{tab:stage-a-primary}
 \centering
 \small
@@ -24,12 +24,12 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 \end{tabular}
 \end{table}
 
-\subsection{Stage-B epoch-200 condition means}\label{app:stage-b-endpoints}
+\subsection{Long-horizon epoch-200 condition means}\label{app:stage-b-endpoints}
 
-The table below gives the Stage-B epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
+The table below gives the developmental epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
-\caption{Stage-B epoch-200 means for constant and annealed template regularization.}
+\caption{Developmental epoch-200 means for constant and annealed template regularization.}
 \label{tab:stage-b-endpoints}
 \centering
 \footnotesize
@@ -55,15 +55,15 @@ two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 
 On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the selected-channel and control-channel patching effects.
 
-\subsection{Stage-C decomposition of the original selected-minus-random comparison}\label{app:stage-c-decomposition}
+\subsection{Post hoc decomposition of the original selected-minus-random comparison}\label{app:stage-c-decomposition}
 
-Stage C reused the 80 epoch-200 Stage-B checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. Stage C is post hoc and is not used as the prospective primary test.
+This post hoc analysis reused the 80 epoch-200 developmental checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. This analysis is post hoc and is not used as the prospective primary test.
 
 {
 \small
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{llrrrr}
-\caption{Stage-C \texttt{two\_concepts}/TinyCNN decomposition.}\label{tab:stage-c-decomp}\\
+\caption{Post hoc \texttt{two\_concepts}/TinyCNN decomposition.}\label{tab:stage-c-decomp}\\
 \toprule
 Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
 \midrule
@@ -94,10 +94,10 @@ When channels are ranked by activation difference, $\Delta F_{sel}(4)=-0.022$ wi
 
 For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channels at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated the later prespecified contrast between smaller ($k=1,2$) and larger ($k=4,8$) channel sets rather than a hypothesis about the sign at any single $k$.
 
-\subsection{Stage-C validation-energy-matched control}\label{app:stage-c-energy}
+\subsection{Validation-energy-matched control}\label{app:stage-c-energy}
 
-A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate Stage D. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the prospective channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
-\subsection{Transition to Stage D}\label{app:transition}
+\subsection{Transition to the prospective channel-count experiment}\label{app:transition}
 
-Stages A--C showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the Stage-D protocol was specified around the patching effect for selected channels before new replicates were generated. Appendix~\ref{app:confirmation} reports that prospective test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
+The developmental analyses showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the prospective channel-count protocol was specified around the patching effect for selected channels before new replicates were generated. \Cref{app:confirmation} reports that prospective test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
