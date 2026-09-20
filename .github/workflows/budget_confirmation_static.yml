@@ -132,6 +132,44 @@ jobs:
                   assert np.max(np.abs(base @ base.T - p @ p.T)) < 5e-6
           print('anchor invariants: PASS')
           PY
+      - name: Verify Stage-G pairing invariants
+        run: |
+          python - <<'PY'
+          import sys
+          import torch
+          import numpy as np
+          sys.path.insert(0, 'studies/cnn_anchor_specificity')
+          import anchor_core as ac
+
+          block, task, arch, rep = 7000, 'two_concepts', 'plain2_w16_gmp', 0
+          models = {}
+          anchors = {}
+          for family in ac.ANCHORS:
+              model, anchor = ac.setup_model(arch, family, block, task, rep)
+              models[family] = model
+              anchors[family] = anchor.numpy().copy()
+
+          ref = models['structured_template'].state_dict()
+          for family, model in models.items():
+              state = model.state_dict()
+              for key in ref:
+                  if key == 'conv.weight':
+                      continue
+                  assert torch.equal(ref[key], state[key]), (family, key)
+
+          assert ac.shuffle_seed(block, task, arch, rep) == ac.shuffle_seed(block, task, arch, rep)
+          for family in ('pixel_permuted_template','random_rank10','random_fullrank'):
+              a = ac.anchor_bank(family, block, rep)
+              # Anchor realization intentionally does not depend on task/architecture.
+              b = ac.anchor_bank(family, block, rep)
+              assert np.array_equal(a, b), family
+
+          assert not np.array_equal(
+              anchors['structured_template'],
+              anchors['pixel_permuted_template'],
+          )
+          print('pairing invariants: PASS')
+          PY
       - name: Verify frozen equivalence helper
         run: |
           python - <<'PY'
