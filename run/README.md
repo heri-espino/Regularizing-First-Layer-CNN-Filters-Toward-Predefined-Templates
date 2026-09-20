@@ -12,7 +12,8 @@ This directory contains convenience launchers for reproducing the experiments an
 | `run_metric_sensitivity.ps1`, `run_metric_sensitivity.zsh` | Re-evaluate saved Stage-D/E checkpoints under frozen alternative patching metrics; no training |
 | `stage_metric_sensitivity_results.ps1` | Stage completed metric-sensitivity analysis directly from `%LOCALAPPDATA%` into Git when the Windows worktree cannot create new directories |
 | `run_architecture_robustness.ps1` | Run the frozen Stage-F 25,600-model architecture robustness study |
-| `stage_architecture_robustness_results.ps1` | Archive only Stage-F paper-facing outputs from `%LOCALAPPDATA%` directly into Git |
+| `stage_architecture_robustness_results.ps1` | Archive only Stage-F paper-facing outputs from the official external CUDA root directly into Git |
+| `benchmark_architecture_training.ps1` | Implementation-only CPU-vs-CUDA Stage-F training throughput benchmark |
 
 Examples from the repository root:
 
@@ -62,20 +63,28 @@ The staging helper writes the external files into Git's object database and inde
 
 ## Stage F
 
-Stage F uses the user-writable default:
+The official Stage-F run uses:
 
 ```text
-%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_001
+%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 ```
 
-Run a smoke test, then the full frozen experiment:
+As of 2026-09-19, all 25,600 models are trained and the frozen evaluation is in progress. Resume after interruption with:
 
 ```powershell
-.\run\run_architecture_robustness.ps1 -Smoke
-.\run\run_architecture_robustness.ps1
+.\run\run_architecture_robustness.ps1 \`
+  -OutputRoot "$env:LOCALAPPDATA\prior-templates-cnns\results\architecture_robustness_cuda_001" \`
+  -TrainDevice cuda \`
+  -TrainWorkers 1 \`
+  -EvalDevice cuda \`
+  -EvalBatchSize 256
 ```
 
-After the full analysis completes on a restricted worktree:
+The earlier CPU-partial root `architecture_robustness_001` is not part of the official Stage-F analysis.
+
+The implementation benchmark measured 110.13 models/hour with 12 CPU workers and 1167.55 models/hour with sequential CUDA. Benchmark outputs are operational only.
+
+After the full frozen analysis completes:
 
 ```powershell
 .\run\stage_architecture_robustness_results.ps1
@@ -84,3 +93,5 @@ git status
 git commit -m "analysis: add Stage-F architecture robustness results"
 git push
 ```
+
+Read `../RESEARCH_STATUS.md` before changing any Stage-F workflow.
