@@ -28,6 +28,7 @@ DEFAULT_OUTPUT = PAPER_DIR / "espino_2026_template-priors.pdf"
 FIGURES = tuple(
     PAPER_DIR / "figures" / name
     for name in (
+        "fig00_overview.pdf",
         "fig01_learning.pdf",
         "fig02_patch_size.pdf",
         "fig03_matching_trajectories.pdf",
@@ -72,6 +73,11 @@ def clean(output: Path) -> None:
 def build(output: Path, *, clean_first: bool = False) -> Path:
     if clean_first:
         clean(output)
+
+    overview = PAPER_DIR / "figures" / "fig00_overview.pdf"
+    if not overview.is_file() or overview.stat().st_size == 0:
+        from build_overview_figure import build_figure
+        build_figure()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
