@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
 \usepackage{bookmark}
+\usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{xurl}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \newcommand{\pandocbounded}[1]{#1}
@@ -61,17 +62,19 @@ Activation patching replaces internal activations and measures a downstream outp
 We use two $32\times32$ grayscale procedural tasks with balanced labels, matched nuisance variables, and exact counterfactual pairs. Each renderer block contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. In \texttt{single\_shape}, the class is line, circle, triangle, or square. In \texttt{two\_concepts}, circle and triangle presence define two binary factors and four classes; counterfactual pairs change one factor while holding the other and the nuisance variables fixed.
 
 Every model begins with the same bias-free $1\!\to\!16$ convolution with $9\times9$ kernels, same padding, and ReLU. The 16-channel template bank contains eight edges, four two-ray corners, and four rings. Templates are centered and unit norm; the bank has rank 10. For learned filter $W_i$ and template $T_j$, filter-template similarity is
-\[
-A=\frac{1}{16}\sum_i\max_j\langle \widehat W_i,\widehat T_j\rangle,
-\]
+\begin{equation}
+\label{eq:template-similarity}
+A=\frac{1}{16}\sum_i\max_j\langle \widehat W_i,\widehat T_j\rangle.
+\end{equation}
 using signed centered cosine similarity.
 
 Template-based models initialize the first convolution from the bank and optimize
-\[
+\begin{equation}
+\label{eq:training-objective}
 \mathcal L=\mathcal L_{\mathrm{CE}}+
 \lambda(e)\frac{\lVert W-W_{\mathrm{anchor}}\rVert_F^2}
 {\lVert W_{\mathrm{anchor}}\rVert_F^2}.
-\]
+\end{equation}
 The central comparison is between \emph{constant template regularization}, $\lambda(e)=1$ for all 200 epochs, and \emph{annealed template regularization}, with $\lambda=1$ through epoch 10, linear decay to zero by epoch 80, and zero thereafter. Adam uses learning rate $0.003$ and batch size 128, with no learning-rate scheduler or early stopping.
 
 \subsection{Activation patching and channel ranking}\label{sec:patching}
@@ -79,58 +82,65 @@ The central comparison is between \emph{constant template regularization}, $\lam
 For each matched base/counterfactual pair, we run the model on the base image, the counterfactual image, and a patched base image. Patching occurs immediately after the first convolution and ReLU: selected first-layer activation maps from the base run are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged.
 
 Channels are ranked on validation data by the absolute standardized difference in first-layer global-max activation,
-\[
+\begin{equation}
+\label{eq:channel-ranking}
 d_{g,j}=
 \frac{\overline z_{g=1,j}-\overline z_{g=0,j}}
-{s_j+10^{-6}},
-\]
+{s_j+10^{-6}}.
+\end{equation}
 where $z_j$ is the global maximum of first-layer activation map $j$ and $s_j$ is its validation-set standard deviation. This ranking is fixed before test-set patching and does not use the downstream patching endpoint to rank channels. Alternative AUROC and validation-patching rankings, random controls, and replacement-energy-matched controls are retained as secondary analyses.
 
 Let
-\[
+\begin{equation}
+\label{eq:probability-error}
 E_{\mathrm{prob}}(a,b)=
-\frac{1}{N}\sum_{i=1}^{N}\lVert p_a^{(i)}-p_b^{(i)}\rVert_2^2
-\]
+\frac{1}{N}\sum_{i=1}^{N}\lVert p_a^{(i)}-p_b^{(i)}\rVert_2^2.
+\end{equation}
 denote mean squared probability-space error over the $N$ matched counterfactual pairs. The historical output metric is
-\[
+\begin{equation}
+\label{eq:probability-fidelity}
 F_{\mathrm{prob}}(S)=
 1-\frac{E_{\mathrm{prob}}(S,1)}{E_{\mathrm{prob}}(0,1)}.
-\]
+\end{equation}
 It is a normalized counterfactual reconstruction-error reduction for this patching procedure. It is not interpreted as a mediated fraction or a general measure of causal importance.
 
 Because the denominator is model specific, we later froze two alternative metrics before evaluating them on saved prospective checkpoints. First, centered-logit fidelity subtracts the per-example mean logit,
-\[
-\widetilde{\ell}=\ell-\mathrm{mean}(\ell)\mathbf 1,
-\]
+\begin{equation}
+\label{eq:centered-logits}
+\widetilde{\ell}=\ell-\mathrm{mean}(\ell)\mathbf 1.
+\end{equation}
 and applies the same normalized error-reduction form in centered-logit space. Second, the unnormalized probability error reduction is
-\[
+\begin{equation}
+\label{eq:probability-error-reduction}
 R_{\mathrm{prob}}(S)=
 E_{\mathrm{prob}}(0,1)-E_{\mathrm{prob}}(S,1).
-\]
+\end{equation}
 Thus $R_{\mathrm{prob}}$ is measured directly in mean squared probability error per matched pair and removes the model-specific denominator entirely.
 
 \subsection{Channel-count contrast and inferential unit}\label{sec:estimand}
 
 For any patching metric $M$, define the within-block treatment difference at channel count $k$,
-\[
-\Delta_b^M(k)=M_b^{\mathrm{annealed}}(k)-M_b^{\mathrm{constant}}(k),
-\]
+\begin{equation}
+\label{eq:treatment-difference}
+\Delta_b^M(k)=M_b^{\mathrm{annealed}}(k)-M_b^{\mathrm{constant}}(k).
+\end{equation}
 and the prespecified small-versus-larger-channel contrast
-\[
+\begin{equation}
+\label{eq:channel-count-contrast}
 B_b^M=
 \frac{\Delta_b^M(4)+\Delta_b^M(8)}{2}
 -\frac{\Delta_b^M(1)+\Delta_b^M(2)}{2}.
-\]
-A positive $B$ means only that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ or a positive treatment difference at either larger channel count.
+\end{equation}
+By \cref{eq:channel-count-contrast}, a positive $B$ means only that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ or a positive treatment difference at either larger channel count.
 
 Matched counterfactual image pairs are repeated measurements inside a renderer/model block and are not treated as inferential replicates. Inference is across independently generated renderer blocks. Training conditions are paired within block through shared data and paired initialization components.
 
 \subsection{Evidence roles and prospective architecture study}\label{sec:design}
 
-Table~\ref{tab:roadmap} separates development analyses from prospectively frozen tests. Earlier stages are preserved because they motivated the eventual estimand, but they are not pooled as independent confirmations.
+\Cref{tab:roadmap} separates developmental analyses from prospectively frozen tests. The developmental analyses are preserved because they motivated the eventual estimand, but they are not pooled as independent confirmations.
 
 \begin{table}[t]
-\caption{Evidence roles. The main text is organized by scientific question rather than stage chronology.}
+\caption{Evidence roles. Internal stage identifiers used during project development are omitted from the manuscript; analyses are named by their scientific role.}
 \label{tab:roadmap}
 \centering
 \footnotesize
@@ -139,52 +149,53 @@ Table~\ref{tab:roadmap} separates development analyses from prospectively frozen
 \toprule
 Evidence & Design & Role \\
 \midrule
-Stages A--C & early training studies and saved-checkpoint decompositions & exploratory/developmental; motivated direct selected-channel analysis and $B$ \\
-Stage D & 20 fresh \texttt{two\_concepts} blocks, TinyCNN primary; protocol frozen before outcomes & single prespecified prospective channel-count test \\
-Stage E & 50 fresh blocks per task/architecture, six regularization schedules & prespecified secondary sensitivity map \\
-Metric audit & saved Stage-D/E checkpoints; alternative metrics frozen before evaluation & post hoc with respect to original results, but metric definitions frozen before recomputation \\
-Stage F & 100 fresh blocks, four paired initialization replicates, 16 architectures, two tasks & prospectively frozen architecture-heterogeneity study \\
-Checkpoint audit & independent recomputation of 32 fixed Stage-B checkpoints & implementation reproducibility check \\
+Developmental analyses & early training studies and saved-checkpoint decompositions & exploratory; motivated direct selected-channel analysis and $B$ \\
+Prospective channel-count experiment & 20 fresh \texttt{two\_concepts} blocks, TinyCNN primary; protocol frozen before outcomes & single prespecified prospective channel-count test \\
+Schedule/task sensitivity experiment & 50 fresh blocks per task/architecture, six regularization schedules & prespecified secondary sensitivity map \\
+Metric robustness analysis & saved prospective/sensitivity checkpoints; alternative metrics frozen before evaluation & post hoc with respect to original results, but metric definitions frozen before recomputation \\
+Architecture robustness experiment & 100 fresh blocks, four paired initialization replicates, 16 architectures, two tasks & prospectively frozen architecture-heterogeneity study \\
+Checkpoint reproducibility audit & independent recomputation of 32 fixed developmental checkpoints & implementation reproducibility check \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Stage F preserves the same first-layer 16-channel intervention tensor, template bank, and validation ranking while varying downstream architecture. The ranking remains the same first-layer global-max activation summary for every architecture, including GAP variants, so architecture and channel-selection rule are not changed together. The 16 variants cross global max pooling (GMP) or global average pooling (GAP) with controlled changes in plain depth (1, 2, or 4), downstream width (16 or 64), residual connectivity, and downstream BatchNorm. Only the downstream computation changes; BatchNorm, when present, is after the intervention point.
+The architecture robustness experiment preserves the same first-layer 16-channel intervention tensor, template bank, and validation ranking while varying downstream architecture. The ranking remains the same first-layer global-max activation summary for every architecture, including GAP variants, so architecture and channel-selection rule are not changed together. The 16 variants cross global max pooling (GMP) or global average pooling (GAP) with controlled changes in plain depth (1, 2, or 4), downstream width (16 or 64), residual connectivity, and downstream BatchNorm. Only the downstream computation changes; BatchNorm, when present, is after the intervention point.
 
-Stage F trains 100 fresh renderer blocks (6000--6099), four paired initialization replicates per block, two tasks, two treatments, and 16 architectures, for 25,600 trained models. Every first-layer patch budget $k=1,\ldots,16$ is evaluated; the frozen primary contrast $B$ retains the prespecified $k=1,2,4,8$ summary. The four initialization replicates are averaged within renderer block before inference, so the inferential sample size is 100 blocks, not 400 initializations or 25,600 models.
+The architecture robustness experiment trains 100 fresh renderer blocks (6000--6099), four paired initialization replicates per block, two tasks, two treatments, and 16 architectures, for 25,600 trained models. Every first-layer patch budget $k=1,\ldots,16$ is evaluated; the frozen primary contrast $B$ retains the prespecified $k=1,2,4,8$ summary. The four initialization replicates are averaged within renderer block before inference, so the inferential sample size is 100 blocks, not 400 initializations or 25,600 models.
 
-The primary task is \texttt{two\_concepts}. The two primary Stage-F metrics are $F_{\mathrm{clogit}}$ and $R_{\mathrm{prob}}$. For each metric, the frozen primary analysis is a one-factor repeated-measures architecture test across the 16 block-level architecture means, followed by a fresh bridge contrast comparing the historical TinyCNN form (\texttt{tiny\_gmp}) with the two-layer form (\texttt{plain2\_w16\_gmp}). The two primary metric tests are Holm adjusted together. Prespecified paired factor contrasts then examine pooling, depth, width, residual connectivity, and BatchNorm.
+The primary task is \texttt{two\_concepts}. The two primary architecture-robustness metrics are $F_{\mathrm{clogit}}$ and $R_{\mathrm{prob}}$. For each metric, the frozen primary analysis is a one-factor repeated-measures architecture test across the 16 block-level architecture means, followed by a fresh bridge contrast comparing the historical TinyCNN form (\texttt{tiny\_gmp}) with the two-layer form (\texttt{plain2\_w16\_gmp}). The two primary metric tests are Holm adjusted together. Prespecified paired factor contrasts then examine pooling, depth, width, residual connectivity, and BatchNorm.
 
 \section{Results}\label{sec:results}
 
 \subsection{Template retention is structural, not a proxy for the patching result}\label{sec:structural}
 
-Constant regularization keeps the first-layer filters substantially closer to the predefined bank. In the larger Stage-E \texttt{two\_concepts}/TinyCNN sample, constant $\lambda=1$ regularization gives mean filter-template similarity 0.944, compared with 0.574 under the default annealing schedule, while mean test accuracies are 98.05\% and 99.45\%, respectively. In TwoLayerCNN the corresponding similarities are 0.999 and 0.896, with accuracies 99.11\% and 99.26\%. Thus, greater template retention is not simply a proxy for higher predictive accuracy or for the later patching contrast.
+Constant regularization keeps the first-layer filters substantially closer to the predefined bank. In the larger schedule/task sensitivity sample for \texttt{two\_concepts}/TinyCNN, constant $\lambda=1$ regularization gives mean filter-template similarity 0.944, compared with 0.574 under the default annealing schedule, while mean test accuracies are 98.05\% and 99.45\%, respectively. In TwoLayerCNN the corresponding similarities are 0.999 and 0.896, with accuracies 99.11\% and 99.26\%. Thus, greater template retention is not simply a proxy for higher predictive accuracy or for the later patching contrast.
 
-Saved-checkpoint one-to-one matching gives the same qualitative conclusion: the high similarity under constant regularization is not produced merely by repeatedly matching many learned filters to the same few template entries. The complete matching table is retained in Appendix~\ref{app:kernel-matching}.
+Saved-checkpoint one-to-one matching gives the same qualitative conclusion: the high similarity under constant regularization is not produced merely by repeatedly matching many learned filters to the same few template entries. The complete matching table is retained in \Cref{app:kernel-matching}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig01_learning.pdf}
-\caption{Representative 200-epoch learning and filter-template-similarity trajectories from Stage B. Constant and annealed regularization begin from the same template-based condition and diverge in template similarity after the annealing schedule releases the first-layer penalty. Bands are sample standard deviations across the historical Stage-B replicates; these trajectories are descriptive, not the prospective primary test.}
+\caption{Representative 200-epoch developmental learning and filter-template-similarity trajectories. Constant and annealed regularization begin from the same template-based condition and diverge in template similarity after the annealing schedule releases the first-layer penalty. Bands are sample standard deviations across the developmental replicates; these trajectories are descriptive, not the prospective primary test.}
 \label{fig:learning}
 \end{figure}
 
 \subsection{The patching comparison changes with the number of patched channels}\label{sec:channel-count}
 
-The Stage-D protocol froze a single prospective primary test before generating blocks 4000--4019. On \texttt{two\_concepts}/TinyCNN with activation-difference ranking,
-\[
+The prospective channel-count protocol froze a single primary test before generating blocks 4000--4019. On \texttt{two\_concepts}/TinyCNN with activation-difference ranking,
+\begin{equation}
+\label{eq:prospective-channel-result}
 \bar B_{\mathrm{prob}}=0.330976,
 \qquad
-95\%\ \mathrm{CI}=[0.273680,0.388273],
-\]
+95\%\ \mathrm{CI}=[0.273680,0.388273].
+\end{equation}
 with $t_{19}=12.09$ and two-sided $p=2.28\times10^{-10}$. All 20 block-level values are positive.
 
-The positive $B$ is not a statement that annealed regularization is uniformly better. The pointwise annealed-minus-constant differences are strongly negative at $k=1,2$, close to zero at $k=4$, and slightly positive at $k=8$ (Table~\ref{tab:stage-d-main}). A single patch budget would therefore give an incomplete description of the treatment comparison.
+The prospective estimate in \cref{eq:prospective-channel-result} is not a statement that annealed regularization is uniformly better. The pointwise annealed-minus-constant differences are strongly negative at $k=1,2$, close to zero at $k=4$, and slightly positive at $k=8$ (\Cref{tab:prospective-main}). A single patch budget would therefore give an incomplete description of the treatment comparison.
 
 \begin{table}[t]
-\caption{Stage-D prospective TinyCNN result on 20 fresh \texttt{two\_concepts} blocks. Values are annealed-minus-constant differences in the historical normalized probability patching effect.}
-\label{tab:stage-d-main}
+\caption{Prospective TinyCNN channel-count result on 20 fresh \texttt{two\_concepts} blocks. Values are annealed-minus-constant differences in the historical normalized probability patching effect.}
+\label{tab:prospective-main}
 \centering
 \small
 \begin{tabular}{rcc}
@@ -203,12 +214,12 @@ The historical selected-minus-random comparison is not used to define this prima
 
 \subsection{The TinyCNN contrast survives alternative output metrics}\label{sec:metric-robustness}
 
-The original $F_{\mathrm{prob}}$ divides by each model's own base-to-counterfactual output difference. A frozen reanalysis of the saved Stage-D checkpoints shows that this denominator is not innocuous: release-minus-retention differences in the input-effect scale are substantial. On the Stage-D TinyCNN setting, the probability-space input-effect scale changes by $+0.8486$ mean squared-error units per pair (95\% CI $[0.8267,0.8704]$), and the centered-logit scale changes by $+126.54$ (95\% CI $[120.85,132.23]$).
+The original $F_{\mathrm{prob}}$ divides by each model's own base-to-counterfactual output difference. A frozen reanalysis of the saved prospective channel-count checkpoints shows that this denominator is not innocuous: release-minus-retention differences in the input-effect scale are substantial. On the prospective TinyCNN setting, the probability-space input-effect scale changes by $+0.8486$ mean squared-error units per pair (95\% CI $[0.8267,0.8704]$), and the centered-logit scale changes by $+126.54$ (95\% CI $[120.85,132.23]$).
 
-The principal channel-count contrast nevertheless remains positive under two alternative output definitions (Table~\ref{tab:metric-main}). Centered-logit fidelity retains the normalization form but removes the irrelevant common-logit offset; $R_{\mathrm{prob}}$ removes the model-specific denominator entirely.
+The principal channel-count contrast nevertheless remains positive under two alternative output definitions (\Cref{tab:metric-main}). Centered-logit fidelity retains the normalization form but removes the irrelevant common-logit offset; $R_{\mathrm{prob}}$ removes the model-specific denominator entirely.
 
 \begin{table}[t]
-\caption{Frozen metric-sensitivity analysis of the Stage-D TinyCNN setting. The two alternative metrics were fixed before their outputs were evaluated.}
+\caption{Frozen metric-sensitivity analysis of the prospective TinyCNN setting. The two alternative metrics were fixed before their outputs were evaluated.}
 \label{tab:metric-main}
 \centering
 \small
@@ -226,27 +237,30 @@ The correct interpretation is therefore not that the original normalization is i
 
 \subsection{Architecture strongly conditions the channel-count contrast}\label{sec:architecture}
 
-Stage F tests the architecture question prospectively on 100 fresh renderer blocks. Architecture heterogeneity is large under both frozen primary metrics:
-\[
-F_{15,1485}=77.09,\quad \eta_p^2=0.438
-\]
+The architecture robustness experiment tests the architecture question prospectively on 100 fresh renderer blocks. Architecture heterogeneity is large under both frozen primary metrics:
+\begin{equation}
+\label{eq:architecture-omnibus-clogit}
+F_{15,1485}=77.09,\quad \eta_p^2=0.438.
+\end{equation}
 for centered-logit fidelity, and
-\[
-F_{15,1485}=656.70,\quad \eta_p^2=0.869
-\]
+\begin{equation}
+\label{eq:architecture-omnibus-prob}
+F_{15,1485}=656.70,\quad \eta_p^2=0.869.
+\end{equation}
 for probability error reduction. The Holm-adjusted centered-logit $p$ value is $2.40\times10^{-173}$; the probability-error $p$ value underflows to zero at machine precision.
 
-The fresh bridge contrast also reproduces the historical TinyCNN-versus-TwoLayer-form difference. For
-\[
-B_{\texttt{tiny\_gmp}}-B_{\texttt{plain2\_w16\_gmp}},
-\]
+The fresh bridge contrast in \cref{eq:architecture-bridge} also reproduces the historical TinyCNN-versus-TwoLayer-form difference. For
+\begin{equation}
+\label{eq:architecture-bridge}
+B_{\texttt{tiny\_gmp}}-B_{\texttt{plain2\_w16\_gmp}}.
+\end{equation}
 the mean difference is $+0.16226$ (95\% CI $[+0.14970,+0.17481]$) for centered-logit fidelity and $+0.88960$ (95\% CI $[+0.86212,+0.91707]$) for probability error reduction.
 
-Table~\ref{tab:stage-f-architectures} shows all 16 primary-task architecture means. The pattern is not a single monotone depth or pooling effect. TinyCNN has a much larger positive probability-error $B$ under GMP than GAP, whereas most multi-layer plain and residual backbones show the opposite GAP-minus-GMP direction.
+\Cref{tab:architecture-means} shows all 16 primary-task architecture means. The pattern is not a single monotone depth or pooling effect. TinyCNN has a much larger positive probability-error $B$ under GMP than GAP, whereas most multi-layer plain and residual backbones show the opposite GAP-minus-GMP direction.
 
 \begin{table}[t]
-\caption{Stage-F mean channel-count contrast $B$ on the primary \texttt{two\_concepts} task after averaging four initialization replicates within each of 100 fresh renderer blocks.}
-\label{tab:stage-f-architectures}
+\caption{Architecture-robustness mean channel-count contrast $B$ on the primary \texttt{two\_concepts} task after averaging four initialization replicates within each of 100 fresh renderer blocks.}
+\label{tab:architecture-means}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -282,9 +296,9 @@ These results do not identify one architectural mechanism. They establish a narr
 
 \subsection{Secondary robustness and implementation checks}\label{sec:secondary}
 
-The larger Stage-E sensitivity map gives the same broad warning before Stage F: under the historical contrast ranking, the default annealing schedule produces positive $B$ for TinyCNN on both tasks, while TwoLayerCNN is near zero or negative depending on task and metric. Five alternative regularization schedules preserve the positive TinyCNN probability-fidelity contrast, but these schedules vary both timing and duration and are not interpreted as a dose-response law.
+The larger schedule/task sensitivity map gives the same broad warning before the prospective architecture experiment: under the historical contrast ranking, the default annealing schedule produces positive $B$ for TinyCNN on both tasks, while TwoLayerCNN is near zero or negative depending on task and metric. Five alternative regularization schedules preserve the positive TinyCNN probability-fidelity contrast, but these schedules vary both timing and duration and are not interpreted as a dose-response law.
 
-The independent checkpoint audit recomputes central Stage-B metrics at 32 fixed checkpoints without reading the stored scalar outputs first. All values fall within prespecified tolerances; the maximum discrepancy for selected-channel fidelity is $2.39\times10^{-7}$, and full-patch/no-op identity errors are zero. Stage F likewise has maximum full-patch and no-op logit identity errors of zero.
+The independent checkpoint audit recomputes central developmental-run metrics at 32 fixed checkpoints without reading the stored scalar outputs first. All values fall within prespecified tolerances; the maximum discrepancy for selected-channel fidelity is $2.39\times10^{-7}$, and full-patch/no-op identity errors are zero. The architecture robustness experiment likewise has maximum full-patch and no-op logit identity errors of zero.
 
 \section{Discussion}\label{sec:discussion}
 
@@ -292,18 +306,18 @@ The experiments separate two ideas that are easy to conflate. Constant regulariz
 
 The metric analysis matters for interpretation. The original probability fidelity is normalized by each model's own base-to-counterfactual output change, and that scale differs strongly between treatments. Reporting only the normalized metric would therefore leave open whether the treatment comparison is primarily a reconstruction effect or a normalization effect. The positive TinyCNN $B$ under centered logits and under unnormalized probability error reduction narrows that concern. At the same time, the large architecture-specific differences in output scale mean that absolute $R_{\mathrm{prob}}$ magnitudes should not be compared as though they were architecture-invariant units. Agreement of the two primary metrics on the architecture omnibus and the fresh Tiny-versus-plain2 bridge is more informative than agreement on every secondary factor contrast.
 
-Stage F also argues against a simple depth story. Under GMP, nearly the entire Tiny-to-plain shift appears after adding the first downstream convolution, with little additional change from two to four plain layers. Under GAP, the pattern differs. Pooling has large effects, but their direction reverses across backbones. Residual connectivity is comparatively unimportant in the tested matched comparison, while BatchNorm is strongly context dependent. These interactions are exactly why the result should be described as architecture dependence rather than as a universal effect of one component.
+The architecture robustness experiment also argues against a simple depth story. Under GMP, nearly the entire Tiny-to-plain shift appears after adding the first downstream convolution, with little additional change from two to four plain layers. Under GAP, the pattern differs. Pooling has large effects, but their direction reverses across backbones. Residual connectivity is comparatively unimportant in the tested matched comparison, while BatchNorm is strongly context dependent. These interactions are exactly why the result should be described as architecture dependence rather than as a universal effect of one component.
 
 The controlled renderer is a strength for this measurement question because the counterfactual intervention is exact and nuisance variables are matched. It is also a scope restriction. The result is evidence about the behavior of activation-patching comparisons in a controlled small-CNN family, not a claim that natural-image CNNs, larger vision models, or transformers will show the same architecture map.
 
 \section{Limitations}\label{sec:limitations}
 
 \begin{itemize}
-\item The experiments use two related synthetic tasks, one first-layer template bank, one optimizer family, and a controlled small-CNN architecture family. Stage F broadens the architecture test substantially but does not establish natural-image or large-model generalization.
+\item The experiments use two related synthetic tasks, one first-layer template bank, one optimizer family, and a controlled small-CNN architecture family. The architecture robustness experiment broadens the architecture test substantially but does not establish natural-image or large-model generalization.
 \item Activation patching replaces complete first-layer feature maps and may create activation combinations that are out of distribution for the trained model. The measurements characterize this intervention procedure; they do not identify a unique internal mechanism.
 \item The original probability metric has a model-specific normalization denominator that differs across training conditions. We address this directly with centered-logit and unnormalized probability metrics, but no single metric is treated as a privileged causal quantity.
-\item Stage D was frozen in the repository before its fresh blocks were generated but was not externally preregistered. The metric audit was designed after the original probability-space results were known, although the alternative metrics were frozen before their outputs were computed. Stage F was prospectively frozen before any Stage-F outcome was inspected.
-\item Stage F contains four initialization replicates per renderer block, but these are averaged before inference. The inferential sample size is 100 fresh renderer blocks per primary architecture comparison, not 400 seeds or 25,600 trained models.
+\item The prospective channel-count experiment was frozen in the repository before its fresh blocks were generated but was not externally preregistered. The metric audit was designed after the original probability-space results were known, although the alternative metrics were frozen before their outputs were computed. The architecture robustness experiment was prospectively frozen before any architecture-study outcome was inspected.
+\item The architecture robustness experiment contains four initialization replicates per renderer block, but these are averaged before inference. The inferential sample size is 100 fresh renderer blocks per primary architecture comparison, not 400 seeds or 25,600 trained models.
 \item The architecture factor contrasts are controlled comparisons within the specified family. Because architecture components interact, they should not be extrapolated as universal causal laws about depth, pooling, normalization, width, or residual connections.
 \item Validation data are reused for channel ranking and several secondary diagnostics. Test-set patching remains held out from ranking, but the secondary diagnostics are not independent pieces of evidence.
 \item Filter-template similarity is a weight-space score based on centered signed cosine. Even with one-to-one matching, it does not show that filters have unique semantic meanings or that humans find them interpretable.
@@ -315,13 +329,13 @@ A structured first-layer prior can strongly preserve predefined filter structure
 
 \section{Data and code availability}\label{sec:availability}
 
-The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, frozen protocols, run manifests, complete paper-facing result tables, analysis scripts, and independent checkpoint-audit materials. Raw large Stage-F checkpoints and per-model evaluator outputs are retained outside the manuscript-facing repository archive, while all aggregate results required for the reported analyses are versioned. For anonymous review, the manuscript does not link the current working repository because it identifies the authors. An anonymized archival artifact and DOI will be prepared if required by the venue.
+The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, frozen protocols, run manifests, complete paper-facing result tables, analysis scripts, and independent checkpoint-audit materials. Raw large architecture-study checkpoints and per-model evaluator outputs are retained outside the manuscript-facing repository archive, while all aggregate results required for the reported analyses are versioned. For anonymous review, the manuscript does not link the current working repository because it identifies the authors. An anonymized archival artifact and DOI will be prepared if required by the venue.
 
 \bibliography{../literature/references.bib}
 
 \clearpage
 \appendix
-\noindent\textbf{Appendix organization.} Appendix~\ref{app:final-robustness} gives the full metric-sensitivity and Stage-F primary/factor summaries used by the revised manuscript. Appendix~\ref{app:confirmation} preserves the complete Stage-D prospective and Stage-E sensitivity analyses. Appendix~\ref{app:historical} preserves the earlier developmental Stages A--C that motivated the prospective estimand. Appendix~\ref{app:kernel-matching} reports the complete filter-matching table.
+\noindent\textbf{Appendix organization.} \Cref{app:final-robustness} gives the full metric and architecture robustness summaries used by the revised manuscript. \Cref{app:confirmation} reports the complete prospective channel-count and schedule/task sensitivity analyses. \Cref{app:historical} preserves the developmental analyses that motivated the prospective estimand. \Cref{app:kernel-matching} reports the complete filter-matching table.
 
 \input{final_robustness_results.tex}
 \clearpage
