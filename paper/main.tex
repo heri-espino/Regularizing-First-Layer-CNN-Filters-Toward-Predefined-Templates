@@ -86,29 +86,28 @@ d_{g,j}=
 \]
 where $z_j$ is the global maximum of first-layer activation map $j$ and $s_j$ is its validation-set standard deviation. This ranking is fixed before test-set patching and does not use the downstream patching endpoint to rank channels. Alternative AUROC and validation-patching rankings, random controls, and replacement-energy-matched controls are retained as secondary analyses.
 
-The historical output metric uses probabilities $p_0,p_1,p_S$ from the base, counterfactual, and patched runs:
+Let
+\[
+E_{\mathrm{prob}}(a,b)=
+\frac{1}{N}\sum_{i=1}^{N}\lVert p_a^{(i)}-p_b^{(i)}\rVert_2^2
+\]
+denote mean squared probability-space error over the $N$ matched counterfactual pairs. The historical output metric is
 \[
 F_{\mathrm{prob}}(S)=
-1-\frac{\sum\lVert p_S-p_1\rVert_2^2}
-{\sum\lVert p_1-p_0\rVert_2^2}.
+1-\frac{E_{\mathrm{prob}}(S,1)}{E_{\mathrm{prob}}(0,1)}.
 \]
 It is a normalized counterfactual reconstruction-error reduction for this patching procedure. It is not interpreted as a mediated fraction or a general measure of causal importance.
 
 Because the denominator is model specific, we later froze two alternative metrics before evaluating them on saved prospective checkpoints. First, centered-logit fidelity subtracts the per-example mean logit,
 \[
 \widetilde{\ell}=\ell-\mathrm{mean}(\ell)\mathbf 1,
-\qquad
-F_{\mathrm{clogit}}(S)=
-1-\frac{\sum\lVert\widetilde\ell_S-\widetilde\ell_1\rVert_2^2}
-{\sum\lVert\widetilde\ell_1-\widetilde\ell_0\rVert_2^2}.
 \]
-Second, the unnormalized probability error reduction is
+and applies the same normalized error-reduction form in centered-logit space. Second, the unnormalized probability error reduction is
 \[
 R_{\mathrm{prob}}(S)=
-\sum\lVert p_1-p_0\rVert_2^2-
-\sum\lVert p_1-p_S\rVert_2^2.
+E_{\mathrm{prob}}(0,1)-E_{\mathrm{prob}}(S,1).
 \]
-The implementation reports the same quantity on a mean-per-pair scale; constant scaling does not affect the within-study contrasts below.
+Thus $R_{\mathrm{prob}}$ is measured directly in mean squared probability error per matched pair and removes the model-specific denominator entirely.
 
 \subsection{Channel-count contrast and inferential unit}\label{sec:estimand}
 
