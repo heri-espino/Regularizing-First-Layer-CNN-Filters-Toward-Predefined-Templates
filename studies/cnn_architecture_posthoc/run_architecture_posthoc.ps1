@@ -24,7 +24,7 @@ try {
     . (Join-Path $RepoRoot 'scripts\use_conda_env.ps1')
 
     $EvaluationRoot = Join-Path $StageFRoot 'evaluation'
-    if (-not (Test-Path (Join-Path $EvaluationRoot 'GRID_COMPLETE.json') -PathType Leaf) {
+    if (-not (Test-Path (Join-Path $EvaluationRoot 'GRID_COMPLETE.json') -PathType Leaf)) {
         throw "Completed Stage-F evaluation not found: $EvaluationRoot"
     }
 
