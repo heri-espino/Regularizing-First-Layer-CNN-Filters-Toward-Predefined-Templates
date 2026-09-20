@@ -161,9 +161,9 @@ Keep predictive performance/context as secondary.
 
 Present the Stage-D prospective TinyCNN result:
 
-[
+$$
 B=0.330976,quad 95\% CI=[0.273680,0.388273].
-]
+$$
 
 Show the pointwise (k=1,2,4,8) curve so readers see that positive (B) does not mean release is better at every larger k.
 
