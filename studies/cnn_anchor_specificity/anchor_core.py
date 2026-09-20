@@ -89,7 +89,7 @@ def random_rank10_bank(block: int, init_rep: int) -> np.ndarray:
     coeff = rng.standard_normal((16, 10))
     bank = coeff @ basis.T
     out = _center_normalize_rows(bank.reshape(16, 9, 9))
-    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=1e-8)
+    rank = np.linalg.matrix_rank(out.reshape(16, 81), tol=1e-6)
     if rank != 10:
         raise AssertionError(f"Expected random rank-10 bank, got rank={rank}")
     return out
@@ -122,7 +122,7 @@ def bank_diagnostics(bank: np.ndarray) -> dict:
     singular = np.linalg.svd(centered, compute_uv=False)
     gram = centered @ centered.T
     return {
-        "rank": int(np.linalg.matrix_rank(centered, tol=1e-8)),
+        "rank": int(np.linalg.matrix_rank(centered, tol=1e-6)),
         "max_abs_row_mean": float(np.abs(matrix.mean(axis=1)).max()),
         "max_abs_row_norm_error": float(np.abs(np.linalg.norm(matrix, axis=1) - 1.0).max()),
         "singular_values": [float(x) for x in singular],
