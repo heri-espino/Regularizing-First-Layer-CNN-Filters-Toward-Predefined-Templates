@@ -23,7 +23,7 @@ The manuscript combines several experiments with different inferential roles. Th
 2. Read `cnn_budget_confirmation/PROTOCOL.md` and `../analysis/budget_confirmation_001/REPORT.md` for the prospective primary result.
 3. Read `cnn_exhaustive_robustness/PROTOCOL.md` and `../analysis/exhaustive_robustness_001/REPORT.md` for the larger secondary sensitivity study.
 4. Read `cnn_metric_sensitivity/PROTOCOL.md` and `../analysis/metric_sensitivity_001/REPORT.md` for the completed metric audit.
-5. Read `cnn_architecture_robustness/PROTOCOL.md` for Stage F. Training is complete and the frozen CUDA evaluation is in progress; do not inspect partial outcomes or modify its scientific source files.
+5. Read `cnn_architecture_robustness/PROTOCOL.md` for Stage F. Training, evaluation, and frozen analysis are complete; see the archived Stage-F report before interpreting or extending the study.
 6. Read `cnn_checkpoint_audit/AUDIT_PROTOCOL.md` and `../analysis/checkpoint_audit/AUDIT_REPORT.md` for the independent implementation check.
 7. Return to Stages A--C when tracing how the Stage-D estimand was developed.
 
