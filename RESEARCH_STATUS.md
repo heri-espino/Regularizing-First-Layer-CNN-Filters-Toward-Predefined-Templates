@@ -717,11 +717,11 @@ It currently contains Stages A--E and the checkpoint audit, but it does not yet 
 
 Do not rewrite the manuscript while Stage-F evaluation is incomplete. The planned revision is documented in `paper/REVISION_PLAN.md`.
 
-The current title is:
+The revised manuscript title is:
 
-> Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Vary with the Number of Patched Channels
+> Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture
 
-The final title should be reconsidered only after Stage F. If architecture heterogeneity becomes central, the title may need to mention both channel count and architecture. Do not choose the final title from anticipated results.
+This title reflects the two prospectively supported conditioning variables now central to the paper: number of patched channels and downstream architecture.
 
 ## 13. What happens after Stage F finishes
 
