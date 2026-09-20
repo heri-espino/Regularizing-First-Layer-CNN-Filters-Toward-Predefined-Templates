@@ -61,6 +61,15 @@ Activation patching replaces internal activations and measures a downstream outp
 
 We use two $32\times32$ grayscale procedural tasks with balanced labels, matched nuisance variables, and exact counterfactual pairs. Each renderer block contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. In \texttt{single\_shape}, the class is line, circle, triangle, or square. In \texttt{two\_concepts}, circle and triangle presence define two binary factors and four classes; counterfactual pairs change one factor while holding the other and the nuisance variables fixed.
 
+\Cref{fig:overview} shows representative images from the frozen renderer, the complete 16-filter template bank, and the intervention point used throughout the paper.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig00_overview.pdf}
+\caption{Overview of the controlled experimental setting. (a) Representative inputs produced by the same procedural renderer used in the experiments. (b) The fixed bank of eight edge, four corner, and four ring templates used to initialize the first convolution. (c) Activation patching replaces a selected set of $k$ first-layer activation maps from the base run with the corresponding maps from a matched counterfactual run, while leaving all downstream parameters unchanged. The displayed images are illustrative renderer outputs, not additional inferential observations.}
+\label{fig:overview}
+\end{figure}
+
 Every model begins with the same bias-free $1\!\to\!16$ convolution with $9\times9$ kernels, same padding, and ReLU. The 16-channel template bank contains eight edges, four two-ray corners, and four rings. Templates are centered and unit norm; the bank has rank 10. For learned filter $W_i$ and template $T_j$, filter-template similarity is
 \begin{equation}
 \label{eq:template-similarity}
@@ -173,11 +182,13 @@ Constant regularization keeps the first-layer filters substantially closer to th
 
 Saved-checkpoint one-to-one matching gives the same qualitative conclusion: the high similarity under constant regularization is not produced merely by repeatedly matching many learned filters to the same few template entries. The complete matching table is retained in \Cref{app:kernel-matching}.
 
+\Cref{fig:kernel-gallery} makes the structural difference visible for one representative \texttt{two\_concepts}/TinyCNN checkpoint. The quantitative claims use the complete replicate-level similarity analyses rather than this example.
+
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/fig01_learning.pdf}
-\caption{Representative 200-epoch developmental learning and filter-template-similarity trajectories. Constant and annealed regularization begin from the same template-based condition and diverge in template similarity after the annealing schedule releases the first-layer penalty. Bands are sample standard deviations across the developmental replicates; these trajectories are descriptive, not the prospective primary test.}
-\label{fig:learning}
+\includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}
+\caption{Representative first-layer kernels for \texttt{two\_concepts}/TinyCNN, renderer block 2000. The top row shows the original templates; subsequent rows show saved filters at initialization and epoch 200 under the developmental training conditions. Rows are reordered by maximum-weight one-to-one template matching for visual comparison. The figure illustrates filter structure only; it is not evidence of human interpretability or of the activation-patching mechanism.}
+\label{fig:kernel-gallery}
 \end{figure}
 
 \subsection{The patching comparison changes with the number of patched channels}\label{sec:channel-count}
