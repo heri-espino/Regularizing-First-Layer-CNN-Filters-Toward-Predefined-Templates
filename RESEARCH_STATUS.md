@@ -656,122 +656,30 @@ Use literature terminology such as:
 
 Avoid inventing stronger terminology such as “interpretable filters” unless the evidence specifically supports it.
 
-## 9.1 Publication target and remaining reviewer risks
+## 9.1 Publication target and current reviewer risks
 
-The current manuscript uses the anonymous TMLR style, so the working publication target is **TMLR**.
+The manuscript uses anonymous TMLR style; the working publication target remains **TMLR**.
 
-Stage F addresses the architecture-generalization weakness inside a controlled small-CNN family, but it does not remove every likely reviewer concern. Remaining risks that should stay visible during the final rewrite are:
+The strict referee pass that motivated the final strengthening round has now been addressed by two completed analyses:
 
-- **synthetic-only external validity**: no natural-image result is currently claimed;
-- **small-model scope**: even Stage F remains a controlled small-CNN family;
-- **off-manifold intervention concern**: replacing internal activation maps can create states the network would not naturally encounter;
-- **historical metric choice**: the original normalized probability metric has treatment-dependent denominator scale, although the TinyCNN contrast survives centered-logit and unnormalized probability metrics;
-- **architecture-factor interpretation**: matched Stage-F contrasts improve control, but changes in depth, width, residual structure, normalization, and pooling should still be interpreted within the frozen model family rather than as universal causal laws;
-- **paper complexity**: the large staged history can itself become a reviewer liability if the main manuscript reads as a sequence of rescued hypotheses rather than a coherent measurement study;
-- **artifact/release polish**: before submission, the final paper-facing Stage-F outputs, figure generation, anonymous artifact presentation if required, and citation metadata should be checked together.
+1. the fresh matched-anchor specificity experiment, which separates the original two-dimensional template arrangement from a Gram/rank/spectrum-matched pixel-permuted control;
+2. post hoc architecture diagnostics using Greenhouse--Geisser correction, within-block permutation tests, Friedman tests, and random channel orders.
 
-The response to these risks should primarily be **scope discipline and presentation**, not automatically another experiment.
+The principal remaining reviewer risks are now scope and interpretation rather than missing internal controls:
 
-## 9.2 Current pre-submission strengthening plan
+- synthetic-only external validity;
+- small-model scope;
+- patched hybrid states may still be off-manifold;
+- pointwise conclusions and practical-effect conclusions differ across output metrics;
+- architecture heterogeneity survives random channels, while spatial specificity is substantially stronger for validation-selected channels;
+- the spatial effect reverses sign in plain2_w16_gmp, so there is no universal positive template effect;
+- the selected-channel probability-error spatial difference is statistically nonzero but practically equivalent under the frozen SESOI.
 
-A strict referee pass after the completed architecture study identified two remaining questions that materially affect the paper's scientific identity. The manuscript should **not be submitted yet**.
+The default response to these risks is precise scope and presentation, not another large experiment.
 
-### Fresh anchor-specificity experiment
+## 10. Final fresh-sample anchor-specificity result
 
-Frozen protocol: `studies/cnn_anchor_specificity/PROTOCOL.md`.
-
-The experiment uses 100 fresh blocks (7000--7099), four init/anchor replicates, both tasks, four diagnostic architectures, two treatments, and four anchor families:
-
-1. the structured edge/corner/ring bank;
-2. a common random pixel permutation of that bank, preserving its Gram matrix, rank, singular spectrum, row norms, and coefficient multisets exactly while destroying 2D spatial arrangement;
-3. a generic random rank-10 bank;
-4. a generic full-rank random bank.
-
-Total: **25,600 new models**.
-
-The primary frozen question is whether structured templates differ from the exactly Gram/rank-matched pixel-permuted control. This distinguishes spatial template structure from generic anchor retention/release.
-
-### Post hoc architecture diagnostics
-
-Frozen protocol: `studies/cnn_architecture_posthoc/PROTOCOL.md`.
-
-This uses the completed Stage-F evaluator outputs only; no retraining.
-
-It will report:
-
-- Greenhouse--Geisser-corrected repeated-measures inference;
-- 100,000-permutation within-block architecture omnibus tests;
-- Friedman sensitivity tests;
-- architecture dependence for the eight random channel-order controls;
-- selected-vs-random architecture patterns;
-- random-channel TinyGMP-vs-Plain2 bridge;
-- direct template-alignment-retention versus functional-B summaries/correlations;
-- an exact architecture-definition table.
-
-This analysis is explicitly outcome-informed and post hoc.
-
-### External benchmark decision
-
-Do not add an external dataset merely to increase experiment count.
-
-After the two analyses above, reassess whether a public controlled benchmark with known factors would add information. The design should depend on whether anchor structure proves specific or generic. A public bridge is optional; it is not a prerequisite if the final paper is framed narrowly as a controlled measurement study and the existing claims remain appropriately scoped.
-
-## 10. Claims the paper can currently support
-
-Before Stage F results, the strongest defensible claims are:
-
-1. Constant template regularization preserves first-layer template similarity much more strongly than release.
-2. Weight-space template similarity does not imply uniformly larger selected-channel activation-patching effects.
-3. In TinyCNN, the release-minus-retention patching comparison changes strongly with number of patched first-layer channels.
-4. The TinyCNN channel-count contrast was supported in a prospective fresh-block Stage-D test.
-5. The TinyCNN pattern persists across both synthetic tasks and several regularization schedules in Stage E.
-6. The TinyCNN pattern persists under centered-logit fidelity and an unnormalized probability reconstruction-error reduction.
-7. TwoLayerCNN behaves differently, so architecture independence is not supported.
-8. Random/energy-matched baseline-relative comparisons must be decomposed because changes in the control term can drive selected-minus-control differences.
-9. The implementation has an independent fixed-checkpoint audit that reproduces sampled metrics within frozen tolerances.
-
-## 11. Claims the paper must NOT make
-
-Do not claim:
-
-- a unique causal mechanism;
-- that (F) is a mediated causal fraction;
-- that template similarity causes the patching pattern;
-- that higher template similarity implies greater human interpretability;
-- natural-image generalization;
-- transformer generalization;
-- architecture-independent behavior before Stage F supports it;
-- causal “effect of depth” from the original TinyCNN/TwoLayerCNN comparison;
-- that the metric audit is an independent replication;
-- that Stage E is another primary confirmation;
-- that the matched image pairs are independent inferential replicates.
-
-Do not infer evidence from model count. The unit of inference is the independent renderer block according to each frozen protocol.
-
-## 12. Current manuscript state
-
-`paper/main.tex` has been fully restructured around the final scientific questions rather than the internal Stage A--F chronology.
-
-Current manuscript conventions:
-
-- title: **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**;
-- no visible Stage A/B/C/D/E/F identifiers in manuscript-facing prose;
-- descriptive experiment names are used instead;
-- `cleveref` is used for cross-references;
-- every displayed equation is numbered and labeled;
-- the main paper uses three principal figures:
-  1. renderer + template bank + patching overview;
-  2. learned-kernel gallery;
-  3. channel-count + architecture central robustness figure;
-- complete numerical robustness tables are retained in appendices rather than duplicated in the main text.
-
-The current paper is intentionally **not considered submission-ready** until the final anchor-specificity experiment and post hoc architecture diagnostics are incorporated.
-
-## 13. Completed final pre-submission strengthening
-
-### 13.1 Fresh anchor-specificity result
-
-The frozen anchor-specificity experiment is complete and archived under `analysis/anchor_specificity_001/`.
+The frozen anchor-specificity experiment is complete and archived under analysis/anchor_specificity_001/.
 
 Scale:
 
@@ -779,125 +687,187 @@ Scale:
 - 25,600 / 25,600 evaluations;
 - 100 fresh renderer blocks;
 - four init/anchor replicates averaged within block;
-- primary task: `two_concepts`;
+- primary task: two_concepts;
 - primary metrics: centered-logit fidelity and probability error reduction.
 
-Primary selected-channel structured-minus-pixel-permuted contrast, averaged over the four diagnostic architectures:
+The primary control applies one common spatial permutation to every template row. It preserves the complete bank Gram matrix, row norms, numerical rank, singular spectrum, and row coefficient multisets while destroying the original 2D edge/corner/ring arrangement.
 
-| metric | mean difference in B | 95% CI | Holm sign-flip p | frozen equivalence result |
+Primary selected-channel structured-minus-pixel-permuted B, averaged over the four diagnostic architectures:
+
+| metric | mean difference | 95% CI | Holm sign-flip p | frozen equivalence conclusion |
 |---|---:|---:|---:|---|
-| centered-logit fidelity | +0.057426 | [+0.051165,+0.063686] | 2.0e-05 | **not equivalent**; frozen margin ±0.017040 |
-| probability error reduction | +0.045628 | [+0.037281,+0.053975] | 2.0e-05 | **practically equivalent** within frozen margin ±0.065936 |
+| centered-logit fidelity | +0.057426 | [+0.051165,+0.063686] | 2.0e-05 | **not equivalent** under +/-0.017040 |
+| probability error reduction | +0.045628 | [+0.037281,+0.053975] | 2.0e-05 | **practically equivalent** under +/-0.065936 |
 
-Thus the two primary metrics agree that the difference is statistically nonzero, but they differ in practical magnitude under the frozen SESOI rule.
+For probability error reduction, the mean difference is estimated away from zero but remains smaller than the prespecified smallest effect size of interest.
 
-Spatial-structure × architecture interaction is large:
+Spatial-structure x architecture interaction:
 
 - centered logits: F(3,297)=91.7943, partial eta^2=0.4811, Holm permutation p=2.0e-05;
 - probability error reduction: F(3,297)=157.6951, partial eta^2=0.6143, Holm permutation p=2.0e-05.
 
-The architecture-specific structured-minus-pixel-permuted effect reverses sign in `plain2_w16_gmp` for both primary metrics. Therefore the paper must not claim a universal positive effect of structured templates.
+Architecture-specific selected-channel structured-minus-pixel-permuted effects on two_concepts:
 
-Prespecified random-channel specificity is much smaller:
+| architecture | centered logit | probability error |
+|---|---:|---:|
+| tiny_gmp | +0.10624 | +0.19953 |
+| tiny_gap | +0.07690 | +0.04308 |
+| plain2_w16_gap | +0.09109 | +0.02057 |
+| plain2_w16_gmp | **-0.04453** | **-0.08067** |
 
-- centered logits: +0.005709, 95% CI [+0.003919,+0.007498], practically equivalent within the frozen margin;
-- probability error reduction: +0.020068, 95% CI [+0.017225,+0.022911], practically equivalent within the frozen margin.
+Thus spatial structure has no architecture-independent direction.
 
-This implies that the structure-specific effect is concentrated much more strongly in the validation-selected channel analysis than in generic random channel subsets.
+The prespecified random-channel version is much smaller:
 
-Secondary anchor contrasts show that pixel-permuted, random-rank10, and random-fullrank anchors are usually similar on the primary task. Rank alone does not explain the selected-channel structure-specific result.
+- centered logits: +0.005709, 95% CI [+0.003919,+0.007498];
+- probability error reduction: +0.020068, 95% CI [+0.017225,+0.022911].
+
+Both random-channel averages are practically equivalent under the frozen margins.
+
+Secondary anchor contrasts show that pixel-permuted, generic random rank-10, and generic random full-rank anchors are usually similar on the primary task. Numerical rank alone does not explain the selected-channel spatial-specificity result.
 
 Integrity:
 
-- maximum full-patch logit error: 0;
-- maximum no-op logit error: 0;
-- maximum structured-vs-pixel-permuted Gram error: 6.66e-16.
+- maximum full-patch logit error = 0;
+- maximum no-op logit error = 0;
+- maximum structured-versus-pixel-permuted Gram discrepancy = 6.66e-16.
 
-### 13.2 Completed post hoc architecture diagnostics
+The final interpretation is:
 
-The frozen outcome-informed diagnostic analysis is complete under `analysis/architecture_posthoc_diagnostics_001/`.
+> preserving designed first-layer spatial structure changes how the release-versus-retention patch-budget comparison concentrates in validation-selected channels, but the magnitude and even direction of that structure-specific effect depend on downstream architecture and output metric.
 
-The original architecture result survives:
+## 11. Completed post hoc architecture diagnostics
+
+Archived under analysis/architecture_posthoc_diagnostics_001/.
+
+These diagnostics are outcome-informed and post hoc. They retrain no models.
+
+The prospectively observed architecture heterogeneity survives:
 
 - Greenhouse--Geisser correction;
-- within-block 100,000-permutation omnibus inference;
-- Friedman rank-based sensitivity analysis.
+- 100,000 within-block architecture permutations;
+- Friedman rank-based inference.
 
-For both primary metrics, the architecture permutation Holm p-value is 2.0e-05.
+For both primary metrics, the architecture permutation Holm p value is 2.0e-05.
 
-Architecture dependence also persists for random channel subsets, so it is not solely an artifact of the validation-derived ranking.
+Architecture dependence also persists when B is averaged over eight random channel orders:
 
-These diagnostics remain explicitly post hoc.
+- centered-logit architecture permutation Holm p=2.0e-05;
+- probability-error architecture permutation Holm p=2.0e-05.
 
-## 14. Paper identity after anchor specificity
+Selected-versus-random architecture-mean Spearman correlations are 0.256 for centered logits and 0.724 for probability error reduction.
 
-The final identity of the manuscript depends on the frozen anchor-specificity result.
+Random-channel TinyGMP-minus-Plain2-GMP bridge:
 
-The fresh experiment resolves the main template-specificity objection, but not with a single universal effect.
+- centered logits: +0.002765, 95% CI [+0.000014,+0.005515], Holm p=0.0488;
+- probability error reduction: +0.319871, 95% CI [+0.312788,+0.326953], Holm p=2.76e-96.
 
-The final paper can retain predefined spatial structure as scientifically relevant because the selected-channel centered-logit contrast differs clearly and non-equivalently from the exactly Gram/rank/spectrum-matched pixel-permuted control.
+Therefore the architecture conclusion is not solely a consequence of the validation-derived ranking, although ranking materially changes effect size and architecture ordering.
 
-However:
+## 12. Current manuscript state
 
-- the probability-error contrast is statistically nonzero but practically equivalent under the frozen margin;
-- the structure-specific effect reverses sign in `plain2_w16_gmp`;
-- the random-channel spatial effect is practically equivalent for both primary metrics.
+paper/main.tex was rewritten from scratch after the final fresh-sample results.
 
-Therefore the final paper should not claim that structured templates universally increase patching effects.
+Before the rewrite, the complete literature/extracted/ corpus was reviewed: **43 extracted works** spanning predefined/fixed filters, early CNN filters, concept-based XAI, activation patching, circuit-faithfulness methodology, causal abstraction, and mechanistic-identifiability limitations.
 
-The preferred final identity is:
+Current title:
 
-> preserving designed first-layer spatial structure changes how release-versus-retention patch-budget comparisons concentrate in selected channels, and this structure-specific effect is strongly conditioned by downstream architecture and output metric.
+> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
 
-Predefined templates remain central, but as a controlled structured anchor whose spatial organization matters selectively, not as a universal interpretability mechanism.
+The main manuscript is organized by scientific question rather than project chronology:
 
-## 15. Final evidence hierarchy after strengthening
+1. structured first-layer priors and the representation-versus-influence distinction;
+2. the prospective channel-budget result;
+3. metric robustness of the prespecified B estimand;
+4. prospective architecture heterogeneity plus post hoc robust inference;
+5. fresh matched-anchor spatial specificity.
 
-The main manuscript should remain compact.
+Manuscript conventions:
 
-Main-text evidence should prioritize:
+- no visible Stage A--G identifiers in paper-facing prose;
+- cleveref for all cross-references;
+- every displayed equation numbered and explicitly labeled;
+- four principal figures:
+  1. renderer/template/patching overview;
+  2. learned-kernel gallery;
+  3. channel-budget + 16-architecture robustness;
+  4. matched-anchor spatial specificity;
+- complete numerical detail remains in appendices;
+- no main-text tables;
+- approximately 4,600 main-text words before appendices.
 
-1. structural anchor/template retention;
-2. prospective channel-count contrast;
-3. metric robustness of the prespecified B contrast;
-4. architecture robustness;
-5. random-channel ranking-independence diagnostic if supported by the frozen post hoc analysis;
-6. anchor-specificity result, because it determines whether template structure belongs in the scientific claim.
+The paper now includes paper/specificity_robustness_results.tex for the fresh matched-anchor and post hoc architecture diagnostics.
 
-Keep exhaustive schedules, rankings, energy controls, block-level tables, full architecture definitions, and implementation diagnostics in appendices/artifact.
+## 13. Literature-grounded positioning
 
-Do not turn the manuscript back into a chronological sequence of internal stages.
+The extracted literature does **not** support equating visually structured first-layer kernels with interpretability.
 
-## 16. Repository and machine constraints
+The final positioning connects three established literatures:
 
-The user frequently runs on university-managed Windows machines without administrator privileges.
+1. predefined and structured filters: fixed/Gabor/predefined first layers can be useful and their structure can be maintained or degraded during training;
+2. alignment versus influence: concept alignment, decodability, and causal influence are distinct quantities;
+3. activation-patching measurement dependence: patch direction, granularity, input construction, ablation/replacement choice, and output metric condition the question being measured.
 
-Observed constraints:
+Accordingly, do not claim that sensitivity of activation patching to methodology is itself novel.
 
-- the Git checkout may be partially non-writable;
-- Git can still commit/push;
-- creating new worktree directories may fail with `UnauthorizedAccessException`;
-- `%LOCALAPPDATA%\prior-templates-cnns\...` is writable;
-- long experiment outputs therefore live outside the repo.
+The narrower contribution is:
 
-Do not tell the user to rerun completed experiments merely because outputs are external.
+> in a controlled vision system with an explicitly structured first layer and exact matched counterfactuals, release-versus-retention patching comparisons depend on channel budget and downstream architecture; a fresh matched-anchor experiment further shows that the original 2D spatial organization contributes selectively to validation-selected channel behavior beyond Gram/rank/spectrum geometry.
 
-Paper-facing result-staging helpers use `git hash-object` and `git update-index --cacheinfo` to archive external files without requiring creation of worktree directories.
+Use literature-standard terminology such as predefined filters, spatial filters, filter initialization, filter similarity, maintaining filter structure, filter kernels, activation patching, and counterfactual/interchange intervention.
 
-## 17. Source-of-truth reading order for a new agent
+Avoid stronger labels such as interpretable filters unless discussing prior work or explicitly denying that inference.
 
-1. `RESEARCH_STATUS.md` — current scientific and operational state.
-2. `.ai_handoff` — concise operational handoff.
-3. `studies/cnn_anchor_specificity/PROTOCOL.md` — active fresh-sample specificity experiment.
-4. `studies/cnn_architecture_posthoc/PROTOCOL.md` — active existing-data diagnostic analysis.
-5. `paper/main.tex` — current restructured manuscript.
-6. `analysis/architecture_robustness_001/REPORT.md` — completed architecture result.
-7. `analysis/metric_sensitivity_001/REPORT.md` — completed metric robustness.
-8. `analysis/budget_confirmation_001/REPORT.md` — prospective channel-count result.
-9. `analysis/exhaustive_robustness_001/REPORT.md` — schedule/task sensitivity map.
-10. `analysis/checkpoint_audit/AUDIT_REPORT.md` — independent implementation audit.
-11. Earlier developmental studies only when tracing provenance.
+## 14. Claims the paper can support
+
+1. Constant regularization strongly preserves the predefined first-layer spatial structure.
+2. Structural similarity does not determine a unique activation-patching signature.
+3. In the prospective TinyCNN test, release-versus-retention differences depend on the number of patched channels.
+4. The prespecified small-versus-larger-channel contrast remains positive under centered-logit and unnormalized probability metrics, while detailed pointwise curves differ.
+5. Downstream architecture strongly conditions the channel-budget contrast in a prospectively frozen 16-architecture study.
+6. Architecture heterogeneity survives Greenhouse--Geisser, within-block permutation, Friedman, and random-channel diagnostics.
+7. The original 2D template arrangement produces a selected-channel centered-logit effect beyond an exactly Gram/rank/spectrum-matched pixel-permuted control.
+8. Spatial specificity is architecture-dependent and reverses sign in one tested architecture.
+9. The selected-channel probability-error average is statistically nonzero but practically equivalent under the frozen SESOI.
+10. Spatial specificity is much smaller for random channel subsets, and both random-channel averages are practically equivalent under the frozen margins.
+
+## 15. Claims the paper must not make
+
+Do not claim:
+
+- a unique causal mechanism;
+- a mediated causal fraction;
+- that template similarity causes the patching pattern;
+- that structured filters are automatically human-interpretable;
+- a universal positive effect of predefined templates;
+- that probability-error spatial specificity is practically important on average;
+- architecture-independent behavior;
+- natural-image, transformer, or large-model generalization;
+- that post hoc architecture diagnostics are prospective confirmation;
+- that image pairs, init replicates, or model count are independent inferential observations.
+
+## 16. Next action
+
+The default next step is **another strict referee pass on the rewritten manuscript**, followed by claim tightening, literature/citation checking, and anonymous-artifact polish.
+
+Do **not** add another large experiment by default.
+
+Only consider additional empirical work if the new referee pass identifies a concrete unresolved threat that cannot be addressed by the existing fresh-sample controls, robustness analyses, or narrower scope.
+
+## 17. Source-of-truth reading order
+
+1. checkpoints/README.md
+2. latest checkpoints/CP-XXX_*.md
+3. RESEARCH_STATUS.md
+4. .ai_handoff
+5. paper/main.tex
+6. analysis/anchor_specificity_001/REPORT.md
+7. analysis/architecture_posthoc_diagnostics_001/REPORT.md
+8. analysis/architecture_robustness_001/REPORT.md
+9. analysis/metric_sensitivity_001/REPORT.md
+10. analysis/budget_confirmation_001/REPORT.md
+11. earlier developmental analyses only when provenance is needed.
 
 ## 18. One-line handoff
 
-**The architecture and metric robustness work is complete and the manuscript has been restructured; the active final fresh-sample experiment is the 25,600-model anchor-specificity study, paired with a no-retraining post hoc architecture diagnostic. The paper should not be submitted until both are incorporated, and the anchor-specificity outcome determines whether the final claim remains template-specific or pivots to generic anchor-regularization/activation-patching sensitivity.**
+**The fresh anchor-specificity and post hoc architecture-strengthening analyses are complete. The manuscript has been rewritten from scratch after reviewing all 43 extracted literature sources. The paper now argues a scoped measurement result: channel budget, downstream architecture, output metric, spatial prior structure, and channel selection jointly condition activation-patching comparisons in controlled CNNs. The next task is referee-level manuscript critique, not another experiment by default.**
