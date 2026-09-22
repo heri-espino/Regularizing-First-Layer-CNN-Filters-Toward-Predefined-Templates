@@ -1,0 +1,3 @@
+task,metric,value_kind,contrast,F,df1,df2,partial_eta_squared,p_permutation,p_holm_two_metric_family
+two_concepts,centered_logit_fidelity,selected,(structured - pixel_permuted) x architecture,91.79428833304652,3,297,0.48111654250787805,9.99990000099999e-06,1.999980000199998e-05
+two_concepts,prob_error_reduction,selected,(structured - pixel_permuted) x architecture,157.69506749884414,3,297,0.6143283898493851,9.99990000099999e-06,1.999980000199998e-05

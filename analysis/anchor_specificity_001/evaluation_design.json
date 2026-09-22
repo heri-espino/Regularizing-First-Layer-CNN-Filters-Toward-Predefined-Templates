@@ -1,0 +1,37 @@
+{
+  "study": "cnn_anchor_specificity_stage_g_evaluation",
+  "training_design_sha256": "4f8ce1df20931b50f6a21b7441f4788f1ca2516004a1d7d9eb11466680718a04",
+  "protocol_sha256": "762484ec15ce3a408ff48dbba0eb78651ccf0143d306c8daf1b6dc25080254a1",
+  "anchor_core_sha256": "a96df9c950dfc200ec9e849ef26103d93389a0aad6bd0cca457d98f017de2e50",
+  "evaluator_sha256": "eaca6ee1f3924bebc7c7adb2d5bc7519037f10c55ac7b6e70e4223d420f0b414",
+  "device": "cuda",
+  "batch_size": 256,
+  "budgets": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "energy_matched_budgets": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "random_controls": 8,
+  "ranking": "validation_standardized_first_layer_global_max_activation_contrast",
+  "expected_models": 25600,
+  "trains_models": false
+}

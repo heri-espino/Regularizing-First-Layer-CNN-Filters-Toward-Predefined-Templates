@@ -1,0 +1,22 @@
+﻿{
+    "created_utc":  "2026-09-21T19:58:48.5539726Z",
+    "repo_head_at_launch":  "396950dc6fecac2738d79aab808710419701a3fb",
+    "protocol_commit":  "4ee89f80d2deb807b717c40698ece082c0aa5a68",
+    "protocol_git_blob":  "3377952f8143f65e08bd25d8f4935f1957a8d901",
+    "source_git_blobs":  {
+                             "protocol":  "3377952f8143f65e08bd25d8f4935f1957a8d901",
+                             "anchor_core":  "e7dec7841a9ab074ade93059f0dc1c8039153e85",
+                             "trainer":  "cd9343aff2f9be4179aa934518f94c8f628cc40b",
+                             "evaluator":  "0ef081cbfebf62ebedde5484aab7f355c4817be7",
+                             "analyzer":  "e17d95e3e5234ee2c1fa23fc69295ecb33de4ba2",
+                             "architecture_core":  "8dd7adb5ad28c84dfe349e38ea6a8fb86d1babc4",
+                             "legacy_core":  "753cb5121971e2a57b3c4dce9ccd84d9be3a403f"
+                         },
+    "output_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\anchor_specificity_cuda_001",
+    "train_device":  "cuda",
+    "train_workers":  1,
+    "threads_per_worker":  1,
+    "eval_device":  "cuda",
+    "eval_batch_size":  256,
+    "smoke":  false
+}

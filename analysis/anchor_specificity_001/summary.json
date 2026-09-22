@@ -1,0 +1,27 @@
+{
+  "study": "cnn_anchor_specificity_stage_g",
+  "status": "prospectively_frozen_fresh_sample",
+  "models": 25600,
+  "blocks": 100,
+  "init_reps": 4,
+  "architectures": [
+    "tiny_gmp",
+    "tiny_gap",
+    "plain2_w16_gmp",
+    "plain2_w16_gap"
+  ],
+  "anchors": [
+    "structured_template",
+    "pixel_permuted_template",
+    "random_rank10",
+    "random_fullrank"
+  ],
+  "primary_task": "two_concepts",
+  "primary_metrics": [
+    "centered_logit_fidelity",
+    "prob_error_reduction"
+  ],
+  "permutations": 100000,
+  "max_full_patch_logit_error": 0.0,
+  "max_noop_logit_error": 0.0
+}
