@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-008_current-pre-submission-state.md`
+`CP-009_checkpoint-system-adopted.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
