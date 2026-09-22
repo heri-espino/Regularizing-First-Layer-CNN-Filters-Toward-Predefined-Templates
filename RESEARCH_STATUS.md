@@ -767,160 +767,89 @@ Current manuscript conventions:
 
 The current paper is intentionally **not considered submission-ready** until the final anchor-specificity experiment and post hoc architecture diagnostics are incorporated.
 
-## 13. Active pre-submission strengthening
+## 13. Completed final pre-submission strengthening
 
-### 13.1 Anchor-specificity experiment
+### 13.1 Fresh anchor-specificity result
 
-Frozen protocol:
+The frozen anchor-specificity experiment is complete and archived under `analysis/anchor_specificity_001/`.
 
-`studies/cnn_anchor_specificity/PROTOCOL.md`
+Scale:
 
-Official external output root:
+- 25,600 / 25,600 trained models;
+- 25,600 / 25,600 evaluations;
+- 100 fresh renderer blocks;
+- four init/anchor replicates averaged within block;
+- primary task: `two_concepts`;
+- primary metrics: centered-logit fidelity and probability error reduction.
 
-`%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001`
+Primary selected-channel structured-minus-pixel-permuted contrast, averaged over the four diagnostic architectures:
 
-Design:
+| metric | mean difference in B | 95% CI | Holm sign-flip p | frozen equivalence result |
+|---|---:|---:|---:|---|
+| centered-logit fidelity | +0.057426 | [+0.051165,+0.063686] | 2.0e-05 | **not equivalent**; frozen margin ±0.017040 |
+| probability error reduction | +0.045628 | [+0.037281,+0.053975] | 2.0e-05 | **practically equivalent** within frozen margin ±0.065936 |
 
-- fresh renderer blocks 7000--7099;
-- 4 init/anchor replicates;
-- 2 tasks;
-- 4 diagnostic architectures;
-- 4 anchor families;
-- 2 treatments;
-- 200 epochs;
-- total: **25,600 models**.
+Thus the two primary metrics agree that the difference is statistically nonzero, but they differ in practical magnitude under the frozen SESOI rule.
 
-Anchor families:
+Spatial-structure × architecture interaction is large:
 
-1. structured edge/corner/ring templates;
-2. pixel-permuted templates preserving the complete Gram matrix, rank, singular spectrum, row norms, and row coefficient multisets;
-3. generic random rank-10 anchors;
-4. generic random full-rank anchors.
+- centered logits: F(3,297)=91.7943, partial eta^2=0.4811, Holm permutation p=2.0e-05;
+- probability error reduction: F(3,297)=157.6951, partial eta^2=0.6143, Holm permutation p=2.0e-05.
 
-The primary scientific contrast is structured minus pixel-permuted, averaged across the four diagnostic architectures on `two_concepts`. It isolates spatial arrangement while holding the structured bank's channel geometry and rank fixed.
+The architecture-specific structured-minus-pixel-permuted effect reverses sign in `plain2_w16_gmp` for both primary metrics. Therefore the paper must not claim a universal positive effect of structured templates.
 
-The primary selected-channel difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics.
+Prespecified random-channel specificity is much smaller:
 
-A formal TOST equivalence companion is also frozen. The margins were fixed before the full experiment using 20% of the historical architecture-study mean absolute B across the same four architecture forms:
+- centered logits: +0.005709, 95% CI [+0.003919,+0.007498], practically equivalent within the frozen margin;
+- probability error reduction: +0.020068, 95% CI [+0.017225,+0.022911], practically equivalent within the frozen margin.
 
-- centered-logit fidelity: **0.017040331170505053**;
-- probability error reduction: **0.06593636028899892**.
+This implies that the structure-specific effect is concentrated much more strongly in the validation-selected channel analysis than in generic random channel subsets.
 
-Interpretation is fixed:
+Secondary anchor contrasts show that pixel-permuted, random-rank10, and random-fullrank anchors are usually similar on the primary task. Rank alone does not explain the selected-channel structure-specific result.
 
-- significant difference test -> evidence that spatial arrangement changes the contrast;
-- significant equivalence test -> evidence of practical equivalence within the frozen margin;
-- neither -> inconclusive.
+Integrity:
 
-A nonsignificant difference alone is never evidence of equivalence.
+- maximum full-patch logit error: 0;
+- maximum no-op logit error: 0;
+- maximum structured-vs-pixel-permuted Gram error: 6.66e-16.
 
-The same anchor-specificity diagnostics are also computed for the eight random channel-order controls as a prespecified ranking-independence robustness check.
+### 13.2 Completed post hoc architecture diagnostics
 
-Implementation validation is complete. GitHub Actions verifies:
+The frozen outcome-informed diagnostic analysis is complete under `analysis/architecture_posthoc_diagnostics_001/`.
 
-- Python compilation;
-- PowerShell syntax;
-- anchor centering/unit norm/rank;
-- structured-versus-pixel-permuted Gram preservation;
-- paired downstream initialization across anchor families;
-- frozen equivalence helper;
-- one-epoch CPU training/evaluation smoke.
+The original architecture result survives:
 
-The final validation workflow passed before the official full run.
+- Greenhouse--Geisser correction;
+- within-block 100,000-permutation omnibus inference;
+- Friedman rank-based sensitivity analysis.
 
-Run from Windows:
+For both primary metrics, the architecture permutation Holm p-value is 2.0e-05.
 
-```powershell
-git pull --ff-only origin main
-conda activate prior-templates-cnns
-nvidia-smi
+Architecture dependence also persists for random channel subsets, so it is not solely an artifact of the validation-derived ranking.
 
-.\run\run_anchor_specificity.ps1 -Smoke
-.\run\run_anchor_specificity.ps1
-```
+These diagnostics remain explicitly post hoc.
 
-Check progress without inspecting partial scientific outcomes:
-
-```powershell
-.\run\status_anchor_specificity.ps1
-```
-
-The full run is incremental and resumable. After interruption or reboot, rerun the exact same full command; completed checkpoints/evaluations are skipped.
-
-Do not inspect partial full-run outcome JSONs.
-
-After full completion:
-
-```powershell
-.\run\stage_anchor_specificity_results.ps1
-git diff --cached --stat
-git status
-git commit -m "analysis: add anchor specificity results"
-git push
-```
-
-Do **not** use `git add .` for these externally staged results.
-
-### 13.2 Post hoc architecture diagnostics
-
-Frozen diagnostic protocol:
-
-`studies/cnn_architecture_posthoc/PROTOCOL.md`
-
-This is explicitly outcome-informed/post hoc and uses the already-completed architecture evaluator outputs. It retrains no models.
-
-It adds:
-
-- Greenhouse--Geisser-corrected repeated-measures inference;
-- 100,000-permutation within-block architecture omnibus tests;
-- Friedman rank-based sensitivity tests;
-- architecture heterogeneity for random channel orders;
-- selected-versus-random architecture summaries;
-- random-channel TinyGMP-vs-Plain2 bridge;
-- direct template-retention-difference versus functional-B summaries/correlations;
-- exact machine-generated architecture definitions and parameter counts.
-
-Run:
-
-```powershell
-.\run\run_architecture_posthoc.ps1
-```
-
-After completion:
-
-```powershell
-.\run\stage_architecture_posthoc_results.ps1
-git diff --cached --stat
-git status
-git commit -m "analysis: add post hoc architecture diagnostics"
-git push
-```
-
-These outputs must always be described as post hoc diagnostics, never prospective confirmation.
-
-## 14. Decision rule after anchor specificity
+## 14. Paper identity after anchor specificity
 
 The final identity of the manuscript depends on the frozen anchor-specificity result.
 
-### If spatial structure differs from the matched control
+The fresh experiment resolves the main template-specificity objection, but not with a single universal effect.
 
-If structured versus pixel-permuted anchors show a reproducible nonzero difference, the paper can retain predefined spatial structure as a scientifically relevant component.
+The final paper can retain predefined spatial structure as scientifically relevant because the selected-channel centered-logit contrast differs clearly and non-equivalently from the exactly Gram/rank/spectrum-matched pixel-permuted control.
 
-The manuscript should state narrowly that, in the tested controlled setting, the designed 2D template arrangement changes the release-versus-retention patch-budget comparison beyond bank Gram/rank/spectrum geometry.
+However:
 
-### If practical equivalence is supported
+- the probability-error contrast is statistically nonzero but practically equivalent under the frozen margin;
+- the structure-specific effect reverses sign in `plain2_w16_gmp`;
+- the random-channel spatial effect is practically equivalent for both primary metrics.
 
-If the frozen TOST supports practical equivalence, the paper should pivot away from template-specificity.
+Therefore the final paper should not claim that structured templates universally increase patching effects.
 
-Predefined templates become the controlled experimental case rather than the proposed mechanism. A stronger title direction would be:
+The preferred final identity is:
 
-> Activation-Patching Comparisons Depend on Channel Budget and Downstream Architecture in Anchor-Regularized CNNs
+> preserving designed first-layer spatial structure changes how release-versus-retention patch-budget comparisons concentrate in selected channels, and this structure-specific effect is strongly conditioned by downstream architecture and output metric.
 
-The main contribution would then be measurement sensitivity under anchor retention/release rather than special properties of edge/corner/ring filters.
-
-### If neither difference nor equivalence is established
-
-Do not force either story. Treat template-specificity as unresolved and frame predefined templates as the controlled case study.
+Predefined templates remain central, but as a controlled structured anchor whose spatial organization matters selectively, not as a universal interpretability mechanism.
 
 ## 15. Final evidence hierarchy after strengthening
 
