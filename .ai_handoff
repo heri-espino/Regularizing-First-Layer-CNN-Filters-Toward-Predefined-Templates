@@ -305,3 +305,25 @@ In parallel or before the full run, run the outcome-informed existing-data diagn
 ```
 
 These diagnostics are explicitly post hoc and must never be described as prospective.
+
+
+## Completed anchor-specificity result
+
+The 25,600-model fresh anchor-specificity experiment is complete and archived under `analysis/anchor_specificity_001/`.
+
+Primary selected-channel structured-minus-pixel-permuted result on `two_concepts`, n=100 renderer blocks:
+
+- centered-logit B difference +0.057426, 95% CI [+0.051165,+0.063686], Holm sign-flip p=2e-05; not equivalent under the frozen ±0.017040 margin;
+- probability-error B difference +0.045628, 95% CI [+0.037281,+0.053975], Holm sign-flip p=2e-05; practically equivalent under the frozen ±0.065936 margin.
+
+Architecture interaction is strong for both metrics. The structured-minus-pixel-permuted effect is negative in plain2_w16_gmp and positive in the other three diagnostic architectures.
+
+Random-channel structured-minus-pixel-permuted differences are much smaller and practically equivalent under both frozen margins.
+
+Interpretation: spatial template organization matters for selected-channel patch-budget behavior, but its magnitude and direction depend on downstream architecture and metric. Do not claim a universal positive template effect.
+
+Checkpoint: `checkpoints/CP-011_anchor-specificity-results.md`.
+
+The post hoc architecture diagnostics are also complete under `analysis/architecture_posthoc_diagnostics_001/` and show architecture dependence survives Greenhouse--Geisser correction, within-block permutation inference, Friedman tests, and random channel subsets.
+
+The next task is manuscript integration and another referee pass. Do not add another large experiment by default.
