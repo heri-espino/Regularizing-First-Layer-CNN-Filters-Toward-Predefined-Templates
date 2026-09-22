@@ -1,6 +1,6 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Measurements in CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**.
+`main.tex` is the authoritative manuscript source for **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**.
 
 The current manuscript was rewritten from scratch after the final fresh anchor-specificity experiment and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
 
