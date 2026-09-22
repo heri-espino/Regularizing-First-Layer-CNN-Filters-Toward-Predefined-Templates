@@ -1,16 +1,53 @@
 # AI handoff
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
 ## Read this first
 
-The durable scientific state is in:
+The durable project memory is now layered. Read in this order:
 
-1. `RESEARCH_STATUS.md`
-2. `paper/REVISION_PLAN.md`
-3. `studies/cnn_architecture_robustness/PROTOCOL.md`
+1. `checkpoints/README.md` — mandatory append-only checkpoint policy;
+2. the **latest `CP-XXX_*.md`** in `checkpoints/` — latest chronological snapshot;
+3. `RESEARCH_STATUS.md` — current scientific state;
+4. this `.ai_handoff` — operational constraints;
+5. active frozen protocols;
+6. `paper/main.tex` and archived analysis reports as needed.
 
-Do not reconstruct the project from chat history if these files are available.
+Do not reconstruct the project from chat history when these files are available.
+
+## Mandatory checkpoint discipline
+
+This is a **hard project rule**.
+
+Whenever you materially implement something new or obtain new scientific results, create a **new Markdown checkpoint** under `checkpoints/`.
+
+Events that require a new checkpoint include:
+
+- freezing a new experiment or analysis;
+- materially changing experiment/analysis implementation;
+- starting a major frozen run when that changes project state;
+- obtaining completed scientific results;
+- changing the scientific interpretation or paper identity;
+- making a major manuscript-framing decision;
+- a referee pass that identifies or closes a major risk;
+- changing submission/release status.
+
+Procedure:
+
+1. Read `checkpoints/README.md`.
+2. Inspect existing `CP-XXX_*.md` files and choose the next unused monotonic ID.
+3. Use `checkpoints/TEMPLATE.md`.
+4. Record what was done, why, evidence/results, interpretation, limitations, provenance, next actions, and do-not-forget constraints.
+5. Update the “Current latest checkpoint” line in `checkpoints/README.md`.
+6. Only then treat the new implementation/result as fully documented.
+
+**Never rewrite an older checkpoint to fit later results.** Old checkpoints are historical snapshots. Factual typo fixes are acceptable; substantive reinterpretation always gets a new checkpoint.
+
+For a results checkpoint, include exact report paths, primary metrics, inferential unit/sample size, effect estimates/intervals, multiplicity treatment, and important negative/null findings.
+
+For implementation-only checkpoints, explicitly state that no scientific outcomes are being interpreted.
+
+As of this handoff, the checkpoint system itself is recorded in `checkpoints/CP-009_checkpoint-system-adopted.md`.
 
 ## Live critical state
 
