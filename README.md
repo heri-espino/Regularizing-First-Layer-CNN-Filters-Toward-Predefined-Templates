@@ -8,6 +8,8 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 
 ## Start here
 
+- **Research checkpoint log / project memory:** [`checkpoints/README.md`](checkpoints/README.md)
+- **Latest checkpoint:** [`checkpoints/CP-009_checkpoint-system-adopted.md`](checkpoints/CP-009_checkpoint-system-adopted.md)
 - **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
 - **Post-Stage-F manuscript revision plan:** [`paper/REVISION_PLAN.md`](paper/REVISION_PLAN.md)
 - **Paper:** [`paper/main.tex`](paper/main.tex)
@@ -71,6 +73,7 @@ Individual study directories still contain their original requirement files and 
 
 ```text
 .
+├── checkpoints/           # Append-only research/implementation memory
 ├── paper/                 # Manuscript, publication figures, style, paper builders
 ├── run/                   # Convenience launchers
 ├── studies/               # Frozen protocols and experiment implementations
@@ -97,6 +100,8 @@ The repository intentionally preserves the experimental record instead of flatte
 | E | Predeclared sensitivity study on 50 new blocks per setting | `studies/cnn_exhaustive_robustness/` |
 | Metric audit | Frozen post hoc metric-sensitivity analysis of saved Stage-D/E checkpoints; no retraining | `studies/cnn_metric_sensitivity/` |
 | F | Frozen fresh-sample architecture robustness study: 16 architectures, 100 renderer blocks, 4 paired initializations | `studies/cnn_architecture_robustness/` |
+| Architecture post hoc | Outcome-informed robust omnibus/random-channel/structure-function diagnostics; no retraining | `studies/cnn_architecture_posthoc/` |
+| G | Frozen fresh-sample anchor-specificity study: structured vs matched/random anchors | `studies/cnn_anchor_specificity/` |
 | Audit | Independent checkpoint reimplementation | `studies/cnn_checkpoint_audit/` |
 
 The Stage-D primary analysis used 20 previously unused `two_concepts` TinyCNN blocks. The predeclared contrast was
