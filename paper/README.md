@@ -1,15 +1,24 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**.
+`main.tex` is the authoritative manuscript source for **Activation-Patching Measurements in CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**.
 
-The manuscript uses descriptive scientific names rather than the internal Stage A--F identifiers retained elsewhere in the repository for provenance. The main text is organized around the final evidence: structural template retention, the prospective channel-count result, metric robustness, and architecture robustness.
+The current manuscript was rewritten from scratch after the final fresh anchor-specificity experiment and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
 
-Appendix material is split into four files so the main source remains readable:
+The main argument is organized around five scientific claims:
 
-- `final_robustness_results.tex` — metric-sensitivity and architecture-robustness results
-- `confirmation_robustness_results.tex` — complete prospective channel-count and schedule/task sensitivity analyses
-- `supplementary_results.tex` — developmental analyses that motivated the prospective estimand
-- `kernel_matching_results.tex` — complete endpoint kernel-matching table
+1. constant regularization preserves the predefined first-layer spatial structure;
+2. the release-versus-retention patching comparison depends on the number of patched channels;
+3. the prespecified channel-budget contrast survives alternative output metrics, although the pointwise curves differ;
+4. downstream architecture strongly conditions the contrast and that conclusion survives sphericity-robust, permutation, Friedman, and random-channel diagnostics;
+5. the original 2D template arrangement has a selected-channel functional effect beyond a Gram/rank/spectrum-matched pixel-permuted control, but that effect is architecture- and metric-dependent.
+
+Appendix material is split into five files:
+
+- `specificity_robustness_results.tex` — fresh matched-anchor specificity experiment and post hoc architecture diagnostics;
+- `final_robustness_results.tex` — complete metric-sensitivity and prospective architecture-robustness summaries;
+- `confirmation_robustness_results.tex` — complete prospective channel-budget and schedule/task sensitivity analyses;
+- `supplementary_results.tex` — developmental analyses that motivated the prospective estimand;
+- `kernel_matching_results.tex` — complete endpoint kernel-matching table.
 
 The bibliography is `../literature/references.bib`. The minimal TMLR style files required for compilation are vendored in `tmlr/` and retain their upstream license.
 
@@ -19,14 +28,22 @@ The manuscript uses `cleveref` for cross-references. Every displayed equation us
 
 ## Figures
 
-The main paper now begins with a reproducible overview showing representative renderer outputs, the complete template bank, and the first-layer activation-patching intervention. It is generated directly from the frozen renderer/template formulas by:
+The main text uses four principal figures:
+
+1. `fig00_overview.pdf` — renderer examples, template bank, and patching intervention;
+2. `fig05_kernel_gallery.pdf` — representative learned first-layer kernels;
+3. `fig06_main_results.pdf` — prospective channel-budget curves and 16-architecture robustness;
+4. `fig07_anchor_specificity.pdf` — matched-anchor spatial specificity, architecture interaction, and equivalence comparison for selected versus random channel sets.
+
+The manuscript-generated figures are built directly from frozen definitions or versioned aggregate analysis tables:
 
 ```bash
 python paper/build_overview_figure.py
 python paper/build_main_results_figure.py
+python paper/build_anchor_specificity_figure.py
 ```
 
-`paper/build.py` regenerates both the overview and the central results figure automatically on every manuscript build.
+`paper/build.py` regenerates all three manuscript-generated figures automatically on every build.
 
 The remaining archived publication figures are regenerated from saved experimental artifacts with:
 
@@ -35,9 +52,7 @@ python -m pip install -e ".[experiments]"
 python paper/build_figures.py
 ```
 
-The revised main text uses three primary figures: (1) the renderer/template/patching overview, (2) the learned-kernel gallery, and (3) `fig06_main_results.pdf`, a central robustness figure combining prospective channel-count curves with the 16-architecture forest plots. Historical learning-curve and auxiliary robustness figures remain available in the artifact and appendices.
-
-`plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. Figure-generation scripts are presentation-only: they do not retrain models or redefine any analysis.
+`plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. Figure-generation scripts are presentation-only: they do not retrain models or redefine scientific analyses.
 
 ## Build
 
