@@ -120,6 +120,8 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
 
     run(latex_command, cwd=PAPER_DIR, env=env)
     run(latex_command, cwd=PAPER_DIR, env=env)
+    # A final pass stabilizes cleveref references after the long appendix chain.
+    run(latex_command, cwd=PAPER_DIR, env=env)
 
     built_pdf = BUILD_DIR / "main.pdf"
     if not built_pdf.exists():
