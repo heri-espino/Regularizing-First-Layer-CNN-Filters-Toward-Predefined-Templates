@@ -1,0 +1,14 @@
+{
+  "analysis": "architecture_posthoc_diagnostics_001",
+  "status": "post_hoc_outcome_informed",
+  "source_evaluation_root": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\evaluation",
+  "models": 25600,
+  "primary_task": "two_concepts",
+  "primary_metrics": [
+    "centered_logit_fidelity",
+    "prob_error_reduction"
+  ],
+  "permutations": 100000,
+  "bootstrap_replicates": 5000,
+  "protocol_path": "C:\\Users\\175199\\Documents\\prior-templates-for-cnns\\studies\\cnn_architecture_posthoc\\PROTOCOL.md"
+}

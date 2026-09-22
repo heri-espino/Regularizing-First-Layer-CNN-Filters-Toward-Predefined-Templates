@@ -1,0 +1,12 @@
+﻿{
+    "created_utc":  "2026-09-21T19:54:19.4299705Z",
+    "status":  "post_hoc_outcome_informed",
+    "repo_head_at_launch":  "396950dc6fecac2738d79aab808710419701a3fb",
+    "protocol_commit":  "becff1158d299b214c92ff5851caab79fe284aa6",
+    "protocol_git_blob":  "e94fc4094c14be9be2e2eac2b4bcc23419ef8877",
+    "analyzer_git_blob":  "ff1b03038c17b283a130f3dec4d24c3bfa16525e",
+    "architecture_core_git_blob":  "8dd7adb5ad28c84dfe349e38ea6a8fb86d1babc4",
+    "source_stage_f_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001",
+    "source_evaluation_design_sha256":  "4181774df9d8195afb727f117f8bb5de42b5f549b0af3984a7c23c62f07906f5",
+    "output_root":  "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_posthoc_diagnostics_001"
+}

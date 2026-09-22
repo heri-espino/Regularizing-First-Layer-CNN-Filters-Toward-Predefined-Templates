@@ -1,0 +1,17 @@
+architecture,total_conv_depth,downstream_width,pooling,connectivity,batchnorm,parameter_count
+tiny_gmp,1,16,max,none,False,1364
+tiny_gap,1,16,avg,none,False,1364
+plain2_w16_gmp,2,16,max,plain,False,3684
+plain2_w16_gap,2,16,avg,plain,False,3684
+plain4_w16_gmp,4,16,max,plain,False,8324
+plain4_w16_gap,4,16,avg,plain,False,8324
+plain2_w64_gmp,2,64,max,plain,False,10836
+plain2_w64_gap,2,64,avg,plain,False,10836
+plain4_w64_gmp,4,64,max,plain,False,84692
+plain4_w64_gap,4,64,avg,plain,False,84692
+res4_w16_gmp,4,16,max,residual,False,8324
+res4_w16_gap,4,16,avg,residual,False,8324
+bn2_w16_gmp,2,16,max,plain,True,3700
+bn2_w16_gap,2,16,avg,plain,True,3700
+bn4_w16_gmp,4,16,max,plain,True,8372
+bn4_w16_gap,4,16,avg,plain,True,8372

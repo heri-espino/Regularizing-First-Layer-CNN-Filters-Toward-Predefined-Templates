@@ -1,0 +1,3 @@
+task,metric,n_architectures,spearman_architecture_means,p_descriptive
+two_concepts,centered_logit_fidelity,16,0.4764705882352941,0.06205917418922616
+two_concepts,prob_error_reduction,16,0.6264705882352941,0.009413977306783625
