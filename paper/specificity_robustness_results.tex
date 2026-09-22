@@ -1,0 +1,101 @@
+\section{Matched-anchor specificity and architecture diagnostics}\label{app:specificity}
+
+This appendix reports the complete paper-facing statistics for the fresh anchor-specificity experiment and the frozen post hoc architecture diagnostics. The anchor-specificity experiment is prospectively frozen fresh-sample evidence; the architecture diagnostics are outcome-informed post hoc robustness analyses and are labeled accordingly.
+
+\subsection{Fresh matched-anchor specificity experiment}\label{app:anchor-specificity}
+
+The fresh experiment uses 100 renderer blocks, four init/anchor replicates per block, two tasks, four diagnostic downstream architectures, four anchor families, and two regularization schedules, for 25,600 trained and evaluated models. The inferential unit is the renderer block after averaging the four init/anchor replicates.
+
+The primary comparison is the original structured edge/corner/ring bank against a bank formed by applying one common random permutation of the 81 spatial coordinates to every template row. This pixel-permuted control preserves, to numerical tolerance, every row norm, the complete $16\times16$ Gram matrix, numerical rank, singular spectrum, and row coefficient multisets while destroying the original 2D spatial arrangement.
+
+\begin{table}[h]
+\caption{Primary selected-channel structured-minus-pixel-permuted channel-count contrast on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics. Equivalence uses the frozen TOST margins and 90\% confidence intervals.}
+\label{tab:anchor-primary}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrr}
+\toprule
+Metric & Mean difference & 95\% CI & Holm diff. $p$ & Equivalence result \\
+\midrule
+Centered-logit fidelity & +0.05743 & [0.05116, 0.06369] & $2.0\times10^{-5}$ & not equivalent ($\delta=0.01704$) \\
+Probability error reduction & +0.04563 & [0.03728, 0.05397] & $2.0\times10^{-5}$ & equivalent ($\delta=0.06594$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For centered logits, the 90\% interval is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the 90\% interval is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus a statistically nonzero probability-error difference is nevertheless practically equivalent under the prespecified smallest effect size of interest.
+
+\subsection{Architecture dependence of spatial specificity}\label{app:anchor-architecture}
+
+The structured-minus-pixel-permuted effect varies strongly across the four prospectively frozen diagnostic architectures.
+
+\begin{table}[h]
+\caption{Architecture-specific selected-channel structured-minus-pixel-permuted $B$ differences on \texttt{two\_concepts}. Intervals are paired 95\% $t$ intervals over 100 renderer blocks.}
+\label{tab:anchor-architectures}
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Architecture & Centered-logit difference & Probability-error difference \\
+\midrule
+\texttt{tiny\_gmp} & +0.10624 & +0.19953 \\
+\texttt{tiny\_gap} & +0.07690 & +0.04308 \\
+\texttt{plain2\_w16\_gmp} & -0.04453 & -0.08067 \\
+\texttt{plain2\_w16\_gap} & +0.09109 & +0.02057 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The corresponding within-block architecture interaction is
+$F(3,297)=91.79$, partial $\eta^2=0.481$, Holm permutation $p=2.0\times10^{-5}$ for centered-logit fidelity, and
+$F(3,297)=157.70$, partial $\eta^2=0.614$, Holm permutation $p=2.0\times10^{-5}$ for probability error reduction. The sign reversal in \texttt{plain2\_w16\_gmp} rules out a universal positive effect of the original spatial arrangement.
+
+\subsection{Random-channel specificity diagnostic}\label{app:anchor-random}
+
+Repeating the primary comparison after averaging over eight random channel orders produces much smaller spatial-structure effects.
+
+\begin{table}[h]
+\caption{Architecture-averaged structured-minus-pixel-permuted $B$ for random channel sets on \texttt{two\_concepts}. Both effects are statistically distinguishable from zero but practically equivalent under the frozen margins.}
+\label{tab:anchor-random}
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Metric & Mean difference & 95\% CI \\
+\midrule
+Centered-logit fidelity & +0.00571 & [0.00392, 0.00750] \\
+Probability error reduction & +0.02007 & [0.01722, 0.02291] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The random-channel spatial-structure interaction remains detectable but is smaller for centered logits: partial $\eta^2=0.0683$ with permutation $p=8.0\times10^{-5}$. For probability error reduction it remains substantial, partial $\eta^2=0.2910$ with permutation $p=1.0\times10^{-5}$. These are prespecified robustness diagnostics, not a second primary family.
+
+Secondary anchor contrasts show that pixel-permuted and generic random rank-10 anchors are generally similar on the primary task, and that random rank-10 and random full-rank anchors are also generally similar after the frozen family corrections. The original 2D arrangement, rather than numerical rank alone, is therefore the anchor property most clearly distinguished by the selected-channel analysis.
+
+Integrity checks pass exactly for the intervention identities: maximum full-patch and no-op logit errors are zero. The maximum structured-versus-pixel-permuted Gram-matrix discrepancy is $6.66\times10^{-16}$.
+
+\subsection{Post hoc architecture robustness diagnostics}\label{app:architecture-posthoc}
+
+The original 16-architecture result was prospectively frozen. After seeing that result, a separate frozen diagnostic analysis tested whether its omnibus conclusion depended on the uncorrected sphericity assumption or on the validation-derived channel ranking. These analyses are explicitly post hoc.
+
+\begin{table}[h]
+\caption{Sphericity-robust and permutation-based architecture omnibus diagnostics on the primary \texttt{two\_concepts} task. Permutation $p$ values use 100,000 within-block permutations and are Holm adjusted across the two metrics within each analysis kind.}
+\label{tab:architecture-posthoc}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrr}
+\toprule
+Metric & GG $\epsilon$ & GG $p$ & Permutation Holm $p$ & Friedman $p$ \\
+\midrule
+Centered-logit fidelity & 0.1861 & $1.56\times10^{-34}$ & $2.0\times10^{-5}$ & $3.52\times10^{-146}$ \\
+Probability error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79\times10^{-200}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Architecture heterogeneity also remains when $B$ is computed from the mean over eight random channel orders: Holm-adjusted permutation $p=2.0\times10^{-5}$ for both primary metrics. The selected-versus-random architecture-mean Spearman correlation is $0.256$ for centered logits and $0.724$ for probability error reduction.
+
+For the historical TinyGMP-minus-Plain2-GMP bridge using random channel sets, the mean difference is $+0.002765$ (95\% CI $[+0.000014,+0.005515]$, Holm $p=0.0488$) for centered logits and $+0.319871$ (95\% CI $[+0.312788,+0.326953]$, Holm $p=2.76\times10^{-96}$) for probability error reduction. The architecture conclusion is therefore not solely a consequence of the selected-channel ranking, although ranking materially changes effect magnitude and architecture ordering.
