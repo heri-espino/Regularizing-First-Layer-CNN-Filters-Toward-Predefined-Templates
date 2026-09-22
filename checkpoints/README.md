@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-009_checkpoint-system-adopted.md`
+`CP-011_anchor-specificity-results.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
