@@ -14,9 +14,9 @@
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \newcommand{\pandocbounded}[1]{#1}
 \bibliographystyle{tmlr}
-\hypersetup{pdfauthor={},pdftitle={Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture}}
+\hypersetup{pdfauthor={},pdftitle={Activation-Patching Measurements in CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure}}
 
-\title{Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture}
+\title{Activation-Patching Measurements in CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure}
 \author{}
 \date{}
 
@@ -24,114 +24,119 @@
 \maketitle
 
 \begin{abstract}
-Predefined first-layer filters provide an explicit structural prior, but preserving that structure need not make intervention-based measurements stable. We study small CNNs whose first convolution is initialized from a fixed bank of edge, corner, and ring templates and trained either with a constant $L_2$ penalty toward those templates or with the same penalty annealed to zero. Constant regularization strongly preserves filter-template similarity. Functionally, however, the annealed-minus-constant activation-patching comparison depends on how many first-layer channels are patched. In a prespecified prospective test on 20 fresh \texttt{two\_concepts}/TinyCNN blocks, the contrast comparing $k=4,8$ with $k=1,2$ is $B=0.33098$ (95\% CI $[0.27368,0.38827]$). A frozen metric-sensitivity analysis shows that the same qualitative contrast remains under centered-logit fidelity ($B=0.17888$) and an unnormalized probability-error reduction ($B=0.89441$), despite substantial treatment differences in the normalization scale of the original metric. A prospectively frozen architecture study on 100 fresh renderer blocks and 16 controlled CNN variants then finds large architecture heterogeneity under both primary metrics, with partial $\eta^2=0.438$ and $0.869$. The original TinyCNN--TwoLayer-form difference also replicates prospectively under both metrics. Pooling and the first downstream convolution are major modifiers, but their effects interact with backbone, normalization, task, and metric. Thus, high template similarity does not imply an architecture-invariant activation-patching signature. The claims are restricted to the tested synthetic tasks and small CNN family and do not establish a unique mechanism, human interpretability, or natural-image generalization.\footnote{ChatGPT (OpenAI) was used as an assistive tool during experimental planning, code development and debugging, manuscript organization, and language editing. All experimental protocols, analyses, interpretations, and manuscript text were reviewed by the authors, who take full responsibility for the work.}
+Activation patching asks how a model output changes when internal activations are replaced, but the resulting measurement is conditional on how the intervention is defined. We study this problem in controlled convolutional networks whose first layer is initialized from a predefined bank of edge, corner, and ring filters. Constant regularization preserves this spatial structure, whereas an annealed condition releases the first layer during training. On exact matched counterfactual image pairs, a prospectively frozen test on 20 fresh renderer blocks shows that the release-versus-retention comparison changes sharply with the number of patched first-layer channels: the prespecified contrast between $k=4,8$ and $k=1,2$ is $B=0.33098$ (95\% CI $[0.27368,0.38827]$) under the historical probability metric. The same prespecified contrast remains positive under centered-logit fidelity and an unnormalized probability-error reduction, although their pointwise curves differ. A separate 100-block study across 16 CNN variants finds strong architecture heterogeneity under both primary metrics, and post hoc Greenhouse--Geisser, permutation, Friedman, and random-channel diagnostics preserve that conclusion. Finally, a fresh 25,600-model specificity experiment compares the original filters with a common pixel permutation that preserves the template-bank Gram matrix, rank, singular spectrum, row norms, and coefficient multisets. For validation-selected channels, spatial structure changes $B$ by $+0.05743$ in centered-logit fidelity and is not practically equivalent under a frozen margin; the probability-error difference is statistically nonzero but practically equivalent. The spatial effect also reverses sign in one downstream architecture and is much smaller for random channel sets. Thus weight-space structure, concentration of functional effects in selected channels, and activation-patching measurements are distinct quantities: conclusions in this setting depend on channel budget, downstream architecture, output metric, and spatial prior structure.\footnote{ChatGPT (OpenAI) was used as an assistive tool during experimental planning, code development and debugging, manuscript organization, and language editing. All experimental protocols, analyses, interpretations, and manuscript text were reviewed by the authors, who take full responsibility for the work.}
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-Predefined spatial filters can make the first convolutional layer structurally explicit. A different question is whether preserving that structure also stabilizes how internal activations appear to influence model outputs. These are not the same object: filter-template similarity is a weight-space property, whereas activation patching measures the response of a trained network to an intervention on internal activations.
+The first convolutional layer is one of the few places in a vision network where learned weights can still be inspected directly as spatial filters. This has motivated a long line of work asking whether early spatial filters should be learned freely at all. Wavelet and Gabor constructions provide useful fixed image representations \citep{bruna_2013_scattering-networks}; Gabor initialization, maintained filter structure, learnable Gabor parameterizations, and predefined-filter networks impose stronger spatial priors on CNNs \citep{ozbulak_2018_gabor-initialization,molaei_2020_gabor-filter-structure,wang_2024_learnable-gabor,linse_2024_predefined-filters,orozco-solis_2024_learnable-gabor-filters}; and fixed or even random spatial kernels can remain effective when later layers learn how to recombine them \citep{gaudio_2023_fixed-filters,gavrikov_2023_random-convolutions}. Analyses of unconstrained CNNs likewise find regular first-layer frequency structure and sensitivity of early filters to training-data statistics \citep{chowers_2023_first-layer-filters,jorgenson26ajorgenson_2026_early-cnn-filters}. These results motivate structured first-layer priors, but they leave open a different question: if a first layer remains structurally close to an intended spatial basis, does that structure have a stable functional signature inside the trained network?
 
-We study this distinction in controlled synthetic image tasks with exact matched counterfactuals. The first convolution is initialized from a fixed bank of edge, corner, and ring filters. One training condition keeps an $L_2$ penalty toward the initial bank throughout training; another begins from the same bank but anneals the penalty to zero. Constant regularization retains substantially more template-like filters. We then patch selected first-layer activation maps from a matched counterfactual image into the base run and ask how the release-versus-retention comparison changes as the number of patched channels increases.
+The distinction matters because representational alignment and functional influence are not interchangeable. Network Dissection, TCAV, Concept Whitening, concept bottlenecks, and related approaches measure or impose different forms of alignment between internal representations and human-defined concepts \citep{bau_2017_network-dissection,kim_2018_tcav,chen_2020_concept-whitening,koh_2020_concept-bottlenecks}. Subsequent work shows that apparently aligned representations can leak unintended information, fail to correspond to intended semantics, or dissociate from influence on model outputs \citep{margeloiu_2021_concept-bottleneck-alignment,havasi_2022_concept-leakage,marconato_2022_glancenets,nicolson_2025_explaining-explainability,sharma_2026_encoding-without-influence}. A filter can therefore look structured in weight space without implying that interventions on the corresponding activation channels behave in a simple or stable way.
 
-The central empirical result is that the answer is not stable across intervention size or downstream architecture. A prespecified prospective test confirms a strong channel-count contrast in TinyCNN on fresh renderer blocks. That contrast persists when the output comparison is changed from the original normalized probability metric to centered logits and to an unnormalized probability-space error reduction. A subsequent prospectively frozen study across 16 controlled CNN variants finds substantial architecture heterogeneity under both alternative metrics and prospectively reproduces the earlier TinyCNN-versus-TwoLayer-form difference.
+Activation patching provides such an intervention: replace an internal activation from one run with the corresponding activation from another and measure the downstream output change. Yet patching does not define a single invariant quantity. Its interpretation depends on patch direction and scope, component granularity, source and target inputs, and output metric \citep{heimersheim_2024_activation-patching,zhang_2024_activation-patching}. More generally, circuit-faithfulness scores can change under reasonable changes in ablation methodology, so the evaluation procedure partly defines the functional question being asked \citep{miller_2024_circuit-faithfulness}. These concerns are well established in mechanistic-interpretability work, but much less is known about how they interact with an explicitly structured spatial prior in a controlled vision setting.
 
-This paper therefore makes a narrow measurement claim rather than a universal mechanistic one. We do not claim that sensitivity to activation-patching granularity is itself new, nor that predefined filters are automatically human-interpretable. Instead, we connect two questions that are often treated separately: whether a structured prior remains visible in weight space, and whether intervention-based functional comparisons remain stable as the intervention set and downstream architecture change. In our setting, they do not.
+We use small CNNs and procedural image tasks as an experimental instrument for isolating that interaction. Every model begins with the same $16$-channel, $9\times9$ first convolution. One condition is kept near a predefined bank of edge, corner, and ring filters by a constant penalty; another begins at the same bank but is released by annealing that penalty to zero. Exact matched counterfactual image pairs let us transplant complete first-layer feature maps without creating an artificial input corruption. We then ask three nested questions. Does the release-versus-retention patching comparison depend on the number of patched channels? Holding the first-layer patch space fixed, does downstream architecture change that dependence? Finally, is any such effect specific to the original two-dimensional arrangement of the predefined filters, rather than to generic anchoring, rank, or channel geometry?
 
-Our main findings are:
+The resulting evidence supports a narrower conclusion than the claim that structured filters are interpretable, but a stronger one than simple sensitivity of a patching score. Our main findings are:
 \begin{enumerate}
-\item Constant template regularization strongly preserves first-layer template similarity, but that structural retention does not determine the relative activation-patching effect.
-\item The annealed-minus-constant patching comparison depends on the number of patched first-layer channels; a prespecified fresh-block TinyCNN test supports a positive small-versus-larger-channel contrast.
-\item The TinyCNN contrast persists under centered-logit fidelity and an unnormalized probability reconstruction-error reduction, even though the original metric's model-specific normalization scale differs strongly between treatments.
-\item Architecture is a major conditioning variable. Across 16 controlled CNN variants, the channel-count contrast varies substantially; pooling and the first downstream convolution are especially important, but their directions interact with the remaining architecture and the output metric.
+\item A prospectively frozen fresh-block test shows that the release-versus-retention comparison depends strongly on first-layer channel budget. The prespecified small-versus-larger-channel contrast remains positive under centered-logit fidelity and unnormalized probability error reduction, although the detailed pointwise curves depend on the metric.
+\item A separate prospectively frozen study across 16 downstream CNN variants shows large architecture heterogeneity under both primary metrics. The conclusion survives Greenhouse--Geisser correction, within-block permutation inference, Friedman tests, and random channel subsets.
+\item A fresh matched-anchor experiment isolates spatial structure. Relative to a common pixel permutation that preserves the original bank's complete Gram matrix, rank, singular spectrum, row norms, and coefficient multisets, the original two-dimensional arrangement produces a clear non-equivalent selected-channel effect under centered logits. That effect is architecture-dependent, reverses sign in one architecture, and is practically much smaller for random channel sets.
 \end{enumerate}
+
+Together, these results separate three quantities that are easy to conflate: preservation of a spatial prior in weight space, concentration of functional effects in selected channels, and the numerical result of an activation-patching experiment.
 
 \section{Related work}\label{sec:related}
 
-\paragraph{Predefined and structured convolutional filters.}
-Gabor filters and other predefined spatial filters have been used for initialization, constrained first layers, and learnable structured kernels \citep{ozbulak_2018_gabor-initialization,molaei_2020_gabor-filter-structure,wang_2024_learnable-gabor,linse_2024_predefined-filters,orozco-solis_2024_learnable-gabor-filters}. Fixed or predefined spatial filters can also support useful predictors when later layers learn how to combine them \citep{gaudio_2023_fixed-filters,gavrikov_2023_random-convolutions}. Our question is not whether these filters can be useful, but whether retaining their weight-space structure stabilizes a downstream intervention measurement.
+\paragraph{Structured and predefined spatial filters.}
+Hand-designed spatial filters predate modern CNNs, and fixed wavelet scattering shows that substantial invariance and discriminative structure can be obtained without learning arbitrary spatial kernels \citep{bruna_2013_scattering-networks}. More recent CNN work has used Gabor banks as initialization \citep{ozbulak_2018_gabor-initialization}, explicitly maintained Gabor structure during optimization \citep{molaei_2020_gabor-filter-structure}, constrained Gabor parameters in task-specific first layers \citep{wang_2024_learnable-gabor}, and learned texture branches built from Gabor filters \citep{zhu_2023_gabor-texture}. Orozco-Solis et al.\ show that learnable Gabor filters can lose their initial structure over training and use similarity measures to track that degeneration \citep{orozco-solis_2024_learnable-gabor-filters}. At a broader architectural level, networks with predefined or fixed spatial filters can retain substantial predictive performance \citep{linse_2024_predefined-filters,gaudio_2023_fixed-filters}, while random frozen convolutions can be effective when learned linear combinations are sufficiently expressive \citep{gavrikov_2023_random-convolutions}. Analyses of ordinary CNNs further suggest that first-layer energy profiles are highly regular and approximately whitening \citep{chowers_2023_first-layer-filters}, and that early-filter updates reflect properties of the training distribution \citep{jorgenson26ajorgenson_2026_early-cnn-filters}. This literature establishes that first-layer spatial structure can be useful and persistent. Our question is whether preserving one such structure yields a stable intervention-based functional measurement.
 
-\paragraph{Concept measurements and activation interventions.}
-Network Dissection, TCAV, concept bottlenecks, concept embeddings, and related methods characterize concept correspondence or impose concept-aligned representations under different assumptions \citep{bau_2017_network-dissection,kim_2018_tcav,koh_2020_concept-bottlenecks,zarlenga_2022_concept-embeddings}. Weight-space template similarity should not be conflated with these activation-space notions.
+\paragraph{Alignment, concepts, and functional influence.}
+Concept-based interpretability methods quantify or impose semantic organization at different representational levels. Network Dissection measures unit-level alignment to visual concepts \citep{bau_2017_network-dissection}; TCAV tests directional sensitivity to user-defined concept vectors \citep{kim_2018_tcav}; Concept Whitening rotates latent axes toward specified concepts \citep{chen_2020_concept-whitening}; and concept bottleneck models expose an intermediate concept representation that can be edited at test time \citep{koh_2020_concept-bottlenecks}. These approaches also expose a recurring limitation: an apparently meaningful representation need not be pure, complete, or used in the intended way. Concept bottlenecks can fail semantic alignment or leak task information \citep{margeloiu_2021_concept-bottleneck-alignment,havasi_2022_concept-leakage,marconato_2022_glancenets}; concept-vector explanations can vary across layers, become entangled, or depend on spatial position \citep{nicolson_2025_explaining-explainability}; and recent causal analyses distinguish information that is decodable from information that changes model behavior \citep{sharma_2026_encoding-without-influence}. We adopt the same distinction at a lower level: filter-template similarity is a structural property, not evidence by itself that the corresponding activation channels have a stable functional role.
 
-Activation patching replaces internal activations and measures a downstream output change. Its conclusions can depend on corruption or replacement scheme, output metric, component choice, ablation method, and intervention granularity \citep{zhang_2024_activation-patching,heimersheim_2024_activation-patching,miller_2024_circuit-faithfulness}. We therefore do not claim granularity sensitivity as a new general phenomenon. Our narrower contribution is to hold the first-layer intervention space and matched counterfactual construction fixed while comparing two structured-prior training conditions, and then to test prospectively how the relative patching comparison changes across channel count and controlled downstream architectures. This is also consistent with the broader distinction between information being encoded in a representation and functionally influencing an output \citep{nicolson_2025_explaining-explainability,sharma_2026_encoding-without-influence}. Stronger claims about unique internal mechanisms require substantially more than the interventions used here \citep{meloux_2025_mechanistic-identifiability,sutter_2025_causal-abstraction-limits}.
+\paragraph{Activation patching and measurement dependence.}
+Activation patching, interchange interventions, and related causal-abstraction tools intervene on internal states rather than merely decoding them \citep{geiger_2025_causal-abstraction}. Practical guidance emphasizes that patching direction, component granularity, input choice, and output metric change what evidence an experiment provides \citep{heimersheim_2024_activation-patching}. Zhang and Nanda show that alternative corruption methods and metrics can yield disparate localization results and caution in particular about nonlinear probability metrics and out-of-distribution corruptions \citep{zhang_2024_activation-patching}. Miller et al.\ similarly show that circuit faithfulness depends strongly on ablation methodology and argue that the task assigned to a circuit cannot be separated from the evaluation procedure \citep{miller_2024_circuit-faithfulness}. Broader work questions whether mechanistic explanations are unique or identifiable without additional assumptions \citep{meloux_2025_mechanistic-identifiability,sutter_2025_causal-abstraction-limits}. Our contribution is not the general observation that patching is sensitive to methodological choices. We isolate, prospectively where possible, how patch budget and downstream architecture interact with a controlled first-layer spatial prior, and then test spatial-prior specificity with a matched anchor that preserves the bank's non-spatial geometry.
 
-\section{Methods}\label{sec:methods}
+\section{Experimental framework}\label{sec:methods}
 
-\subsection{Tasks, first-layer prior, and training conditions}\label{sec:setup}
+\subsection{Controlled tasks and first-layer spatial prior}\label{sec:setup}
 
-We use two $32\times32$ grayscale procedural tasks with balanced labels, matched nuisance variables, and exact counterfactual pairs. Each renderer block contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. In \texttt{single\_shape}, the class is line, circle, triangle, or square. In \texttt{two\_concepts}, circle and triangle presence define two binary factors and four classes; counterfactual pairs change one factor while holding the other and the nuisance variables fixed.
+We use two $32\times32$ grayscale procedural classification tasks with exact matched counterfactual pairs. Each renderer block contains 512 training, 256 validation, and 256 test images. Rendering varies angle, line width, scale, translation, Gaussian noise, and occasional occlusion. In \texttt{single\_shape}, the four classes are line, circle, triangle, and square. In \texttt{two\_concepts}, circle and triangle presence define two binary factors and four classes; a counterfactual pair changes one factor while holding the other factor and nuisance variables fixed. The primary inferential task in the later fresh-sample studies is \texttt{two\_concepts}.
 
-\Cref{fig:overview} shows representative images from the frozen renderer, the complete 16-filter template bank, and the intervention point used throughout the paper.
+Every model begins with a bias-free $1\!\to\!16$ convolution with $9\times9$ kernels, same padding, and ReLU. The predefined bank contains eight oriented edges, four two-ray corners, and four rings. Each template is centered and unit norm; the $16\times81$ flattened bank has numerical rank 10. \Cref{fig:overview} shows the renderer, the bank, and the intervention point.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig00_overview.pdf}
-\caption{Overview of the controlled experimental setting. (a) Representative inputs produced by the same procedural renderer used in the experiments. (b) The fixed bank of eight edge, four corner, and four ring templates used to initialize the first convolution. (c) Activation patching replaces a selected set of $k$ first-layer activation maps from the base run with the corresponding maps from a matched counterfactual run, while leaving all downstream parameters unchanged. The displayed images are illustrative renderer outputs, not additional inferential observations.}
+\caption{Controlled experimental system. \textbf{(a)} Representative inputs from the procedural renderer. \textbf{(b)} The 16 predefined first-layer spatial filters: eight edges, four corners, and four rings. \textbf{(c)} Activation patching replaces a selected set of $k$ post-ReLU first-layer feature maps in a base run with the corresponding maps from a matched counterfactual run, while downstream parameters remain unchanged. Source activations come from in-distribution counterfactual images; the resulting hybrid activation state is nevertheless an intervention and need not itself lie on the model's training manifold.}
 \label{fig:overview}
 \end{figure}
 
-Every model begins with the same bias-free $1\!\to\!16$ convolution with $9\times9$ kernels, same padding, and ReLU. The 16-channel template bank contains eight edges, four two-ray corners, and four rings. Templates are centered and unit norm; the bank has rank 10. For learned filter $W_i$ and template $T_j$, filter-template similarity is
+For learned filter $W_i$ and template $T_j$, structural similarity is
 \begin{equation}
 \label{eq:template-similarity}
-A=\frac{1}{16}\sum_i\max_j\langle \widehat W_i,\widehat T_j\rangle.
+A=\frac{1}{16}\sum_i\max_j\langle \widehat W_i,\widehat T_j\rangle,
 \end{equation}
-where the inner product is signed centered cosine similarity.
+where the inner product is signed cosine similarity after centering and normalizing each filter. A one-to-one matching analysis is retained as a secondary structural check.
 
-Template-based models initialize the first convolution from the bank and optimize
+\subsection{Retention, release, and matched anchor controls}\label{sec:training}
+
+Template-based models initialize the first convolution from anchor bank $W_{\mathrm{anchor}}$ and optimize
 \begin{equation}
 \label{eq:training-objective}
 \mathcal L=\mathcal L_{\mathrm{CE}}+
 \lambda(e)\frac{\lVert W-W_{\mathrm{anchor}}\rVert_F^2}
 {\lVert W_{\mathrm{anchor}}\rVert_F^2}.
 \end{equation}
-The central comparison is between \emph{constant template regularization}, $\lambda(e)=1$ for all 200 epochs, and \emph{annealed template regularization}, with $\lambda=1$ through epoch 10, linear decay to zero by epoch 80, and zero thereafter. Adam uses learning rate $0.003$ and batch size 128, with no learning-rate scheduler or early stopping.
+The central training comparison uses the same initialization but different regularization schedules. \emph{Retention} keeps $\lambda(e)=1$ for all 200 epochs. \emph{Release} keeps $\lambda=1$ through epoch 10, decays linearly to zero by epoch 80, and remains zero thereafter. Adam uses learning rate $0.003$ and batch size 128, with no learning-rate scheduler or early stopping.
 
-\subsection{Activation patching and channel ranking}\label{sec:patching}
+The final fresh-sample specificity experiment replaces the original anchor with three controls while preserving the same retention/release schedules. The primary matched control, \emph{pixel-permuted}, applies one common random permutation of the 81 spatial coordinates to every row of the structured bank. Because the same permutation is applied to all rows, it preserves the complete $16\times16$ Gram matrix, row norms, numerical rank, singular spectrum, and each row's coefficient multiset while destroying the original two-dimensional edge/corner/ring arrangement. Two secondary controls use a generic random rank-10 bank and a generic random full-rank bank. Random anchor realizations are paired across task, architecture, and treatment within block/init replicate.
 
-For each matched base/counterfactual pair, we run the model on the base image, the counterfactual image, and a patched base image. Patching occurs immediately after the first convolution and ReLU: selected first-layer activation maps from the base run are replaced by the corresponding maps from the counterfactual run. The downstream network is otherwise unchanged.
+\subsection{Activation patching, ranking, and output metrics}\label{sec:patching}
 
-Channels are ranked on validation data by the absolute standardized difference in first-layer global-max activation,
+For each matched base/counterfactual pair, we cache the post-ReLU first-layer tensor for both images. A patched run starts from the base image and replaces selected feature maps with the corresponding maps from the counterfactual run. No test-set quantity is used to select channels.
+
+The primary selected-channel ranking is the absolute standardized validation-set difference in global-max first-layer activation,
 \begin{equation}
 \label{eq:channel-ranking}
 d_{g,j}=
 \frac{\overline z_{g=1,j}-\overline z_{g=0,j}}
-{s_j+10^{-6}}.
+{s_j+10^{-6}},
 \end{equation}
-where $z_j$ is the global maximum of first-layer activation map $j$ and $s_j$ is its validation-set standard deviation. This ranking is fixed before test-set patching and does not use the downstream patching endpoint to rank channels. Alternative AUROC and validation-patching rankings, random controls, and replacement-energy-matched controls are retained as secondary analyses.
+where $z_j$ is the global maximum of feature map $j$ and $s_j$ is its validation-set standard deviation. The same ranking rule is used for every downstream architecture. Eight same-size random channel orders provide a ranking-independence diagnostic.
 
 Let
 \begin{equation}
 \label{eq:probability-error}
 E_{\mathrm{prob}}(a,b)=
-\frac{1}{N}\sum_{i=1}^{N}\lVert p_a^{(i)}-p_b^{(i)}\rVert_2^2.
+\frac{1}{N}\sum_{i=1}^{N}\lVert p_a^{(i)}-p_b^{(i)}\rVert_2^2
 \end{equation}
-denote mean squared probability-space error over the $N$ matched counterfactual pairs. The historical output metric is
+denote mean squared probability-space error over $N$ matched pairs. The historical patching score is
 \begin{equation}
 \label{eq:probability-fidelity}
 F_{\mathrm{prob}}(S)=
 1-\frac{E_{\mathrm{prob}}(S,1)}{E_{\mathrm{prob}}(0,1)}.
 \end{equation}
-It is a normalized counterfactual reconstruction-error reduction for this patching procedure. It is not interpreted as a mediated fraction or a general measure of causal importance.
+This is a model-normalized counterfactual reconstruction score, not a mediated fraction or a general measure of causal importance.
 
-Because the denominator is model specific, we later froze two alternative metrics before evaluating them on saved prospective checkpoints. First, centered-logit fidelity subtracts the per-example mean logit,
+Because the denominator in \cref{eq:probability-fidelity} varies across models and treatments, later analyses use two primary robustness metrics. Centered logits remove the arbitrary common-logit offset,
 \begin{equation}
 \label{eq:centered-logits}
-\widetilde{\ell}=\ell-\mathrm{mean}(\ell)\mathbf 1.
+\widetilde{\ell}=\ell-\mathrm{mean}(\ell)\mathbf 1,
 \end{equation}
-and applies the same normalized error-reduction form in centered-logit space. Second, the unnormalized probability error reduction is
+and centered-logit fidelity applies the same normalized reconstruction form in that space. The unnormalized probability error reduction is
 \begin{equation}
 \label{eq:probability-error-reduction}
 R_{\mathrm{prob}}(S)=
 E_{\mathrm{prob}}(0,1)-E_{\mathrm{prob}}(S,1).
 \end{equation}
-Thus $R_{\mathrm{prob}}$ is measured directly in mean squared probability error per matched pair and removes the model-specific denominator entirely.
 
-\subsection{Channel-count contrast and inferential unit}\label{sec:estimand}
+\subsection{Channel-budget estimand and evidence design}\label{sec:estimand}
 
-For any patching metric $M$, define the within-block treatment difference at channel count $k$,
+For any patching metric $M$, define the within-block release-minus-retention difference at channel count $k$,
 \begin{equation}
 \label{eq:treatment-difference}
-\Delta_b^M(k)=M_b^{\mathrm{annealed}}(k)-M_b^{\mathrm{constant}}(k).
+\Delta_b^M(k)=M_b^{\mathrm{release}}(k)-M_b^{\mathrm{retention}}(k),
 \end{equation}
 and the prespecified small-versus-larger-channel contrast
 \begin{equation}
@@ -140,139 +145,132 @@ B_b^M=
 \frac{\Delta_b^M(4)+\Delta_b^M(8)}{2}
 -\frac{\Delta_b^M(1)+\Delta_b^M(2)}{2}.
 \end{equation}
-By \cref{eq:channel-count-contrast}, a positive $B$ means only that the annealed-minus-constant difference is larger on average at $k=4,8$ than at $k=1,2$; it does not imply monotonicity in $k$ or a positive treatment difference at either larger channel count.
+A positive $B$ means only that the release-minus-retention difference is larger on average at $k=4,8$ than at $k=1,2$. It does not imply monotonicity in $k$ or a positive release effect at either larger channel count.
 
-Matched counterfactual image pairs are repeated measurements inside a renderer/model block and are not treated as inferential replicates. Inference is across independently generated renderer blocks. Training conditions are paired within block through shared data and paired initialization components.
+Matched image pairs are repeated measurements within a model/block and are never treated as independent inferential replicates. The principal evidence comes from three fresh-sample designs. First, a prospectively frozen channel-budget test uses 20 new \texttt{two\_concepts} renderer blocks in the TinyCNN setting. Second, a prospectively frozen architecture study uses 100 new blocks, four paired initialization replicates, two tasks, two treatments, and 16 downstream CNN variants; the four init replicates are averaged within block before inference. Third, the matched-anchor specificity study uses 100 further fresh blocks, four init/anchor replicates, two tasks, four diagnostic architectures, four anchor families, and two treatments, again averaging the four replicates within block. The latter two designs each train 25,600 models but have inferential sample size $n=100$, not 25,600.
 
-\subsection{Statistical design and evidence hierarchy}\label{sec:design}
-
-The final analysis separates developmental evidence from prospectively frozen tests. Early developmental analyses identified that a selected-minus-control comparison could change through the control term and motivated the direct selected-channel contrast in \cref{eq:channel-count-contrast}; those analyses are not pooled with later fresh-sample tests. The primary prospective channel-count experiment uses 20 new \texttt{two\_concepts} renderer blocks. A separately specified schedule/task sensitivity experiment uses 50 fresh blocks per task/architecture setting. The metric robustness analysis reuses saved prospective and sensitivity checkpoints, with the alternative metric definitions frozen before recomputation. The architecture robustness experiment uses 100 further fresh renderer blocks and was prospectively frozen before any of its outcomes were inspected. Finally, an independent checkpoint audit recomputes central quantities at 32 fixed developmental checkpoints. Throughout, inference is at the renderer-block level appropriate to each analysis rather than at the image-pair, initialization, or model-count level.
-
-The architecture robustness experiment preserves the same first-layer 16-channel intervention tensor, template bank, and validation ranking while varying downstream architecture. The ranking remains the same first-layer global-max activation summary for every architecture, including GAP variants, so architecture and channel-selection rule are not changed together. The 16 variants cross global max pooling (GMP) or global average pooling (GAP) with controlled changes in plain depth (1, 2, or 4), downstream width (16 or 64), residual connectivity, and downstream BatchNorm. Only the downstream computation changes; BatchNorm, when present, is after the intervention point.
-
-The architecture robustness experiment trains 100 fresh renderer blocks (6000--6099), four paired initialization replicates per block, two tasks, two treatments, and 16 architectures, for 25,600 trained models. Every first-layer patch budget $k=1,\ldots,16$ is evaluated; the frozen primary contrast $B$ retains the prespecified $k=1,2,4,8$ summary. The four initialization replicates are averaged within renderer block before inference, so the inferential sample size is 100 blocks, not 400 initializations or 25,600 models.
-
-The primary task is \texttt{two\_concepts}. The two primary architecture-robustness metrics are $F_{\mathrm{clogit}}$ and $R_{\mathrm{prob}}$. For each metric, the frozen primary analysis is a one-factor repeated-measures architecture test across the 16 block-level architecture means, followed by a fresh bridge contrast comparing the historical TinyCNN form (\texttt{tiny\_gmp}) with the two-layer form (\texttt{plain2\_w16\_gmp}). The two primary metric tests are Holm adjusted together. Prespecified paired factor contrasts then examine pooling, depth, width, residual connectivity, and BatchNorm.
+Alternative-metric reanalysis of saved prospective checkpoints and the later Greenhouse--Geisser, permutation, Friedman, and random-channel architecture diagnostics are explicitly post hoc with respect to the original results, although their analysis definitions were frozen before recomputation. Complete developmental and secondary schedule analyses are retained in the appendix but are not pooled with fresh-sample tests.
 
 \section{Results}\label{sec:results}
 
-\subsection{Template retention is structural, not a proxy for the patching result}\label{sec:structural}
+\subsection{Structural retention does not determine the patching signature}\label{sec:structural}
 
-Constant regularization keeps the first-layer filters substantially closer to the predefined bank. In the larger schedule/task sensitivity sample for \texttt{two\_concepts}/TinyCNN, constant $\lambda=1$ regularization gives mean filter-template similarity 0.944, compared with 0.574 under the default annealing schedule, while mean test accuracies are 98.05\% and 99.45\%, respectively. In TwoLayerCNN the corresponding similarities are 0.999 and 0.896, with accuracies 99.11\% and 99.26\%. Thus, greater template retention is not simply a proxy for higher predictive accuracy or for the later patching contrast.
+Retention produces the intended weight-space effect. In the larger schedule/task sensitivity sample, \texttt{two\_concepts}/TinyCNN models under constant regularization have mean template similarity 0.944 versus 0.574 under release, while mean test accuracy is 98.05\% versus 99.45\%. In the corresponding two-layer model, similarities are 0.999 and 0.896 while accuracies are 99.11\% and 99.26\%. One-to-one matching gives the same structural conclusion and rules out the trivial explanation that many learned filters merely match the same few templates (\Cref{app:kernel-matching}).
 
-Saved-checkpoint one-to-one matching gives the same qualitative conclusion: the high similarity under constant regularization is not produced merely by repeatedly matching many learned filters to the same few template entries. The complete matching table is retained in \Cref{app:kernel-matching}.
-
-\Cref{fig:kernel-gallery} makes the structural difference visible for one representative \texttt{two\_concepts}/TinyCNN checkpoint. The quantitative claims use the complete replicate-level similarity analyses rather than this example.
+\Cref{fig:kernel-gallery} provides a representative visualization. It is deliberately treated as structural evidence only: neither visual resemblance nor the score in \cref{eq:template-similarity} establishes semantic purity or functional influence.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig05_kernel_gallery.pdf}
-\caption{Representative first-layer kernels for \texttt{two\_concepts}/TinyCNN, renderer block 2000. The top row shows the original templates; subsequent rows show saved filters at initialization and epoch 200 under the developmental training conditions. Rows are reordered by maximum-weight one-to-one template matching for visual comparison. The figure illustrates filter structure only; it is not evidence of human interpretability or of the activation-patching mechanism.}
+\caption{Representative first-layer kernels from a \texttt{two\_concepts}/TinyCNN checkpoint. The top row shows the predefined bank; later rows show saved filters under the developmental training conditions, reordered by one-to-one template matching for display. Retention preserves visibly template-like kernels, whereas released filters move farther from the bank. The inferential claims in the paper use replicate-level structural and intervention statistics rather than this example.}
 \label{fig:kernel-gallery}
 \end{figure}
 
-\subsection{The patching comparison changes with the number of patched channels}\label{sec:channel-count}
-
-The prospective channel-count protocol froze a single primary test before generating blocks 4000--4019. On \texttt{two\_concepts}/TinyCNN with activation-difference ranking,
+The functional comparison is not fixed by that structural separation. In the prospectively frozen 20-block TinyCNN test, the historical probability-fidelity contrast is
 \begin{equation}
 \label{eq:prospective-channel-result}
-\bar B_{\mathrm{prob}}=0.330976,
+\bar B_{\mathrm{prob}}=0.33098,
 \qquad
-95\%\ \mathrm{CI}=[0.273680,0.388273].
+95\%\ \mathrm{CI}=[0.27368,0.38827],
 \end{equation}
-The corresponding test gives $t_{19}=12.09$ and two-sided $p=2.28\times10^{-10}$. All 20 block-level values are positive.
+with $t_{19}=12.09$, $p=2.28\times10^{-10}$, and all 20 block-level values positive. The pointwise release-minus-retention differences are $-0.3459$, $-0.3317$, $-0.0221$, and $+0.0065$ at $k=1,2,4,8$, respectively. Thus a single patch budget would describe only one slice of the treatment comparison.
 
-The prospective estimate in \cref{eq:prospective-channel-result} is not a statement that annealed regularization is uniformly better. Under the historical probability metric, the pointwise annealed-minus-constant differences are $-0.3459$, $-0.3317$, $-0.0221$, and $+0.0065$ at $k=1,2,4,8$, respectively. Panel~(a) of \cref{fig:main-results} shows these estimates with their paired 95\% intervals and makes the key pattern visible: the relative treatment effect changes substantially with the number of patched channels. A single patch budget would therefore give an incomplete description of the comparison.
+\subsection{The channel-budget contrast survives alternative metrics, not identical curves}\label{sec:metric-robustness}
 
-The historical selected-minus-random comparison is not used to define this primary result. In the earlier decomposition, a positive selected-minus-random difference at $k=4$ was partly caused by a lower random-channel baseline under annealing even though the selected-channel patching effect itself was slightly lower. This is why the prospective analysis uses the selected-channel effect directly. Random and replacement-energy-matched controls remain useful diagnostics but answer a different question.
+The original probability fidelity has a model-specific denominator, and the frozen metric reanalysis confirms that this denominator changes substantially between retention and release. The probability-space base-to-counterfactual error scale differs by $+0.8486$ on average in the prospective TinyCNN setting, and the centered-logit scale differs by $+126.54$. The original normalization is therefore not innocuous.
 
-\subsection{The TinyCNN contrast survives alternative output metrics}\label{sec:metric-robustness}
+Nevertheless, the prespecified contrast in \cref{eq:channel-count-contrast} remains positive under both frozen alternatives. Centered-logit fidelity gives $B=+0.17888$ (95\% CI $[+0.12727,+0.23049]$, Holm $p=6.95\times10^{-7}$), while probability error reduction gives $B=+0.89441$ (95\% CI $[+0.78630,+1.00252]$, Holm $p=8.59\times10^{-13}$).
 
-The original $F_{\mathrm{prob}}$ divides by each model's own base-to-counterfactual output difference. A frozen reanalysis of the saved prospective channel-count checkpoints shows that this denominator is not innocuous: release-minus-retention differences in the input-effect scale are substantial. On the prospective TinyCNN setting, the probability-space input-effect scale changes by $+0.8486$ mean squared-error units per pair (95\% CI $[0.8267,0.8704]$), and the centered-logit scale changes by $+126.54$ (95\% CI $[120.85,132.23]$).
-
-The principal channel-count contrast nevertheless remains positive under two alternative output definitions. Centered-logit fidelity gives $B=+0.17888$ (95\% CI $[+0.12727,+0.23049]$; Holm $p=6.95\times10^{-7}$), while the unnormalized probability error reduction gives $B=+0.89441$ (95\% CI $[+0.78630,+1.00252]$; Holm $p=8.59\times10^{-13}$). Centered-logit fidelity retains the normalization form but removes the irrelevant common-logit offset; $R_{\mathrm{prob}}$ removes the model-specific denominator entirely. The three pointwise curves are shown together in panel~(a) of \cref{fig:main-results}; complete numerical tables are reported in \Cref{app:metric-sensitivity}.
-
-The correct interpretation is therefore not that the original normalization is irrelevant. It changes substantially across treatments. Rather, the TinyCNN small-versus-larger-channel contrast is not explained away by that normalization choice.
+Panel~(a) of \cref{fig:main-results} is important for the interpretation: the alternative metrics support the same \emph{sign of the prespecified $B$ contrast}, but not the same pointwise treatment curve. In particular, unnormalized probability error reduction becomes strongly positive at $k=4,8$, whereas the historical normalized probability score is close to zero there. We therefore treat metric agreement at the level of the frozen estimand as robustness, not as evidence that the metrics are interchangeable.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig06_main_results.pdf}
-\caption{Central robustness results. \textbf{(a)} Annealed-minus-constant treatment differences $\Delta^M(k)$ across the prespecified first-layer channel counts in the fresh \texttt{two\_concepts}/TinyCNN experiment. The left subpanel reproduces the historical normalized probability metric; the centered-logit and unnormalized probability-error panels come from the frozen metric-robustness reanalysis of the same saved checkpoints. Points are means across 20 renderer blocks and error bars are paired 95\% $t$ intervals. \textbf{(b)} Architecture-specific channel-count contrast $B$ on the primary \texttt{two\_concepts} task for the 16 prospectively frozen downstream architectures. The two forest plots show the primary centered-logit and unnormalized probability-error metrics separately because their numerical scales are not comparable. Each point is the architecture mean after averaging four initialization replicates within each of 100 fresh renderer blocks; horizontal bars are marginal 95\% $t$ intervals. Vertical zero lines mark no small-versus-larger-channel contrast. Full numerical tables and prespecified factor contrasts are in \Cref{app:final-robustness}.}
+\caption{Channel-budget and architecture robustness. \textbf{(a)} Release-minus-retention treatment differences $\Delta^M(k)$ in the prospective \texttt{two\_concepts}/TinyCNN experiment under the historical normalized probability score, centered-logit fidelity, and unnormalized probability error reduction. The three metrics agree on a positive small-versus-larger-channel contrast $B$ but not on the detailed pointwise curve. \textbf{(b)} Architecture-specific $B$ on the primary \texttt{two\_concepts} task for 16 prospectively frozen downstream architectures. Each point averages four initialization replicates within each of 100 fresh renderer blocks; bars are marginal 95\% $t$ intervals. The two primary metrics are shown separately because their numerical scales are not comparable.}
 \label{fig:main-results}
 \end{figure}
 
-\subsection{Architecture strongly conditions the channel-count contrast}\label{sec:architecture}
+\subsection{Downstream architecture is a major conditioning variable}\label{sec:architecture}
 
-The architecture robustness experiment tests the architecture question prospectively on 100 fresh renderer blocks. Architecture heterogeneity is large under both frozen primary metrics:
+Holding the first-layer intervention tensor, training comparison, validation ranking, counterfactual construction, and primary metrics fixed, the 16-architecture fresh-sample study finds strong heterogeneity:
 \begin{equation}
 \label{eq:architecture-omnibus-clogit}
-F_{15,1485}=77.09,\quad \eta_p^2=0.438.
+F_{15,1485}=77.09,\quad \eta_p^2=0.438
 \end{equation}
-for centered-logit fidelity, and
+for centered-logit fidelity and
 \begin{equation}
 \label{eq:architecture-omnibus-prob}
-F_{15,1485}=656.70,\quad \eta_p^2=0.869.
+F_{15,1485}=656.70,\quad \eta_p^2=0.869
 \end{equation}
-for probability error reduction. The Holm-adjusted centered-logit $p$ value is $2.40\times10^{-173}$; the probability-error $p$ value underflows to zero at machine precision.
+for probability error reduction. The fresh TinyGMP-minus-Plain2-GMP bridge is $+0.16226$ (95\% CI $[+0.14970,+0.17481]$) for centered logits and $+0.88960$ (95\% CI $[+0.86212,+0.91707]$) for probability error reduction.
 
-The fresh bridge contrast in \cref{eq:architecture-bridge} also reproduces the historical TinyCNN-versus-TwoLayer-form difference. For
-\begin{equation}
-\label{eq:architecture-bridge}
-B_{\texttt{tiny\_gmp}}-B_{\texttt{plain2\_w16\_gmp}}.
-\end{equation}
-The mean difference is $+0.16226$ (95\% CI $[+0.14970,+0.17481]$) for centered-logit fidelity and $+0.88960$ (95\% CI $[+0.86212,+0.91707]$) for probability error reduction.
+The pattern in panel~(b) of \cref{fig:main-results} is not a single monotone effect of depth or pooling. Under GMP, most of the Tiny-to-plain shift occurs when the first downstream convolution is added; adding further plain depth changes little. Under GAP, the depth pattern differs. GAP-versus-GMP contrasts are large but reverse direction across backbones. Residual-versus-plain depth-4 contrasts are comparatively small, while BatchNorm effects depend on depth, pooling, and metric. The defensible conclusion is therefore architecture dependence, not a universal law about any single architectural component.
 
-Panel~(b) of \cref{fig:main-results} shows all 16 primary-task architecture means and intervals. The heterogeneity is visually substantial under both primary metrics, but the pattern is not a single monotone depth or pooling effect. TinyCNN has a much larger positive probability-error $B$ under GMP than GAP, whereas most multi-layer plain and residual backbones show the opposite GAP-minus-GMP direction. The complete numerical architecture table is retained in \Cref{tab:app-architecture-estimates}.
+A frozen post hoc diagnostic analysis addresses two reviewer-sensitive alternatives. First, the architecture omnibus survives Greenhouse--Geisser correction, 100,000 within-block permutations, and Friedman rank tests; the Holm-adjusted permutation $p$ value is $2.0\times10^{-5}$ for both primary metrics. Second, architecture heterogeneity remains when $B$ is computed from the mean over eight random channel orders, again with Holm permutation $p=2.0\times10^{-5}$ for both metrics. The architecture result is therefore not solely produced by the validation-derived channel ranking. Ranking still matters quantitatively: selected-versus-random architecture-mean Spearman correlation is $0.256$ for centered logits and $0.724$ for probability error reduction (\Cref{app:architecture-posthoc}).
 
-The prespecified factor contrasts sharpen this result. Under GMP, moving from TinyCNN to the two-layer plain form changes $B$ by $-0.16226$ for centered logits and $-0.88960$ for probability error reduction. Adding further plain depth from two to four layers under GMP is approximately null for both metrics. Thus, in this controlled family, the first downstream convolution accounts for nearly all of the Tiny-to-plain depth shift under GMP. Under GAP, depth behaves differently: the two-layer-minus-Tiny contrast is near zero for centered-logit fidelity but positive for probability error reduction, while four-minus-two layers is negative under both metrics.
+\subsection{The original two-dimensional template structure has a conditional functional effect}\label{sec:anchor-specificity}
 
-Pooling itself is a strong modifier but has no architecture-independent direction. All eight prespecified GAP-minus-GMP contrasts are Holm-significant for both primary metrics. For probability error reduction, GAP-minus-GMP ranges from $-0.7372$ in TinyCNN and $-0.0517$ in the depth-2 BatchNorm model to $+0.3929$ in plain depth-2 width-16 and $+0.3268$ in plain depth-2 width-64. Width produces smaller, metric-dependent changes. Residual-versus-plain depth-4 contrasts include zero under both pooling choices and both primary metrics after the frozen family correction. BatchNorm can produce large changes, especially under GAP, but the direction depends on depth and metric.
+The strongest remaining alternative after the architecture study was that retention/release effects might arise for any anchor, with the edge/corner/ring structure playing no special role. The fresh matched-anchor experiment addresses this directly. Its primary control applies the same random permutation of spatial coordinates to every template, preserving the full Gram matrix, numerical rank, singular spectrum, row norms, and row coefficient multisets while destroying the original two-dimensional arrangement.
 
-These results do not identify one architectural mechanism. They establish a narrower point: the relative patching signature of the same first-layer training intervention is strongly conditioned by the downstream computation.
+Averaged over the four diagnostic architectures on \texttt{two\_concepts}, selected-channel centered-logit $B$ differs between structured and pixel-permuted anchors by $+0.05743$ (95\% CI $[+0.05116,+0.06369]$, Holm sign-flip $p=2.0\times10^{-5}$). The 90\% interval $[+0.05219,+0.06266]$ lies entirely outside the frozen equivalence margin $\pm0.01704$, so this effect is both statistically distinguishable from zero and not practically equivalent under the prespecified rule.
 
-\subsection{Secondary robustness and implementation checks}\label{sec:secondary}
+For probability error reduction, the mean difference is $+0.04563$ (95\% CI $[+0.03728,+0.05397]$, Holm sign-flip $p=2.0\times10^{-5}$). Here the 90\% interval $[+0.03864,+0.05261]$ lies inside the wider frozen equivalence margin $\pm0.06594$; the difference is therefore precisely nonzero but practically equivalent by the prespecified smallest effect size of interest. Both statements are required for an accurate summary.
 
-The larger schedule/task sensitivity map gives the same broad warning before the prospective architecture experiment: under the historical contrast ranking, the default annealing schedule produces positive $B$ for TinyCNN on both tasks, while TwoLayerCNN is near zero or negative depending on task and metric. Five alternative regularization schedules preserve the positive TinyCNN probability-fidelity contrast, but these schedules vary both timing and duration and are not interpreted as a dose-response law.
+The average also hides a strong architecture interaction. The structured-minus-pixel-permuted selected-channel effect is positive for \texttt{tiny\_gmp}, \texttt{tiny\_gap}, and \texttt{plain2\_w16\_gap}, but negative for \texttt{plain2\_w16\_gmp} under both primary metrics. The interaction has partial $\eta^2=0.481$ for centered logits and $0.614$ for probability error reduction, with Holm permutation $p=2.0\times10^{-5}$ for both. Panel~(a) of \cref{fig:anchor-specificity} shows the sign reversal directly.
 
-The independent checkpoint audit recomputes central developmental-run metrics at 32 fixed checkpoints without reading the stored scalar outputs first. All values fall within prespecified tolerances; the maximum discrepancy for selected-channel fidelity is $2.39\times10^{-7}$, and full-patch/no-op identity errors are zero. The architecture robustness experiment likewise has maximum full-patch and no-op logit identity errors of zero.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig07_anchor_specificity.pdf}
+\caption{Fresh matched-anchor specificity experiment. \textbf{(a)} Architecture-specific selected-channel difference in $B$ between the original structured bank and its common pixel-permuted control on \texttt{two\_concepts}. The spatial effect reverses sign in \texttt{plain2\_w16\_gmp}. Bars are paired 95\% $t$ intervals over 100 fresh renderer blocks. \textbf{(b)} Architecture-averaged structured-minus-pixel-permuted effects for validation-selected and random channel sets. Bars are 90\% intervals used by the frozen TOST procedure; shaded regions denote the prespecified equivalence margins. Selected-channel centered-logit specificity is not equivalent, whereas the probability-error average and both random-channel effects are practically equivalent under their frozen margins.}
+\label{fig:anchor-specificity}
+\end{figure}
+
+The random-channel diagnostic constrains the interpretation further. Averaged across architectures, structured-minus-pixel-permuted random-channel $B$ is only $+0.00571$ for centered logits and $+0.02007$ for probability error reduction. Both are statistically distinguishable from zero but practically equivalent under the same frozen margins. The spatial-prior effect is therefore much more concentrated in the validation-selected channel analysis than in arbitrary same-size channel subsets.
+
+Finally, the secondary anchor controls argue against numerical rank as the main explanation. On the primary task, pixel-permuted and generic random rank-10 anchors are generally similar, and random rank-10 versus random full-rank differences are generally small after the frozen family corrections. The original two-dimensional organization is the anchor property most clearly isolated by the selected-channel result, but its sign and practical magnitude remain architecture- and metric-dependent.
+
+\subsection{Integrity and secondary evidence}\label{sec:secondary}
+
+The fresh anchor experiment completes all 25,600 planned training jobs and evaluations. Maximum full-patch and no-op logit identity errors are zero, and the maximum structured-versus-pixel-permuted Gram-matrix discrepancy is $6.66\times10^{-16}$. The earlier independent checkpoint audit also reproduces central developmental metrics at 32 fixed checkpoints within prespecified numerical tolerances. Secondary schedule, task, ranking, and energy-matched analyses are reported in the appendix; they motivate and delimit the main estimands but are not treated as independent repetitions of the fresh-sample tests.
 
 \section{Discussion}\label{sec:discussion}
 
-The experiments separate two ideas that are easy to conflate. Constant regularization clearly preserves template-like first-layer weights. Yet the functional comparison between constant and annealed regularization is not a fixed property of those weights: it changes with the number of patched channels and with the downstream architecture through which the same first-layer intervention propagates.
+The results separate weight-space structure from intervention-based function in a way that neither literature alone makes explicit. Work on predefined, fixed, and Gabor-based filters shows that spatial structure can be useful, robust, or even unnecessary for predictive performance depending on how later layers recombine it \citep{linse_2024_predefined-filters,gaudio_2023_fixed-filters,gavrikov_2023_random-convolutions,molaei_2020_gabor-filter-structure}. Our retention condition confirms that such structure can be maintained almost exactly. But high structural similarity does not determine a unique patching signature. The same first-layer retention/release comparison changes with channel budget, and the same first-layer intervention propagates differently through different downstream architectures.
 
-The metric analysis matters for interpretation. The original probability fidelity is normalized by each model's own base-to-counterfactual output change, and that scale differs strongly between treatments. Reporting only the normalized metric would therefore leave open whether the treatment comparison is primarily a reconstruction effect or a normalization effect. The positive TinyCNN $B$ under centered logits and under unnormalized probability error reduction narrows that concern. At the same time, the large architecture-specific differences in output scale mean that absolute $R_{\mathrm{prob}}$ magnitudes should not be compared as though they were architecture-invariant units. Agreement of the two primary metrics on the architecture omnibus and the fresh Tiny-versus-plain2 bridge is more informative than agreement on every secondary factor contrast.
+The matched-anchor experiment sharpens that conclusion. The original spatial arrangement is not merely decorative: under centered-logit fidelity, selected-channel $B$ differs clearly from a control that preserves the bank's complete non-spatial channel geometry. At the same time, this is not a universal template benefit. The effect reverses in one architecture, is practically small under the probability-error smallest effect size of interest when averaged across architectures, and is much smaller for random channel sets. The most defensible interpretation is therefore that designed spatial structure changes where the release-versus-retention functional difference concentrates, conditional on the downstream computation and on how channels are selected.
 
-The architecture robustness experiment also argues against a simple depth story. Under GMP, nearly the entire Tiny-to-plain shift appears after adding the first downstream convolution, with little additional change from two to four plain layers. Under GAP, the pattern differs. Pooling has large effects, but their direction reverses across backbones. Residual connectivity is comparatively unimportant in the tested matched comparison, while BatchNorm is strongly context dependent. These interactions are exactly why the result should be described as architecture dependence rather than as a universal effect of one component.
+This distinction parallels a broader lesson from concept-based and mechanistic interpretability. Alignment, decodability, and causal influence answer different questions \citep{margeloiu_2021_concept-bottleneck-alignment,nicolson_2025_explaining-explainability,sharma_2026_encoding-without-influence}. Likewise, activation patching is a family of interventions whose conclusions depend on intervention and evaluation choices \citep{heimersheim_2024_activation-patching,zhang_2024_activation-patching,miller_2024_circuit-faithfulness}. Our contribution is to show this conditionality in a controlled vision setting where the internal representation is deliberately structured and the input counterfactuals are exact. Channel budget, downstream architecture, output metric, spatial anchor structure, and ranking rule are not interchangeable implementation details; they define materially different measurements.
 
-The controlled renderer is a strength for this measurement question because the counterfactual intervention is exact and nuisance variables are matched. It is also a scope restriction. The result is evidence about the behavior of activation-patching comparisons in a controlled small-CNN family, not a claim that natural-image CNNs, larger vision models, or transformers will show the same architecture map.
+The practical implication is methodological rather than prescriptive. A patching result should be reported together with the number and type of components patched, the output metric, the architecture through which the intervention propagates, the channel-selection rule, and the source of replacement activations. Weight-space similarity should be reported separately from functional intervention effects. When a null comparison is scientifically meaningful, equivalence should be tested rather than inferred from nonsignificance. These practices do not make patching a complete mechanistic explanation, but they make the claim being tested substantially clearer.
 
 \section{Limitations}\label{sec:limitations}
 
 \begin{itemize}
-\item The experiments use two related synthetic tasks, one first-layer template bank, one optimizer family, and a controlled small-CNN architecture family. The architecture robustness experiment broadens the architecture test substantially but does not establish natural-image or large-model generalization.
-\item Activation patching replaces complete first-layer feature maps and may create activation combinations that are out of distribution for the trained model. The measurements characterize this intervention procedure; they do not identify a unique internal mechanism.
-\item The original probability metric has a model-specific normalization denominator that differs across training conditions. We address this directly with centered-logit and unnormalized probability metrics, but no single metric is treated as a privileged causal quantity.
-\item The prospective channel-count experiment was frozen in the repository before its fresh blocks were generated but was not externally preregistered. The metric audit was designed after the original probability-space results were known, although the alternative metrics were frozen before their outputs were computed. The architecture robustness experiment was prospectively frozen before any architecture-study outcome was inspected.
-\item The architecture robustness experiment contains four initialization replicates per renderer block, but these are averaged before inference. The inferential sample size is 100 fresh renderer blocks per primary architecture comparison, not 400 seeds or 25,600 trained models.
-\item The architecture factor contrasts are controlled comparisons within the specified family. Because architecture components interact, they should not be extrapolated as universal causal laws about depth, pooling, normalization, width, or residual connections.
-\item Validation data are reused for channel ranking and several secondary diagnostics. Test-set patching remains held out from ranking, but the secondary diagnostics are not independent pieces of evidence.
-\item Filter-template similarity is a weight-space score based on centered signed cosine. Even with one-to-one matching, it does not show that filters have unique semantic meanings or that humans find them interpretable.
+\item The experiments use two related synthetic image tasks, one family of first-layer spatial templates, and small CNNs. Exact counterfactual control is a strength for measurement, but the results do not establish natural-image, large-CNN, vision-transformer, or language-model generalization.
+\item Patching replaces complete post-ReLU feature maps with activations from an in-distribution matched counterfactual. The source activations are therefore not generated by artificial input corruption, but the hybrid activation state can still be off-manifold for the trained model.
+\item The validation ranking uses global-max first-layer activation for every architecture, including GAP variants. This keeps ranking fixed while architecture changes, but it may favor some representations. Random-channel diagnostics show that architecture dependence survives without that ranking, while the fresh specificity experiment shows that the structure-specific effect is much smaller for random channels.
+\item The historical normalized probability score has a model-specific denominator that differs across treatments. Later analyses therefore use centered-logit and unnormalized probability metrics. Agreement is strongest at the level of the prespecified $B$ contrast and architecture omnibus; detailed pointwise curves and practical-effect conclusions can differ across metrics.
+\item The anchor-specificity probability-error difference is statistically nonzero but practically equivalent under the frozen margin. It should not be described as a practically important average effect merely because its $p$ value is small.
+\item The architecture-factor decompositions and the later Greenhouse--Geisser, Friedman, structural-versus-functional, and random-channel diagnostics are controlled or frozen analyses but some are post hoc with respect to the original architecture outcomes. They delimit the result; they do not provide independent prospective confirmation.
+\item Filter-template similarity is a geometric weight-space score. Neither that score nor the visual appearance of filters establishes human interpretability, semantic purity, a unique mechanism, or an identifiable causal abstraction \citep{meloux_2025_mechanistic-identifiability,sutter_2025_causal-abstraction-limits}.
 \end{itemize}
 
 \section{Conclusion}\label{sec:conclusion}
 
-A structured first-layer prior can strongly preserve predefined filter structure without producing a stable, architecture-independent activation-patching signature. In a prespecified fresh-block TinyCNN test, the release-versus-retention comparison changes sharply between small and larger first-layer channel sets. That channel-count contrast remains under centered-logit fidelity and an unnormalized probability reconstruction-error reduction, despite treatment-dependent normalization scale in the original metric. A separate prospectively frozen study across 16 CNN variants shows that architecture strongly conditions the contrast and prospectively reproduces the earlier TinyCNN-versus-TwoLayer-form difference. Pooling and the first downstream convolution are major modifiers, but their effects interact with the broader architecture and metric. These results support treating intervention size, output metric, and downstream architecture as explicit dimensions of an activation-patching analysis rather than hidden implementation choices, and treating template similarity as a structural measurement distinct from functional intervention behavior.
+Preserving a predefined first-layer spatial basis does not yield a single activation-patching signature. In controlled CNNs with exact matched counterfactuals, the release-versus-retention comparison changes with the number of patched channels and varies strongly across downstream architectures. Those conclusions survive alternative output metrics and sphericity-robust, permutation-based, and random-channel diagnostics. A fresh matched-anchor experiment further shows that the original two-dimensional edge/corner/ring arrangement itself changes selected-channel patch-budget behavior beyond the bank's Gram matrix, rank, and singular spectrum---but the effect is architecture-dependent, metric-dependent, and much smaller for random channel sets. Structural retention, selected-channel functional concentration, and intervention-based measurement should therefore be treated as distinct empirical quantities.
 
 \section{Data and code availability}\label{sec:availability}
 
-The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, training and evaluation code, frozen protocols, run manifests, complete paper-facing result tables, analysis scripts, and independent checkpoint-audit materials. Raw large architecture-study checkpoints and per-model evaluator outputs are retained outside the manuscript-facing repository archive, while all aggregate results required for the reported analyses are versioned. For anonymous review, the manuscript does not link the current working repository because it identifies the authors. An anonymized archival artifact and DOI will be prepared if required by the venue.
+The experiments use procedurally rendered synthetic images. The research artifact contains the renderer, model and anchor definitions, training and evaluation code, frozen protocols, execution manifests, complete paper-facing result tables, analysis scripts, matched-anchor integrity checks, and the independent checkpoint audit. Large raw checkpoints and per-model evaluator outputs are retained outside the manuscript-facing archive, while all aggregate data needed to reproduce the reported paper statistics and figures are versioned. For anonymous review, the manuscript does not link the current working repository because it identifies the authors. An anonymized archival artifact and DOI will be prepared if required by the venue.
 
 \bibliography{../literature/references.bib}
 
 \clearpage
 \appendix
-\noindent\textbf{Appendix organization.} \Cref{app:final-robustness} gives the full metric and architecture robustness summaries used by the revised manuscript. \Cref{app:confirmation} reports the complete prospective channel-count and schedule/task sensitivity analyses. \Cref{app:historical} preserves the developmental analyses that motivated the prospective estimand. \Cref{app:kernel-matching} reports the complete filter-matching table.
+\noindent\textbf{Appendix organization.} \Cref{app:specificity} reports the fresh matched-anchor specificity experiment and the post hoc architecture diagnostics. \Cref{app:final-robustness} gives the complete metric- and architecture-robustness summaries. \Cref{app:confirmation} reports the prospective channel-budget and schedule/task sensitivity analyses. \Cref{app:historical} preserves the developmental analyses that motivated the prospective estimand. \Cref{app:kernel-matching} reports the complete filter-matching table.
 
+\input{specificity_robustness_results.tex}
+\clearpage
 \input{final_robustness_results.tex}
 \clearpage
 \input{confirmation_robustness_results.tex}
