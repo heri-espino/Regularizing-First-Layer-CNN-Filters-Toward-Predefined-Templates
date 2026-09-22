@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-011_anchor-specificity-results.md`
+`CP-012_final-manuscript-rewrite.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
