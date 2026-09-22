@@ -255,75 +255,71 @@ The main visual narrative is now:
 
 `paper/build.py` regenerates both manuscript-generated figures deterministically on each build.
 
-## Pre-submission strengthening now in progress
+## Final strengthening complete
 
-The current manuscript is **not considered submission-ready** after a strict referee pass.
+Both final strengthening workflows are complete.
 
-Two frozen workflows were added on 2026-09-20:
+Fresh anchor-specificity:
+- analysis: `analysis/anchor_specificity_001/`;
+- checkpoint: `checkpoints/CP-011_anchor-specificity-results.md`;
+- 25,600 / 25,600 models and evaluations complete;
+- primary selected-channel structured-minus-pixel-permuted centered-logit B difference +0.057426, not equivalent under the frozen margin;
+- probability-error difference +0.045628, statistically nonzero but practically equivalent under the frozen margin;
+- strong spatial-structure x architecture interaction;
+- sign reversal in `plain2_w16_gmp`;
+- random-channel spatial specificity much smaller and practically equivalent under both primary margins.
 
-1. `studies/cnn_anchor_specificity/` — fresh 25,600-model experiment on blocks 7000--7099 testing structured templates against an exactly Gram/rank/spectrum-matched pixel-permuted bank plus random rank-10 and full-rank banks. This is the decisive test of whether the phenomenon is template-specific or generic to anchor retention/release.
-2. `studies/cnn_architecture_posthoc/` — outcome-informed reanalysis of the completed architecture study using Greenhouse--Geisser correction, within-block permutation tests, Friedman tests, random-channel B, and structural-versus-functional alignment/B diagnostics. No retraining.
+Post hoc architecture diagnostics:
+- analysis: `analysis/architecture_posthoc_diagnostics_001/`;
+- checkpoint: `checkpoints/CP-010_architecture-posthoc-results.md`;
+- architecture heterogeneity survives Greenhouse--Geisser, within-block permutation, Friedman, and random-channel analyses;
+- these diagnostics remain explicitly post hoc.
 
-Do not rewrite the final abstract/title around anchor specificity until the fresh experiment finishes. Do not call the post hoc diagnostics prospective.
+## Current manuscript state
 
-Do not add a public/natural-image dataset yet. Reassess external validation only after anchor-specificity determines the paper's final scientific identity.
+The manuscript was rewritten from scratch after the final results and after reviewing all 43 files in `literature/extracted/`.
 
+Current title:
 
-## Current next experiment: anchor specificity
+> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
 
-The final fresh-sample strengthening experiment is frozen under `studies/cnn_anchor_specificity/PROTOCOL.md`.
+Current source:
+- `paper/main.tex`
+- checkpoint: `checkpoints/CP-012_final-manuscript-rewrite.md`
 
-Design:
+Paper-facing conventions:
+- no internal Stage A--G names;
+- `cleveref` for cross-references;
+- every displayed equation numbered and labeled;
+- no main-text result tables;
+- four principal figures, including the matched-anchor specificity figure;
+- approximately 4,600 main-text words before appendices;
+- full numerical detail in appendices.
 
-- blocks 7000--7099;
-- 4 init/anchor replicates;
-- tasks: single_shape, two_concepts;
-- architectures: tiny_gmp, tiny_gap, plain2_w16_gmp, plain2_w16_gap;
-- treatments: retention_1, release_default;
-- anchors: structured_template, pixel_permuted_template, random_rank10, random_fullrank;
-- total: 25,600 models;
-- primary metrics: centered-logit fidelity and probability error reduction;
-- primary specificity contrast: structured minus pixel-permuted, averaged over the four diagnostic architectures;
-- companion TOST equivalence margins frozen before the full run;
-- selected-channel and random-channel versions are both evaluated.
+Build:
+- `paper/build.py` regenerates the overview, central robustness, and matched-anchor specificity figures;
+- GitHub Actions compiles the full manuscript successfully;
+- final LaTeX pass has no undefined citations/references or unstable labels;
+- remaining Underfull warnings are typographic only.
 
-The pixel-permuted control preserves the structured bank's complete Gram matrix, rank, singular spectrum, row norms, and row coefficient multisets while destroying the original 2D spatial arrangement.
+## Scientific identity
 
-Run only after pulling the latest `main`:
+Do not describe the paper as showing that structured filters are automatically interpretable or that templates universally increase patching effects.
 
-```powershell
-.\run\run_anchor_specificity.ps1 -Smoke
-.\run\run_anchor_specificity.ps1
-```
+The final scoped claim is:
 
-Do not inspect partial full-run scientific outcomes. Completed models/evaluations are persisted incrementally and skipped on relaunch.
+> in a controlled vision system with an explicitly structured first layer and exact matched counterfactuals, release-versus-retention activation-patching comparisons depend on channel budget and downstream architecture; the original 2D spatial organization contributes selectively to validation-selected channel behavior beyond matched bank geometry, but that contribution is architecture- and metric-dependent.
 
-In parallel or before the full run, run the outcome-informed existing-data diagnostics:
+Key constraints:
+- probability-error spatial specificity is statistically nonzero but practically equivalent under the frozen SESOI;
+- `plain2_w16_gmp` reverses the spatial-specificity sign;
+- random-channel spatial specificity is much smaller;
+- architecture heterogeneity survives random-channel analysis;
+- inferential n is renderer blocks, not model count;
+- no natural-image, transformer, human-interpretability, or unique-mechanism claims.
 
-```powershell
-.\run\run_architecture_posthoc.ps1
-```
+## Next task
 
-These diagnostics are explicitly post hoc and must never be described as prospective.
+Perform a strict referee pass on the rewritten manuscript.
 
-
-## Completed anchor-specificity result
-
-The 25,600-model fresh anchor-specificity experiment is complete and archived under `analysis/anchor_specificity_001/`.
-
-Primary selected-channel structured-minus-pixel-permuted result on `two_concepts`, n=100 renderer blocks:
-
-- centered-logit B difference +0.057426, 95% CI [+0.051165,+0.063686], Holm sign-flip p=2e-05; not equivalent under the frozen ±0.017040 margin;
-- probability-error B difference +0.045628, 95% CI [+0.037281,+0.053975], Holm sign-flip p=2e-05; practically equivalent under the frozen ±0.065936 margin.
-
-Architecture interaction is strong for both metrics. The structured-minus-pixel-permuted effect is negative in plain2_w16_gmp and positive in the other three diagnostic architectures.
-
-Random-channel structured-minus-pixel-permuted differences are much smaller and practically equivalent under both frozen margins.
-
-Interpretation: spatial template organization matters for selected-channel patch-budget behavior, but its magnitude and direction depend on downstream architecture and metric. Do not claim a universal positive template effect.
-
-Checkpoint: `checkpoints/CP-011_anchor-specificity-results.md`.
-
-The post hoc architecture diagnostics are also complete under `analysis/architecture_posthoc_diagnostics_001/` and show architecture dependence survives Greenhouse--Geisser correction, within-block permutation inference, Friedman tests, and random channel subsets.
-
-The next task is manuscript integration and another referee pass. Do not add another large experiment by default.
+Do not add another large experiment by default. Only add empirical work if the referee pass identifies a concrete unresolved threat that cannot be addressed by narrower claims, existing controls, or already archived analyses.
