@@ -1,12 +1,12 @@
 # Research status and scientific handoff
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
-This document is the durable scientific state of the project. A new researcher or AI agent should read this file, `.ai_handoff`, `paper/REVISION_PLAN.md`, and the frozen protocols before changing experiments or rewriting the manuscript.
+This document is the durable current scientific state of the project. The chronological research memory is now `checkpoints/`. A new researcher or AI agent must first read `checkpoints/README.md`, the latest `CP-XXX_*.md`, this file, `.ai_handoff`, and the active frozen protocols before changing experiments or rewriting the manuscript.
 
 ## 1. Project in one paragraph
 
-This project studies the gap between **weight-space structure** and **functional intervention measurements** in small CNNs whose first convolution is initialized from a bank of predefined spatial templates. The first-layer filters are either kept close to their initial templates with a constant L2 penalty or allowed to move away as that penalty is annealed to zero. Constant regularization reliably preserves template-like filters, but the release-versus-retention difference measured by first-layer activation patching changes with the number of patched channels. The effect is strong in TinyCNN under multiple metrics and substantially different in TwoLayerCNN. The current Stage F experiment prospectively tests whether this difference is systematically associated with downstream architectural factors while keeping the first-layer intervention space fixed.
+This project studies the gap between **weight-space structure** and **functional intervention measurements** in small CNNs whose first convolution is initialized from a bank of predefined spatial templates. The first-layer filters are either kept close to their initial templates with a constant L2 penalty or allowed to move away as that penalty is annealed to zero. Constant regularization reliably preserves template-like filters, but the release-versus-retention difference measured by first-layer activation patching changes with the number of patched channels. The effect is strong in TinyCNN under multiple metrics and is strongly conditioned by downstream architecture in the completed fresh-sample architecture study. The active final fresh-sample experiment now tests whether the phenomenon specifically depends on the designed spatial template arrangement or instead reflects anchor retention/release more generally.
 
 The intended contribution is **empirical and measurement-focused**. The paper does not claim that predefined templates automatically create human-interpretable concepts, that activation patching measures a unique causal quantity, or that the observed effect generalizes to natural images.
 
