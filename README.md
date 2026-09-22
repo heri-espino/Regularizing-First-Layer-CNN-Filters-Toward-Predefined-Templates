@@ -1,18 +1,17 @@
-# Template Priors in Small CNNs
+# Activation Patching with Structured First-Layer Priors
 
 Research artifact for:
 
-> **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**
+> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
 
-This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior**: persistent template retention strongly preserves template-like kernels, while the measured release-versus-retention effect changes with the number of patched channels and with architecture.
+This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on channel budget and downstream architecture. A fresh matched-anchor control further shows that the original 2D spatial prior contributes selectively to validation-selected channel behavior beyond matched bank geometry, with architecture- and metric-dependent effects.
 
 ## Start here
 
 - **Research checkpoint log / project memory:** [`checkpoints/README.md`](checkpoints/README.md)
-- **Latest checkpoint:** [`checkpoints/CP-009_checkpoint-system-adopted.md`](checkpoints/CP-009_checkpoint-system-adopted.md)
+- **Latest checkpoint:** [`checkpoints/CP-012_final-manuscript-rewrite.md`](checkpoints/CP-012_final-manuscript-rewrite.md)
 - **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
-- **Post-Stage-F manuscript revision plan:** [`paper/REVISION_PLAN.md`](paper/REVISION_PLAN.md)
-- **Paper:** [`paper/main.tex`](paper/main.tex)
+- **Final manuscript source:** [`paper/main.tex`](paper/main.tex)
 - **Build:** `python paper/build.py`
 - **Publication figures:** `python paper/build_figures.py`
 - **Prospective test (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
@@ -20,8 +19,10 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
 - **Completed metric-sensitivity analysis:** [`analysis/metric_sensitivity_001/REPORT.md`](analysis/metric_sensitivity_001/REPORT.md)
 - **Completed architecture robustness:** [`analysis/architecture_robustness_001/REPORT.md`](analysis/architecture_robustness_001/REPORT.md)
+- **Completed anchor-specificity results:** [`analysis/anchor_specificity_001/REPORT.md`](analysis/anchor_specificity_001/REPORT.md)
 - **Anchor-specificity protocol:** [`studies/cnn_anchor_specificity/PROTOCOL.md`](studies/cnn_anchor_specificity/PROTOCOL.md)
-- **Post hoc architecture diagnostics:** [`studies/cnn_architecture_posthoc/PROTOCOL.md`](studies/cnn_architecture_posthoc/PROTOCOL.md)
+- **Completed post hoc architecture diagnostics:** [`analysis/architecture_posthoc_diagnostics_001/REPORT.md`](analysis/architecture_posthoc_diagnostics_001/REPORT.md)
+- **Post hoc architecture protocol:** [`studies/cnn_architecture_posthoc/PROTOCOL.md`](studies/cnn_architecture_posthoc/PROTOCOL.md)
 - **Study map:** [`studies/README.md`](studies/README.md)
 - **Run helpers:** [`run/README.md`](run/README.md)
 - **Analysis map:** [`analysis/README.md`](analysis/README.md)
