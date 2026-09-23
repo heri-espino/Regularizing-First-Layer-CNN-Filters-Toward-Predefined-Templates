@@ -1,34 +1,20 @@
 name: paper-figures
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'paper/build_figures.py'
-      - 'paper/plot_style.py'
-      - 'pyproject.toml'
-      - '.github/workflows/paper_figures.yml'
-      - 'analysis/exhaustive_robustness_001/full_budget_curves.csv'
-      - 'analysis/kernel_similarity/results/per_checkpoint.csv'
-      - 'analysis/kernel_similarity/results/similarity_matrices.npz'
-      - 'results/retention_release_001/analysis/learning_curves.csv'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: paper-figures-main
+  group: paper-figures-manual
   cancel-in-progress: true
 
 jobs:
   refresh:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -96,20 +82,10 @@ jobs:
       - name: Upload visual-review artifact
         uses: actions/upload-artifact@v4
         with:
-          name: espino_2026_template-priors-publication-figures
+          name: tmlr-publication-figures-${{ github.sha }}
           path: |
-            paper/espino_2026_template-priors.pdf
+            paper/tmlr_submission.pdf
             paper/figures/*.pdf
             paper/build/main.log
+          retention-days: 30
           if-no-files-found: error
-      - name: Commit refreshed figures
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add paper/build_figures.py paper/main.tex paper/figures/*.pdf
-          if git diff --cached --quiet; then
-            echo 'Publication figures are already up to date.'
-          else
-            git commit -m 'style: refresh publication figures'
-            git push origin HEAD:main
-          fi
