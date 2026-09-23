@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-012_final-manuscript-rewrite.md`
+`CP-013_referee-driven-manuscript-revision.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
