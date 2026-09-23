@@ -9,7 +9,7 @@ This repository contains the manuscript, frozen experimental protocols, saved an
 ## Start here
 
 - **Research checkpoint log / project memory:** [`checkpoints/README.md`](checkpoints/README.md)
-- **Latest checkpoint:** [`checkpoints/CP-013_referee-driven-manuscript-revision.md`](checkpoints/CP-013_referee-driven-manuscript-revision.md)
+- **Latest checkpoint:** [`checkpoints/CP-014_submission-readiness.md)
 - **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
 - **Final manuscript source:** [`paper/main.tex`](paper/main.tex)
 - **Build:** `python paper/build.py`
