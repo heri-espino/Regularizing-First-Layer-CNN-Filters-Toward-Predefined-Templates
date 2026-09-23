@@ -184,40 +184,55 @@ def build_figure() -> Path:
     metric_rows = read_csv(METRIC_TABLE)
     arch_rows = read_csv(ARCH_TABLE)
 
-    fig = plt.figure(figsize=(7.15, 6.05))
+    # Dedicated header rows keep panel labels/titles out of the plotting axes.
+    # This avoids the previous negative-axis-coordinate text, which was clipped
+    # and visually misaligned after tight PDF bounding boxes were applied.
+    fig = plt.figure(figsize=(7.15, 5.55))
     outer = fig.add_gridspec(
-        2,
+        4,
         1,
-        height_ratios=[1.0, 2.15],
-        hspace=0.44,
-        left=0.075,
+        height_ratios=[0.12, 1.0, 0.12, 2.05],
+        hspace=0.16,
+        left=0.12,
         right=0.99,
-        top=0.96,
-        bottom=0.075,
+        top=0.985,
+        bottom=0.085,
     )
 
-    top = outer[0].subgridspec(1, 3, wspace=0.34)
+    header_a = fig.add_subplot(outer[0])
+    header_a.axis("off")
+    header_a.text(
+        0.0, 0.50, "a", fontweight="bold", fontsize=9.0,
+        ha="left", va="center", fontstretch="normal",
+    )
+    header_a.text(
+        0.035, 0.50, "Prospective channel-count pattern and metric robustness",
+        fontsize=8.1, ha="left", va="center", fontstretch="normal",
+    )
+
+    top = outer[1].subgridspec(1, 3, wspace=0.32)
     top_axes = []
     for i, (metric, label, color) in enumerate(TOP_METRICS):
         ax = fig.add_subplot(top[0, i])
         draw_top_metric(ax, prospective_rows(metric_rows, metric), label, color)
         top_axes.append(ax)
 
-    # Give normalized fidelities comparable visual headroom while retaining
-    # their actual numerical scales. The unnormalized metric keeps its own scale.
     top_axes[0].set_ylabel(r"Annealed $-$ constant, $\Delta^M(k)$")
     top_axes[1].set_ylabel("")
     top_axes[2].set_ylabel("")
-    top_axes[0].text(
-        -0.38, 1.13, "a", transform=top_axes[0].transAxes,
-        fontweight="bold", fontsize=9.0, va="top"
+
+    header_b = fig.add_subplot(outer[2])
+    header_b.axis("off")
+    header_b.text(
+        0.0, 0.50, "b", fontweight="bold", fontsize=9.0,
+        ha="left", va="center", fontstretch="normal",
     )
-    top_axes[0].text(
-        -0.25, 1.13, "Prospective channel-count pattern and metric robustness",
-        transform=top_axes[0].transAxes, fontsize=8.3, va="top"
+    header_b.text(
+        0.035, 0.50, "Architecture dependence on 100 fresh renderer blocks",
+        fontsize=8.1, ha="left", va="center", fontstretch="normal",
     )
 
-    bottom = outer[1].subgridspec(1, 2, width_ratios=[1.06, 0.94], wspace=0.16)
+    bottom = outer[3].subgridspec(1, 2, width_ratios=[1.08, 0.92], wspace=0.17)
     bottom_axes = []
     for i, (metric, label, color) in enumerate(ARCH_METRICS):
         ax = fig.add_subplot(bottom[0, i])
@@ -230,14 +245,9 @@ def build_figure() -> Path:
         )
         bottom_axes.append(ax)
 
-    bottom_axes[0].text(
-        -0.38, 1.065, "b", transform=bottom_axes[0].transAxes,
-        fontweight="bold", fontsize=9.0, va="top"
-    )
-    bottom_axes[0].text(
-        -0.25, 1.065, "Architecture dependence on 100 fresh renderer blocks",
-        transform=bottom_axes[0].transAxes, fontsize=8.3, va="top"
-    )
+    # Slightly smaller architecture labels keep the left column compact without
+    # shrinking the figure horizontally or stretching text.
+    bottom_axes[0].tick_params(axis="y", labelsize=5.9)
 
     return save_pdf(fig, OUT)
 
