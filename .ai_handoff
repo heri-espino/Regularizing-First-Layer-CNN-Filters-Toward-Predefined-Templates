@@ -345,3 +345,16 @@ Key changes now in `paper/main.tex`:
 Static source checks pass: no missing citations, unresolved cleveref references, duplicate labels, unlabeled displayed equations, raw ref commands, or visible Stage A--G names in the main manuscript.
 
 Next default action after build validation: one final readability/polish pass and anonymous-artifact preparation. Do not add another large experiment by default.
+
+
+## Final submission-readiness pass
+
+Checkpoint: `checkpoints/CP-014_submission-readiness.md`.
+
+The manuscript-facing build now uses `paper/tmlr_submission.pdf` rather than an author-identifying filename. Heavy paper compilation and publication-figure workflows are manual-only and no longer auto-commit generated outputs. `paper/SUBMISSION_CHECKLIST.md` records double-blind packaging constraints.
+
+Important: the working repository is not itself anonymous because citation/Zenodo/package/license metadata identify the author and some execution manifests preserve local paths. Do not upload the repository wholesale as supplementary material. Use a clean allowlist-based anonymous export.
+
+Fresh static checks after the final readability edits report no missing citations, unresolved cleveref refs, duplicate labels, unlabeled display equations, raw ref commands, unnumbered bracket displays, or prose sentences >=45 words under the audit heuristic.
+
+Before actual TMLR upload, manually run `paper-compile` once (or `python paper/build.py --clean`) and visually inspect `paper/tmlr_submission.pdf`.
