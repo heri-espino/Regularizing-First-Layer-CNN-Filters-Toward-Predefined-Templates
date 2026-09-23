@@ -7,7 +7,7 @@ These earlier analyses precede the pre-specified channel-count experiment report
 The initial 40-epoch analysis compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the outcomes were inspected and were Holm-adjusted as one family. Filter-template similarity and accuracy are also reported descriptively.
 
 \begin{table}[h]
-\caption{Complete early four-comparison family. The positive marginal interval in the first row does not survive Holm adjustment.}
+\caption{Early four-comparison analysis. The positive marginal interval in the first row does not survive Holm adjustment.}
 \label{tab:development-early}
 \centering
 \small
@@ -96,7 +96,7 @@ For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channel
 
 \subsection{Validation-energy-matched control}\label{app:development-energy}
 
-A later post-hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the pre-specified channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post-hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the \texttt{two\_concepts}/TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the pre-specified channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
 \subsection{Transition to the pre-specified channel-count experiment}\label{app:transition}
 
