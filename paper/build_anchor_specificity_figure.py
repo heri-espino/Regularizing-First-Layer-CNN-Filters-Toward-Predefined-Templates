@@ -85,7 +85,6 @@ def draw_architecture_panel(ax, rows: list[dict[str, str]], title: str, color: s
     ax.set_title(title, pad=3)
     ax.set_yticks(y)
     ax.set_yticklabels([ARCH_LABELS[a] for a in ARCH_ORDER] if show_labels else [])
-    ax.set_xlabel("Structured − pixel-permuted")
     ax.grid(axis="y", visible=False)
 
 
@@ -139,15 +138,15 @@ def build_figure() -> Path:
     # As in Figure 6, panel headings get dedicated rows.  This keeps panel
     # letters and long titles aligned to the same left edge and removes the
     # large vertical gaps caused by negative axes coordinates.
-    fig = plt.figure(figsize=(7.15, 3.75))
+    fig = plt.figure(figsize=(7.15, 4.15))
     outer = fig.add_gridspec(
-        4,
+        5,
         1,
-        height_ratios=[0.12, 1.18, 0.12, 0.82],
-        hspace=0.16,
+        height_ratios=[0.18, 1.18, 0.18, 0.22, 0.82],
+        hspace=0.20,
         left=0.13,
         right=0.99,
-        top=0.985,
+        top=0.975,
         bottom=0.12,
     )
 
@@ -176,7 +175,14 @@ def build_figure() -> Path:
         top_axes.append(ax)
     top_axes[0].tick_params(axis="y", labelsize=6.0)
 
-    header_b = fig.add_subplot(outer[2])
+    top_xlabel = fig.add_subplot(outer[2])
+    top_xlabel.axis("off")
+    top_xlabel.text(
+        0.5, 0.50, "Structured - pixel-permuted",
+        fontsize=8.0, ha="center", va="center",
+    )
+
+    header_b = fig.add_subplot(outer[3])
     header_b.axis("off")
     header_b.text(
         0.0, 0.50, "b", fontweight="bold", fontsize=9.0,
@@ -187,7 +193,7 @@ def build_figure() -> Path:
         fontsize=8.0, ha="left", va="center", fontstretch="normal",
     )
 
-    bottom = outer[3].subgridspec(1, 2, wspace=0.24)
+    bottom = outer[4].subgridspec(1, 2, wspace=0.24)
     for i, (metric, label, color) in enumerate(METRICS):
         ax = fig.add_subplot(bottom[0, i])
         draw_equivalence_panel(ax, primary, random_rows, metric, label, color)

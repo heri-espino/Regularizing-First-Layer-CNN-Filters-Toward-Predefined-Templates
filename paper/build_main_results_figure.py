@@ -136,7 +136,6 @@ def draw_top_metric(ax, rows, title: str, color: str) -> None:
     )
     ax.set_title(title, pad=3)
     ax.set_xticks([1, 2, 4, 8])
-    ax.set_xlabel(r"Patched channels, $k$")
     ax.grid(axis="x", visible=False)
 
 
@@ -187,15 +186,15 @@ def build_figure() -> Path:
     # Dedicated header rows keep panel labels/titles out of the plotting axes.
     # This avoids the previous negative-axis-coordinate text, which was clipped
     # and visually misaligned after tight PDF bounding boxes were applied.
-    fig = plt.figure(figsize=(7.15, 5.55))
+    fig = plt.figure(figsize=(7.15, 6.05))
     outer = fig.add_gridspec(
-        4,
+        5,
         1,
-        height_ratios=[0.12, 1.0, 0.12, 2.05],
-        hspace=0.16,
+        height_ratios=[0.18, 1.0, 0.18, 0.22, 2.05],
+        hspace=0.20,
         left=0.12,
         right=0.99,
-        top=0.985,
+        top=0.975,
         bottom=0.085,
     )
 
@@ -221,7 +220,14 @@ def build_figure() -> Path:
     top_axes[1].set_ylabel("")
     top_axes[2].set_ylabel("")
 
-    header_b = fig.add_subplot(outer[2])
+    top_xlabel = fig.add_subplot(outer[2])
+    top_xlabel.axis("off")
+    top_xlabel.text(
+        0.5, 0.50, r"Patched channels, $k$",
+        fontsize=8.0, ha="center", va="center",
+    )
+
+    header_b = fig.add_subplot(outer[3])
     header_b.axis("off")
     header_b.text(
         0.0, 0.50, "b", fontweight="bold", fontsize=9.0,
@@ -232,7 +238,7 @@ def build_figure() -> Path:
         fontsize=8.1, ha="left", va="center", fontstretch="normal",
     )
 
-    bottom = outer[3].subgridspec(1, 2, width_ratios=[1.08, 0.92], wspace=0.17)
+    bottom = outer[4].subgridspec(1, 2, width_ratios=[1.08, 0.92], wspace=0.17)
     bottom_axes = []
     for i, (metric, label, color) in enumerate(ARCH_METRICS):
         ax = fig.add_subplot(bottom[0, i])
