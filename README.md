@@ -38,7 +38,7 @@ python paper/build.py --clean
 This produces:
 
 ```text
-paper/espino_2026_template-priors.pdf
+paper/tmlr_submission.pdf
 ```
 
 The manuscript builder itself uses only the Python standard library. LaTeX intermediates and the generated PDF are not versioned.
@@ -153,29 +153,11 @@ Its protocol was frozen before any centered-logit or unnormalized-error outputs 
 
 Stage F targets that remaining architecture question with fresh blocks and multiple paired initialization replicates. The official run is a clean CUDA run under `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`. As of 2026-09-20, all 25,600 models and all frozen evaluations are complete; the Stage-F analysis is archived under `analysis/architecture_robustness_001/`. See `RESEARCH_STATUS.md` for the exact live state and resume command.
 
-## Final pre-submission experiment
+## Final pre-submission strengthening
 
-The active fresh-sample experiment tests whether the patch-budget phenomenon specifically depends on the designed edge/corner/ring spatial structure or instead reflects anchor retention/release more generally.
+The fresh matched-anchor specificity study and the post hoc architecture diagnostics are complete. The matched-anchor study compares the original structured bank with a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, plus generic random rank-10 and full-rank controls. Paper-facing results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
 
-It compares four frozen anchor families: the original structured bank, a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, a generic random rank-10 bank, and a generic full-rank bank. The full design contains 25,600 models on fresh blocks 7000--7099.
-
-On Windows:
-
-```powershell
-git pull --ff-only origin main
-.\run\run_anchor_specificity.ps1 -Smoke
-.\run\run_anchor_specificity.ps1
-```
-
-The experiment is incremental/resumable and writes outside the worktree under `%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001`.
-
-A separate existing-data diagnostic can be run without retraining:
-
-```powershell
-.\run\run_architecture_posthoc.ps1
-```
-
-Read the frozen protocols before interpreting either output.
+The current default task is manuscript polish and anonymous-artifact preparation, not further large-scale experimentation.
 
 ## Scope
 
