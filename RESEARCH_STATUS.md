@@ -206,12 +206,9 @@ Do not pool stages as if they were independent repetitions of one preregistered 
 
 ### Terminology
 
-In new prose, prefer:
+For all new paper-facing prose, `literature/TERMINOLOGY.md` is the terminology source of truth. Read it before introducing or revising recurring terms. It supersedes older wording preserved in historical stage descriptions, checkpoints, analysis folders, and frozen reports.
 
-- **prespecified prospective follow-up**
-- **prespecified prospective test**
-
-Avoid calling Stage D generically “confirmatory” in narrative prose. Historical directory names and frozen reports contain “confirmation” language and should remain unchanged as provenance.
+Use **pre-specified** consistently. Do not call Stage D generically “confirmatory” or describe any follow-up as preregistered unless the record supports that claim. Historical directory names and frozen reports remain unchanged as provenance.
 
 ## 6. What each stage taught us
 
@@ -772,13 +769,13 @@ Before the rewrite, the complete literature/extracted/ corpus was reviewed: **43
 
 Current title:
 
-> **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**
+> **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**
 
 The main manuscript is organized by scientific question rather than project chronology:
 
 1. predefined first-layer filters and the distinction between filter similarity and effects on model behavior;
-2. the pre-specified channel-count result;
-3. sensitivity of the channel-count contrast to the output metric;
+2. the pre-specified intervention-size result;
+3. sensitivity of the intervention-size contrast to the evaluation metric;
 4. differences across network architectures plus post-hoc statistical analyses;
 5. the pixel-permuted filter-bank control for the original 2D spatial arrangement.
 
@@ -790,7 +787,7 @@ Manuscript conventions:
 - four principal figures:
   1. renderer/template/patching overview;
   2. learned-kernel gallery;
-  3. number of patched channels + 16-architecture results;
+  3. intervention size + 16-architecture results;
   4. pixel-permuted filter-bank control;
 - complete numerical detail remains in appendices;
 - no main-text tables;
@@ -806,13 +803,13 @@ The final positioning connects three established literatures:
 
 1. predefined and structured filters: fixed/Gabor/predefined first layers can be useful and their structure can be maintained or degraded during training;
 2. alignment versus influence: concept alignment, decodability, and causal influence are distinct quantities;
-3. activation-patching measurement dependence: patch direction, granularity, input construction, ablation/replacement choice, and output metric condition the question being measured.
+3. activation-patching measurement dependence: patch direction, granularity, input construction, ablation/replacement choice, and evaluation metric condition the question being measured.
 
 Accordingly, do not claim that sensitivity of activation patching to methodology is itself novel.
 
 The narrower contribution is:
 
-> in controlled CNNs with exact matched counterfactuals, the patching-effect difference between release and retention depends on the number of patched channels and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for validation-selected channels beyond matched Gram-matrix, rank, and singular-spectrum properties.
+> in controlled CNNs with matched counterfactuals, the patching-effect difference between release and retention depends on intervention size and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for channels selected on the validation set beyond matched Gram-matrix, rank, and singular-spectrum properties.
 
 Use literature-standard terminology such as predefined filters, spatial filters, filter initialization, filter similarity, maintaining filter structure, filter kernels, activation patching, and counterfactual/interchange intervention.
 
@@ -822,14 +819,14 @@ Avoid stronger labels such as interpretable filters unless discussing prior work
 
 1. Constant regularization strongly preserves the predefined first-layer spatial structure.
 2. Filter similarity does not determine a unique patching effect.
-3. In the prospective TinyCNN test, release-versus-retention differences depend on the number of patched channels.
-4. The pre-specified contrast between $k=1,2$ and $k=4,8$ remains positive under centered-logit and unnormalized probability metrics, while values at individual channel counts differ.
-5. The channel-count contrast differs strongly across the 16 pre-specified network architectures.
+3. In the pre-specified TinyCNN test, release-versus-retention differences depend on intervention size.
+4. The pre-specified contrast between $k=1,2$ and $k=4,8$ remains positive under centered-logit and unnormalized probability evaluation metrics, while values at individual intervention sizes differ.
+5. The intervention-size contrast differs strongly across the 16 pre-specified network architectures.
 6. Differences across architectures remain after Greenhouse--Geisser correction, within-block permutation tests, Friedman tests, and random-channel analyses.
-7. The original 2D filter arrangement changes the centered-logit patching effect for validation-selected channels relative to a pixel-permuted control matched on Gram matrix, rank, and singular spectrum.
-8. The structured-minus-pixel-permuted effect depends on architecture and reverses sign in one tested architecture.
+7. The original 2D filter arrangement changes the centered-logit patching effect for channels selected on the validation set relative to a pixel-permuted control matched on Gram matrix, rank, and singular spectrum.
+8. The difference between the structured and pixel-permuted filter banks depends on architecture and reverses sign in one tested architecture.
 9. The selected-channel probability-error difference averaged across architectures differs from zero but falls within the pre-specified equivalence margin.
-10. The structured-minus-pixel-permuted effect is much smaller on average for random channel subsets, and both random-channel averages fall within the pre-specified equivalence margins.
+10. The difference between the structured and pixel-permuted filter banks is much smaller on average for random channel subsets, and both random-channel averages fall within the pre-specified equivalence margins.
 
 ## 15. Claims the paper must not make
 
@@ -869,13 +866,14 @@ Only consider additional empirical work if a final review identifies a concrete 
 2. latest checkpoints/CP-XXX_*.md
 3. RESEARCH_STATUS.md
 4. .ai_handoff
-5. paper/main.tex
-6. analysis/anchor_specificity_001/REPORT.md
-7. analysis/architecture_posthoc_diagnostics_001/REPORT.md
-8. analysis/architecture_robustness_001/REPORT.md
-9. analysis/metric_sensitivity_001/REPORT.md
-10. analysis/budget_confirmation_001/REPORT.md
-11. earlier developmental analyses only when provenance is needed.
+5. literature/TERMINOLOGY.md
+6. paper/main.tex
+7. analysis/anchor_specificity_001/REPORT.md
+8. analysis/architecture_posthoc_diagnostics_001/REPORT.md
+9. analysis/architecture_robustness_001/REPORT.md
+10. analysis/metric_sensitivity_001/REPORT.md
+11. analysis/budget_confirmation_001/REPORT.md
+12. earlier developmental analyses only when provenance is needed.
 
 ## 18. One-line handoff
 
