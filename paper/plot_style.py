@@ -6,8 +6,11 @@ This module affects presentation only. It does not recompute experimental outcom
 from __future__ import annotations
 
 from pathlib import Path
+import shutil
+import subprocess
 
 import matplotlib as mpl
+from matplotlib import font_manager
 import seaborn as sns
 
 # Color-blind-friendly palette; manuscript-facing regularization labels are defined below and reused across figures.
@@ -51,19 +54,50 @@ LINESTYLES = {
 }
 
 
+def _register_latin_modern() -> bool:
+    """Register the same OpenType text face that the TMLR style loads."""
+
+    kpsewhich = shutil.which("kpsewhich")
+    if kpsewhich is None:
+        return False
+    try:
+        result = subprocess.run(
+            [kpsewhich, "lmroman10-regular.otf"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return False
+
+    regular = Path(result.stdout.strip())
+    if not regular.is_file():
+        return False
+    for name in (
+        "lmroman10-regular.otf",
+        "lmroman10-bold.otf",
+        "lmroman10-italic.otf",
+        "lmroman10-bolditalic.otf",
+    ):
+        candidate = regular.with_name(name)
+        if candidate.is_file():
+            font_manager.fontManager.addfont(candidate)
+    return True
+
+
 def apply_paper_style() -> None:
     """Apply a restrained white-grid style compatible with the TMLR manuscript."""
 
+    latin_modern_available = _register_latin_modern()
     sns.set_theme(style="whitegrid", context="paper")
     mpl.rcParams.update(
         {
             "font.family": "serif",
-            "font.serif": [
-                "Latin Modern Roman",
-                "Computer Modern Roman",
-                "CMU Serif",
-                "DejaVu Serif",
-            ],
+            "font.serif": (
+                ["Latin Modern Roman", "DejaVu Serif"]
+                if latin_modern_available
+                else ["DejaVu Serif"]
+            ),
             "mathtext.fontset": "cm",
             "font.size": 8.0,
             "axes.titlesize": 8.5,
