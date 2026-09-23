@@ -323,3 +323,25 @@ Key constraints:
 Perform a strict referee pass on the rewritten manuscript.
 
 Do not add another large experiment by default. Only add empirical work if the referee pass identifies a concrete unresolved threat that cannot be addressed by narrower claims, existing controls, or already archived analyses.
+
+
+## Referee-driven manuscript revision complete
+
+The full rewritten manuscript received a fresh referee-style review. No fatal empirical gap was identified. The resulting manuscript revision is recorded in `checkpoints/CP-013_referee-driven-manuscript-revision.md`.
+
+Key changes now in `paper/main.tex`:
+
+- the experimental program is explicitly described as sequential and outcome-informed across follow-ups, not jointly preregistered;
+- two_concepts and the four matched-anchor diagnostic architectures are described as choices informed by earlier outcomes but frozen before their own fresh follow-up outcomes;
+- retention-versus-release is explicitly a complete training-regime contrast with downstream co-adaptation, not an isolated post-training manipulation of first-layer geometry;
+- all matched-anchor equivalence language is explicitly architecture-averaged and tied to a prespecified 20%-of-historical-scale margin;
+- the appendix reports that the observed probability-error 90% interval would require approximately a 16.0%-of-historical-scale symmetric margin for equivalence, making margin sensitivity visible;
+- random-channel spatial specificity is described as smaller on average but not absent, because architecture-dependent random-channel differences remain;
+- the validation ranking equation now defines the renderer concept/destination identity used for each directed counterfactual;
+- the main Methods now summarizes the 16-architecture grid;
+- the appendix now contains exact architecture definitions and parameter counts;
+- Bau et al. (2020) is cited as a direct visual-network intervention precedent.
+
+Static source checks pass: no missing citations, unresolved cleveref references, duplicate labels, unlabeled displayed equations, raw ref commands, or visible Stage A--G names in the main manuscript.
+
+Next default action after build validation: one final readability/polish pass and anonymous-artifact preparation. Do not add another large experiment by default.
