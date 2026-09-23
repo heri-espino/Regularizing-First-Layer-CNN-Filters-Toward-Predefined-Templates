@@ -1,15 +1,15 @@
 \section{Final metric and architecture robustness analyses}\label{app:final-robustness}
 
-This appendix gives the complete paper-facing summaries for the two robustness analyses added after the initial prospective/sensitivity manuscript: the frozen metric-sensitivity reanalysis and the prospectively frozen architecture study. Machine-readable block-level values, design manifests, integrity checks, and the full control diagnostics are versioned under \texttt{analysis/metric\_sensitivity\_001/} and \texttt{analysis/architecture\_robustness\_001/}. The main text reports only the estimates needed for the central argument.
+This appendix gives the complete paper-facing summaries for the two robustness analyses added after the initial study: the pre-specified metric-sensitivity reanalysis and the pre-specified architecture study. Machine-readable block-level values, design manifests, integrity checks, and the full control diagnostics are versioned under \texttt{analysis/metric\_sensitivity\_001/} and \texttt{analysis/architecture\_robustness\_001/}. The main text reports only the estimates needed for the central argument.
 
-\subsection{Frozen metric-sensitivity analysis}\label{app:metric-sensitivity}
+\subsection{Metric-sensitivity analysis}\label{app:metric-sensitivity}
 
-The metric-sensitivity analysis reuses saved checkpoints from the prospective channel-count and schedule/task sensitivity experiments. It was designed after the historical probability-fidelity results were known, so it is post hoc with respect to those original results; however, the alternative metric definitions and analysis plan were frozen before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
+The metric-sensitivity analysis reuses saved checkpoints from the pre-specified channel-count and schedule/task sensitivity experiments. It was designed after the original probability-fidelity results were known, so it is post-hoc with respect to those results; however, the alternative metric definitions and analysis plan were specified before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
 
-For the primary prospective \texttt{two\_concepts}/TinyCNN/activation-contrast setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative primary metrics.
+For the primary \texttt{two\_concepts}/TinyCNN setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative primary metrics.
 
 \begin{table}[h]
-\caption{Prospective TinyCNN pointwise treatment contrasts under the frozen alternative metrics.}
+\caption{TinyCNN pointwise release-minus-retention contrasts under the pre-specified alternative metrics.}
 \label{tab:app-metric-pointwise}
 \centering
 \small
@@ -32,12 +32,12 @@ Probability error reduction & 8 & +0.85004 & [+0.82915, +0.87093] \\
 
 The corresponding $B$ contrasts are $+0.178881$ (95\% CI $[+0.127268,+0.230494]$) for centered-logit fidelity and $+0.894411$ (95\% CI $[+0.786301,+1.002522]$) for probability error reduction. Holm-adjusted $p$ values for the two-metric family are $6.95\times10^{-7}$ and $8.59\times10^{-13}$, respectively.
 
-The release-minus-retention base-to-counterfactual error scales are themselves different. In TinyCNN the probability input-effect-scale contrast is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$), and the centered-logit input-effect-scale contrast is $+126.537$ (95\% CI $[+120.845,+132.229]$). In TwoLayerCNN the corresponding contrasts are $+0.062062$ and $+211.368$. Thus the historical normalized metric cannot be treated as though its denominator were constant across treatments.
+The release-minus-retention base-to-counterfactual error scales are themselves different. In TinyCNN the probability input-effect-scale contrast is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$), and the centered-logit input-effect-scale contrast is $+126.537$ (95\% CI $[+120.845,+132.229]$). In TwoLayerCNN the corresponding contrasts are $+0.062062$ and $+211.368$. Thus the original normalized metric cannot be treated as though its denominator were constant across treatments.
 
-The same frozen analysis applied to the schedule/task sensitivity experiment gives the default-release results in \Cref{tab:app-metric-sensitivity}.
+The same pre-specified analysis applied to the schedule/task sensitivity experiment gives the default-release results in \Cref{tab:app-metric-sensitivity}.
 
 \begin{table}[h]
-\caption{Schedule/task sensitivity default-release $B$ contrasts under the frozen alternative metrics. Values are release minus constant $\lambda=1$ under the original activation-contrast ranking.}
+\caption{Schedule/task sensitivity default-release $B$ contrasts under the pre-specified alternative metrics. Values are release minus constant $\lambda=1$ under the original activation-contrast ranking.}
 \label{tab:app-metric-sensitivity}
 \centering
 \small
@@ -53,14 +53,14 @@ two concepts & TwoLayerCNN & -0.01953 & -0.05497 \\
 \end{tabular}
 \end{table}
 
-The maximum absolute discrepancy between recomputed and stored historical probability fidelity is $1.24\times10^{-7}$. Maximum full-patch and no-op logit identity errors are zero.
+The maximum absolute discrepancy between recomputed and stored original probability fidelity is $1.24\times10^{-7}$. Maximum full-patch and no-op logit identity errors are zero.
 
 \subsection{Primary architecture robustness analyses}\label{app:architecture-primary}
 
-The architecture robustness experiment uses 100 fresh renderer blocks, four paired initialization replicates per block, 16 downstream architectures, two tasks, and the two central treatments. Initialization replicates are averaged before inference. The primary task is \texttt{two\_concepts}; the inferential unit is therefore the renderer block ($n=100$) for each architecture-level comparison.
+The architecture study uses 100 independent renderer blocks, four paired initialization replicates per block, 16 CNN architectures, two tasks, and the two central training conditions. Initialization replicates are averaged before inference. The primary task is \texttt{two\_concepts}; the independent unit for inference is therefore the renderer block ($n=100$) for each architecture-level comparison.
 
 \begin{table}[h]
-\caption{Frozen repeated-measures architecture omnibus tests on \texttt{two\_concepts}.}
+\caption{Repeated-measures architecture omnibus tests on \texttt{two\_concepts}.}
 \label{tab:app-architecture-omnibus}
 \centering
 \small
@@ -77,7 +77,7 @@ prob\_error\_reduction & 656.70 & 15, 1485 & 0.869 & 0 (machine precision) \\
 For probability error reduction, the computed upper-tail $p$ value is numerically zero at double precision; this is reported as a machine-precision underflow rather than a literal probability of zero.
 
 \begin{table}[h]
-\caption{Frozen fresh-sample architecture bridge contrast, \texttt{tiny\_gmp} minus \texttt{plain2\_w16\_gmp}.}
+\caption{TinyGMP-minus-Plain2-GMP architecture contrast, \texttt{tiny\_gmp} minus \texttt{plain2\_w16\_gmp}.}
 \label{tab:app-architecture-bridge}
 \centering
 \small
@@ -93,7 +93,7 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 
 \subsection{Architecture-specific estimates}\label{app:architecture-estimates}
 
-\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two frozen primary metrics.
+\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified primary metrics.
 
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -131,7 +131,7 @@ bn4\_w16\_gap & +0.1445 & [+0.1177, +0.1713] & +0.0757 & [+0.0532, +0.0983] \\
 
 \subsection{Prespecified architecture-factor contrasts}\label{app:architecture-factors}
 
-\Cref{tab:app-architecture-factors} gives all prespecified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as frozen in the architecture robustness protocol. The signs are alternative architecture minus reference architecture as named in each row.
+\Cref{tab:app-architecture-factors} gives all pre-specified factor contrasts on the primary \texttt{two\_concepts} task. Holm adjustment is applied within metric, task, and factor family exactly as specified in the architecture protocol. The signs are alternative architecture minus reference architecture as named in each row.
 
 \begin{landscape}
 {\scriptsize
@@ -175,7 +175,7 @@ batchnorm & depth4 GAP: BN - noBN & +0.1168 & $2.67\times10^{-11}$ & -0.0403 & 0
 }
 \end{landscape}
 
-The residual-versus-plain contrasts are the cleanest null factor family: all four primary-metric/pooling combinations have intervals spanning zero after the frozen family correction. Pooling, depth, width, and BatchNorm show multiple nonzero contrasts, but directions vary by backbone and metric. The data therefore support architecture dependence without supporting a single architecture-independent component effect.
+The residual-versus-plain contrasts are the cleanest null factor family: all four primary-metric/pooling combinations have intervals spanning zero after the pre-specified family correction. Pooling, depth, width, and BatchNorm show multiple nonzero contrasts, but directions vary by backbone and metric. The data therefore support architecture dependence without supporting a single architecture-independent component effect.
 
 \subsection{Secondary \texttt{single\_shape} architecture map}\label{app:architecture-single}
 
