@@ -13,3 +13,5 @@ The current TMLR manuscript uses the official `tmlr` bibliography style vendored
 Keys preserve the corpus naming convention so references remain stable across analyses. Some local files are preprints even when a later publication year appears in the filename; `references.bib` records the version selected for citation.
 
 For the literature-to-experiment rationale, see [`TECHNICAL_COMPARISON.md`](TECHNICAL_COMPARISON.md).
+
+For manuscript wording and canonical terminology, use [`TERMINOLOGY.md`](TERMINOLOGY.md) as the source of truth before coining or revising recurring terms.
