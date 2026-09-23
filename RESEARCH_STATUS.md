@@ -766,21 +766,21 @@ Therefore the architecture conclusion is not solely a consequence of the validat
 
 ## 12. Current manuscript state
 
-paper/main.tex was rewritten from scratch after the final fresh-sample results.
+paper/main.tex was rewritten from scratch after the final independent-block results.
 
 Before the rewrite, the complete literature/extracted/ corpus was reviewed: **43 extracted works** spanning predefined/fixed filters, early CNN filters, concept-based XAI, activation patching, circuit-faithfulness methodology, causal abstraction, and mechanistic-identifiability limitations.
 
 Current title:
 
-> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
+> **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**
 
 The main manuscript is organized by scientific question rather than project chronology:
 
-1. structured first-layer priors and the representation-versus-influence distinction;
-2. the prospective channel-budget result;
-3. metric robustness of the prespecified B estimand;
-4. prospective architecture heterogeneity plus post hoc robust inference;
-5. fresh matched-anchor spatial specificity.
+1. predefined first-layer filters and the distinction between filter similarity and effects on model behavior;
+2. the pre-specified channel-count result;
+3. sensitivity of the channel-count contrast to the output metric;
+4. differences across network architectures plus post-hoc statistical analyses;
+5. the pixel-permuted filter-bank control for the original 2D spatial arrangement.
 
 Manuscript conventions:
 
@@ -790,13 +790,13 @@ Manuscript conventions:
 - four principal figures:
   1. renderer/template/patching overview;
   2. learned-kernel gallery;
-  3. channel-budget + 16-architecture robustness;
-  4. matched-anchor spatial specificity;
+  3. number of patched channels + 16-architecture results;
+  4. pixel-permuted filter-bank control;
 - complete numerical detail remains in appendices;
 - no main-text tables;
 - approximately 4,600 main-text words before appendices.
 
-The paper now includes paper/specificity_robustness_results.tex for the fresh matched-anchor and post hoc architecture diagnostics.
+The paper now includes paper/specificity_robustness_results.tex for the pixel-permuted control and post-hoc architecture analyses.
 
 ## 13. Literature-grounded positioning
 
@@ -812,7 +812,7 @@ Accordingly, do not claim that sensitivity of activation patching to methodology
 
 The narrower contribution is:
 
-> in a controlled vision system with an explicitly structured first layer and exact matched counterfactuals, release-versus-retention patching comparisons depend on channel budget and downstream architecture; a fresh matched-anchor experiment further shows that the original 2D spatial organization contributes selectively to validation-selected channel behavior beyond Gram/rank/spectrum geometry.
+> in controlled CNNs with exact matched counterfactuals, the patching-effect difference between release and retention depends on the number of patched channels and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for validation-selected channels beyond matched Gram-matrix, rank, and singular-spectrum properties.
 
 Use literature-standard terminology such as predefined filters, spatial filters, filter initialization, filter similarity, maintaining filter structure, filter kernels, activation patching, and counterfactual/interchange intervention.
 
@@ -821,15 +821,15 @@ Avoid stronger labels such as interpretable filters unless discussing prior work
 ## 14. Claims the paper can support
 
 1. Constant regularization strongly preserves the predefined first-layer spatial structure.
-2. Structural similarity does not determine a unique activation-patching signature.
+2. Filter similarity does not determine a unique patching effect.
 3. In the prospective TinyCNN test, release-versus-retention differences depend on the number of patched channels.
-4. The prespecified small-versus-larger-channel contrast remains positive under centered-logit and unnormalized probability metrics, while detailed pointwise curves differ.
-5. Downstream architecture strongly conditions the channel-budget contrast in a prospectively frozen 16-architecture study.
-6. Architecture heterogeneity survives Greenhouse--Geisser, within-block permutation, Friedman, and random-channel diagnostics.
-7. The original 2D template arrangement produces a selected-channel centered-logit effect beyond an exactly Gram/rank/spectrum-matched pixel-permuted control.
-8. Spatial specificity is architecture-dependent and reverses sign in one tested architecture.
-9. The selected-channel probability-error average is statistically nonzero but practically equivalent under the frozen SESOI.
-10. Spatial specificity is much smaller for random channel subsets, and both random-channel averages are practically equivalent under the frozen margins.
+4. The pre-specified contrast between $k=1,2$ and $k=4,8$ remains positive under centered-logit and unnormalized probability metrics, while values at individual channel counts differ.
+5. The channel-count contrast differs strongly across the 16 pre-specified network architectures.
+6. Differences across architectures remain after Greenhouse--Geisser correction, within-block permutation tests, Friedman tests, and random-channel analyses.
+7. The original 2D filter arrangement changes the centered-logit patching effect for validation-selected channels relative to a pixel-permuted control matched on Gram matrix, rank, and singular spectrum.
+8. The structured-minus-pixel-permuted effect depends on architecture and reverses sign in one tested architecture.
+9. The selected-channel probability-error difference averaged across architectures differs from zero but falls within the pre-specified equivalence margin.
+10. The structured-minus-pixel-permuted effect is much smaller on average for random channel subsets, and both random-channel averages fall within the pre-specified equivalence margins.
 
 ## 15. Claims the paper must not make
 
@@ -840,7 +840,7 @@ Do not claim:
 - that template similarity causes the patching pattern;
 - that structured filters are automatically human-interpretable;
 - a universal positive effect of predefined templates;
-- that probability-error spatial specificity is practically important on average;
+- that the architecture-averaged probability-error difference between structured and pixel-permuted banks is practically important;
 - architecture-independent behavior;
 - natural-image, transformer, or large-model generalization;
 - that post hoc architecture diagnostics are prospective confirmation;
@@ -851,7 +851,7 @@ Do not claim:
 A fresh strict referee pass has been completed and its four substantive concerns have been incorporated into the manuscript:
 
 1. sequential/outcome-informed follow-up design is now explicit;
-2. matched-anchor equivalence is explicitly architecture-averaged and tied to a study-specific scale-relative margin;
+2. pixel-permuted-control equivalence is explicitly averaged across architectures and tied to a study-specific pre-specified margin;
 3. retention-versus-release is explicitly interpreted as a complete training-regime contrast with downstream co-adaptation;
 4. Methods now fully define the concept-specific ranking and architecture grid.
 
@@ -879,4 +879,4 @@ Only consider additional empirical work if a final review identifies a concrete 
 
 ## 18. One-line handoff
 
-**The fresh anchor-specificity and post hoc architecture-strengthening analyses are complete. The manuscript was rewritten from scratch after reviewing all 43 extracted literature sources and then revised after a fresh referee pass. Sequential design, architecture-averaged equivalence, the scale-relative SESOI, downstream co-adaptation, ranking definitions, and the exact architecture grid are now explicit. The next task is final readability/anonymization/submission polish, not another experiment by default.**
+**The pixel-permuted filter-bank control and post-hoc architecture analyses are complete. The manuscript was rewritten from scratch after reviewing all 43 extracted literature sources and then received repeated terminology and referee passes. Sequential study design, equivalence averaged across architectures, downstream co-adaptation, channel ranking, and the exact architecture grid are explicit. The next task is final readability/anonymization/submission polish, not another experiment by default.**
