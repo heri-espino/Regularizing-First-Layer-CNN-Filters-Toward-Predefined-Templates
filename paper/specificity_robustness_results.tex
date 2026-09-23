@@ -9,7 +9,7 @@ The experiment uses 100 independent renderer blocks, four initialization/filter-
 The primary comparison is the original structured edge/corner/ring bank against a bank formed by applying one common random permutation of the 81 spatial coordinates to every template row. This pixel-permuted control preserves, to numerical tolerance, every row norm, the complete $16\times16$ Gram matrix, numerical rank, singular spectrum, and row coefficient multisets while destroying the original 2D spatial arrangement.
 
 \begin{table}[h]
-\caption{Structured-minus-pixel-permuted difference in the selected-channel $B$ contrast, averaged across architectures on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two output metrics. Equivalence uses the pre-specified TOST margins and 90\% confidence intervals.}
+\caption{Difference in $B$ between the structured and pixel-permuted filter banks for channels selected on the validation set, averaged across architectures on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two evaluation metrics. Equivalence uses the pre-specified TOST margins and 90\% confidence intervals.}
 \label{tab:anchor-primary}
 \centering
 \footnotesize
@@ -24,14 +24,14 @@ Probability error reduction & +0.04563 & [0.03728, 0.05397] & $2.0\times10^{-5}$
 \end{tabular}
 \end{table}
 
-The equivalence margins were pre-specified before the new outcomes as 20\% of the mean absolute $B$ from the earlier architecture study for the same four architectures: $\delta_{\mathrm{clogit}}=0.01704$ and $\delta_{R_{\mathrm{prob}}}=0.06594$. These are study-specific equivalence margins rather than externally validated thresholds of scientific importance. For centered logits, the 90\% interval averaged across architectures is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the 90\% interval averaged across architectures is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus the probability-error difference averaged across architectures is statistically nonzero while falling inside the pre-specified equivalence region. The smallest symmetric margin that would contain its observed 90\% interval is approximately $0.05261$, about 16.0\% of the effect scale from the earlier architecture study used to define the pre-specified 20\% margin; this sensitivity is reported to make the role of the margin explicit.
+The equivalence margins were pre-specified before the new outcomes as 20\% of the mean absolute $B$ from the earlier architecture study for the same four architectures: $\delta_{\mathrm{clogit}}=0.01704$ and $\delta_{R_{\mathrm{prob}}}=0.06594$. These are study-specific equivalence margins rather than externally validated thresholds of scientific importance. For centered logits, the 90\% interval averaged across architectures is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the 90\% interval averaged across architectures is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus the probability-error difference averaged across architectures differs from zero while falling inside the pre-specified equivalence region. The smallest symmetric margin that would contain its observed 90\% interval is approximately $0.05261$, about 16.0\% of the effect scale from the earlier architecture study used to define the pre-specified 20\% margin; this sensitivity is reported to make the role of the margin explicit.
 
-\subsection{Architecture dependence of the spatial-arrangement effect}\label{app:anchor-architecture}
+\subsection{Architecture dependence of the effect of spatial arrangement}\label{app:anchor-architecture}
 
-The structured-minus-pixel-permuted effect varies strongly across the four pre-specified architectures.
+The difference between the structured and pixel-permuted filter banks varies strongly across the four pre-specified architectures.
 
 \begin{table}[h]
-\caption{Architecture-specific selected-channel structured-minus-pixel-permuted $B$ differences on \texttt{two\_concepts}. Intervals are paired 95\% $t$ intervals over 100 renderer blocks.}
+\caption{Difference in $B$ between the structured and pixel-permuted filter banks for channels selected on the validation set, shown separately for each architecture on \texttt{two\_concepts}. Intervals are paired 95\% $t$ intervals over 100 renderer blocks.}
 \label{tab:anchor-architectures}
 \centering
 \small
@@ -56,7 +56,7 @@ $F(3,297)=157.70$, partial $\eta^2=0.614$, Holm permutation $p=2.0\times10^{-5}$
 Repeating the primary comparison after averaging over eight random channel orders produces much smaller effects of the original spatial arrangement.
 
 \begin{table}[h]
-\caption{Structured-minus-pixel-permuted $B$ averaged across architectures for random channel sets on \texttt{two\_concepts}. Both effects are statistically distinguishable from zero and fall within the pre-specified equivalence margins.}
+\caption{Difference in $B$ between the structured and pixel-permuted filter banks for random channel sets, averaged across architectures on \texttt{two\_concepts}. Both confidence intervals exclude zero and fall within the pre-specified equivalence margins.}
 \label{tab:anchor-random}
 \centering
 \small
@@ -70,11 +70,11 @@ Probability error reduction & +0.02007 & [0.01722, 0.02291] \\
 \end{tabular}
 \end{table}
 
-The interaction between filter-bank type and architecture for random channels remains detectable but is smaller for centered logits: partial $\eta^2=0.0683$ with permutation $p=8.0\times10^{-5}$. For probability error reduction it remains substantial, partial $\eta^2=0.2910$ with permutation $p=1.0\times10^{-5}$. Thus small random-channel effects averaged across architectures coexist with architecture-dependent differences; the equivalence statements apply to the averages across architectures, not to every architecture separately. These are pre-specified secondary analyses.
+The interaction between filter-bank type and architecture for random channels remains detectable but is smaller for centered logits: partial $\eta^2=0.0683$ with permutation $p=8.0\times10^{-5}$. For probability error reduction it remains substantial, partial $\eta^2=0.2910$ with permutation $p=1.0\times10^{-5}$. Thus small effects for random channel sets, averaged across architectures, coexist with architecture-dependent differences; the equivalence statements apply to the averages across architectures, not to every architecture separately. These are pre-specified secondary analyses.
 
 Secondary filter-bank contrasts show that the pixel-permuted and generic random rank-10 banks are generally similar on the primary task, and that the random rank-10 and random full-rank banks are also generally similar after the pre-specified Holm corrections. The original 2D arrangement, rather than numerical rank alone, is therefore the filter-bank property most clearly distinguished by the selected-channel analysis.
 
-The full-patch and no-op checks give zero logit error, as required. The maximum structured-versus-pixel-permuted Gram-matrix discrepancy is $6.66\times10^{-16}$.
+The full-patch and no-op checks give zero logit error, as required. The maximum Gram-matrix discrepancy between the structured and pixel-permuted banks is $6.66\times10^{-16}$.
 
 \subsection{Post-hoc architecture analyses}\label{app:architecture-posthoc}
 
@@ -129,6 +129,6 @@ Probability error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79
 \end{tabular}
 \end{table}
 
-Differences across architectures also remain when $B$ is computed from the mean over eight random channel orders: Holm-adjusted permutation $p=2.0\times10^{-5}$ for both output metrics. The Spearman correlation across architecture means for selected versus random channels is $0.256$ for centered logits and $0.724$ for probability error reduction.
+Differences across architectures also remain when $B$ is computed from the mean over eight random channel orders: Holm-adjusted permutation $p=2.0\times10^{-5}$ for both evaluation metrics. The Spearman correlation across architecture means for selected versus random channels is $0.256$ for centered logits and $0.724$ for probability error reduction.
 
 For the TinyGMP-minus-Plain2-GMP contrast using random channel sets, the mean difference is $+0.002765$ (95\% CI $[+0.000014,+0.005515]$, Holm $p=0.0488$) for centered logits and $+0.319871$ (95\% CI $[+0.312788,+0.326953]$, Holm $p=2.76\times10^{-96}$) for probability error reduction. The architecture conclusion is therefore not solely a consequence of the selected-channel ranking, although the ranking changes effect magnitude and the ordering across architectures.
