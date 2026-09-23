@@ -100,10 +100,20 @@ def draw_equivalence_panel(ax, primary_rows, random_rows, metric: str, title: st
     highs = [float(p["equivalence_ci90_high"]), float(q["equivalence_ci90_high"])]
     y = np.array([1.0, 0.0])
 
-    ax.axvspan(-margin, margin, color="#E5E7EB", alpha=0.65, zorder=0)
+    # Light gray band = the pre-specified TOST equivalence region.  Label it
+    # directly so the background encoding is understandable without relying on
+    # the caption.
+    ax.axvspan(-margin, margin, color="#E5E7EB", alpha=0.55, zorder=0)
     ax.axvline(0.0, color="#555555", linewidth=0.7, zorder=1)
     ax.axvline(-margin, color="#9CA3AF", linewidth=0.6, linestyle="--", zorder=1)
     ax.axvline(+margin, color="#9CA3AF", linewidth=0.6, linestyle="--", zorder=1)
+    ax.text(
+        0.0, 0.96, "pre-specified\nequivalence region",
+        transform=ax.get_xaxis_transform(),
+        ha="center", va="top", fontsize=5.5, color="#6B7280",
+        bbox=dict(facecolor="white", edgecolor="none", alpha=0.82, pad=0.8),
+        zorder=4,
+    )
 
     xerr = np.vstack([np.array(means) - np.array(lows), np.array(highs) - np.array(means)])
     ax.errorbar(
@@ -126,13 +136,33 @@ def build_figure() -> Path:
     primary = read_csv(PRIMARY)
     random_rows = read_csv(RANDOM)
 
-    fig = plt.figure(figsize=(7.15, 4.15))
+    # As in Figure 6, panel headings get dedicated rows.  This keeps panel
+    # letters and long titles aligned to the same left edge and removes the
+    # large vertical gaps caused by negative axes coordinates.
+    fig = plt.figure(figsize=(7.15, 3.75))
     outer = fig.add_gridspec(
-        2, 1, height_ratios=[1.35, 1.0],
-        hspace=0.52, left=0.10, right=0.99, top=0.94, bottom=0.12
+        4,
+        1,
+        height_ratios=[0.12, 1.18, 0.12, 0.82],
+        hspace=0.16,
+        left=0.13,
+        right=0.99,
+        top=0.985,
+        bottom=0.12,
     )
 
-    top = outer[0].subgridspec(1, 2, wspace=0.20)
+    header_a = fig.add_subplot(outer[0])
+    header_a.axis("off")
+    header_a.text(
+        0.0, 0.50, "a", fontweight="bold", fontsize=9.0,
+        ha="left", va="center", fontstretch="normal",
+    )
+    header_a.text(
+        0.035, 0.50, "Spatial-structure effect reverses with downstream architecture",
+        fontsize=8.0, ha="left", va="center", fontstretch="normal",
+    )
+
+    top = outer[1].subgridspec(1, 2, wspace=0.20)
     top_axes = []
     for i, (metric, label, color) in enumerate(METRICS):
         ax = fig.add_subplot(top[0, i])
@@ -144,29 +174,23 @@ def build_figure() -> Path:
             show_labels=(i == 0),
         )
         top_axes.append(ax)
-    top_axes[0].text(
-        -0.27, 1.13, "a", transform=top_axes[0].transAxes,
-        fontweight="bold", fontsize=9.0, va="top"
+    top_axes[0].tick_params(axis="y", labelsize=6.0)
+
+    header_b = fig.add_subplot(outer[2])
+    header_b.axis("off")
+    header_b.text(
+        0.0, 0.50, "b", fontweight="bold", fontsize=9.0,
+        ha="left", va="center", fontstretch="normal",
     )
-    top_axes[0].text(
-        -0.16, 1.13, "Spatial-structure effect reverses with downstream architecture",
-        transform=top_axes[0].transAxes, fontsize=8.2, va="top"
+    header_b.text(
+        0.035, 0.50, "Selected-channel specificity versus random-channel specificity",
+        fontsize=8.0, ha="left", va="center", fontstretch="normal",
     )
 
-    bottom = outer[1].subgridspec(1, 2, wspace=0.24)
-    bottom_axes = []
+    bottom = outer[3].subgridspec(1, 2, wspace=0.24)
     for i, (metric, label, color) in enumerate(METRICS):
         ax = fig.add_subplot(bottom[0, i])
         draw_equivalence_panel(ax, primary, random_rows, metric, label, color)
-        bottom_axes.append(ax)
-    bottom_axes[0].text(
-        -0.27, 1.18, "b", transform=bottom_axes[0].transAxes,
-        fontweight="bold", fontsize=9.0, va="top"
-    )
-    bottom_axes[0].text(
-        -0.16, 1.18, "Selected-channel specificity is stronger than random-channel specificity",
-        transform=bottom_axes[0].transAxes, fontsize=8.2, va="top"
-    )
 
     return save_pdf(fig, OUT)
 
