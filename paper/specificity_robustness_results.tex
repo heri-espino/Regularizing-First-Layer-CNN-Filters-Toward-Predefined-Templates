@@ -9,7 +9,7 @@ The experiment uses 100 independent renderer blocks, four initialization/filter-
 The primary comparison is the original structured edge/corner/ring bank against a bank formed by applying one common random permutation of the 81 spatial coordinates to every template row. This pixel-permuted control preserves, to numerical tolerance, every row norm, the complete $16\times16$ Gram matrix, numerical rank, singular spectrum, and row coefficient multisets while destroying the original 2D spatial arrangement.
 
 \begin{table}[h]
-\caption{Primary selected-channel structured-minus-pixel-permuted channel-count contrast averaged across architectures on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics. Equivalence uses the pre-specified TOST margins and 90\% confidence intervals.}
+\caption{Structured-minus-pixel-permuted difference in the selected-channel $B$ contrast, averaged across architectures on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two output metrics. Equivalence uses the pre-specified TOST margins and 90\% confidence intervals.}
 \label{tab:anchor-primary}
 \centering
 \footnotesize
@@ -129,6 +129,6 @@ Probability error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79
 \end{tabular}
 \end{table}
 
-Differences across architectures also remain when $B$ is computed from the mean over eight random channel orders: Holm-adjusted permutation $p=2.0\times10^{-5}$ for both primary metrics. The Spearman correlation across architecture means for selected versus random channels is $0.256$ for centered logits and $0.724$ for probability error reduction.
+Differences across architectures also remain when $B$ is computed from the mean over eight random channel orders: Holm-adjusted permutation $p=2.0\times10^{-5}$ for both output metrics. The Spearman correlation across architecture means for selected versus random channels is $0.256$ for centered logits and $0.724$ for probability error reduction.
 
 For the TinyGMP-minus-Plain2-GMP contrast using random channel sets, the mean difference is $+0.002765$ (95\% CI $[+0.000014,+0.005515]$, Holm $p=0.0488$) for centered logits and $+0.319871$ (95\% CI $[+0.312788,+0.326953]$, Holm $p=2.76\times10^{-96}$) for probability error reduction. The architecture conclusion is therefore not solely a consequence of the selected-channel ranking, although the ranking changes effect magnitude and the ordering across architectures.
