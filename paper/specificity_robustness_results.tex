@@ -9,7 +9,7 @@ The fresh experiment uses 100 renderer blocks, four init/anchor replicates per b
 The primary comparison is the original structured edge/corner/ring bank against a bank formed by applying one common random permutation of the 81 spatial coordinates to every template row. This pixel-permuted control preserves, to numerical tolerance, every row norm, the complete $16\times16$ Gram matrix, numerical rank, singular spectrum, and row coefficient multisets while destroying the original 2D spatial arrangement.
 
 \begin{table}[h]
-\caption{Primary selected-channel structured-minus-pixel-permuted channel-count contrast on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics. Equivalence uses the frozen TOST margins and 90\% confidence intervals.}
+\caption{Primary architecture-averaged selected-channel structured-minus-pixel-permuted channel-count contrast on \texttt{two\_concepts}. Difference tests use 100,000 sign-flip permutations and Holm correction across the two primary metrics. Equivalence uses the frozen TOST margins and 90\% confidence intervals.}
 \label{tab:anchor-primary}
 \centering
 \footnotesize
@@ -24,7 +24,7 @@ Probability error reduction & +0.04563 & [0.03728, 0.05397] & $2.0\times10^{-5}$
 \end{tabular}
 \end{table}
 
-For centered logits, the 90\% interval is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the 90\% interval is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus a statistically nonzero probability-error difference is nevertheless practically equivalent under the prespecified smallest effect size of interest.
+The equivalence margins were frozen before the fresh outcomes as 20\% of the historical mean absolute $B$ across the same four diagnostic architecture forms: $\delta_{\mathrm{clogit}}=0.01704$ and $\delta_{R_{\mathrm{prob}}}=0.06594$. These are study-specific, scale-relative smallest-effect conventions rather than externally validated thresholds of scientific importance. For centered logits, the architecture-averaged 90\% interval is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the architecture-averaged 90\% interval is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus the architecture-averaged probability-error difference is statistically nonzero while falling inside the prespecified equivalence region. The smallest symmetric margin that would contain its observed 90\% interval is approximately $0.05261$, about 16.0\% of the historical scale used to define the frozen 20\% margin; this sensitivity is reported to make the role of the margin explicit.
 
 \subsection{Architecture dependence of spatial specificity}\label{app:anchor-architecture}
 
@@ -56,7 +56,7 @@ $F(3,297)=157.70$, partial $\eta^2=0.614$, Holm permutation $p=2.0\times10^{-5}$
 Repeating the primary comparison after averaging over eight random channel orders produces much smaller spatial-structure effects.
 
 \begin{table}[h]
-\caption{Architecture-averaged structured-minus-pixel-permuted $B$ for random channel sets on \texttt{two\_concepts}. Both effects are statistically distinguishable from zero but practically equivalent under the frozen margins.}
+\caption{Architecture-averaged structured-minus-pixel-permuted $B$ for random channel sets on \texttt{two\_concepts}. Both effects are statistically distinguishable from zero and fall within the frozen scale-relative equivalence margins.}
 \label{tab:anchor-random}
 \centering
 \small
@@ -70,13 +70,46 @@ Probability error reduction & +0.02007 & [0.01722, 0.02291] \\
 \end{tabular}
 \end{table}
 
-The random-channel spatial-structure interaction remains detectable but is smaller for centered logits: partial $\eta^2=0.0683$ with permutation $p=8.0\times10^{-5}$. For probability error reduction it remains substantial, partial $\eta^2=0.2910$ with permutation $p=1.0\times10^{-5}$. These are prespecified robustness diagnostics, not a second primary family.
+The random-channel spatial-structure interaction remains detectable but is smaller for centered logits: partial $\eta^2=0.0683$ with permutation $p=8.0\times10^{-5}$. For probability error reduction it remains substantial, partial $\eta^2=0.2910$ with permutation $p=1.0\times10^{-5}$. Thus small architecture-averaged random-channel effects coexist with architecture-dependent differences; the equivalence statements apply to the architecture averages, not to every architecture separately. These are prespecified robustness diagnostics, not a second primary family.
 
 Secondary anchor contrasts show that pixel-permuted and generic random rank-10 anchors are generally similar on the primary task, and that random rank-10 and random full-rank anchors are also generally similar after the frozen family corrections. The original 2D arrangement, rather than numerical rank alone, is therefore the anchor property most clearly distinguished by the selected-channel analysis.
 
 Integrity checks pass exactly for the intervention identities: maximum full-patch and no-op logit errors are zero. The maximum structured-versus-pixel-permuted Gram-matrix discrepancy is $6.66\times10^{-16}$.
 
 \subsection{Post hoc architecture robustness diagnostics}\label{app:architecture-posthoc}
+
+\paragraph{Exact architecture definitions.}
+All variants share the same patched $1\!\to\!16$, $9\times9$ first convolution and ReLU. Pooling is global max (GMP) or global average (GAP). Plain depth-2 networks add one $3\times3$ convolution; plain depth-4 networks add three. Width-64 variants expand the first downstream convolution to 64 channels and remain width 64 thereafter. Residual depth-4 variants keep width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm, when present, is downstream of the intervention tensor.
+
+\begin{table}[h]
+\caption{Exact architecture grid used in the prospectively frozen architecture study. Parameter counts include the classifier.}
+\label{tab:architecture-definitions}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrlr}
+\toprule
+Architecture & Conv depth & Width & Pool & BN & Connectivity & Parameters \\
+\midrule
+\texttt{tiny\_gmp} & 1 & 16 & GMP & no & none & 1,364 \\
+\texttt{tiny\_gap} & 1 & 16 & GAP & no & none & 1,364 \\
+\texttt{plain2\_w16\_gmp} & 2 & 16 & GMP & no & plain & 3,684 \\
+\texttt{plain2\_w16\_gap} & 2 & 16 & GAP & no & plain & 3,684 \\
+\texttt{plain4\_w16\_gmp} & 4 & 16 & GMP & no & plain & 8,324 \\
+\texttt{plain4\_w16\_gap} & 4 & 16 & GAP & no & plain & 8,324 \\
+\texttt{plain2\_w64\_gmp} & 2 & 64 & GMP & no & plain & 10,836 \\
+\texttt{plain2\_w64\_gap} & 2 & 64 & GAP & no & plain & 10,836 \\
+\texttt{plain4\_w64\_gmp} & 4 & 64 & GMP & no & plain & 84,692 \\
+\texttt{plain4\_w64\_gap} & 4 & 64 & GAP & no & plain & 84,692 \\
+\texttt{res4\_w16\_gmp} & 4 & 16 & GMP & no & residual & 8,324 \\
+\texttt{res4\_w16\_gap} & 4 & 16 & GAP & no & residual & 8,324 \\
+\texttt{bn2\_w16\_gmp} & 2 & 16 & GMP & yes & plain & 3,700 \\
+\texttt{bn2\_w16\_gap} & 2 & 16 & GAP & yes & plain & 3,700 \\
+\texttt{bn4\_w16\_gmp} & 4 & 16 & GMP & yes & plain & 8,372 \\
+\texttt{bn4\_w16\_gap} & 4 & 16 & GAP & yes & plain & 8,372 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The original 16-architecture result was prospectively frozen. After seeing that result, a separate frozen diagnostic analysis tested whether its omnibus conclusion depended on the uncorrected sphericity assumption or on the validation-derived channel ranking. These analyses are explicitly post hoc.
 
