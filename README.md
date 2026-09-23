@@ -100,9 +100,9 @@ The repository intentionally preserves the experimental record instead of flatte
 | D | Frozen prespecified prospective test | `studies/cnn_budget_confirmation/` |
 | E | Predeclared sensitivity study on 50 new blocks per setting | `studies/cnn_exhaustive_robustness/` |
 | Metric audit | Frozen post hoc metric-sensitivity analysis of saved Stage-D/E checkpoints; no retraining | `studies/cnn_metric_sensitivity/` |
-| F | Frozen fresh-sample architecture robustness study: 16 architectures, 100 renderer blocks, 4 paired initializations | `studies/cnn_architecture_robustness/` |
+| F | Pre-specified architecture study: 16 architectures, 100 independent renderer blocks, 4 paired initializations | `studies/cnn_architecture_robustness/` |
 | Architecture post hoc | Outcome-informed robust omnibus/random-channel/structure-function diagnostics; no retraining | `studies/cnn_architecture_posthoc/` |
-| G | Frozen fresh-sample anchor-specificity study: structured vs matched/random anchors | `studies/cnn_anchor_specificity/` |
+| G | Pixel-permuted filter-bank control: structured vs pixel-permuted/random filter banks | `studies/cnn_anchor_specificity/` |
 | Audit | Independent checkpoint reimplementation | `studies/cnn_checkpoint_audit/` |
 
 The Stage-D primary analysis used 20 previously unused `two_concepts` TinyCNN blocks. The predeclared contrast was
@@ -155,7 +155,7 @@ Stage F targets that remaining architecture question with fresh blocks and multi
 
 ## Final pre-submission strengthening
 
-The pixel-permuted control specificity study and the post hoc architecture diagnostics are complete. The matched-anchor study compares the original structured bank with a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, plus generic random rank-10 and full-rank controls. Paper-facing results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
+The pixel-permuted filter-bank control and post-hoc architecture analyses are complete. The control compares the original structured bank with a common pixel permutation preserving the complete Gram matrix, rank, and singular spectrum, plus generic random rank-10 and full-rank controls. Results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
 
 The current default task is manuscript polish and anonymous-artifact preparation, not further large-scale experimentation.
 
