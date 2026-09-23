@@ -1,6 +1,6 @@
 \section{Earlier analyses motivating the pre-specified contrast}\label{app:historical}
 
-These earlier analyses precede the pre-specified channel-count experiment reported in \Cref{app:confirmation}. They are retained to show why the primary analysis used the patching effect for selected channels rather than the selected-minus-random comparison.
+These earlier analyses precede the pre-specified intervention-size experiment reported in \Cref{app:confirmation}. They are retained to show why the primary analysis used the patching effect for selected channels rather than the selected-minus-random comparison.
 
 \subsection{Early 40-epoch comparisons}\label{app:development-early}
 
@@ -96,8 +96,8 @@ For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channel
 
 \subsection{Validation-energy-matched control}\label{app:development-energy}
 
-A later post-hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the \texttt{two\_concepts}/TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the pre-specified channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post-hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with intervention size: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the \texttt{two\_concepts}/TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the pre-specified intervention-size experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
-\subsection{Transition to the pre-specified channel-count experiment}\label{app:transition}
+\subsection{Transition to the pre-specified intervention-size experiment}\label{app:transition}
 
-The earlier analyses showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the channel-count protocol was specified around the patching effect for selected channels before the new replicates were generated. \Cref{app:confirmation} reports that pre-specified test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
+The earlier analyses showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested intervention sizes. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the intervention-size protocol was specified around the patching effect for selected channels before the new replicates were generated. \Cref{app:confirmation} reports that pre-specified test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
