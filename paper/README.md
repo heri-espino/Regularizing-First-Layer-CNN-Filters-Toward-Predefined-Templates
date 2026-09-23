@@ -33,7 +33,7 @@ The main text uses four principal figures:
 1. `fig00_overview.pdf` — renderer examples, template bank, and patching intervention;
 2. `fig05_kernel_gallery.pdf` — representative learned first-layer kernels;
 3. `fig06_main_results.pdf` — prospective channel-budget curves and 16-architecture robustness;
-4. `fig07_anchor_specificity.pdf` — matched-anchor spatial specificity, architecture interaction, and equivalence comparison for selected versus random channel sets.
+4. `fig07_anchor_specificity.pdf` — pixel-permuted filter-bank control, architecture interaction, and equivalence comparison for selected versus random channel sets.
 
 The manuscript-generated figures are built directly from frozen definitions or versioned aggregate analysis tables:
 
