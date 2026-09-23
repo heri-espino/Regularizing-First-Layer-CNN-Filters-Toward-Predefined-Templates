@@ -857,7 +857,7 @@ A fresh strict referee pass has been completed and its four substantive concerns
 
 The referee-driven revision is build-validated in GitHub Actions. The final LaTeX pass produces a 27-page PDF including appendices with no undefined citations, undefined references, duplicate labels, or unstable cross-references; remaining warnings are typographic Underfull/float-placement notices.
 
-The default next step is **final readability/polish and anonymous-artifact preparation**, followed by a submission-readiness check.
+The final readability and submission-readiness pass is complete. The remaining pre-upload step is a fresh manual manuscript build plus visual inspection of the anonymous PDF and any anonymous supplementary ZIP.
 
 Do **not** add another large experiment by default.
 
