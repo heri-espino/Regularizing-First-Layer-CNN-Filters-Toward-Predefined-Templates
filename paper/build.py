@@ -2,7 +2,7 @@
 """Build the TMLR manuscript.
 
 Default output:
-    paper/espino_2026_template-priors.pdf
+    paper/tmlr_submission.pdf
 
 Requirements:
     - Python 3.10+
@@ -24,7 +24,7 @@ ROOT = PAPER_DIR.parent
 BUILD_DIR = PAPER_DIR / "build"
 STYLE_DIR = PAPER_DIR / "tmlr"
 SOURCE = PAPER_DIR / "main.tex"
-DEFAULT_OUTPUT = PAPER_DIR / "espino_2026_template-priors.pdf"
+DEFAULT_OUTPUT = PAPER_DIR / "tmlr_submission.pdf"
 FIGURES = tuple(
     PAPER_DIR / "figures" / name
     for name in (
