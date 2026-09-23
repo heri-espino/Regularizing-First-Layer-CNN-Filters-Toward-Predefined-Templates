@@ -1,15 +1,6 @@
 name: paper-compile
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'paper/**'
-      - 'analysis/exhaustive_robustness_001/selected_fidelity_budget_curves.png'
-      - 'analysis/retention_release_001/**'
-      - 'analysis/kernel_similarity/results/**'
-      - 'literature/references.bib'
-      - '.github/workflows/paper_compile.yml'
   workflow_dispatch:
 
 permissions:
@@ -35,8 +26,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: espino_2026_template-priors
+          name: tmlr-submission-${{ github.sha }}
           path: |
-            paper/espino_2026_template-priors.pdf
+            paper/tmlr_submission.pdf
             paper/build/main.log
+          retention-days: 30
           if-no-files-found: warn
