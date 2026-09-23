@@ -2,9 +2,9 @@
 
 Research artifact for:
 
-> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
+> **Activation-Patching Comparisons in Controlled CNNs Depend on the Number of Patched Channels, Architecture, and First-Layer Filter Structure**
 
-This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on channel budget and downstream architecture. A fresh matched-anchor control further shows that the original 2D spatial prior contributes selectively to validation-selected channel behavior beyond matched bank geometry, with architecture- and metric-dependent effects.
+This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on number of patched channels and downstream architecture. A pixel-permuted control control further shows that the original 2D spatial prior contributes selectively to validation-selected channel behavior beyond matched bank geometry, with architecture- and metric-dependent effects.
 
 ## Start here
 
@@ -155,7 +155,7 @@ Stage F targets that remaining architecture question with fresh blocks and multi
 
 ## Final pre-submission strengthening
 
-The fresh matched-anchor specificity study and the post hoc architecture diagnostics are complete. The matched-anchor study compares the original structured bank with a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, plus generic random rank-10 and full-rank controls. Paper-facing results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
+The pixel-permuted control specificity study and the post hoc architecture diagnostics are complete. The matched-anchor study compares the original structured bank with a common pixel permutation preserving the complete Gram matrix/rank/singular spectrum, plus generic random rank-10 and full-rank controls. Paper-facing results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
 
 The current default task is manuscript polish and anonymous-artifact preparation, not further large-scale experimentation.
 
