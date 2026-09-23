@@ -279,9 +279,11 @@ Post hoc architecture diagnostics:
 
 The manuscript was rewritten from scratch after the final results and after reviewing all 43 files in `literature/extracted/`.
 
+Before any paper-facing wording change, read `literature/TERMINOLOGY.md`. It is the canonical terminology guide and supersedes older wording preserved in historical checkpoints, stage notes, and analysis directory names.
+
 Current title:
 
-> **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**
+> **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**
 
 Current source:
 - `paper/main.tex`
@@ -308,12 +310,12 @@ Do not describe the paper as showing that structured filters are automatically i
 
 The final scoped claim is:
 
-> in controlled CNNs with exact matched counterfactuals, the patching-effect difference between release and retention depends on the number of patched channels and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for validation-selected channels beyond matched non-spatial filter-bank properties, with architecture- and metric-dependent magnitude and sign.
+> in controlled CNNs with matched counterfactuals, the patching-effect difference between release and retention depends on intervention size and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for channels selected on the validation set beyond matched non-spatial filter-bank properties, with architecture- and evaluation-metric-dependent magnitude and sign.
 
 Key constraints:
 - the probability-error difference between structured and pixel-permuted banks, averaged across architectures, differs from zero but falls within the pre-specified equivalence margin;
-- `plain2_w16_gmp` reverses the sign of the structured-minus-pixel-permuted effect;
-- the structured-minus-pixel-permuted effect is much smaller on average for random channel subsets;
+- `plain2_w16_gmp` reverses the sign of the difference between the structured and pixel-permuted filter banks;
+- the difference between the structured and pixel-permuted filter banks is much smaller on average for random channel subsets;
 - differences across architectures remain under random-channel analysis;
 - inferential n is renderer blocks, not model count;
 - no natural-image, transformer, human-interpretability, or unique-mechanism claims.
