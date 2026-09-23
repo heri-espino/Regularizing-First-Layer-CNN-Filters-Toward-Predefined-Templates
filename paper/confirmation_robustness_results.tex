@@ -1,6 +1,6 @@
-\section{Pre-specified channel-count and schedule/task sensitivity analyses}\label{app:confirmation}
+\section{Pre-specified intervention-size and schedule/task sensitivity analyses}\label{app:confirmation}
 
-This appendix reports the full numerical results for the pre-specified channel-count experiment and the subsequent schedule/task sensitivity experiment. The channel-count protocol was specified after the earlier analyses but before running blocks 4000--4019, which are disjoint from the earlier data. It was not externally preregistered. The schedule/task sensitivity protocol was separately specified before running blocks 5000--5049 and remains secondary to the channel-count test. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The main text reports the primary channel-count result and uses the schedule/task analysis as a secondary sensitivity analysis. This appendix preserves the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. The complete tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
+This appendix reports the full numerical results for the pre-specified intervention-size experiment and the subsequent schedule/task sensitivity experiment. The intervention-size protocol was specified after the earlier analyses but before running blocks 4000--4019, which are disjoint from the earlier data. It was not externally preregistered. The schedule/task sensitivity protocol was separately specified before running blocks 5000--5049 and remains secondary to the intervention-size test. Blocks are independent experimental replicates; conditions within a block are paired through shared generated data and relevant initialization components. The main text reports the primary intervention-size result and uses the schedule/task analysis as a secondary sensitivity analysis. This appendix preserves the complete channel-selection and schedule breakdowns, secondary controls, and reimplementation details. The complete tables are retained under \texttt{analysis/budget\_confirmation\_001/} and \texttt{analysis/exhaustive\_robustness\_001/}.
 
 \subsection{Pre-specified selected-channel patching results}\label{app:prospective-full}
 
@@ -49,7 +49,7 @@ TwoLayerCNN & validation patching & 8 & +0.0100 & [-0.0015, +0.0214] \\
 \normalsize
 }
 
-\subsection{Pre-specified channel-count contrast}\label{app:prospective-contrast}
+\subsection{Pre-specified intervention-size contrast}\label{app:prospective-contrast}
 
 For every architecture/channel-selection pair,
 \begin{equation}
@@ -85,7 +85,7 @@ AUROC and validation-patching channel-selection rules show the same broad change
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with the number of patched channels, but the primary analysis remains the patching effect for selected channels.
+The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with intervention size, but the primary analysis remains the patching effect for selected channels.
 
 \subsection{Schedule sensitivity when channels are ranked by activation difference}\label{app:schedule-profiles}
 
