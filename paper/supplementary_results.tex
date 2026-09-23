@@ -1,6 +1,6 @@
-\section{Developmental analyses motivating the prospective estimand}\label{app:historical}
+\section{Earlier analyses motivating the pre-specified contrast}\label{app:historical}
 
-These developmental analyses precede the prespecified prospective channel-count experiment reported in \Cref{app:confirmation}. They are retained to show why the prospective primary analysis ultimately used the patching effect for selected channels rather than the selected-minus-random comparison.
+These earlier analyses precede the pre-specified channel-count experiment reported in \Cref{app:confirmation}. They are retained to show why the primary analysis used the patching effect for selected channels rather than the selected-minus-random comparison.
 
 \subsection{Early 40-epoch comparisons}\label{app:development-early}
 
@@ -57,7 +57,7 @@ On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual ta
 
 \subsection{Post hoc decomposition of the original selected-minus-random comparison}\label{app:development-decomposition}
 
-This post hoc analysis reused the 80 epoch-200 developmental checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. This analysis is post hoc and is not used as the prospective primary test.
+This post-hoc analysis reused the 80 earlier epoch-200 checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. This analysis is post-hoc and is not used as the primary pre-specified test.
 
 {
 \small
@@ -92,12 +92,12 @@ validation patching & 8 & +0.005 & -0.033 & +0.038 & +0.013 \\
 
 When channels are ranked by activation difference, $\Delta F_{sel}(4)=-0.022$ with 95\% interval $[-0.054,0.010]$, while $\Delta F_{rand}(4)=-0.083$ with interval $[-0.097,-0.068]$. The positive $\Delta U(4)=+0.061$ is therefore partly due to the change in the random-channel baseline. At $k=8$, the patching effect for selected channels itself becomes slightly positive: $+0.006$ $[0.004,0.009]$. AUROC and validation-patching channel selection show the same broad pattern.
 
-For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channels at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated the later prespecified contrast between smaller ($k=1,2$) and larger ($k=4,8$) channel sets rather than a hypothesis about the sign at any single $k$.
+For \texttt{two\_concepts}/TwoLayerCNN, the patching effect for selected channels at $k=4$ is negative under all three channel-selection rules (approximately -0.125, -0.121, and -0.087 for activation difference, AUROC, and validation patching, respectively). Under validation-patching selection the score becomes positive at $k=8$ ($+0.0215$ with marginal interval $[0.0049,0.0381]$). These outcomes motivated the later pre-specified contrast between smaller ($k=1,2$) and larger ($k=4,8$) channel sets rather than a hypothesis about the sign at any single $k$.
 
 \subsection{Validation-energy-matched control}\label{app:development-energy}
 
-A later post hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the prospective channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
+A later post-hoc control chose alternative channel sets of the same size whose validation replacement energy was closest to that of the selected set. All 80 checkpoint evaluations were completed. Matching quality varies substantially with channel count: single-channel sets can have large relative mismatch, while $k=4$ and especially $k=8$ are generally tightly matched in the key TinyCNN setting. Changing the baseline does not alter the annealed-minus-constant effect for the selected channels, which is the quantity used to motivate the pre-specified channel-count experiment. The comparison with the energy-matched baseline is therefore reported as a secondary analysis.
 
-\subsection{Transition to the prospective channel-count experiment}\label{app:transition}
+\subsection{Transition to the pre-specified channel-count experiment}\label{app:transition}
 
-The developmental analyses showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the prospective channel-count protocol was specified around the patching effect for selected channels before new replicates were generated. \Cref{app:confirmation} reports that prospective test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
+The earlier analyses showed that constant template regularization preserves high filter-template similarity, that prediction can improve after the regularizer is annealed to zero, and that the annealed-minus-constant patching comparison differed across the tested channel counts. Because the original sign change in $U$ combined changes in both the selected-channel and baseline patching effects, the channel-count protocol was specified around the patching effect for selected channels before the new replicates were generated. \Cref{app:confirmation} reports that pre-specified test and the subsequent secondary sensitivity analysis over 50 new blocks per task/architecture setting (1,200 trained models in total).
