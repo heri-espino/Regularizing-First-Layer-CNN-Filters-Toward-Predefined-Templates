@@ -1,14 +1,14 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**.
+`main.tex` is the authoritative manuscript source for **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**.
 
 The current manuscript was rewritten from scratch after the final pixel-permuted control experiment on independent renderer blocks and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
 
 The main argument is organized around five scientific claims:
 
 1. constant regularization preserves the predefined first-layer spatial structure;
-2. the release-versus-retention patching comparison depends on the number of patched channels;
-3. the prespecified channel-budget contrast survives alternative output metrics, although the pointwise curves differ;
+2. the release-versus-retention patching comparison depends on intervention size;
+3. the pre-specified intervention-size contrast remains under alternative evaluation metrics, although the values at individual intervention sizes differ;
 4. downstream architecture strongly conditions the contrast and that conclusion survives sphericity-robust, permutation, Friedman, and random-channel diagnostics;
 5. the original 2D template arrangement has a selected-channel functional effect beyond a Gram/rank/spectrum-matched pixel-permuted control, but that effect is architecture- and metric-dependent.
 
