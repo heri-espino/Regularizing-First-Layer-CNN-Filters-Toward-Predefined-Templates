@@ -6,7 +6,7 @@ This appendix gives the complete numerical results for the pre-specified metric-
 
 The metric-sensitivity analysis reuses saved checkpoints from the pre-specified channel-count and schedule/task sensitivity experiments. It was designed after the original probability-fidelity results were known, so it is post-hoc with respect to those results; however, the alternative metric definitions and analysis plan were specified before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
 
-For the primary \texttt{two\_concepts}/TinyCNN setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative primary metrics.
+For the primary \texttt{two\_concepts}/TinyCNN setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative output metrics.
 
 \begin{table}[h]
 \caption{TinyCNN pointwise release-minus-retention contrasts under the pre-specified alternative metrics.}
@@ -93,7 +93,7 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 
 \subsection{Architecture-specific estimates}\label{app:architecture-estimates}
 
-\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified primary metrics.
+\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified output metrics.
 
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
