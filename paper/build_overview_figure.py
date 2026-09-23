@@ -147,7 +147,10 @@ def build_figure() -> Path:
     templates = template_bank()
 
     fig = plt.figure(figsize=(7.15, 3.65))
-    grid = fig.add_gridspec(1, 3, width_ratios=[1.10, 1.05, 1.40], wspace=0.28)
+    # The intervention schematic needs more horizontal room than the data and
+    # template panels.  Giving panel (c) its own generous column prevents the
+    # state labels, arrows, and downstream block from colliding at manuscript size.
+    grid = fig.add_gridspec(1, 3, width_ratios=[1.06, 1.02, 1.72], wspace=0.30)
 
     ax_data = fig.add_subplot(grid[0, 0])
     ax_data.axis("off")
@@ -189,77 +192,103 @@ def build_figure() -> Path:
     ax_patch.set_ylim(0, 1)
     ax_patch.axis("off")
     ax_patch.text(0.00, 1.02, "c", transform=ax_patch.transAxes, fontweight="bold")
-    ax_patch.text(0.08, 1.02, "First-layer patching", transform=ax_patch.transAxes)
+    ax_patch.text(
+        0.08, 1.02, "First-layer patching",
+        transform=ax_patch.transAxes, fontstretch="normal"
+    )
 
-    for y, image, title in ((0.68, two[0], "base"), (0.28, two[1], "counterfactual")):
-        inset = ax_patch.inset_axes([0.00, y, 0.18, 0.22])
-        inset.imshow(image, cmap="gray", vmin=0, vmax=1, interpolation="nearest")
+    # Two clean lanes: base and matched counterfactual.  The coordinates are
+    # deliberately separated so the diagram remains legible after LaTeX scales
+    # the PDF to \linewidth.
+    lane_y = {"base": 0.69, "counterfactual": 0.27}
+    lane_images = {"base": two[0], "counterfactual": two[1]}
+    for name in ("base", "counterfactual"):
+        y = lane_y[name]
+        inset = ax_patch.inset_axes([0.00, y, 0.17, 0.20])
+        inset.imshow(lane_images[name], cmap="gray", vmin=0, vmax=1, interpolation="nearest")
         inset.axis("off")
-        ax_patch.text(0.09, y - 0.025, title, ha="center", va="top", fontsize=6.4)
+        ax_patch.text(0.085, y - 0.022, name, ha="center", va="top", fontsize=6.1)
 
-    for y in (0.70, 0.30):
-        box = FancyBboxPatch(
-            (0.25, y), 0.20, 0.13, boxstyle="round,pad=0.015",
-            facecolor="0.96", edgecolor="0.35", linewidth=0.7
+        conv = FancyBboxPatch(
+            (0.225, y + 0.02), 0.215, 0.145,
+            boxstyle="round,pad=0.012",
+            facecolor="0.96", edgecolor="0.35", linewidth=0.7,
         )
-        ax_patch.add_patch(box)
-        ax_patch.text(0.35, y + 0.065, "conv1 + ReLU\n16 maps", ha="center", va="center", fontsize=6.3)
+        ax_patch.add_patch(conv)
+        ax_patch.text(
+            0.3325, y + 0.0925, "conv1 + ReLU\n16 feature maps",
+            ha="center", va="center", fontsize=5.8,
+        )
         ax_patch.add_patch(
             FancyArrowPatch(
-                (0.18, y + 0.065), (0.245, y + 0.065),
-                arrowstyle="-|>", mutation_scale=7, linewidth=0.7, color="0.3"
+                (0.175, y + 0.10), (0.22, y + 0.10),
+                arrowstyle="-|>", mutation_scale=7, linewidth=0.7, color="0.3",
             )
         )
 
-    for y, label in ((0.70, r"$H_0$"), (0.30, r"$H_1$")):
+    def draw_state_stack(x: float, y: float, label: str, *, highlighted: bool = False) -> None:
         for depth in range(4):
             ax_patch.add_patch(
                 Rectangle(
-                    (0.50 + depth * 0.012, y + 0.01 + depth * 0.008),
-                    0.10, 0.10, facecolor="0.94", edgecolor="0.45", linewidth=0.5
+                    (x + depth * 0.011, y + depth * 0.008),
+                    0.092, 0.098,
+                    facecolor="0.86" if highlighted and depth < 2 else "0.95",
+                    edgecolor="0.42", linewidth=0.5,
                 )
             )
-        ax_patch.text(0.57, y - 0.02, label, ha="center", va="top", fontsize=7.0)
+        ax_patch.text(x + 0.058, y - 0.018, label, ha="center", va="top", fontsize=6.8)
 
-    ax_patch.add_patch(
-        FancyArrowPatch(
-            (0.61, 0.35), (0.70, 0.58),
-            arrowstyle="-|>", mutation_scale=8, linewidth=0.9, color="0.25"
-        )
-    )
-    ax_patch.text(0.68, 0.48, "replace selected\n$k$ channels", ha="center", va="center", fontsize=6.2)
-    for depth in range(4):
+    # First-layer states are separated from the convolution boxes, so their
+    # labels cannot overlap the module text.
+    draw_state_stack(0.485, 0.735, r"$H_0$")
+    draw_state_stack(0.485, 0.315, r"$H_1$")
+    for y in (0.785, 0.365):
         ax_patch.add_patch(
-            Rectangle(
-                (0.72 + depth * 0.012, 0.58 + depth * 0.008),
-                0.10, 0.10,
-                facecolor="0.85" if depth < 2 else "0.94",
-                edgecolor="0.35", linewidth=0.55,
+            FancyArrowPatch(
+                (0.445, y), (0.48, y),
+                arrowstyle="-|>", mutation_scale=7, linewidth=0.7, color="0.3",
             )
         )
-    ax_patch.text(0.79, 0.55, r"$H_S$", ha="center", va="top", fontsize=7.0)
+
+    # Hybrid patched state.  The two incoming arrows are intentionally routed
+    # around a white-backed annotation rather than through the text.
+    draw_state_stack(0.705, 0.565, r"$H_S$", highlighted=True)
     ax_patch.add_patch(
         FancyArrowPatch(
-            (0.61, 0.75), (0.715, 0.66),
-            arrowstyle="-|>", mutation_scale=8, linewidth=0.7, color="0.45"
+            (0.595, 0.785), (0.70, 0.655),
+            arrowstyle="-|>", mutation_scale=8, linewidth=0.75, color="0.45",
         )
     )
-    downstream = FancyBboxPatch(
-        (0.86, 0.58), 0.13, 0.13, boxstyle="round,pad=0.01",
-        facecolor="0.96", edgecolor="0.35", linewidth=0.7
-    )
-    ax_patch.add_patch(downstream)
-    ax_patch.text(0.925, 0.645, "downstream\nnetwork", ha="center", va="center", fontsize=5.8)
     ax_patch.add_patch(
         FancyArrowPatch(
-            (0.83, 0.645), (0.855, 0.645),
-            arrowstyle="-|>", mutation_scale=7, linewidth=0.7, color="0.3"
+            (0.595, 0.365), (0.70, 0.605),
+            arrowstyle="-|>", mutation_scale=8, linewidth=0.9, color="0.25",
         )
     )
     ax_patch.text(
-        0.80, 0.18,
-        "Downstream parameters\nare unchanged.",
-        ha="center", va="center", fontsize=5.9,
+        0.655, 0.505, "replace selected\n$k$ channels from $H_1$",
+        ha="center", va="center", fontsize=5.7,
+        bbox=dict(facecolor="white", edgecolor="none", pad=1.2),
+    )
+
+    downstream = FancyBboxPatch(
+        (0.855, 0.59), 0.135, 0.135, boxstyle="round,pad=0.01",
+        facecolor="0.96", edgecolor="0.35", linewidth=0.7,
+    )
+    ax_patch.add_patch(downstream)
+    ax_patch.text(
+        0.9225, 0.6575, "downstream\nnetwork",
+        ha="center", va="center", fontsize=5.6,
+    )
+    ax_patch.add_patch(
+        FancyArrowPatch(
+            (0.82, 0.655), (0.85, 0.655),
+            arrowstyle="-|>", mutation_scale=7, linewidth=0.7, color="0.3",
+        )
+    )
+    ax_patch.text(
+        0.86, 0.46, "Downstream parameters\nremain unchanged.",
+        ha="center", va="center", fontsize=5.7,
     )
 
     fig.subplots_adjust(left=0.025, right=0.995, top=0.91, bottom=0.05)
