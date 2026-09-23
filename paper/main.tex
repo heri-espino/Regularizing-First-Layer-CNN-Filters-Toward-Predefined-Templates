@@ -264,7 +264,7 @@ These results suggest reporting intervention size, the type of patched component
 
 \section{Conclusion}\label{sec:conclusion}
 
-Preserving a predefined first-layer filter bank does not determine the patching effect. In controlled CNNs with exact matched counterfactuals, the release-versus-retention comparison changes with intervention size and varies strongly across architectures after the first layer. The same conclusions hold under alternative evaluation metrics, Greenhouse--Geisser correction, permutation tests, and random-channel analyses. A pixel-permuted control experiment on independent renderer blocks further shows that the original two-dimensional edge/corner/ring arrangement changes the patching effect for channels selected on the validation set beyond the bank's Gram matrix, rank, and singular spectrum---but the effect is architecture-dependent, evaluation-metric-dependent, and smaller on average for random channel sets. Filter similarity and patching effects should therefore be reported separately, together with the channel-selection rule used for the intervention.
+Preserving a predefined first-layer filter bank does not determine the patching effect. In controlled CNNs with matched counterfactuals, the release-versus-retention comparison changes with intervention size and varies strongly across architectures after the first layer. The same conclusions hold under alternative evaluation metrics, Greenhouse--Geisser correction, permutation tests, and random-channel analyses. A pixel-permuted control experiment on independent renderer blocks further shows that the original two-dimensional edge/corner/ring arrangement changes the patching effect for channels selected on the validation set beyond the bank's Gram matrix, rank, and singular spectrum---but the effect is architecture-dependent, evaluation-metric-dependent, and smaller on average for random channel sets. Filter similarity and patching effects should therefore be reported separately, together with the channel-selection rule used for the intervention.
 
 \section{Data and code availability}\label{sec:availability}
 
@@ -274,7 +274,7 @@ The experiments use procedurally rendered synthetic images. The accompanying art
 
 \clearpage
 \appendix
-\noindent\textbf{Appendix organization.} \Cref{app:specificity} reports the pixel-permuted control experiment and the post-hoc architecture analyses. \Cref{app:final-robustness} gives the complete metric- and architecture-robustness summaries. \Cref{app:confirmation} reports the pre-specified channel-count study and the schedule/task sensitivity analyses. \Cref{app:historical} preserves the earlier analyses that motivated the pre-specified contrast. \Cref{app:kernel-matching} reports the complete filter-matching table.
+\noindent\textbf{Appendix organization.} \Cref{app:specificity} reports the pixel-permuted control experiment and the post-hoc architecture analyses. \Cref{app:final-robustness} gives the complete metric- and architecture-robustness summaries. \Cref{app:confirmation} reports the pre-specified intervention-size study and the schedule/task sensitivity analyses. \Cref{app:historical} preserves the earlier analyses that motivated the pre-specified contrast. \Cref{app:kernel-matching} reports the complete filter-matching table.
 
 \input{specificity_robustness_results.tex}
 \clearpage
