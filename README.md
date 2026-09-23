@@ -2,7 +2,7 @@
 
 Research artifact for:
 
-> **Activation-Patching Comparisons in Controlled CNNs Depend on the Number of Patched Channels, Architecture, and First-Layer Filter Structure**
+> **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**
 
 This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on number of patched channels and downstream architecture. A pixel-permuted control control further shows that the original 2D spatial prior contributes selectively to validation-selected channel behavior beyond matched bank geometry, with architecture- and metric-dependent effects.
 
