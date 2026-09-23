@@ -65,7 +65,7 @@ python paper/build.py
 The compiled manuscript is written to:
 
 ```text
-paper/espino_2026_template-priors.pdf
+paper/tmlr_submission.pdf
 ```
 
 For a clean rebuild:
@@ -75,3 +75,8 @@ python paper/build.py --clean
 ```
 
 LaTeX intermediates are written to `paper/build/` and are ignored by Git. The final PDF is generated rather than versioned so a release artifact can be rebuilt from source.
+
+
+## Submission readiness
+
+Before a double-blind submission, read `paper/SUBMISSION_CHECKLIST.md`. The working repository itself is **not** an anonymous supplementary artifact because repository metadata and some provenance manifests contain author-identifying information and local machine paths. Do not upload the repository wholesale as TMLR supplementary material.
