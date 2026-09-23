@@ -161,7 +161,7 @@ two concepts & TwoLayerCNN & default annealing & 99.26\% & 0.896 \\
 
 \subsection{Independent reimplementation of checkpoint evaluation}\label{app:audit}
 
-The pre-specified reimplementation covered 32 developmental checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the pre-specified protocol. All recomputed values then fell within the stated tolerances.
+The pre-specified reimplementation covered 32 earlier checkpoint evaluations. All 32 completed after correcting an error in the independent implementation that initially ranked post-second-layer rather than first-layer activations in TwoLayerCNN. The correction did not alter the pre-specified protocol. All recomputed values then fell within the stated tolerances.
 
 \begin{table}[h]
 \caption{Discrepancies between the original and independently reimplemented checkpoint evaluations. Full-channel and no-op probability errors were both zero.}
