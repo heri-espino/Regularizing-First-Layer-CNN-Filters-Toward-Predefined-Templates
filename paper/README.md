@@ -1,6 +1,6 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Comparisons in Controlled CNNs Depend on the Number of Patched Channels, Architecture, and First-Layer Filter Structure**.
+`main.tex` is the authoritative manuscript source for **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**.
 
 The current manuscript was rewritten from scratch after the final pixel-permuted control experiment on independent renderer blocks and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
 
