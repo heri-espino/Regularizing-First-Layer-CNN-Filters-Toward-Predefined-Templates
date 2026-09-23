@@ -26,10 +26,10 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 
 \subsection{Long-horizon epoch-200 condition means}\label{app:development-endpoints}
 
-The table below gives the developmental epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
+The table below gives the earlier epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
-\caption{Developmental epoch-200 means for constant and annealed template regularization.}
+\caption{Earlier epoch-200 means for constant and annealed template regularization.}
 \label{tab:development-endpoints}
 \centering
 \footnotesize
@@ -55,7 +55,7 @@ two concepts & TwoLayerCNN & annealed & 99.531 & 0.907 & 0.003 \\
 
 On \texttt{two\_concepts}/TinyCNN, patched-run accuracy on the counterfactual target is 93.61\% under constant regularization and 90.64\% under annealed regularization even though $U_{\mathrm{random}}$ is higher under annealing. This discrepancy motivated separate reporting of the selected-channel and control-channel patching effects.
 
-\subsection{Post hoc decomposition of the original selected-minus-random comparison}\label{app:development-decomposition}
+\subsection{Post-hoc decomposition of the original selected-minus-random comparison}\label{app:development-decomposition}
 
 This post-hoc analysis reused the 80 earlier epoch-200 checkpoints from the annealed- and constant-regularization conditions and evaluated three validation-only channel-selection rules at $k\in\{1,2,4,8\}$. The TinyCNN results are reproduced below. Each entry is annealed minus constant regularization; intervals are marginal paired 95\% $t$ intervals over ten replicates. This analysis is post-hoc and is not used as the primary pre-specified test.
 
@@ -63,7 +63,7 @@ This post-hoc analysis reused the 80 earlier epoch-200 checkpoints from the anne
 \small
 \setlength{\tabcolsep}{3pt}
 \begin{longtable}{llrrrr}
-\caption{Post hoc \texttt{two\_concepts}/TinyCNN decomposition.}\label{tab:development-decomposition}\\
+\caption{Post-hoc \texttt{two\_concepts}/TinyCNN decomposition.}\label{tab:development-decomposition}\\
 \toprule
 Channel selection & $k$ & $\Delta F_{sel}$ & $\Delta F_{rand}$ & $\Delta U$ & $\Delta$ CF acc. \\
 \midrule
