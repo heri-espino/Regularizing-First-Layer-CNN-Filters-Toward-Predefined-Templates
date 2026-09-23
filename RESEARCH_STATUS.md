@@ -855,6 +855,8 @@ A fresh strict referee pass has been completed and its four substantive concerns
 3. retention-versus-release is explicitly interpreted as a complete training-regime contrast with downstream co-adaptation;
 4. Methods now fully define the concept-specific ranking and architecture grid.
 
+The referee-driven revision is build-validated in GitHub Actions. The final LaTeX pass produces a 27-page PDF including appendices with no undefined citations, undefined references, duplicate labels, or unstable cross-references; remaining warnings are typographic Underfull/float-placement notices.
+
 The default next step is **final readability/polish and anonymous-artifact preparation**, followed by a submission-readiness check.
 
 Do **not** add another large experiment by default.
