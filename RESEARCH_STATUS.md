@@ -848,11 +848,18 @@ Do not claim:
 
 ## 16. Next action
 
-The default next step is **another strict referee pass on the rewritten manuscript**, followed by claim tightening, literature/citation checking, and anonymous-artifact polish.
+A fresh strict referee pass has been completed and its four substantive concerns have been incorporated into the manuscript:
+
+1. sequential/outcome-informed follow-up design is now explicit;
+2. matched-anchor equivalence is explicitly architecture-averaged and tied to a study-specific scale-relative margin;
+3. retention-versus-release is explicitly interpreted as a complete training-regime contrast with downstream co-adaptation;
+4. Methods now fully define the concept-specific ranking and architecture grid.
+
+The default next step is **final readability/polish and anonymous-artifact preparation**, followed by a submission-readiness check.
 
 Do **not** add another large experiment by default.
 
-Only consider additional empirical work if the new referee pass identifies a concrete unresolved threat that cannot be addressed by the existing fresh-sample controls, robustness analyses, or narrower scope.
+Only consider additional empirical work if a final review identifies a concrete unresolved threat that cannot be addressed by the existing fresh-sample controls, robustness analyses, or narrower scope.
 
 ## 17. Source-of-truth reading order
 
@@ -870,4 +877,4 @@ Only consider additional empirical work if the new referee pass identifies a con
 
 ## 18. One-line handoff
 
-**The fresh anchor-specificity and post hoc architecture-strengthening analyses are complete. The manuscript has been rewritten from scratch after reviewing all 43 extracted literature sources. The paper now argues a scoped measurement result: channel budget, downstream architecture, output metric, spatial prior structure, and channel selection jointly condition activation-patching comparisons in controlled CNNs. The next task is referee-level manuscript critique, not another experiment by default.**
+**The fresh anchor-specificity and post hoc architecture-strengthening analyses are complete. The manuscript was rewritten from scratch after reviewing all 43 extracted literature sources and then revised after a fresh referee pass. Sequential design, architecture-averaged equivalence, the scale-relative SESOI, downstream co-adaptation, ranking definitions, and the exact architecture grid are now explicit. The next task is final readability/anonymization/submission polish, not another experiment by default.**
