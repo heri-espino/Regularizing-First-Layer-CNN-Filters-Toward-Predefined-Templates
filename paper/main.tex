@@ -141,7 +141,7 @@ For any patching metric $M$, define the within-block release-minus-retention dif
 \label{eq:treatment-difference}
 \Delta_b^M(k)=M_b^{\mathrm{release}}(k)-M_b^{\mathrm{retention}}(k),
 \end{equation}
-and the pre-specified small-versus-larger-channel contrast
+and the pre-specified contrast between $k=1,2$ and $k=4,8$
 \begin{equation}
 \label{eq:channel-count-contrast}
 B_b^M=
@@ -189,7 +189,7 @@ Panel~(a) of \cref{fig:main-results} shows that the alternative metrics support 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig06_main_results.pdf}
-\caption{Number of patched channels and network architecture. \textbf{(a)} Release-minus-retention differences $\Delta^M(k)$ in the pre-specified \texttt{two\_concepts}/TinyCNN experiment under the original normalized probability score, centered-logit fidelity, and unnormalized probability error reduction. The three metrics agree on the sign of $B$ but not on the values at individual channel counts. \textbf{(b)} Architecture-specific $B$ on the primary \texttt{two\_concepts} task for 16 pre-specified CNN architectures. Each point averages four initialization replicates within each of 100 independent renderer blocks; bars are marginal 95\% $t$ intervals. The two primary metrics are shown separately because their numerical scales are not comparable.}
+\caption{Number of patched channels and network architecture. \textbf{(a)} Release-minus-retention differences $\Delta^M(k)$ in the pre-specified \texttt{two\_concepts}/TinyCNN experiment under the original normalized probability score, centered-logit fidelity, and unnormalized probability error reduction. The three metrics agree on the sign of $B$ but not on the values at individual channel counts. \textbf{(b)} Architecture-specific $B$ on the primary \texttt{two\_concepts} task for 16 pre-specified CNN architectures. Each point averages four initialization replicates within each of 100 independent renderer blocks; bars are marginal 95\% $t$ intervals. The two output metrics are shown separately because their numerical scales are not comparable.}
 \label{fig:main-results}
 \end{figure}
 
