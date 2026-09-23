@@ -281,7 +281,7 @@ The manuscript was rewritten from scratch after the final results and after revi
 
 Current title:
 
-> **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**
+> **Activation-Patching Effects in Controlled CNNs Depend on the Number of Patched Channels, Network Architecture, and First-Layer Filter Structure**
 
 Current source:
 - `paper/main.tex`
@@ -292,12 +292,12 @@ Paper-facing conventions:
 - `cleveref` for cross-references;
 - every displayed equation numbered and labeled;
 - no main-text result tables;
-- four principal figures, including the matched-anchor specificity figure;
+- four principal figures, including the pixel-permuted filter-bank control figure;
 - approximately 4,600 main-text words before appendices;
 - full numerical detail in appendices.
 
 Build:
-- `paper/build.py` regenerates the overview, central robustness, and matched-anchor specificity figures;
+- `paper/build.py` regenerates the overview, main-results, and pixel-permuted control figures;
 - GitHub Actions compiles the full manuscript successfully;
 - final LaTeX pass has no undefined citations/references or unstable labels;
 - remaining Underfull warnings are typographic only.
@@ -308,13 +308,13 @@ Do not describe the paper as showing that structured filters are automatically i
 
 The final scoped claim is:
 
-> in a controlled vision system with an explicitly structured first layer and exact matched counterfactuals, release-versus-retention activation-patching comparisons depend on channel budget and downstream architecture; the original 2D spatial organization contributes selectively to validation-selected channel behavior beyond matched bank geometry, but that contribution is architecture- and metric-dependent.
+> in controlled CNNs with exact matched counterfactuals, the patching-effect difference between release and retention depends on the number of patched channels and network architecture; a pixel-permuted filter-bank control further shows that the original 2D spatial arrangement changes the patching effect for validation-selected channels beyond matched non-spatial filter-bank properties, with architecture- and metric-dependent magnitude and sign.
 
 Key constraints:
-- probability-error spatial specificity is statistically nonzero but practically equivalent under the frozen SESOI;
-- `plain2_w16_gmp` reverses the spatial-specificity sign;
-- random-channel spatial specificity is much smaller;
-- architecture heterogeneity survives random-channel analysis;
+- the probability-error difference between structured and pixel-permuted banks, averaged across architectures, differs from zero but falls within the pre-specified equivalence margin;
+- `plain2_w16_gmp` reverses the sign of the structured-minus-pixel-permuted effect;
+- the structured-minus-pixel-permuted effect is much smaller on average for random channel subsets;
+- differences across architectures remain under random-channel analysis;
 - inferential n is renderer blocks, not model count;
 - no natural-image, transformer, human-interpretability, or unique-mechanism claims.
 
@@ -332,11 +332,11 @@ The full rewritten manuscript received a fresh referee-style review. No fatal em
 Key changes now in `paper/main.tex`:
 
 - the experimental program is explicitly described as sequential and outcome-informed across follow-ups, not jointly preregistered;
-- two_concepts and the four matched-anchor diagnostic architectures are described as choices informed by earlier outcomes but frozen before their own fresh follow-up outcomes;
+- `two_concepts` and the four architectures used in the pixel-permuted control are described as choices informed by earlier results but specified before evaluation on their independent renderer blocks;
 - retention-versus-release is explicitly a complete training-regime contrast with downstream co-adaptation, not an isolated post-training manipulation of first-layer geometry;
-- all matched-anchor equivalence language is explicitly architecture-averaged and tied to a prespecified 20%-of-historical-scale margin;
+- all equivalence language for the pixel-permuted control is explicitly averaged across architectures and tied to a pre-specified 20%-of-earlier-study-scale margin;
 - the appendix reports that the observed probability-error 90% interval would require approximately a 16.0%-of-historical-scale symmetric margin for equivalence, making margin sensitivity visible;
-- random-channel spatial specificity is described as smaller on average but not absent, because architecture-dependent random-channel differences remain;
+- the structured-minus-pixel-permuted effect is described as smaller on average for random channels but not absent, because architecture-dependent random-channel differences remain;
 - the validation ranking equation now defines the renderer concept/destination identity used for each directed counterfactual;
 - the main Methods now summarizes the 16-architecture grid;
 - the appendix now contains exact architecture definitions and parameter counts;
