@@ -4,9 +4,9 @@ This appendix gives the complete numerical results for the pre-specified metric-
 
 \subsection{Metric-sensitivity analysis}\label{app:metric-sensitivity}
 
-The metric-sensitivity analysis reuses saved checkpoints from the pre-specified channel-count and schedule/task sensitivity experiments. It was designed after the original probability-fidelity results were known, so it is post-hoc with respect to those results; however, the alternative metric definitions and analysis plan were specified before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
+The metric-sensitivity analysis reuses saved checkpoints from the pre-specified intervention-size and schedule/task sensitivity experiments. It was designed after the original probability-fidelity results were known, so it is post-hoc with respect to those results; however, the alternative metric definitions and analysis plan were specified before their values were computed. No model was retrained and the original validation-derived channel rankings were reused.
 
-For the primary \texttt{two\_concepts}/TinyCNN setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative output metrics.
+For the primary \texttt{two\_concepts}/TinyCNN setting, \Cref{tab:app-metric-pointwise} gives the full pointwise annealed-minus-constant curves under the two alternative evaluation metrics.
 
 \begin{table}[h]
 \caption{TinyCNN pointwise release-minus-retention contrasts under the pre-specified alternative metrics.}
@@ -32,7 +32,7 @@ Probability error reduction & 8 & +0.85004 & [+0.82915, +0.87093] \\
 
 The corresponding $B$ contrasts are $+0.178881$ (95\% CI $[+0.127268,+0.230494]$) for centered-logit fidelity and $+0.894411$ (95\% CI $[+0.786301,+1.002522]$) for probability error reduction. Holm-adjusted $p$ values for the two-metric family are $6.95\times10^{-7}$ and $8.59\times10^{-13}$, respectively.
 
-The release-minus-retention base-to-counterfactual error scales are themselves different. In TinyCNN the probability input-effect-scale contrast is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$), and the centered-logit input-effect-scale contrast is $+126.537$ (95\% CI $[+120.845,+132.229]$). In TwoLayerCNN the corresponding contrasts are $+0.062062$ and $+211.368$. Thus the original normalized metric cannot be treated as though its denominator were constant across treatments.
+The base-to-counterfactual error denominator differs between release and retention. In TinyCNN, release minus retention is $+0.848558$ (95\% CI $[+0.826701,+0.870416]$) for the probability-space denominator and $+126.537$ (95\% CI $[+120.845,+132.229]$) for the centered-logit denominator. In TwoLayerCNN the corresponding differences are $+0.062062$ and $+211.368$. Thus the original normalized metric cannot be treated as though its denominator were constant across training conditions.
 
 The same pre-specified analysis applied to the schedule/task sensitivity experiment gives the default-release results in \Cref{tab:app-metric-sensitivity}.
 
@@ -93,7 +93,7 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 
 \subsection{Architecture-specific estimates}\label{app:architecture-estimates}
 
-\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified output metrics.
+\Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified evaluation metrics.
 
 {\scriptsize
 \setlength{\tabcolsep}{3pt}
