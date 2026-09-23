@@ -1,8 +1,8 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Comparisons in Controlled CNNs Depend on Channel Budget, Architecture, and Spatial Prior Structure**.
+`main.tex` is the authoritative manuscript source for **Activation-Patching Comparisons in Controlled CNNs Depend on the Number of Patched Channels, Architecture, and First-Layer Filter Structure**.
 
-The current manuscript was rewritten from scratch after the final fresh anchor-specificity experiment and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
+The current manuscript was rewritten from scratch after the final pixel-permuted control experiment on independent renderer blocks and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
 
 The main argument is organized around five scientific claims:
 
@@ -14,7 +14,7 @@ The main argument is organized around five scientific claims:
 
 Appendix material is split into five files:
 
-- `specificity_robustness_results.tex` — fresh matched-anchor specificity experiment and post hoc architecture diagnostics;
+- `specificity_robustness_results.tex` — pixel-permuted control specificity experiment and post hoc architecture diagnostics;
 - `final_robustness_results.tex` — complete metric-sensitivity and prospective architecture-robustness summaries;
 - `confirmation_robustness_results.tex` — complete prospective channel-budget and schedule/task sensitivity analyses;
 - `supplementary_results.tex` — developmental analyses that motivated the prospective estimand;
