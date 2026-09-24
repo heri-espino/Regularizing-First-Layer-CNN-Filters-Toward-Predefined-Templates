@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build the matched-anchor specificity figure from archived Stage-G outputs.
 
-Panel (a) shows the architecture-specific selected-channel difference between
-structured and pixel-permuted anchors on the primary task.
-Panel (b) compares architecture-averaged selected- and random-channel effects
-against the equivalence margins frozen before the full run.
+Panel (a) shows the architecture-specific difference between the structured
+and pixel-permuted filter banks for channels selected on the validation set.
+Panel (b) compares architecture-averaged effects for channels selected on the
+validation set and random channel sets against the pre-specified equivalence margins.
 
 Presentation-only: this script reads versioned aggregate CSVs and does not
 recompute scientific statistics.
@@ -178,7 +178,7 @@ def build_figure() -> Path:
     top_xlabel = fig.add_subplot(outer[2])
     top_xlabel.axis("off")
     top_xlabel.text(
-        0.5, 0.50, "Structured - pixel-permuted",
+        0.5, 0.50, "Difference: structured - pixel-permuted",
         fontsize=8.0, ha="center", va="center",
     )
 
@@ -189,7 +189,7 @@ def build_figure() -> Path:
         ha="left", va="center", fontstretch="normal",
     )
     header_b.text(
-        0.035, 0.50, "Selected-channel specificity versus random-channel specificity",
+        0.035, 0.50, "Channels selected on the validation set versus random channels",
         fontsize=8.0, ha="left", va="center", fontstretch="normal",
     )
 
