@@ -92,7 +92,7 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 \end{table}
 
 \paragraph{Input-effect denominators across architectures.}
-The normalized fidelity metrics divide by a base-to-counterfactual input-effect scale. \Cref{tab:architecture-denominators} reports the release-minus-retention difference in that denominator for each architecture on the primary \texttt{two\_concepts} task. The probability-space quantity is $E_{\mathrm{prob}}(0,1)$ from \Cref{eq:prob-error}; the centered-logit quantity is its direct analogue after centering logits. Each estimate averages the four initialization replicates within renderer block before inference over 100 blocks. The wide variation across architectures is one reason the main text reports the unnormalized probability-error reduction alongside normalized fidelity.
+The normalized fidelity metrics divide by a base-to-counterfactual input-effect scale. \Cref{tab:architecture-denominators} reports the release-minus-retention difference in that denominator for each architecture on the primary \texttt{two\_concepts} task. The probability-space quantity is $E_{\mathrm{prob}}(0,1)$ from \Cref{eq:probability-error}; the centered-logit quantity is its direct analogue after centering logits. Each estimate averages the four initialization replicates within renderer block before inference over 100 blocks. The wide variation across architectures is one reason the main text reports the unnormalized probability-error reduction alongside normalized fidelity.
 
 {\scriptsize
 \setlength{\tabcolsep}{2.5pt}
