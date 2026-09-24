@@ -1,0 +1,251 @@
+name: Build anonymous TMLR supplement
+
+on:
+  push:
+    branches:
+      - submission/anonymous-artifact-final
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+
+      - name: Build allowlisted anonymous artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ART="anonymous_tmlr_artifact"
+          rm -rf "$ART" tmlr_anonymous_supplement.zip
+          mkdir -p "$ART/studies" "$ART/analysis" "$ART/paper"
+
+          # Scientific study code and frozen protocols. Run wrappers and machine-
+          # specific launch scripts are intentionally omitted.
+          study_dirs=(
+            cnn_release_experiment
+            cnn_budget_confirmation
+            cnn_exhaustive_robustness
+            cnn_metric_sensitivity
+            cnn_architecture_robustness
+            cnn_architecture_posthoc
+            cnn_anchor_specificity
+            cnn_checkpoint_audit
+            cnn_patch_energy_control
+            cnn_patch_robustness
+          )
+          for d in "${study_dirs[@]}"; do
+            src="studies/$d"
+            dst="$ART/studies/$d"
+            mkdir -p "$dst"
+            find "$src" -maxdepth 1 -type f \( -name '*.py' -o -name '*.md' -o -name 'requirements.txt' \) -print0 |
+              while IFS= read -r -d '' f; do cp "$f" "$dst/"; done
+          done
+
+          # Aggregate paper-facing results. Keep text/tabular outputs only.
+          # Raw checkpoints and per-model training outputs are deliberately absent.
+          cp -R analysis/. "$ART/analysis/"
+          find "$ART/analysis" -type f \
+            ! -name '*.csv' ! -name '*.json' ! -name '*.md' ! -name '*.txt' -delete
+          find "$ART/analysis" -type f \( \
+            -iname '*manifest*' -o \
+            -iname '*environment*' -o \
+            -iname '*launch*' \
+          \) -delete
+          find "$ART/analysis" -type d -empty -delete || true
+
+          # Figure builders used for the paper-facing figures.
+          for f in \
+            paper/build_overview_figure.py \
+            paper/build_main_results_figure.py \
+            paper/build_anchor_specificity_figure.py \
+            paper/build_figures.py \
+            paper/plot_style.py \
+            paper/test_figure_layout.py
+          do
+            cp "$f" "$ART/paper/"
+          done
+
+          cat > "$ART/requirements.txt" <<'REQ'
+          numpy>=1.24
+          pandas>=2.0
+          scipy>=1.10
+          matplotlib>=3.7
+          pillow>=9.5
+          scikit-learn>=1.3
+          torch>=2.0
+          pytest>=7
+          REQ
+
+          cat > "$ART/README.md" <<'README'
+          # Anonymous supplementary artifact
+
+          This supplementary artifact accompanies the anonymous TMLR submission
+          **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size,
+          Network Architecture, and First-Layer Filter Structure**.
+
+          ## Contents
+
+          - `studies/`: model, renderer, filter-bank, training, evaluation, analysis,
+            audit, and frozen-protocol code used by the studies reported in the paper.
+          - `analysis/`: versioned aggregate and block-level paper-facing outputs used
+            for the reported statistics, robustness checks, tables, and figures.
+          - `paper/`: scripts that regenerate the main paper-facing figures from
+            frozen definitions or included aggregate analysis tables.
+          - `requirements.txt`: minimal Python dependencies.
+
+          The synthetic inputs are generated procedurally; no external dataset is
+          required. Large raw model checkpoints and per-model evaluator outputs are
+          not included in this submission package. The paper reports inference at the
+          renderer-block level, and the aggregate/block-level data needed for its
+          reported statistics and figures are included here.
+
+          ## Environment
+
+          Python 3.10--3.12 is recommended.
+
+          ```bash
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          ```
+
+          On Windows PowerShell, activate the environment with:
+
+          ```powershell
+          .\.venv\Scripts\Activate.ps1
+          ```
+
+          ## Main study directories
+
+          - `cnn_budget_confirmation`: pre-specified intervention-size study.
+          - `cnn_metric_sensitivity`: alternative patching-metric reanalysis.
+          - `cnn_architecture_robustness`: 16-architecture independent-block study.
+          - `cnn_architecture_posthoc`: sphericity/permutation/random-channel checks.
+          - `cnn_anchor_specificity`: pixel-permuted filter-bank control.
+          - `cnn_checkpoint_audit`: independent checkpoint-evaluation audit.
+          - `cnn_exhaustive_robustness` and `cnn_patch_energy_control`: supporting
+            schedule/task/channel-selection and energy-matched analyses.
+          - `cnn_release_experiment`: shared renderer/model/filter definitions used by
+            earlier experiments and later checkpoint-based analyses.
+
+          Each study directory contains its own protocol and/or README where applicable.
+
+          ## Regenerating the main figures
+
+          From the root of this extracted artifact:
+
+          ```bash
+          python paper/build_overview_figure.py
+          python paper/build_main_results_figure.py
+          python paper/build_anchor_specificity_figure.py
+          ```
+
+          The scripts are presentation-only and do not retrain models.
+
+          ## Anonymity
+
+          This package intentionally omits repository history, citation metadata,
+          archival metadata, author metadata, identifying repository links, and
+          machine-specific execution manifests.
+          README
+
+          # Git commit/blob IDs can link an anonymous artifact back to the public
+          # development repository. They are provenance metadata rather than scientific
+          # quantities, so redact 40-hex Git object IDs while retaining longer SHA-256
+          # scientific file/checkpoint hashes.
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("anonymous_tmlr_artifact")
+          text_suffixes = {".md", ".json", ".txt", ".csv", ".py"}
+          git_object = re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{40}(?![0-9A-Fa-f])")
+          for path in root.rglob("*"):
+              if not path.is_file() or path.suffix.lower() not in text_suffixes:
+                  continue
+              text = path.read_text(encoding="utf-8")
+              cleaned = git_object.sub("<redacted-git-object-for-anonymous-review>", text)
+              if cleaned != text:
+                  path.write_text(cleaned, encoding="utf-8")
+          PY
+
+          # Fail closed if identifying information or private machine paths remain.
+          bad=0
+          patterns=(
+            'Heriberto'
+            'Espino'
+            'heri-espino'
+            'udlap'
+            'Universidad de las Americas'
+            'Fundacion Universidad'
+            '0009-0009-1230-2931'
+            'heriberto\.espinomo'
+            'github\.com/heri'
+            'orcid\.org/0009'
+            'C:\\Users\\'
+            'OneDrive - '
+          )
+          for p in "${patterns[@]}"; do
+            if grep -RIniE --binary-files=without-match "$p" "$ART"; then
+              echo "::error::Anonymous-artifact scan matched forbidden pattern: $p"
+              bad=1
+            fi
+          done
+
+          # Generic check for absolute user-home paths that can identify a machine/user.
+          if grep -RIniE --binary-files=without-match '(/Users/[^/]+/|/home/[^/]+/)' "$ART"; then
+            echo "::error::Anonymous-artifact scan found an absolute user-home path."
+            bad=1
+          fi
+
+          if [ "$bad" -ne 0 ]; then
+            exit 1
+          fi
+
+          # No raw Git commit/blob IDs should survive anonymization.
+          if python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          root = Path("anonymous_tmlr_artifact")
+          pat = re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{40}(?![0-9A-Fa-f])")
+          hits = []
+          for path in root.rglob("*"):
+              if not path.is_file() or path.suffix.lower() not in {".md", ".json", ".txt", ".csv", ".py"}:
+                  continue
+              for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                  if pat.search(line):
+                      hits.append(f"{path}:{i}")
+          if hits:
+              print("\n".join(hits[:50]))
+              sys.exit(0)
+          sys.exit(1)
+          PY
+          then
+            echo "::error::Anonymous-artifact scan found an unredacted 40-hex Git object ID."
+            exit 1
+          fi
+
+          (
+            cd "$ART"
+            find . -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+          )
+
+          zip -qr tmlr_anonymous_supplement.zip "$ART"
+          unzip -l tmlr_anonymous_supplement.zip | tail -n 5
+          du -h tmlr_anonymous_supplement.zip
+
+      - name: Upload anonymous supplement
+        uses: actions/upload-artifact@v4
+        with:
+          name: tmlr-anonymous-supplement
+          path: tmlr_anonymous_supplement.zip
+          if-no-files-found: error
+          retention-days: 30
