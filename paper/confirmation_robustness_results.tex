@@ -85,7 +85,21 @@ AUROC and validation-patching channel-selection rules show the same broad change
 
 \subsection{Energy-matched control}\label{app:energy-control}
 
-The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with intervention size, but the primary analysis remains the patching effect for selected channels.
+The energy-matched control uses validation replacement energy to select eight alternative channel sets of the same size whose replacement energy is closest to that of the selected set, using validation data only. Here $F$ denotes the original probability-fidelity score in \Cref{eq:probability-fidelity}. For a fixed model, concept, and intervention size $k$, let
+\begin{equation}
+F_{\mathrm{random}}(k)=\frac{1}{8}\sum_{r=1}^{8}F\!\left(S^{(r)}_{\mathrm{random}},k\right),
+\qquad
+F_{\mathrm{energy}}(k)=\frac{1}{8}\sum_{r=1}^{8}F\!\left(S^{(r)}_{\mathrm{energy}},k\right),
+\label{eq:control-fidelity-averages}
+\end{equation}
+where the first average uses eight same-size random channel sets and the second uses the eight validation-energy-matched sets. The relative control quantities are
+\begin{equation}
+U_{\mathrm{random}}(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{random}}(k),
+\qquad
+U_{\mathrm{energy}}(k)=F_{\mathrm{selected}}(k)-F_{\mathrm{energy}}(k).
+\label{eq:control-usefulness}
+\end{equation}
+Thus both quantities compare exactly the same selected-channel patching score with an average over eight alternative channel sets; only the control-set construction changes. For TinyCNN with channels ranked by activation difference, the annealed-minus-constant difference in $U_{\mathrm{energy}}$ is -0.2980 at $k=1$, -0.1887 at $k=2$, +0.1310 at $k=4$, and +0.0696 at $k=8$. Matching quality is not uniform: single-channel alternatives can be poorly matched, whereas $k=4$ and $k=8$ are generally much tighter. This analysis shows that the difference relative to the energy-matched baseline also changes with intervention size, but the primary analysis remains the patching effect for selected channels.
 
 \subsection{Schedule sensitivity when channels are ranked by activation difference}\label{app:schedule-profiles}
 
