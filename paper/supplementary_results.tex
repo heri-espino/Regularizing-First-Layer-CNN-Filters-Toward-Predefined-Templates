@@ -4,7 +4,7 @@ These earlier analyses precede the pre-specified intervention-size experiment re
 
 \subsection{Early 40-epoch comparisons}\label{app:development-early}
 
-The initial 40-epoch analysis compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four $U$ tests were specified before the outcomes were inspected and were Holm-adjusted as one family. Filter-template similarity and accuracy are also reported descriptively.
+The initial 40-epoch analysis compared constant template regularization (\texttt{template\_retention\_1}) with template initialization only (\texttt{template\_init}) at 40 epochs. Four tests of $U_{\mathrm{random}}=F_{\mathrm{selected}}-F_{\mathrm{random}}$ were specified before the outcomes were inspected and were Holm-adjusted as one family; \Cref{eq:control-fidelity-averages,eq:control-usefulness} gives the later explicit definition of the same selected-minus-random quantity, including the eight-control average. Filter-template similarity and accuracy are also reported descriptively.
 
 \begin{table}[h]
 \caption{Early four-comparison analysis. The positive marginal interval in the first row does not survive Holm adjustment.}
@@ -26,7 +26,7 @@ two concepts & TwoLayerCNN & +0.198 & -0.39 & -0.0074 [-0.0557, 0.0408] & 1.0000
 
 \subsection{Long-horizon epoch-200 condition means}\label{app:development-endpoints}
 
-The table below gives the earlier epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
+The table below gives the earlier epoch-200 quantities most relevant to the constant-versus-annealed regularization comparison. Means are over ten replicates. $U_{\mathrm{random}}$ is the selected-channel probability fidelity minus the mean fidelity over eight same-size random channel sets, as defined in \Cref{eq:control-fidelity-averages,eq:control-usefulness}. The full five-condition tables and checkpoint trajectories remain in the analysis artifact.
 
 \begin{table}[h]
 \caption{Earlier epoch-200 means for constant and annealed template regularization.}
