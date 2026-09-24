@@ -26,6 +26,31 @@ Probability error reduction & +0.04563 & [0.03728, 0.05397] & $2.0\times10^{-5}$
 
 The equivalence margins were pre-specified before the new outcomes as 20\% of the mean absolute $B$ from the earlier architecture study for the same four architectures: $\delta_{\mathrm{clogit}}=0.01704$ and $\delta_{R_{\mathrm{prob}}}=0.06594$. These are study-specific equivalence margins rather than externally validated thresholds of scientific importance. For centered logits, the 90\% interval averaged across architectures is $[0.05219,0.06266]$ and the Holm-adjusted TOST $p$ value is 1. For probability error reduction, the 90\% interval averaged across architectures is $[0.03864,0.05261]$ and the Holm-adjusted TOST $p$ value is $5.03\times10^{-6}$. Thus the probability-error difference averaged across architectures differs from zero while falling inside the pre-specified equivalence region. The smallest symmetric margin that would contain its observed 90\% interval is approximately $0.05261$, about 16.0\% of the effect scale from the earlier architecture study used to define the pre-specified 20\% margin; this sensitivity is reported to make the role of the margin explicit.
 
+\paragraph{Model endpoints for the primary control task.}
+To make model competence and filter retention directly inspectable, \Cref{tab:anchor-endpoints} reports mean test accuracy and similarity to each model's own reference bank for the structured and pixel-permuted conditions on \texttt{two\_concepts}. Each entry first averages the four initialization/filter-bank replicates within renderer block and then averages over the 100 blocks. The table also makes clear that the architecture grid is not performance-matched: the GAP variants, especially \texttt{tiny\_gap}, have lower accuracy than the GMP variants.
+
+\begin{table}[h]
+\caption{Endpoint audit for the four architectures in the pixel-permuted control on \texttt{two\_concepts}. Similarity is measured against the corresponding reference bank for that row, not always against the original structured bank.}
+\label{tab:anchor-endpoints}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{llrrrr}
+\toprule
+Architecture & Reference bank & Acc. retention & Acc. release & Similarity retention & Similarity release \\
+\midrule
+\texttt{tiny\_gmp} & structured & 97.83\% & 99.43\% & 0.943 & 0.573 \\
+\texttt{tiny\_gmp} & pixel-permuted & 97.59\% & 99.31\% & 0.936 & 0.563 \\
+\texttt{tiny\_gap} & structured & 43.26\% & 79.04\% & 0.999 & 0.590 \\
+\texttt{tiny\_gap} & pixel-permuted & 41.17\% & 83.29\% & 0.999 & 0.422 \\
+\texttt{plain2\_w16\_gmp} & structured & 99.07\% & 99.31\% & 0.999 & 0.900 \\
+\texttt{plain2\_w16\_gmp} & pixel-permuted & 99.21\% & 99.31\% & 0.999 & 0.908 \\
+\texttt{plain2\_w16\_gap} & structured & 82.61\% & 92.97\% & 0.974 & 0.731 \\
+\texttt{plain2\_w16\_gap} & pixel-permuted & 85.33\% & 92.96\% & 0.961 & 0.668 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Architecture dependence of the effect of spatial arrangement}\label{app:anchor-architecture}
 
 The difference between the structured and pixel-permuted filter banks varies strongly across the four pre-specified architectures.
@@ -34,15 +59,16 @@ The difference between the structured and pixel-permuted filter banks varies str
 \caption{Difference in $B$ between the structured and pixel-permuted filter banks for channels selected on the validation set, shown separately for each architecture on \texttt{two\_concepts}. Intervals are paired 95\% $t$ intervals over 100 renderer blocks.}
 \label{tab:anchor-architectures}
 \centering
-\small
-\begin{tabular}{lrr}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lrrrr}
 \toprule
-Architecture & Centered-logit difference & Probability-error difference \\
+Architecture & Centered-logit diff. & 95\% CI & Probability-error diff. & 95\% CI \\
 \midrule
-\texttt{tiny\_gmp} & +0.10624 & +0.19953 \\
-\texttt{tiny\_gap} & +0.07690 & +0.04308 \\
-\texttt{plain2\_w16\_gmp} & -0.04453 & -0.08067 \\
-\texttt{plain2\_w16\_gap} & +0.09109 & +0.02057 \\
+\texttt{tiny\_gmp} & +0.10624 & [0.09645, 0.11602] & +0.19953 & [0.17831, 0.22075] \\
+\texttt{tiny\_gap} & +0.07690 & [0.06348, 0.09033] & +0.04308 & [0.03938, 0.04678] \\
+\texttt{plain2\_w16\_gmp} & -0.04453 & [-0.05187, -0.03719] & -0.08067 & [-0.10006, -0.06127] \\
+\texttt{plain2\_w16\_gap} & +0.09109 & [0.07012, 0.11207] & +0.02057 & [-0.00051, 0.04164] \\
 \bottomrule
 \end{tabular}
 \end{table}
