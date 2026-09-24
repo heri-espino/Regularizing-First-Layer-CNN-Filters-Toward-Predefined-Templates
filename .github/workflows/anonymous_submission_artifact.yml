@@ -155,6 +155,26 @@ jobs:
           machine-specific execution manifests.
           README
 
+          # Git commit/blob IDs can link an anonymous artifact back to the public
+          # development repository. They are provenance metadata rather than scientific
+          # quantities, so redact 40-hex Git object IDs while retaining longer SHA-256
+          # scientific file/checkpoint hashes.
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path("anonymous_tmlr_artifact")
+          text_suffixes = {".md", ".json", ".txt", ".csv", ".py"}
+          git_object = re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{40}(?![0-9A-Fa-f])")
+          for path in root.rglob("*"):
+              if not path.is_file() or path.suffix.lower() not in text_suffixes:
+                  continue
+              text = path.read_text(encoding="utf-8")
+              cleaned = git_object.sub("<redacted-git-object-for-anonymous-review>", text)
+              if cleaned != text:
+                  path.write_text(cleaned, encoding="utf-8")
+          PY
+
           # Fail closed if identifying information or private machine paths remain.
           bad=0
           patterns=(
@@ -185,6 +205,31 @@ jobs:
           fi
 
           if [ "$bad" -ne 0 ]; then
+            exit 1
+          fi
+
+          # No raw Git commit/blob IDs should survive anonymization.
+          if python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          root = Path("anonymous_tmlr_artifact")
+          pat = re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{40}(?![0-9A-Fa-f])")
+          hits = []
+          for path in root.rglob("*"):
+              if not path.is_file() or path.suffix.lower() not in {".md", ".json", ".txt", ".csv", ".py"}:
+                  continue
+              for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                  if pat.search(line):
+                      hits.append(f"{path}:{i}")
+          if hits:
+              print("\n".join(hits[:50]))
+              sys.exit(0)
+          sys.exit(1)
+          PY
+          then
+            echo "::error::Anonymous-artifact scan found an unredacted 40-hex Git object ID."
             exit 1
           fi
 
