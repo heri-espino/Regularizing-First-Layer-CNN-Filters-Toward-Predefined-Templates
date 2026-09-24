@@ -138,12 +138,12 @@ def build_figure() -> Path:
     # As in Figure 6, panel headings get dedicated rows.  This keeps panel
     # letters and long titles aligned to the same left edge and removes the
     # large vertical gaps caused by negative axes coordinates.
-    fig = plt.figure(figsize=(7.15, 4.15))
+    fig = plt.figure(figsize=(7.15, 4.30))
     outer = fig.add_gridspec(
         5,
         1,
-        height_ratios=[0.18, 1.18, 0.18, 0.22, 0.82],
-        hspace=0.20,
+        height_ratios=[0.18, 1.18, 0.30, 0.22, 0.82],
+        hspace=0.22,
         left=0.13,
         right=0.99,
         top=0.975,
@@ -178,7 +178,7 @@ def build_figure() -> Path:
     top_xlabel = fig.add_subplot(outer[2])
     top_xlabel.axis("off")
     top_xlabel.text(
-        0.5, 0.50, "Difference: structured - pixel-permuted",
+        0.5, 0.42, "Difference: structured - pixel-permuted",
         fontsize=8.0, ha="center", va="center",
     )
 
