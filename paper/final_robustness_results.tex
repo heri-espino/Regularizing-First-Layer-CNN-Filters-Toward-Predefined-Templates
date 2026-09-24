@@ -91,6 +91,43 @@ prob\_error\_reduction & +0.88960 & [+0.86212, +0.91707] & $3.24\times10^{-82}$ 
 \end{tabular}
 \end{table}
 
+\paragraph{Input-effect denominators across architectures.}
+The normalized fidelity metrics divide by a base-to-counterfactual input-effect scale. \Cref{tab:architecture-denominators} reports the release-minus-retention difference in that denominator for each architecture on the primary \texttt{two\_concepts} task. The probability-space quantity is $E_{\mathrm{prob}}(0,1)$ from \Cref{eq:prob-error}; the centered-logit quantity is its direct analogue after centering logits. Each estimate averages the four initialization replicates within renderer block before inference over 100 blocks. The wide variation across architectures is one reason the main text reports the unnormalized probability-error reduction alongside normalized fidelity.
+
+{\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}{lrrrr}
+\caption{Release-minus-retention differences in the base-to-counterfactual input-effect denominator on \texttt{two\_concepts}. Intervals are paired 95\% $t$ intervals over 100 renderer blocks.}\label{tab:architecture-denominators}\\
+\toprule
+Architecture & $\Delta E_{\mathrm{prob}}(0,1)$ & 95\% CI & $\Delta E_{\mathrm{clogit}}(0,1)$ & 95\% CI \\
+\midrule
+\endfirsthead
+\toprule
+Architecture & $\Delta E_{\mathrm{prob}}(0,1)$ & 95\% CI & $\Delta E_{\mathrm{clogit}}(0,1)$ & 95\% CI \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{tiny\_gmp} & +0.83752 & [+0.83054, +0.84450] & +126.31 & [+124.45, +128.18] \\
+\texttt{tiny\_gap} & +0.19010 & [+0.18295, +0.19724] & +5.34 & [+5.07, +5.62] \\
+\texttt{plain2\_w16\_gmp} & +0.06108 & [+0.05866, +0.06350] & +204.42 & [+201.23, +207.60] \\
+\texttt{plain2\_w16\_gap} & +0.74200 & [+0.73086, +0.75315] & +216.93 & [+208.71, +225.15] \\
+\texttt{plain4\_w16\_gmp} & +0.00472 & [+0.00371, +0.00573] & +181.74 & [+168.61, +194.86] \\
+\texttt{plain4\_w16\_gap} & +0.13850 & [+0.12074, +0.15627] & +601.26 & [+548.89, +653.63] \\
+\texttt{plain2\_w64\_gmp} & +0.02535 & [+0.02383, +0.02686] & +186.40 & [+183.23, +189.56] \\
+\texttt{plain2\_w64\_gap} & +0.58107 & [+0.57304, +0.58910] & +181.49 & [+175.74, +187.25] \\
+\texttt{plain4\_w64\_gmp} & -0.00027 & [-0.00053, -0.00002] & +85.05 & [+77.20, +92.91] \\
+\texttt{plain4\_w64\_gap} & +0.06385 & [+0.04470, +0.08301] & +625.91 & [+558.30, +693.51] \\
+\texttt{res4\_w16\_gmp} & +0.00298 & [+0.00229, +0.00367] & +132.71 & [+124.93, +140.48] \\
+\texttt{res4\_w16\_gap} & +0.12994 & [+0.11077, +0.14911] & +553.74 & [+516.93, +590.55] \\
+\texttt{bn2\_w16\_gmp} & +0.08357 & [+0.06440, +0.10274] & +122.19 & [+116.66, +127.72] \\
+\texttt{bn2\_w16\_gap} & +0.49681 & [+0.45913, +0.53449] & +57.03 & [+55.08, +58.98] \\
+\texttt{bn4\_w16\_gmp} & +0.00290 & [+0.00238, +0.00341] & +6.68 & [+5.46, +7.91] \\
+\texttt{bn4\_w16\_gap} & +0.02535 & [+0.01827, +0.03243] & +8.26 & [+7.50, +9.02] \\
+\end{longtable}
+\normalsize
+}
+
 \subsection{Architecture-specific estimates}\label{app:architecture-estimates}
 
 \Cref{tab:app-architecture-estimates} reports every architecture mean and marginal 95\% $t$ interval for the two pre-specified evaluation metrics.
