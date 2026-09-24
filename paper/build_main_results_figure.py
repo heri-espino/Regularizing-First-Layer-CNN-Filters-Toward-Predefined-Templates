@@ -2,12 +2,12 @@
 """Build the manuscript's central robustness figure from archived analysis tables.
 
 Panel (a) shows the annealed-minus-constant treatment difference as a function
-of patched first-layer channel count in the prospective two_concepts/TinyCNN
+of intervention size in the pre-specified two_concepts/TinyCNN
 experiment under the historical probability metric and the two frozen
 alternative metrics.
 
-Panel (b) shows the architecture-specific channel-count contrast B for the 16
-architectures in the prospective architecture-robustness experiment under the
+Panel (b) shows the architecture-specific intervention-size contrast B for the 16
+architectures in the pre-specified architecture-robustness experiment under the
 two primary metrics.
 
 This script is presentation-only. It reads versioned aggregate CSVs and does
@@ -166,7 +166,7 @@ def draw_forest(ax, rows_by_arch, title: str, color: str, show_labels: bool) -> 
     else:
         ax.set_yticklabels([])
     ax.set_ylim(-0.8, len(ARCH_ORDER) - 0.2)
-    ax.set_xlabel(r"Channel-count contrast, $B$")
+    ax.set_xlabel(r"Intervention-size contrast, $B$")
     ax.grid(axis="y", visible=False)
 
     # Visual separators preserve the prespecified architecture-family ordering
@@ -205,7 +205,7 @@ def build_figure() -> Path:
         ha="left", va="center", fontstretch="normal",
     )
     header_a.text(
-        0.035, 0.50, "Prospective channel-count pattern and metric robustness",
+        0.035, 0.50, "Pre-specified intervention-size contrast and metric robustness",
         fontsize=8.1, ha="left", va="center", fontstretch="normal",
     )
 
@@ -223,7 +223,7 @@ def build_figure() -> Path:
     top_xlabel = fig.add_subplot(outer[2])
     top_xlabel.axis("off")
     top_xlabel.text(
-        0.5, 0.50, r"Patched channels, $k$",
+        0.5, 0.50, r"Intervention size, $k$",
         fontsize=8.0, ha="center", va="center",
     )
 
@@ -234,7 +234,7 @@ def build_figure() -> Path:
         ha="left", va="center", fontstretch="normal",
     )
     header_b.text(
-        0.035, 0.50, "Architecture dependence on 100 fresh renderer blocks",
+        0.035, 0.50, "Architecture dependence on 100 independent renderer blocks",
         fontsize=8.1, ha="left", va="center", fontstretch="normal",
     )
 
