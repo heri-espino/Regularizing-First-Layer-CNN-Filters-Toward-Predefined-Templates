@@ -413,3 +413,22 @@ The first real VM invocation of the additivity workflow failed before any scient
 Checkpoint: `checkpoints/CP-016_patching-additivity-bom-fix.md`.
 
 After pulling, rerun `-Mode Inventory` and then `-Mode Validate`. Do not bypass the validation gate or run `-Mode Main` until validation succeeds.
+
+
+## 2026-09-30 patching-additivity staging handoff
+
+The user reports that the central `-Mode Main` patching-additivity experiment finished successfully on the university VM. The scientific outputs still live under the external default root `%LOCALAPPDATA%\prior-templates-cnns\results\patching_additivity_001` and have not yet been inspected from the repository.
+
+A direct-to-Git archival helper now exists at `run/stage_patching_additivity_results.ps1`. It stages both inventories, the validation/benchmark artifact plus compact validation metadata, central grid design/inventory/completion metadata, and every paper-facing file under `architecture_analysis/` and `anchor_analysis/`. If a complete cost-gated secondary-anchor run exists, it is archived automatically too. It intentionally excludes per-model `runs/**` JSON trees and source checkpoints.
+
+Next VM action:
+```powershell
+git pull --ff-only origin main
+.\run\stage_patching_additivity_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add patching-additivity results"
+git push
+```
+
+After those results reach the repository, inspect the actual reports/tables before writing the next scientific checkpoint. Do not claim or summarize additivity outcomes from user-reported completion alone.
