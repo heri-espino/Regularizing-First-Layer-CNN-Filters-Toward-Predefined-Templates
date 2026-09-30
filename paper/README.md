@@ -22,7 +22,7 @@ Complete test statistics, corrections, alternative rankings, schedules, and othe
 
 The restructured manuscript uses a small figure-led set:
 
-1. figures/fig00_overview.pdf plus figures/fig05_kernel_gallery.pdf — presented together as the experimental system, predefined bank, representative learned filters, and patch point.
+1. figures/fig00_overview.pdf plus figures/fig01_kernel_summary.pdf — presented together as the experimental system, predefined bank, a compact checkpoint-based subset of learned filters, and the patch point. The full 16-channel gallery remains in the supplement.
 2. figures/fig02_intervention_size.pdf — retention and release curves plus their paired difference for the three evaluation metrics.
 3. additive-reconstruction figure — pending the frozen post-hoc analysis under studies/cnn_patching_additivity/.
 4. figures/fig04_architecture.pdf — the complete 16-architecture map, separated from the intervention-size figure.
