@@ -368,39 +368,39 @@ The user explicitly authorized one additional **post-hoc saved-checkpoint mechan
 
 Latest checkpoint:
 
-- \`checkpoints/CP-015_patching-additivity-implementation.md\`
+- `checkpoints/CP-015_patching-additivity-implementation.md`
 
 Study:
 
-- \`studies/cnn_patching_additivity/\`
-- protocol: \`studies/cnn_patching_additivity/PROTOCOL.md\`
-- runbook: \`studies/cnn_patching_additivity/README.md\`
-- wrapper: \`run/run_patching_additivity.ps1\`
+- `studies/cnn_patching_additivity/`
+- protocol: `studies/cnn_patching_additivity/PROTOCOL.md`
+- runbook: `studies/cnn_patching_additivity/README.md`
+- wrapper: `run/run_patching_additivity.ps1`
 
 Read-only source roots:
 
-\`\`\`text
+```text
 %LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 %LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001
-\`\`\`
+```
 
 New result root:
 
-\`\`\`text
+```text
 %LOCALAPPDATA%\prior-templates-cnns\results\patching_additivity_001
-\`\`\`
+```
 
 Current state: implementation and synthetic/analytic validation are complete, but the actual saved Stage-F/G checkpoints have **not** been evaluated in the current ChatGPT runtime because those Windows paths are not mounted here. Do not infer or invent scientific results.
 
 On the university VM, the next commands are:
 
-\`\`\`powershell
+```powershell
 git pull --ff-only origin main
 conda activate prior-templates-cnns
 
 .\run\run_patching_additivity.ps1 -Mode Inventory
 .\run\run_patching_additivity.ps1 -Mode Validate
 .\run\run_patching_additivity.ps1 -Mode Main
-\`\`\`
+```
 
-Do not run \`-Mode Main\` if validation fails. Main execution is incremental/resumable and trains no models. Do not use the old partial CPU architecture root. Do not inspect the random-rank10/full-rank additivity outcomes before applying the predeclared timing/storage-only secondary-run rule. After central evaluation completes, create a new results checkpoint before changing the manuscript.
+Do not run `-Mode Main` if validation fails. Main execution is incremental/resumable and trains no models. Do not use the old partial CPU architecture root. Do not inspect the random-rank10/full-rank additivity outcomes before applying the predeclared timing/storage-only secondary-run rule. After central evaluation completes, create a new results checkpoint before changing the manuscript.
