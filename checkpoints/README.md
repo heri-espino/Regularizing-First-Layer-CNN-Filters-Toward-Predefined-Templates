@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-015_patching-additivity-implementation.md`
+`CP-016_patching-additivity-bom-fix.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
