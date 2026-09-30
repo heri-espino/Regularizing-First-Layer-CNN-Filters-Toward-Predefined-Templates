@@ -12,6 +12,7 @@ This directory contains convenience launchers for reproducing the experiments an
 | `run_metric_sensitivity.ps1`, `run_metric_sensitivity.zsh` | Re-evaluate saved Stage-D/E checkpoints under frozen alternative patching metrics; no training |
 | `stage_metric_sensitivity_results.ps1` | Stage completed metric-sensitivity analysis directly from `%LOCALAPPDATA%` into Git when the Windows worktree cannot create new directories |
 | `run_architecture_robustness.ps1` | Run the frozen Stage-F 25,600-model architecture robustness study |
+| `run_patching_additivity.ps1` | Run the post-hoc saved-checkpoint additivity inventory, validation, central analysis, or cost-gated secondary extension |
 | `stage_architecture_robustness_results.ps1` | Archive only Stage-F paper-facing outputs from the official external CUDA root directly into Git |
 | `benchmark_architecture_training.ps1` | Implementation-only CPU-vs-CUDA Stage-F training throughput benchmark |
 | `status_anchor_specificity.ps1` | Report outcome-blind training/evaluation completion counts for the anchor-specificity run |
