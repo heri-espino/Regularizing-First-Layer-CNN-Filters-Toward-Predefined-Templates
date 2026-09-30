@@ -2,7 +2,7 @@
 
 Post-hoc mechanistic decomposition of the completed architecture-robustness and filter-bank-control checkpoints. This study **never trains models** and never overwrites the source runs.
 
-Read [`PROTOCOL.md`](PROTOCOL.md) before execution.
+Read [`PROTOCOL.md`](PROTOCOL.md) before execution. [`IMPLEMENTATION_MANIFEST.json`](IMPLEMENTATION_MANIFEST.json) records the exact implementation/source Git blobs and the implementation-only validation state.
 
 ## Inputs
 
