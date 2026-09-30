@@ -29,12 +29,9 @@ FIGURES = tuple(
     PAPER_DIR / "figures" / name
     for name in (
         "fig00_overview.pdf",
-        "fig01_learning.pdf",
-        "fig02_patch_size.pdf",
-        "fig03_matching_trajectories.pdf",
-        "fig04_similarity_matrices.pdf",
+        "fig02_intervention_size.pdf",
+        "fig04_architecture.pdf",
         "fig05_kernel_gallery.pdf",
-        "fig06_main_results.pdf",
         "fig07_anchor_specificity.pdf",
     )
 )
