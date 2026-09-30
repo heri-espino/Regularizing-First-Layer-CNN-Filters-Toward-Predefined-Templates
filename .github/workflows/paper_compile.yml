@@ -22,15 +22,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-bibtex-extra
-      - name: Compile manuscript
+      - name: Compile main manuscript
         run: python paper/build.py --clean
+      - name: Compile supplement
+        run: python paper/build_supplement.py
       - name: Upload compiled PDF and log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tmlr-submission-${{ github.sha }}
+          name: sncs-restructure-${{ github.sha }}
           path: |
-            paper/tmlr_submission.pdf
+            paper/manuscript.pdf
+            paper/supplement.pdf
             paper/build/main.log
+            paper/build/supplement.log
           retention-days: 30
           if-no-files-found: warn
