@@ -32,7 +32,7 @@ jobs:
         with:
           name: sncs-restructure-${{ github.sha }}
           path: |
-            paper/manuscript.pdf
+            paper/tmlr_submission.pdf
             paper/supplement.pdf
             paper/build/main.log
             paper/build/supplement.log
