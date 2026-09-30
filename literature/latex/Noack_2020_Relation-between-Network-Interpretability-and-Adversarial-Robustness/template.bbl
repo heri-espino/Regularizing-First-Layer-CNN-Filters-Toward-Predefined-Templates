@@ -1,0 +1,414 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{sanity_checks_salience_maps}
+Adebayo, J., Gilmer, J., Muelly, M., Goodfellow, I.J., Hardt, M., Kim, B.:
+  Sanity checks for saliency maps.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2018)
+
+\bibitem{ahern2019normlime}
+Ahern, I., Noack, A., Guzman-Nateras, L., Dou, D., Li, B., Huan, J.:
+  Norm{L}ime: A new feature importance metric for explaining deep neural
+  networks.
+\newblock arXiv Preprint \textbf{arXiv 1909.04200} (2019)
+
+\bibitem{lipschitz_nets_interp}
+Anil, C., Lucas, J., Grosse, R.B.: Sorting out {L}ipschitz function
+  approximation.
+\newblock In: The International Conference on Machine Learning (ICML) (2018)
+
+\bibitem{simple_gradient}
+Baehrens, D., Schroeter, T., Harmeling, S., Kawanabe, M., Hansen, K.,
+  M\"{u}ller, K.R.: How to explain individual classification decisions.
+\newblock Journal of Machine Learning Research \textbf{11}, 1803--1831 (2010)
+
+\bibitem{NetDissection2017}
+{Bau}, D., {Zhou}, B., {Khosla}, A., {Oliva}, A., {Torralba}, A.: Network
+  dissection: Quantifying interpretability of deep visual representations.
+\newblock In: 2017 IEEE Conference on Computer Vision and Pattern Recognition
+  (CVPR), pp. 3319--3327 (2017)
+
+\bibitem{Brendel2017:Decision-based-attacks}
+Brendel, W., Rauber, J., Bethge, M.: Decision-based adversarial attacks:
+  Reliable attacks against black-box machine learning models.
+\newblock arXiv Preprint \textbf{arXiv 1712.04248} (2017)
+
+\bibitem{Bubeck2018}
+Bubeck, S., Price, E., Razenshteyn, I.: Adversarial examples from computational
+  constraints.
+\newblock The International Conference on Machine Learning (ICML)  (2019)
+
+\bibitem{carlini2019evaluating}
+Carlini, N., Athalye, A., Papernot, N., Brendel, W., Rauber, J., Tsipras, D.,
+  Goodfellow, I., Madry, A., Kurakin, A.: On evaluating adversarial robustness.
+\newblock arXiv Preprint \textbf{arXiv 1902.06705} (2019)
+
+\bibitem{Carlini2017:bypass-detection}
+Carlini, N., Wagner, D.: Adversarial examples are not easily detected:
+  Bypassing ten detection methods.
+\newblock In: The 10th ACM Workshop on Artificial Intelligence and Security
+  (2017)
+
+\bibitem{cw}
+Carlini, N., Wagner, D.A.: Towards evaluating the robustness of neural
+  networks.
+\newblock In: The IEEE Symposium on Security and Privacy (2017)
+
+\bibitem{prasad}
+Chalasani, P., Jha, S., Sadagopan, A., Wu, X.: Adversarial learning and
+  explainability in structured datasets.
+\newblock arXiv Preprint \textbf{arXiv 1810.06583} (2018)
+
+\bibitem{JARN}
+Chan, A., Tay, Y., Ong, Y.S., Fu, J.: Jacobian adversarially regularized
+  networks for robustness.
+\newblock In: International Conference on Learning Representations (ICLR)
+  (2020)
+
+\bibitem{Chen2017:zoo}
+Chen, P.Y., Zhang, H., Sharma, Y., Yi, J., Hsieh, C.J.: Zoo: Zeroth order
+  optimization based black-box attacks to deep neural networks without training
+  substitute models.
+\newblock In: The 10th ACM Workshop on Artificial Intelligenceand Security, p.
+  15–26 (2017)
+
+\bibitem{parseval_nets}
+Cisse, M., Bojanowski, P., Grave, E., Dauphin, Y., Usunier, N.: Parseval
+  networks: Improving robustness to adversarial examples.
+\newblock In: The International Conference on Machine Learning (ICML), pp.
+  854--863 (2017)
+
+\bibitem{dhur2018explanations}
+Dhurandhar, A., Chen, P.Y., Luss, R., Tu, C.C., Ting, P., Shanmugam, K., Das,
+  P.: Explanations based on the missing: Towards contrastive explanations with
+  pertinent negatives.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2018)
+
+\bibitem{Dong2017}
+Dong, Y., Su, H., Zhu, J., Bao, F.: Towards interpretable deep neural networks
+  by leveraging adversarial examples.
+\newblock In: AAAI-19 Workshop on Network Interpretability for Deep Learning
+  (2017)
+
+\bibitem{double_bp}
+Drucker, H., LeCun, Y.: Double backpropagation increasing generalization
+  performance.
+\newblock In: The International Joint Conference on Neural Networks, pp.
+  145--150 (1992)
+
+\bibitem{robustness_interpretability}
+Etmann, C., Lunz, S., Maass, P., Schönlieb, C.B.: On the connection between
+  adversarial robustness and saliency map interpretability.
+\newblock In: The International Conference on Machine Learning (ICML) (2019)
+
+\bibitem{fong2018}
+Fong, R., Vedaldi, A.: Net2vec: Quantifying and explaining how concepts are
+  encoded by filters in deep neural networks.
+\newblock arXiv preprint arXiv:1801.03454  (2018)
+
+\bibitem{frgagile_interpretations}
+Ghorbani, A., Abid, A., Zou, J.Y.: Interpretation of neural networks is
+  fragile.
+\newblock In: AAAI (2017)
+
+\bibitem{Gilmer2018}
+Gilmer, J., Metz, L., Faghri, F., Schoenholz, S.S., Raghu, M., Wattenberg, M.,
+  Goodfellow, I.J.: Adversarial spheres.
+\newblock In: Workshop of International Conference on Learning Representations
+  (ICLR) (2018)
+
+\bibitem{gong2017adversarial}
+Gong, Z., Wang, W., Ku, W.S.: Adversarial and clean data are not twins.
+\newblock arXiv Preprint \textbf{arXiv 1704.04960} (2017)
+
+\bibitem{explaining_harnessing_adv_egs}
+Goodfellow, I., Shlens, J., Szegedy, C.: Explaining and harnessing adversarial
+  examples.
+\newblock In: International Conference on Learning Representations (ICLR)
+  (2015)
+
+\bibitem{grosse2017statistical}
+Grosse, K., Manoharan, P., Papernot, N., Backes, M., McDaniel, P.: On the
+  (statistical) detection of adversarial examples.
+\newblock arXiv Preprint \textbf{arXiv 1702.06280} (2017)
+
+\bibitem{cross_lipschitz}
+Hein, M., Andriushchenko, M.: Formal guarantees on the robustness of a
+  classifier against adversarial manipulation.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2017)
+
+\bibitem{jacobian_reg_approx}
+Hoffman, J., Roberts, D.A., Yaida, S.: Robust learning with jacobian
+  regularization.
+\newblock arXiv Preprint \textbf{arXiv 1908.02729} (2019)
+
+\bibitem{Ilyas2018:black-box}
+Ilyas, A., Engstrom, L., Athalye, A., Lin, J.: Black-box adversarial
+  attackswith limited queries and information.
+\newblock In: The International Conference on Machine Learning (ICML) (2018)
+
+\bibitem{ilyas2019adversarial}
+Ilyas, A., Santurkar, S., Tsipras, D., Engstrom, L., Tran, B., Madry, A.:
+  Adversarial examples are not bugs, they are features.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2019)
+
+\bibitem{Jain2016:hard-thresholding}
+Jain, P., Rao, N., Dhillon, I.S.: Structured sparse regression via greedy hard
+  thresholding.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2016)
+
+\bibitem{jacobian_reg}
+Jakubovitz, D., Giryes, R.: Improving {DNN} robustness to adversarial attacks
+  using jacobian regularization.
+\newblock In: The European Conference on Computer Vision (ECCV) (2018)
+
+\bibitem{unreliability}
+{Kindermans}, P.J., {Hooker}, S., {Adebayo}, J., {Alber}, M., {Sch{\"u}tt},
+  K.T., {D{\"a}hne}, S., {Erhan}, D., {Kim}, B.: {The (Un)reliability of
+  saliency methods}.
+\newblock In: Explainable AI: Interpreting, Explaining and Visualizing Deep
+  Learning, vol. 11700. Springer (2019)
+
+\bibitem{kindermans2017learning}
+Kindermans, P.J., Schütt, K.T., Alber, M., Müller, K.R., Erhan, D., Kim, B.,
+  Dähne, S.: Learning how to explain neural networks: {P}attern{N}et and
+  {P}attern{A}ttribution  (2017)
+
+\bibitem{Koh2017:influence-functions}
+Koh, P.W., Liang, P.: Understanding black-box predictions via influence
+  functions.
+\newblock In: International Conference on Machine Learning (2017)
+
+\bibitem{lamb2019interpolated}
+Lamb, A., Verma, V., Kannala, J., Bengio, Y.: Interpolated adversarial
+  training: Achieving robust neural networks without sacrificing too much
+  accuracy.
+\newblock arXiv Preprint \textbf{arXiv 1906.06784} (2019)
+
+\bibitem{lampinen2019analytic}
+Lampinen, A.K., Ganguli, S.: An analytic theory of generalization dynamics and
+  transfer learning in deep linear networks.
+\newblock In: International Conference on Learning Representations (ICLR)
+  (2019)
+
+\bibitem{lanfredi2020quantifying}
+Lanfredi, R.B., Schroeder, J.D., Tasdizen, T.: Quantifying the preferential
+  direction of the model gradient in adversarial training with projected
+  gradient descent.
+\newblock arXiv Preprint \textbf{arXiv 2009.04709} (2020)
+
+\bibitem{smoothing}
+Lécuyer, M., Atlidakis, V., Geambasu, R., Hsu, D., Jana, S.: Certified
+  robustness to adversarial examples with differential privacy.
+\newblock In: 2019 IEEE Symposium on Security and Privacy (SP), pp. 656--672
+  (2019)
+
+\bibitem{l2mnist}
+Li, B., Chen, C., Wang, W., Carin, L.: Second-order adversarial attack and
+  certifiable robustness (2018)
+
+\bibitem{Liu2017:transferable}
+Liu, Y., Chen, X., Liu, C., Song, D.: Delving into transferable adversarial
+  examples and black-box attacks.
+\newblock In: The International Conference on Learning Representation (ICLR)
+  (2017)
+
+\bibitem{toward_robust_dnn}
+Madry, A., Makelov, A., Schmidt, L., Tsipras, D., Vladu, A.: Towards deep
+  learning models resistant to adversarial attacks.
+\newblock In: International Conference on Learning Representations (ICLR)
+  (2017)
+
+\bibitem{metzen2017detecting}
+Metzen, J.H., Genewein, T., Fischer, V., Bischoff, B.: On detecting adversarial
+  perturbations.
+\newblock arXiv Preprint \textbf{arXiv 1702.04267} (2017)
+
+\bibitem{deep_taylor}
+Montavon, G., Samek, W., M{\"{u}}ller, K.: Methods for interpreting and
+  understanding deep neural networks.
+\newblock arXiv Preprint \textbf{arXiv 1706.07979} (2017)
+
+\bibitem{deepfool}
+Moosavi{-}Dezfooli, S., Fawzi, A., Frossard, P.: Deepfool: a simple and
+  accurate method to fool deep neural networks.
+\newblock In: CVPR (2016)
+
+\bibitem{universal-perturbations2017}
+Moosavi-Dezfooli, S.M., Fawzi, A., Fawzi, O., Frossard, P.: Universal
+  adversarial perturbations.
+\newblock In: The IEEE Conference on Computer Vision and Pattern Recognition
+  (CVPR) (2017)
+
+\bibitem{Nakkiran2019}
+Nakkiran, P.: Adversarial robustness may be at odds with simplicity.
+\newblock arXiv Preprint \textbf{arXiv 1901.00532} (2019)
+
+\bibitem{lipschitz_converge_generalize}
+Oberman, A.M., Calder, J.: Lipschitz regularized deep neural networks converge
+  and generalize.
+\newblock arXiv Preprint \textbf{arXiv 1808.09540} (2018)
+
+\bibitem{blackbox_attack}
+Papernot, N., McDaniel, P., Goodfellow, I., Jha, S., Celik, Z.B., Swami, A.:
+  Practical black-box attacks against machine learning.
+\newblock In: The 2017 ACM on Asia Conference on Computer and Communications
+  Security, pp. 506--519. ACM, New York, NY, USA (2017)
+
+\bibitem{jsma}
+Papernot, N., McDaniel, P.D., Jha, S., Fredrikson, M., Celik, Z.B., Swami, A.:
+  The limitations of deep learning in adversarial settings.
+\newblock IEEE European Symposium on Security and Privacy  (2016)
+
+\bibitem{distillation}
+Papernot, N., McDaniel, P.D., Wu, X., Jha, S., Swami, A.: Distillation as a
+  defense to adversarial perturbations against deep neural networks.
+\newblock In: IEEE Symposium on Security and Privacy (2016)
+
+\bibitem{pytorch}
+Paszke, A., Gross, S., Chintala, S., Chanan, G., Yang, E., DeVito, Z., Lin, Z.,
+  Desmaison, A., Antiga, L., Lerer, A.: Py{T}orch {T}orch{V}ision  (2017).
+\newblock \urlprefix\url{https://github.com/pytorch/vision}
+
+\bibitem{input_grad_reg}
+Ross, A.S., Doshi{-}Velez, F.: Improving the adversarial robustness and
+  interpretability of deep neural networks by regularizing their input
+  gradients.
+\newblock In: AAAI (2018)
+
+\bibitem{roth2019odds}
+Roth, K., Kilcher, Y., Hofmann, T.: The odds are odd: A statistical test for
+  detecting adversarial examples.
+\newblock In: The International Conference on Machine Learning (ICML) (2019)
+
+\bibitem{Saxe2019}
+Saxe, A.M., McClelland, J.L., Ganguli, S.: A mathematical theory of semantic
+  development in deep neural networks.
+\newblock Proceedings of the National Academy of Sciences \textbf{116}(23),
+  11537--11546 (2019)
+
+\bibitem{Schmidt2018}
+Schmidt, L., Santurkar, S., Tsipras, D., Talwar, K., Madry, A.: Adversarially
+  robust generalization requires more data.
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2018)
+
+\bibitem{selvaraju2016gradcam}
+Selvaraju, R.R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., Batra, D.:
+  Grad-cam: Visual explanations from deep networks via gradient-based
+  localization.
+\newblock ICCV  (2017)
+
+\bibitem{Shafahi2019:AT-for-free}
+Shafahi, A., Najibi, M., Ghiasi, M.A., Xu, Z., Dickerson, J., Studer, C.,
+  Davis, L.S., Taylor, G., Goldstein, T.: Adversarial training for free!
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS), pp.
+  3358--3369 (2019)
+
+\bibitem{deeplift}
+Shrikumar, A., Greenside, P., Kundaje, A.: Learning important features through
+  propagating activation differences.
+\newblock In: The International Conference on Machine Learning (ICML) (2017)
+
+\bibitem{grad_mag_and_robustness}
+Simon-Gabriel, C.J., Ollivier, Y., Bottou, L., Sch{\"o}lkopf, B., Lopez-Paz,
+  D.: First-order adversarial vulnerability of neural networks and input
+  dimension.
+\newblock In: K.~Chaudhuri, R.~Salakhutdinov (eds.) The 36th International
+  Conference on Machine Learning (ICML), \emph{Proceedings of Machine Learning
+  Research}, vol.~97, pp. 5809--5817. PMLR, Long Beach, California, USA (2019)
+
+\bibitem{smoothgrad}
+Smilkov, D., Thorat, N., Kim, B., Vi{\'{e}}gas, F.B., Wattenberg, M.:
+  Smooth{G}rad: removing noise by adding noise.
+\newblock In: The International Conference on Machine Learning (ICML) (2017)
+
+\bibitem{jacobian_reg_improves_generalization}
+Sokolic, J., Giryes, R., Sapiro, G., Rodrigues, M.R.D.: Robust large margin
+  deep neural networks.
+\newblock In: IEEE Transactions on Signal Processing, vol.~65, pp. 4265--4280
+  (2016)
+
+\bibitem{guided_backprop}
+Springenberg, J.T., Dosovitskiy, A., Brox, T., Riedmiller, M.: Striving for
+  simplicity: The all convolutional net.
+\newblock In: ICLR Workshop (2014)
+
+\bibitem{StacklebergGame:2011}
+von Stackelberg, H.: Market Structure and Equilibrium: 1st Edition Translation
+  into English.
+\newblock Springer (2011)
+
+\bibitem{stutz2019confidencecalibrated}
+Stutz, D., Hein, M., Schiele, B.: Confidence-calibrated adversarial training:
+  Generalizing to unseen attacks.
+\newblock arXiv Preprint \textbf{arXiv 1910.06259} (2019)
+
+\bibitem{integrated_gradients}
+Sundararajan, M., Taly, A., Yan, Q.: Axiomatic attribution for deep networks.
+\newblock In: The International Conference on Machine Learning (ICML) (2017)
+
+\bibitem{intriguing_properties_dnns}
+Szegedy, C., Zaremba, W., Sutskever, I., Bruna, J., Erhan, D., Goodfellow,
+  I.J., Fergus, R.: Intriguing properties of neural networks.
+\newblock In: The International Conference on Learning Representation (ICLR)
+  (2014)
+
+\bibitem{simple_cnn}
+TensorFlow: {TensorFlow models repository} (2017).
+\newblock
+  \urlprefix\url{https://github.com/tensorflow/models/blob/master/tutorials/image/mnist/convolutional.py}
+
+\bibitem{tramr2017ensemble}
+Tramèr, F., Kurakin, A., Papernot, N., Goodfellow, I., Boneh, D., McDaniel,
+  P.: Ensemble adversarial training: Attacks and defenses.
+\newblock arXiv Preprint \textbf{arXiv 1705.07204} (2017)
+
+\bibitem{robustness_vs_accuracy}
+{Tsipras}, D., {Santurkar}, S., {Engstrom}, L., {Turner}, A., {Madry}, A.:
+  Robustness may be at odds with accuracy.
+\newblock In: The International Conference on Learning Representation (ICLR)
+  (2019)
+
+\bibitem{uesato2019labels}
+Uesato, J., Alayrac, J.B., Huang, P.S., Stanforth, R., Fawzi, A., Kohli, P.:
+  Are labels required for improving adversarial robustness?
+\newblock In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2019)
+
+\bibitem{Uesato2018:adversarial-risk}
+Uesato, J., O’Donoghue, B., van~den Oord, A., Kohli, P.: Adversarial risk and
+  the dangers of evaluating against weak attacks.
+\newblock arXiv preprint \textbf{arXiv:1802.05666} (2018)
+
+\bibitem{xie2018improving}
+Xie, C., Zhang, Z., Zhou, Y., Bai, S., Wang, J., Ren, Z., Yuille, A.: Improving
+  transferability of adversarial examples with input diversity.
+\newblock arXiv Preprint \textbf{arXiv 1803.06978} (2018)
+
+\bibitem{wide_resnet}
+Zagoruyko, S., Komodakis, N.: Wide residual networks.
+\newblock In: The British Machine Vision Conference (BMVC) (2016)
+
+\bibitem{Zeiler2014}
+Zeiler, M.D., Fergus, R.: Visualizing and understanding convolutional networks.
+\newblock In: The European Conference on Computer Vision (ECCV), pp. 818--833
+  (2014)
+
+\bibitem{BoleiZhou2015}
+Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., Torralba, A.: Object detectors
+  emerge in deep scene cnns.
+\newblock In: International Conference on Learning Representations (ICLR)
+  (2015)
+
+\end{thebibliography}
