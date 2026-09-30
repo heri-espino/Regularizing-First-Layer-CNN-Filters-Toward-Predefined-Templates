@@ -68,6 +68,7 @@ jobs:
             'run/stage_architecture_posthoc_results.ps1',
             'studies/cnn_architecture_posthoc/run_architecture_posthoc.ps1',
             'run/run_patching_additivity.ps1',
+            'run/stage_patching_additivity_results.ps1',
             'studies/cnn_patching_additivity/run_patching_additivity.ps1'
           )
           foreach ($file in $files) {
