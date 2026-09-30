@@ -2,7 +2,7 @@
   "study": "cnn_patching_additivity",
   "frozen_date": "2026-09-30",
   "evidential_role": "post_hoc_saved_checkpoint_analysis",
-  "implementation_status": "validated_locally_source_execution_pending",
+  "implementation_status": "validated_locally_bom_compatibility_fixed_source_execution_pending",
   "trains_models": false,
   "scientific_execution_complete": false,
   "inspected_source_repository_head_before_implementation": "fa5fae0295747ba48ec8a4f222aac07e58fc5ace",
@@ -39,13 +39,14 @@
     "studies/cnn_patching_additivity/PROTOCOL.md": "72acf27feed75c73592f63f85d92579eb113c0bd",
     "studies/cnn_patching_additivity/README.md": "17acd1e5c66c0f361de91307f3f4015d1730194d",
     "studies/cnn_patching_additivity/math_core.py": "75cb4773df6720fbba3bf5832d053b8a75675f76",
-    "studies/cnn_patching_additivity/evaluate.py": "73fdf52e6cd12c0a3851b09a9a41103b38b31d0f",
+    "studies/cnn_patching_additivity/evaluate.py": "db811476cb126cf614f99b21ca3083a9ca0394a8",
     "studies/cnn_patching_additivity/analyze.py": "d2175fe5439232702a63b8368867d74f90ece1f1",
     "studies/cnn_patching_additivity/validate.py": "1aaac37dd6a2e1f1f05746e42f17ae9f29c814da",
     "studies/cnn_patching_additivity/run_patching_additivity.ps1": "0c777a561c4c83c44ef03cd00d05d9f08f573f0d",
     "studies/cnn_patching_additivity/test_math.py": "5b878dd4cad5759e35eba8b42113951e631cee64",
     "studies/cnn_patching_additivity/test_integration.py": "94e054cdb1fc5e70175f158190c96d09406b472c",
-    "run/run_patching_additivity.ps1": "c9561afcd2f9324b8f6c9ebd3cb409241bfe03d4"
+    "run/run_patching_additivity.ps1": "c9561afcd2f9324b8f6c9ebd3cb409241bfe03d4",
+    "studies/cnn_patching_additivity/test_json_io.py": "30612a10a7711c367c7e77c3cb51dab1f872ec2d"
   },
   "frozen_source_git_blobs": {
     "studies/cnn_architecture_robustness/PROTOCOL.md": "de00c0efc1c46fa2ad034c71d2a353ee590584ad",
@@ -63,7 +64,9 @@
     "synthetic_architecture_analysis": "PASS",
     "synthetic_anchor_analysis": "PASS",
     "known_fixed_issue": "architecture-source all-missing anchor_family dropped by pandas pivot; fixed via explicit not_applicable level",
-    "lightweight_github_ci_configured": true
+    "lightweight_github_ci_configured": true,
+    "bom_safe_json_reader": "covered_by_test_json_io.py",
+    "real_vm_first_run_issue": "UTF-8 BOM in historical Windows PowerShell execution_manifest.json; fixed without changing scientific design"
   },
   "runtime_artifacts_created_only_on_vm": [
     "inventory_architecture.json",
