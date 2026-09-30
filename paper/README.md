@@ -1,82 +1,74 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**.
+paper/main.tex is the working main manuscript. The current branch restructures the paper for a planned SN Computer Science resubmission. The scientific content is being reorganized before the final publisher-template conversion so that the pending additive-reconstruction analysis can be inserted without another structural rewrite.
 
-The current manuscript was rewritten from scratch after the final pixel-permuted control experiment on independent renderer blocks and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
+## Main-paper logic
 
-The main argument is organized around five scientific claims:
+The main paper is now organized by scientific questions rather than by the chronology of experiments:
 
-1. constant regularization preserves the predefined first-layer spatial structure;
-2. the release-versus-retention patching comparison depends on intervention size;
-3. the pre-specified intervention-size contrast remains under alternative evaluation metrics, although the values at individual intervention sizes differ;
-4. downstream architecture strongly conditions the contrast and that conclusion survives sphericity-robust, permutation, Friedman, and random-channel diagnostics;
-5. the original 2D template arrangement has a selected-channel functional effect beyond a Gram/rank/spectrum-matched pixel-permuted control, but that effect is architecture- and metric-dependent.
+1. Does constant regularization preserve the predefined first-layer filter structure?
+2. How does the release-versus-retention patching comparison change with intervention size?
+3. How much of that intervention-size behavior can be reconstructed from singleton contributions, cancellation, model-tail non-additivity, and metric nonlinearity? This result is pending; only the frozen method is currently defined.
+4. How strongly does downstream architecture change the same first-layer comparison?
+5. Does the original two-dimensional filter arrangement matter relative to a Gram/rank/spectrum-matched pixel-permuted control?
 
-Appendix material is split into five files:
+The intended reading order for every result is:
 
-- `specificity_robustness_results.tex` — pixel-permuted control specificity experiment and post hoc architecture diagnostics;
-- `final_robustness_results.tex` — complete metric-sensitivity and prospective architecture-robustness summaries;
-- `confirmation_robustness_results.tex` — complete prospective channel-budget and schedule/task sensitivity analyses;
-- `supplementary_results.tex` — developmental analyses that motivated the prospective estimand;
-- `kernel_matching_results.tex` — complete endpoint kernel-matching table.
+finding → figure → principal magnitude → interpretation.
 
-The bibliography is `../literature/references.bib`. The minimal TMLR style files required for compilation are vendored in `tmlr/` and retain their upstream license.
+Complete test statistics, corrections, alternative rankings, schedules, and other exhaustive estimates are kept out of the main narrative unless they change interpretation.
 
-## Cross-references and equations
+## Main figures
 
-The manuscript uses `cleveref` for cross-references. Every displayed equation uses a numbered `equation` environment with an explicit `eq:...` label. New displayed equations should follow the same convention rather than using `\[...\]`.
+The restructured manuscript uses a small figure-led set:
 
-## Figures
+1. figures/fig00_overview.pdf plus figures/fig05_kernel_gallery.pdf — presented together as the experimental system, predefined bank, representative learned filters, and patch point.
+2. figures/fig02_intervention_size.pdf — retention and release curves plus their paired difference for the three evaluation metrics.
+3. additive-reconstruction figure — pending the frozen post-hoc analysis under studies/cnn_patching_additivity/.
+4. figures/fig04_architecture.pdf — the complete 16-architecture map, separated from the intervention-size figure.
+5. figures/fig07_anchor_specificity.pdf — the spatial-control result.
 
-The main text uses four principal figures:
+paper/build_main_results_figure.py generates figures 2 and 4 from versioned analysis tables. It is presentation-only and does not retrain models or redefine inferential statistics.
 
-1. `fig00_overview.pdf` — renderer examples, template bank, and patching intervention;
-2. `fig05_kernel_gallery.pdf` — representative learned first-layer kernels;
-3. `fig06_main_results.pdf` — prospective channel-budget curves and 16-architecture robustness;
-4. `fig07_anchor_specificity.pdf` — pixel-permuted filter-bank control, architecture interaction, and equivalence comparison for selected versus random channel sets.
+## Main tables
 
-The manuscript-generated figures are built directly from frozen definitions or versioned aggregate analysis tables:
+The main text intentionally keeps only two compact tables:
 
-```bash
-python paper/build_overview_figure.py
-python paper/build_main_results_figure.py
-python paper/build_anchor_specificity_figure.py
-```
+- the evidence roadmap: task, architecture scope, comparison, renderer blocks, and evidential status;
+- endpoint context for the four architectures used in the spatial-control follow-up, including test accuracy and filter similarity.
 
-`paper/build.py` regenerates all three manuscript-generated figures automatically on every build.
+This keeps the important performance mismatch visible without reproducing the full architecture tables in the body.
 
-The remaining archived publication figures are regenerated from saved experimental artifacts with:
+## Supplement
 
-```bash
-python -m pip install -e ".[experiments]"
-python paper/build_figures.py
-```
+paper/supplement.tex is now separate from paper/main.tex. It groups the existing exhaustive material into three roles:
 
-`plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. Figure-generation scripts are presentation-only: they do not retrain models or redefine scientific analyses.
+1. methods and checks;
+2. complete estimates and sensitivity analyses;
+3. earlier exploratory analyses retained for provenance.
+
+The previous appendix source files remain intact so no numerical record is discarded. The main manuscript no longer inputs them directly.
+
+## Pending additive reconstruction
+
+The frozen protocol is studies/cnn_patching_additivity/PROTOCOL.md. It is explicitly post-hoc and uses saved checkpoints without retraining. The manuscript already defines the additive reconstruction notation and reserves the result location immediately after the intervention-size result.
+
+Do not insert an outcome before the frozen analysis finishes. In particular:
+
+- metric curvature is not a model interaction;
+- a nonzero residual is not automatically synergy or redundancy;
+- the analysis is explanatory decomposition, not independent confirmation.
+
+## Journal positioning
+
+The bibliography now includes the three supplied SN Computer Science papers on interpretation regularization/robustness, explanation multiplicity, and deceptive XAI. They are cited where they sharpen the distinction between representation, intervention, and explanation fidelity rather than added only to increase same-journal citation counts.
 
 ## Build
 
 From the repository root:
 
-```bash
-python paper/build.py
-```
+    python paper/build.py --clean
 
-The compiled manuscript is written to:
+The build regenerates the manuscript figures from versioned aggregate tables before compiling the PDF. Heavy paper-generation workflows remain manual-only through workflow_dispatch.
 
-```text
-paper/tmlr_submission.pdf
-```
-
-For a clean rebuild:
-
-```bash
-python paper/build.py --clean
-```
-
-LaTeX intermediates are written to `paper/build/` and are ignored by Git. The final PDF is generated rather than versioned so a release artifact can be rebuilt from source.
-
-
-## Submission readiness
-
-Before a double-blind submission, read `paper/SUBMISSION_CHECKLIST.md`. The working repository itself is **not** an anonymous supplementary artifact because repository metadata and some provenance manifests contain author-identifying information and local machine paths. Do not upload the repository wholesale as TMLR supplementary material.
+The current output filename remains paper/tmlr_submission.pdf until the final SN Computer Science template migration. This prevents a template change from being mixed with the scientific restructuring.
