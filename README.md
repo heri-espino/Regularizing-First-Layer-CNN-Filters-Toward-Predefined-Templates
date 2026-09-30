@@ -159,6 +159,8 @@ The pixel-permuted filter-bank control and post-hoc architecture analyses are co
 
 The current default task is manuscript polish and anonymous-artifact preparation, not further large-scale experimentation.
 
+A subsequent, explicitly post-hoc saved-checkpoint decomposition is implemented under `studies/cnn_patching_additivity/`. It asks whether the intervention-size curves can be reconstructed from all 16 singleton channel effects and separates cancellation, downstream non-additivity, and metric nonlinearity. It trains no models. The implementation is validated, while execution on the external Stage-F/G checkpoint roots remains pending; see `checkpoints/CP-015_patching-additivity-implementation.md` and `RESEARCH_STATUS.md`.
+
 ## Scope
 
 The empirical claims are restricted to the tested synthetic renderer, first-layer interventions, and small CNN family. Kernel-template similarity is a weight-space measurement; selected-channel fidelity is defined for the specified activation-patching procedure. The experiments do not establish a unique causal mechanism, human interpretability, or natural-image generalization.
