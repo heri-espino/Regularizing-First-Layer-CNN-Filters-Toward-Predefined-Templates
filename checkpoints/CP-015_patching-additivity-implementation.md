@@ -66,6 +66,7 @@ The new study is ready for source inventory and predetermined validation on the 
 - Implementation: `studies/cnn_patching_additivity/evaluate.py`, `math_core.py`, `validate.py`, `analyze.py`
 - Launcher: `studies/cnn_patching_additivity/run_patching_additivity.ps1`
 - Documentation: `studies/cnn_patching_additivity/README.md`
+- Implementation manifest: `studies/cnn_patching_additivity/IMPLEMENTATION_MANIFEST.json`
 - Tests: `studies/cnn_patching_additivity/test_math.py`, `test_integration.py`
 - Source architecture root: `%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001`
 - Source filter-bank root: `%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001`
