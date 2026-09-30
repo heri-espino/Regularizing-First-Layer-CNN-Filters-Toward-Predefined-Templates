@@ -31,7 +31,7 @@ FIGURES = tuple(
         "fig00_overview.pdf",
         "fig02_intervention_size.pdf",
         "fig04_architecture.pdf",
-        "fig05_kernel_gallery.pdf",
+        "fig01_kernel_summary.pdf",
         "fig07_anchor_specificity.pdf",
     )
 )
@@ -74,10 +74,12 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
         clean(output)
 
     from build_overview_figure import build_figure as build_overview_figure
+    from build_kernel_summary_figure import build_figure as build_kernel_summary_figure
     from build_main_results_figure import build_figure as build_main_results_figure
     from build_anchor_specificity_figure import build_figure as build_anchor_specificity_figure
 
     build_overview_figure()
+    build_kernel_summary_figure()
     build_main_results_figure()
     build_anchor_specificity_figure()
 
