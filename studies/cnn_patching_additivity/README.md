@@ -135,3 +135,18 @@ python studies/cnn_patching_additivity/test_integration.py
 ```
 
 These tests require no saved checkpoints. The second test verifies whole-channel logit additivity for a tiny pooling-plus-linear tail.
+
+## Archive completed results
+
+The experiment root is intentionally external to the Git checkout. After the central `Main` run has completed, archive the repository-facing scientific outputs with:
+
+```powershell
+git pull --ff-only origin main
+.\run\stage_patching_additivity_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add patching-additivity results"
+git push
+```
+
+The staging helper copies through Git's object database rather than creating files in the restricted worktree. It includes inventories, technical-validation metadata, full-grid design/completion metadata, all analysis reports/CSVs/figures, and any completed cost-gated secondary analysis. It excludes the tens of thousands of per-model evaluator JSON files and all source checkpoints; those remain under `%LOCALAPPDATA%`.
