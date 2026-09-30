@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the TMLR manuscript.
+"""Build the working main manuscript.
 
 Default output:
-    paper/tmlr_submission.pdf
+    paper/manuscript.pdf
 
 Requirements:
     - Python 3.10+
@@ -24,7 +24,7 @@ ROOT = PAPER_DIR.parent
 BUILD_DIR = PAPER_DIR / "build"
 STYLE_DIR = PAPER_DIR / "tmlr"
 SOURCE = PAPER_DIR / "main.tex"
-DEFAULT_OUTPUT = PAPER_DIR / "tmlr_submission.pdf"
+DEFAULT_OUTPUT = PAPER_DIR / "manuscript.pdf"
 FIGURES = tuple(
     PAPER_DIR / "figures" / name
     for name in (
