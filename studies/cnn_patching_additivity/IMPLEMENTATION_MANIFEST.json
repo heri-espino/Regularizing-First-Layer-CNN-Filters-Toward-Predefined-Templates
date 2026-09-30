@@ -37,7 +37,7 @@
   },
   "implementation_git_blobs": {
     "studies/cnn_patching_additivity/PROTOCOL.md": "72acf27feed75c73592f63f85d92579eb113c0bd",
-    "studies/cnn_patching_additivity/README.md": "7a463ef8e313ad8af77abc9b51aeac1159ddc8cf",
+    "studies/cnn_patching_additivity/README.md": "17acd1e5c66c0f361de91307f3f4015d1730194d",
     "studies/cnn_patching_additivity/math_core.py": "75cb4773df6720fbba3bf5832d053b8a75675f76",
     "studies/cnn_patching_additivity/evaluate.py": "73fdf52e6cd12c0a3851b09a9a41103b38b31d0f",
     "studies/cnn_patching_additivity/analyze.py": "d2175fe5439232702a63b8368867d74f90ece1f1",
@@ -62,14 +62,15 @@
     "analytic_tiny_whole_channel_additivity_test": "PASS",
     "synthetic_architecture_analysis": "PASS",
     "synthetic_anchor_analysis": "PASS",
-    "known_fixed_issue": "architecture-source all-missing anchor_family dropped by pandas pivot; fixed via explicit not_applicable level"
+    "known_fixed_issue": "architecture-source all-missing anchor_family dropped by pandas pivot; fixed via explicit not_applicable level",
+    "lightweight_github_ci_configured": true
   },
   "runtime_artifacts_created_only_on_vm": [
     "inventory_architecture.json",
     "inventory_anchor.json",
-    "validation/benchmark.json",
+    "validation/VALIDATION_AND_BENCHMARK.json",
     "architecture/design.json",
-    "anchor_primary/design.json",
+    "anchor/design.json",
     "per-model JSON outputs",
     "block-level CSV tables",
     "figures",
