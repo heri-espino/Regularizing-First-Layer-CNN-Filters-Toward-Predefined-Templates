@@ -13,6 +13,7 @@ This directory contains convenience launchers for reproducing the experiments an
 | `stage_metric_sensitivity_results.ps1` | Stage completed metric-sensitivity analysis directly from `%LOCALAPPDATA%` into Git when the Windows worktree cannot create new directories |
 | `run_architecture_robustness.ps1` | Run the frozen Stage-F 25,600-model architecture robustness study |
 | `run_patching_additivity.ps1` | Run the post-hoc saved-checkpoint additivity inventory, validation, central analysis, or cost-gated secondary extension |
+| `stage_patching_additivity_results.ps1` | Archive completed patching-additivity inventories, validation metadata, analyses, tables, reports, and figures directly from `%LOCALAPPDATA%` into Git; raw per-model JSONs remain external |
 | `stage_architecture_robustness_results.ps1` | Archive only Stage-F paper-facing outputs from the official external CUDA root directly into Git |
 | `benchmark_architecture_training.ps1` | Implementation-only CPU-vs-CUDA Stage-F training throughput benchmark |
 | `status_anchor_specificity.ps1` | Report outcome-blind training/evaluation completion counts for the anchor-specificity run |
@@ -142,3 +143,35 @@ After completion, archive only paper-facing outputs:
 ```
 
 Read the corresponding frozen protocols before interpreting outputs. The anchor-specificity primary structured-vs-pixel-permuted analysis includes a prespecified equivalence test; nonsignificance alone is not evidence of equivalence.
+
+
+## Patching-additivity result archival
+
+The completed post-hoc run lives outside the checkout by default:
+
+```text
+%LOCALAPPDATA%\prior-templates-cnns\results\patching_additivity_001
+```
+
+After `-Mode Main` has completed both central grids and analyses, archive the complete paper-facing result set directly into Git:
+
+```powershell
+git pull --ff-only origin main
+.\run\stage_patching_additivity_results.ps1
+git diff --cached --stat
+git status
+git commit -m "analysis: add patching-additivity results"
+git push
+```
+
+The staging helper archives:
+
+- both source inventories;
+- the frozen validation/benchmark decision and compact validation metadata;
+- central architecture and primary-anchor design/inventory/completion metadata;
+- every file under `architecture_analysis/` and `anchor_analysis/`, including reports, CSV tables, summaries, and figures;
+- a completed cost-gated secondary-anchor analysis automatically, if it exists.
+
+It intentionally does **not** archive `architecture/runs/**`, `anchor/runs/**`, validation per-model outputs, or source checkpoints. Those are large intermediate/reusable artifacts in `%LOCALAPPDATA%`; the archived analysis products and design/completion metadata are the repository-facing scientific results.
+
+The helper writes external files directly into Git's object database and index, so it works on the restricted university Windows worktree without creating the destination directories physically.
