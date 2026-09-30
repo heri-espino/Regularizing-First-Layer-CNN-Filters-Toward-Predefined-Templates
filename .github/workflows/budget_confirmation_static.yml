@@ -104,6 +104,7 @@ jobs:
           python -m py_compile studies/cnn_patching_additivity/analyze.py
           python -m py_compile studies/cnn_patching_additivity/test_math.py
           python -m py_compile studies/cnn_patching_additivity/test_integration.py
+          python -m py_compile studies/cnn_patching_additivity/test_json_io.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
@@ -127,6 +128,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install numpy scipy pandas pillow
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify patching-additivity implementation controls
+        run: |
+          python studies/cnn_patching_additivity/test_json_io.py
+          python studies/cnn_patching_additivity/test_math.py
+          python studies/cnn_patching_additivity/test_integration.py
       - name: Verify anchor invariants
         run: |
           python - <<'PY'
