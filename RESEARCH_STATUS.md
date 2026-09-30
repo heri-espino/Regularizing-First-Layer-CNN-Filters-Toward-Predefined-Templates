@@ -45,6 +45,8 @@ The real source roots are not mounted in the current ChatGPT runtime. Therefore 
 
 `-Mode Main` requires the predetermined validation/benchmark artifact and is resumable. The two random filter-bank families are secondary and may be run only if the frozen cost-only rule in the validation artifact permits them.
 
+**BOM compatibility fix (2026-09-30):** the first university-VM `Inventory`/`Validate` invocation exposed that the historical Windows PowerShell `execution_manifest.json` contains a UTF-8 BOM. The additivity evaluator now reads all JSON inputs with `utf-8-sig`, which accepts both BOM and BOM-free UTF-8. This is a design-preserving implementation fix recorded in `checkpoints/CP-016_patching-additivity-bom-fix.md`; real inventory/validation must be rerun after pulling it.
+
 
 ### Stage F is complete
 
