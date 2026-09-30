@@ -44,6 +44,16 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def read_json(path: Path) -> Any:
+    """Read JSON written by either Python or Windows PowerShell.
+
+    Windows PowerShell 5.1 writes a UTF-8 BOM for `Set-Content -Encoding utf8`.
+    `utf-8-sig` transparently strips that BOM while remaining compatible with
+    ordinary BOM-free UTF-8 JSON files.
+    """
+    return json.loads(path.read_text(encoding="utf-8-sig"))
+
+
 def atomic_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -166,9 +176,9 @@ def source_code_checks(source: str, source_manifest: dict[str, Any]) -> dict[str
 
 def inventory(source: str, root: Path, sample_loads: int = 4) -> dict[str, Any]:
     training, evaluation, manifest_path = source_paths(root)
-    training_design = json.loads((training / "design.json").read_text())
-    evaluation_design = json.loads((evaluation / "design.json").read_text())
-    source_manifest = json.loads(manifest_path.read_text())
+    training_design = read_json(training / "design.json")
+    evaluation_design = read_json(evaluation / "design.json")
+    source_manifest = read_json(manifest_path)
     cps = checkpoint_glob(source, training)
     records = [parse_checkpoint(source, p) for p in cps]
     evals = [evaluation_file(source, training, evaluation, p) for p in cps]
@@ -433,7 +443,7 @@ def evaluate_checkpoint(source: str, core, source_root: Path, cp: Path, output: 
     src_eval_path = evaluation_file(source, training, evaluation, cp)
     if not src_eval_path.exists():
         raise SystemExit(f"Missing original evaluation: {src_eval_path}")
-    source_eval = json.loads(src_eval_path.read_text())
+    source_eval = read_json(src_eval_path)
 
     model = core.ArchitectureNet(meta["architecture"])
     saved = torch.load(cp, map_location="cpu", weights_only=True)
