@@ -13,6 +13,7 @@ on:
       - 'studies/cnn_architecture_robustness/**'
       - 'studies/cnn_anchor_specificity/**'
       - 'studies/cnn_architecture_posthoc/**'
+      - 'studies/cnn_patching_additivity/**'
       - '.github/workflows/budget_confirmation_static.yml'
   workflow_dispatch:
 
@@ -65,7 +66,9 @@ jobs:
             'studies/cnn_anchor_specificity/run_anchor_specificity.ps1',
             'run/run_architecture_posthoc.ps1',
             'run/stage_architecture_posthoc_results.ps1',
-            'studies/cnn_architecture_posthoc/run_architecture_posthoc.ps1'
+            'studies/cnn_architecture_posthoc/run_architecture_posthoc.ps1',
+            'run/run_patching_additivity.ps1',
+            'studies/cnn_patching_additivity/run_patching_additivity.ps1'
           )
           foreach ($file in $files) {
             $tokens = $null
@@ -95,6 +98,12 @@ jobs:
           python -m py_compile studies/cnn_anchor_specificity/evaluate_grid.py
           python -m py_compile studies/cnn_anchor_specificity/analyze.py
           python -m py_compile studies/cnn_architecture_posthoc/analyze.py
+          python -m py_compile studies/cnn_patching_additivity/math_core.py
+          python -m py_compile studies/cnn_patching_additivity/evaluate.py
+          python -m py_compile studies/cnn_patching_additivity/validate.py
+          python -m py_compile studies/cnn_patching_additivity/analyze.py
+          python -m py_compile studies/cnn_patching_additivity/test_math.py
+          python -m py_compile studies/cnn_patching_additivity/test_integration.py
       - name: Verify frozen protocols are present
         run: |
           test -s studies/cnn_budget_confirmation/PROTOCOL.md
@@ -103,6 +112,8 @@ jobs:
           test -s studies/cnn_architecture_robustness/PROTOCOL.md
           test -s studies/cnn_anchor_specificity/PROTOCOL.md
           test -s studies/cnn_architecture_posthoc/PROTOCOL.md
+          test -s studies/cnn_patching_additivity/PROTOCOL.md
+          test -s studies/cnn_patching_additivity/IMPLEMENTATION_MANIFEST.json
 
   anchor-specificity-smoke:
     runs-on: ubuntu-latest
