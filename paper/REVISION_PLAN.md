@@ -457,3 +457,26 @@ A good final title direction is now:
 > **Regularizing First-Layer CNN Filters Toward Predefined Templates: Activation-Patching Comparisons Depend on Channel Count and Architecture**
 
 This title is still a working recommendation until the full manuscript wording is revised.
+
+
+## 18. Figure-led SN Computer Science restructure (implemented on paper-restructure-sncs)
+
+The post-desk-rejection revision now separates the main narrative from the exhaustive numerical record. This is a readability intervention, not an attribution of the editorial rejection.
+
+Main-paper order:
+
+1. experimental system and structural retention;
+2. intervention-size curves, showing retention and release separately before their difference;
+3. additive reconstruction, reserved but outcome-free until the frozen post-hoc computation finishes;
+4. architecture dependence as a standalone 16-architecture figure;
+5. spatial-arrangement control;
+6. combined discussion and limitations;
+7. one-paragraph conclusion.
+
+The main manuscript keeps one evidence-roadmap table and one compact endpoint-context table. The latter moves the important accuracy/filter-similarity context for the four spatial-control architectures into the body, including the low-performing GAP cases that affect interpretation.
+
+The old in-manuscript appendix chain has been removed. paper/supplement.tex now groups the existing exhaustive files into methods/checks, complete estimates/sensitivity, and earlier exploratory analyses. No numerical result was deleted.
+
+The additivity study remains explicitly post-hoc. Its frozen decomposition distinguishes additive singleton contributions and cancellation, non-additivity of the network tail, and nonlinearities introduced by the evaluation metric. The manuscript must not label metric curvature as a model interaction or infer synergy/redundancy from a residual alone.
+
+The current title and abstract remain provisional until the additive reconstruction is complete. The final publisher-template migration to SN Computer Science should occur after scientific content and figure numbering stabilize.
