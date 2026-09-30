@@ -1,0 +1,80 @@
+{
+  "study": "cnn_patching_additivity",
+  "frozen_date": "2026-09-30",
+  "evidential_role": "post_hoc_saved_checkpoint_analysis",
+  "implementation_status": "validated_locally_source_execution_pending",
+  "trains_models": false,
+  "scientific_execution_complete": false,
+  "inspected_source_repository_head_before_implementation": "fa5fae0295747ba48ec8a4f222aac07e58fc5ace",
+  "source_roots": {
+    "architecture": "%LOCALAPPDATA%\\prior-templates-cnns\\results\\architecture_robustness_cuda_001",
+    "anchor": "%LOCALAPPDATA%\\prior-templates-cnns\\results\\anchor_specificity_cuda_001"
+  },
+  "output_root": "%LOCALAPPDATA%\\prior-templates-cnns\\results\\patching_additivity_001",
+  "central_scope": {
+    "architecture_checkpoints": 25600,
+    "anchor_primary_checkpoints": 12800,
+    "anchor_primary_families": [
+      "structured_template",
+      "pixel_permuted_template"
+    ],
+    "core_architectures": [
+      "tiny_gmp",
+      "tiny_gap",
+      "plain2_w16_gmp",
+      "plain2_w16_gap"
+    ],
+    "tasks": [
+      "single_shape",
+      "two_concepts"
+    ],
+    "treatments": [
+      "retention_1",
+      "release_default"
+    ],
+    "init_reps_per_block": 4,
+    "inference_unit": "renderer_block"
+  },
+  "implementation_git_blobs": {
+    "studies/cnn_patching_additivity/PROTOCOL.md": "72acf27feed75c73592f63f85d92579eb113c0bd",
+    "studies/cnn_patching_additivity/README.md": "7a463ef8e313ad8af77abc9b51aeac1159ddc8cf",
+    "studies/cnn_patching_additivity/math_core.py": "75cb4773df6720fbba3bf5832d053b8a75675f76",
+    "studies/cnn_patching_additivity/evaluate.py": "73fdf52e6cd12c0a3851b09a9a41103b38b31d0f",
+    "studies/cnn_patching_additivity/analyze.py": "d2175fe5439232702a63b8368867d74f90ece1f1",
+    "studies/cnn_patching_additivity/validate.py": "1aaac37dd6a2e1f1f05746e42f17ae9f29c814da",
+    "studies/cnn_patching_additivity/run_patching_additivity.ps1": "0c777a561c4c83c44ef03cd00d05d9f08f573f0d",
+    "studies/cnn_patching_additivity/test_math.py": "5b878dd4cad5759e35eba8b42113951e631cee64",
+    "studies/cnn_patching_additivity/test_integration.py": "94e054cdb1fc5e70175f158190c96d09406b472c",
+    "run/run_patching_additivity.ps1": "c9561afcd2f9324b8f6c9ebd3cb409241bfe03d4"
+  },
+  "frozen_source_git_blobs": {
+    "studies/cnn_architecture_robustness/PROTOCOL.md": "de00c0efc1c46fa2ad034c71d2a353ee590584ad",
+    "studies/cnn_architecture_robustness/architecture_core.py": "8dd7adb5ad28c84dfe349e38ea6a8fb86d1babc4",
+    "studies/cnn_architecture_robustness/evaluate_grid.py": "954657cbbffcd2dc79c77b96c19368acff2424a5",
+    "studies/cnn_anchor_specificity/PROTOCOL.md": "3377952f8143f65e08bd25d8f4935f1957a8d901",
+    "studies/cnn_anchor_specificity/anchor_core.py": "e7dec7841a9ab074ade93059f0dc1c8039153e85",
+    "studies/cnn_anchor_specificity/evaluate_grid.py": "0ef081cbfebf62ebedde5484aab7f355c4817be7",
+    "studies/cnn_release_experiment/core.py": "753cb5121971e2a57b3c4dce9ccd84d9be3a403f"
+  },
+  "implementation_validation": {
+    "py_compile": true,
+    "algebra_self_test": "PASS",
+    "analytic_tiny_whole_channel_additivity_test": "PASS",
+    "synthetic_architecture_analysis": "PASS",
+    "synthetic_anchor_analysis": "PASS",
+    "known_fixed_issue": "architecture-source all-missing anchor_family dropped by pandas pivot; fixed via explicit not_applicable level"
+  },
+  "runtime_artifacts_created_only_on_vm": [
+    "inventory_architecture.json",
+    "inventory_anchor.json",
+    "validation/benchmark.json",
+    "architecture/design.json",
+    "anchor_primary/design.json",
+    "per-model JSON outputs",
+    "block-level CSV tables",
+    "figures",
+    "REPORT.md",
+    "GRID_COMPLETE.json"
+  ],
+  "note": "This manifest records implementation provenance only. It is not a scientific result and does not substitute for runtime source inventory or completion markers."
+}
