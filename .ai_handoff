@@ -404,3 +404,12 @@ conda activate prior-templates-cnns
 ```
 
 Do not run `-Mode Main` if validation fails. Main execution is incremental/resumable and trains no models. Do not use the old partial CPU architecture root. Do not inspect the random-rank10/full-rank additivity outcomes before applying the predeclared timing/storage-only secondary-run rule. After central evaluation completes, create a new results checkpoint before changing the manuscript.
+
+
+## 2026-09-30 BOM compatibility fix
+
+The first real VM invocation of the additivity workflow failed before any scientific evaluation because the historical Windows PowerShell `execution_manifest.json` contains a UTF-8 BOM. This is fixed in `studies/cnn_patching_additivity/evaluate.py` by routing all JSON input through a BOM-safe `utf-8-sig` reader. Regression coverage is in `test_json_io.py`.
+
+Checkpoint: `checkpoints/CP-016_patching-additivity-bom-fix.md`.
+
+After pulling, rerun `-Mode Inventory` and then `-Mode Validate`. Do not bypass the validation gate or run `-Mode Main` until validation succeeds.
