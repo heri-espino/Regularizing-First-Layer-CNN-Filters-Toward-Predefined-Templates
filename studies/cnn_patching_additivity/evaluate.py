@@ -623,7 +623,7 @@ def run(args):
     manifest = build_manifest(args, source_root, jobs, inv)
     manifest_path = output / "design.json"
     if manifest_path.exists():
-        old = json.loads(manifest_path.read_text())
+        old = read_json(manifest_path)
         # Ignore transient worktree status but require all scientific/run choices to match.
         for volatile in ("git_status_porcelain",):
             old.pop(volatile, None); manifest.pop(volatile, None)
