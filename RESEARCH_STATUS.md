@@ -14,36 +14,36 @@ The intended contribution is **empirical and measurement-focused**. The paper do
 
 ### Post-hoc patching additivity — implementation frozen, source execution pending
 
-The user explicitly authorized a new saved-checkpoint analysis after the submission-readiness pass. It is implemented under \`studies/cnn_patching_additivity/\` and recorded in \`checkpoints/CP-015_patching-additivity-implementation.md\`.
+The user explicitly authorized a new saved-checkpoint analysis after the submission-readiness pass. It is implemented under `studies/cnn_patching_additivity/` and recorded in `checkpoints/CP-015_patching-additivity-implementation.md`.
 
 Scientific question: how much of the intervention-size dependence of the observed activation-patching curves can be reconstructed by summing all 16 singleton channel effects in centered-logit space, and how much remains as a joint non-additive residual? The analysis explicitly separates singleton geometry/cancellation, downstream-model non-additivity, and evaluation-metric nonlinearity.
 
 Source roots on the university Windows VM are read-only:
 
-\`\`\`text
+```text
 %LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
 %LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001
-\`\`\`
+```
 
 The new external output root is:
 
-\`\`\`text
+```text
 %LOCALAPPDATA%\prior-templates-cnns\results\patching_additivity_001
-\`\`\`
+```
 
 No models are retrained. The evaluator reuses the exact matched pairs, post-ReLU whole-channel intervention, stored validation ranking, original random-control seed namespaces, and validation-energy-matched control construction. It recomputes every singleton channel patch and checks the original evaluation metrics before accepting a model output.
 
-Implementation-only validation already passes for the exact algebra, k=0/k=1 controls, and analytic additivity of the \`tiny_gmp\` and \`tiny_gap\` tails. Synthetic end-to-end analyzer tests also pass for both Stage-F-shaped and Stage-G-shaped outputs. These are engineering checks, not scientific outcomes from the saved models.
+Implementation-only validation already passes for the exact algebra, k=0/k=1 controls, and analytic additivity of the `tiny_gmp` and `tiny_gap` tails. Synthetic end-to-end analyzer tests also pass for both Stage-F-shaped and Stage-G-shaped outputs. These are engineering checks, not scientific outcomes from the saved models.
 
 The real source roots are not mounted in the current ChatGPT runtime. Therefore **no Stage-F/G additivity result is yet interpreted or marked complete**. On the university VM, use:
 
-\`\`\`powershell
+```powershell
 .\run\run_patching_additivity.ps1 -Mode Inventory
 .\run\run_patching_additivity.ps1 -Mode Validate
 .\run\run_patching_additivity.ps1 -Mode Main
-\`\`\`
+```
 
-\`-Mode Main\` requires the predetermined validation/benchmark artifact and is resumable. The two random filter-bank families are secondary and may be run only if the frozen cost-only rule in the validation artifact permits them.
+`-Mode Main` requires the predetermined validation/benchmark artifact and is resumable. The two random filter-bank families are secondary and may be run only if the frozen cost-only rule in the validation artifact permits them.
 
 
 ### Stage F is complete
