@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install figure dependencies
-        run: python -m pip install numpy matplotlib pillow seaborn
+        run: |\n          python -m pip install numpy matplotlib pillow seaborn\n          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
       - name: Install TeX
         run: |
           sudo apt-get update
