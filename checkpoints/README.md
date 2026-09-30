@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-014_submission-readiness.md`
+`CP-015_patching-additivity-implementation.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
