@@ -42,16 +42,13 @@ METRICS = (
 HIGHLIGHT_LABELS = {
     "tiny_gmp": "Tiny-GMP",
     "bn2_w16_gap": "BN2-GAP",
-    "bn4_w16_gap": "BN4-GAP",
 }
 
 HIGHLIGHT_OFFSETS = {
     ("centered_logit_fidelity", "tiny_gmp"): (5, 5),
     ("centered_logit_fidelity", "bn2_w16_gap"): (5, -11),
-    ("centered_logit_fidelity", "bn4_w16_gap"): (5, 5),
     ("prob_error_reduction", "tiny_gmp"): (5, 5),
     ("prob_error_reduction", "bn2_w16_gap"): (5, -11),
-    ("prob_error_reduction", "bn4_w16_gap"): (5, 5),
 }
 
 
