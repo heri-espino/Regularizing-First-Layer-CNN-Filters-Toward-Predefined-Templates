@@ -1,6 +1,6 @@
 # AI handoff
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 ## Read this first
 
@@ -432,3 +432,28 @@ git push
 ```
 
 After those results reach the repository, inspect the actual reports/tables before writing the next scientific checkpoint. Do not claim or summarize additivity outcomes from user-reported completion alone.
+
+
+## 2026-10-01 superseding note — additivity results complete
+
+This note supersedes the earlier “execution pending” and “awaiting archival” additivity notes.
+
+The central saved-checkpoint study is complete and archived under `analysis/patching_additivity_001/`. Read `checkpoints/CP-017_patching-additivity-results.md` before changing the manuscript interpretation.
+
+Central result:
+
+- intervention-size dependence is **not** equivalent to channel interaction;
+- `tiny_gmp` and `tiny_gap` provide exact-additivity controls in logits yet retain large intervention-size contrasts;
+- singleton vector cancellation and nonlinear scoring explain part of the curve shape;
+- deeper architectures, especially some BatchNorm variants, show genuine downstream non-additivity;
+- the structured-versus-pixel-permuted difference is reproduced closely by the additive singleton reconstruction, so much of the spatial-bank effect is already present in singleton contribution geometry.
+
+Key values:
+
+- `two_concepts/tiny_gmp` probability-error (B): observed = additive = +0.83151;
+- `single_shape/bn2_w16_gap` centered-logit (B): observed -0.27012 vs additive +0.34955;
+- `two_concepts` structured-minus-pixel-permuted centered-logit (B), four-architecture average: observed +0.05743 vs additive +0.05710.
+
+`paper/main.tex` now includes a compact additive-decomposition method and result section plus revised abstract/discussion/conclusion. Do not revert to wording that treats the intervention-size effect itself as evidence of nonlinear channel interaction.
+
+No new models are required for this interpretation.
