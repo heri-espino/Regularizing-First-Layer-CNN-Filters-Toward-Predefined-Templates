@@ -1,82 +1,71 @@
 # Paper
 
-`main.tex` is the authoritative manuscript source for **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**.
+`main.tex` is the authoritative **Springer Nature / SN Computer Science** manuscript source for:
 
-The current manuscript was rewritten from scratch after the final pixel-permuted control experiment on independent renderer blocks and a full review of the repository's extracted literature corpus. Paper-facing prose uses descriptive scientific names rather than the internal Stage A--G identifiers retained elsewhere for provenance.
+> **Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity**
 
-The main argument is organized around five scientific claims:
+The manuscript uses the vendored Springer Nature article template under `paper/sn-article-template/` and is intentionally much shorter than the earlier TMLR draft.
 
-1. constant regularization preserves the predefined first-layer spatial structure;
-2. the release-versus-retention patching comparison depends on intervention size;
-3. the pre-specified intervention-size contrast remains under alternative evaluation metrics, although the values at individual intervention sizes differ;
-4. downstream architecture strongly conditions the contrast and that conclusion survives sphericity-robust, permutation, Friedman, and random-channel diagnostics;
-5. the original 2D template arrangement has a selected-channel functional effect beyond a Gram/rank/spectrum-matched pixel-permuted control, but that effect is architecture- and metric-dependent.
+## Editorial structure
 
-Appendix material is split into five files:
+The main paper now follows the structure used by recent SN Computer Science research articles:
 
-- `specificity_robustness_results.tex` — pixel-permuted control specificity experiment and post hoc architecture diagnostics;
-- `final_robustness_results.tex` — complete metric-sensitivity and prospective architecture-robustness summaries;
-- `confirmation_robustness_results.tex` — complete prospective channel-budget and schedule/task sensitivity analyses;
-- `supplementary_results.tex` — developmental analyses that motivated the prospective estimand;
-- `kernel_matching_results.tex` — complete endpoint kernel-matching table.
+1. Abstract and keywords
+2. Introduction
+3. Related work
+4. Method
+5. Results
+6. Discussion
+7. Conclusion
+8. Springer-style declarations
 
-The bibliography is `../literature/references.bib`. The minimal TMLR style files required for compilation are vendored in `tmlr/` and retain their upstream license.
+The paper is organized around the scientific story rather than the chronological Stage A--G experiment history.
 
-## Cross-references and equations
+## What moved out of the main paper
 
-The manuscript uses `cleveref` for cross-references. Every displayed equation uses a numbered `equation` environment with an explicit `eq:...` label. New displayed equations should follow the same convention rather than using `\[...\]`.
+The previous five embedded appendices are **not included in `main.tex`**. Their source files remain in the repository for provenance and can be converted into Supplementary Information if needed:
 
-## Figures
+- `specificity_robustness_results.tex`
+- `final_robustness_results.tex`
+- `confirmation_robustness_results.tex`
+- `supplementary_results.tex`
+- `kernel_matching_results.tex`
 
-The main text uses four principal figures:
+Complete numerical tables also remain versioned under `analysis/`. The main paper reports only the estimates needed to support the central argument.
 
-1. `fig00_overview.pdf` — renderer examples, template bank, and patching intervention;
-2. `fig05_kernel_gallery.pdf` — representative learned first-layer kernels;
-3. `fig06_main_results.pdf` — prospective channel-budget curves and 16-architecture robustness;
-4. `fig07_anchor_specificity.pdf` — pixel-permuted filter-bank control, architecture interaction, and equivalence comparison for selected versus random channel sets.
+## Main figures
 
-The manuscript-generated figures are built directly from frozen definitions or versioned aggregate analysis tables:
+The compact manuscript uses four figures:
 
-```bash
-python paper/build_overview_figure.py
-python paper/build_main_results_figure.py
-python paper/build_anchor_specificity_figure.py
-```
+1. `fig00_overview.pdf` — controlled renderer, predefined filters, and patch location;
+2. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
+3. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
+4. `fig08_additivity.pdf` — observed versus singleton-additive reconstruction.
 
-`paper/build.py` regenerates all three manuscript-generated figures automatically on every build.
-
-The remaining archived publication figures are regenerated from saved experimental artifacts with:
-
-```bash
-python -m pip install -e ".[experiments]"
-python paper/build_figures.py
-```
-
-`plot_style.py` centralizes typography, colors, line styles, grid treatment, and PDF export settings. Figure-generation scripts are presentation-only: they do not retrain models or redefine scientific analyses.
+The generated figures are rebuilt automatically by `paper/build.py`.
 
 ## Build
 
 From the repository root:
 
 ```bash
-python paper/build.py
+python paper/build.py --clean
 ```
 
 The compiled manuscript is written to:
 
 ```text
-paper/tmlr_submission.pdf
+paper/sn_submission.pdf
 ```
 
-For a clean rebuild:
+The build uses:
 
-```bash
-python paper/build.py --clean
-```
+- `paper/sn-article-template/sn-jnl.cls`;
+- the Springer Nature bibliography styles under `paper/sn-article-template/bst/`;
+- `../literature/references.bib`.
 
-LaTeX intermediates are written to `paper/build/` and are ignored by Git. The final PDF is generated rather than versioned so a release artifact can be rebuilt from source.
+The generated PDF and LaTeX intermediates are not intended to be committed; the GitHub Actions `paper-compile` workflow uploads the compiled PDF as an artifact.
 
+## Writing rule
 
-## Submission readiness
-
-Before a double-blind submission, read `paper/SUBMISSION_CHECKLIST.md`. The working repository itself is **not** an anonymous supplementary artifact because repository metadata and some provenance manifests contain author-identifying information and local machine paths. Do not upload the repository wholesale as TMLR supplementary material.
+Keep the main paper compact. New robustness checks, large tables, implementation audits, and exhaustive secondary analyses belong in `analysis/` or Supplementary Information unless they change the central scientific conclusion.
