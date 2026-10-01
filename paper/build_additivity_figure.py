@@ -45,6 +45,15 @@ HIGHLIGHT_LABELS = {
     "bn4_w16_gap": "BN4-GAP",
 }
 
+HIGHLIGHT_OFFSETS = {
+    ("centered_logit_fidelity", "tiny_gmp"): (5, 5),
+    ("centered_logit_fidelity", "bn2_w16_gap"): (5, -11),
+    ("centered_logit_fidelity", "bn4_w16_gap"): (5, 5),
+    ("prob_error_reduction", "tiny_gmp"): (5, 5),
+    ("prob_error_reduction", "bn2_w16_gap"): (5, -11),
+    ("prob_error_reduction", "bn4_w16_gap"): (5, 5),
+}
+
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
@@ -107,7 +116,7 @@ def build_figure() -> Path:
                 ax.annotate(
                     HIGHLIGHT_LABELS[architecture],
                     (additive, observed),
-                    xytext=(4, 4),
+                    xytext=HIGHLIGHT_OFFSETS[(metric, architecture)],
                     textcoords="offset points",
                     fontsize=5.8,
                 )
