@@ -53,7 +53,7 @@ def require_figures() -> None:
         names = ", ".join(p.name for p in missing)
         raise SystemExit(
             f"Missing publication figure assets: {names}. "
-            "Regenerate them with `python paper/build_figures.py`."
+            "Regenerate them with `python paper/build.py`."
         )
 
 
@@ -119,7 +119,7 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
 
     run(latex_command, cwd=PAPER_DIR, env=env)
     run(latex_command, cwd=PAPER_DIR, env=env)
-    # A final pass stabilizes cleveref references after the long appendix chain.
+    # A final pass stabilizes cross-references and bibliography links.
     run(latex_command, cwd=PAPER_DIR, env=env)
 
     built_pdf = BUILD_DIR / "main.pdf"
