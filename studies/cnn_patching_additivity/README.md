@@ -149,4 +149,4 @@ git commit -m "analysis: add patching-additivity results"
 git push
 ```
 
-The staging helper copies through Git's object database rather than creating files in the restricted worktree. It includes inventories, technical-validation metadata, full-grid design/completion metadata, all analysis reports/CSVs/figures, and any completed cost-gated secondary analysis. It excludes the tens of thousands of per-model evaluator JSON files and all source checkpoints; those remain under `%LOCALAPPDATA%`.
+The staging helper copies through Git's object database rather than creating files in the restricted worktree. It includes inventories, technical-validation metadata, full-grid design/completion metadata, all analysis reports/CSVs/figures, and any completed cost-gated secondary analysis. It excludes the tens of thousands of per-model evaluator JSON files, all source checkpoints, and the very large reproducible `per_model_curves.csv` / `per_block_curves.csv` expansion tables; those remain under `%LOCALAPPDATA%`.
