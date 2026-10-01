@@ -10,6 +10,34 @@ This project studies the gap between **weight-space structure** and **functional
 
 The intended contribution is **empirical and measurement-focused**. The paper does not claim that predefined templates automatically create human-interpretable concepts, that activation patching measures a unique causal quantity, or that the observed effect generalizes to natural images.
 
+## Manuscript target and current form
+
+The publication-facing manuscript is now a **compact SN Computer Science paper** using the vendored Springer Nature `sn-jnl.cls` template. This supersedes the earlier TMLR-formatted manuscript.
+
+Current source:
+
+```text
+paper/main.tex
+```
+
+Current build product:
+
+```text
+paper/sn_submission.pdf
+```
+
+The main paper is approximately 3,000 prose words before references/declarations and uses four figures plus one compact table. The five historical appendix files remain in the repository but are no longer embedded in the article; they should be treated as candidate Supplementary Information only.
+
+The publication-facing scientific story is deliberately compact:
+
+1. retention preserves the predefined first-layer filter geometry;
+2. the release-versus-retention patching effect depends on intervention size;
+3. downstream architecture strongly conditions that effect;
+4. the original 2D filter arrangement differs from a Gram/rank/spectrum-matched pixel permutation;
+5. singleton-additive reconstruction shows that intervention-size dependence is not itself evidence of channel interaction, while some deeper architectures add genuine downstream non-additivity.
+
+See `checkpoints/CP-018_sn-computer-science-compact-rewrite.md` for the formatting and framing change.
+
 ## 2. Current live state
 
 ### Post-hoc patching additivity — complete and integrated into the manuscript
