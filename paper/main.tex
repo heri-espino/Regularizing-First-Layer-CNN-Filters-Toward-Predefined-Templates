@@ -55,6 +55,15 @@ We use two $32\times32$ grayscale procedural classification tasks. In \texttt{si
 
 Every model begins with a bias-free $1\!\to\!16$ convolution with $9\times9$ kernels, same padding, and ReLU. The predefined bank contains eight oriented edge filters, four two-ray corners, and four rings. Each filter is centered and normalized to unit norm. The flattened $16\times81$ bank has numerical rank 10. Figure~\ref{fig:overview} summarizes the renderer, filter bank, and patching location.
 
+We quantify filter--template similarity by signed cosine similarity after centering each spatial kernel and normalizing it to unit norm. If $\bar w_j$ is learned filter $j$ and $\bar t_m$ is template $m$ after this normalization, the reported nearest-template score is
+\begin{equation}
+S_{\mathrm{temp}}(W,T)
+=
+\frac{1}{16}\sum_{j=1}^{16}\max_m \bar w_j^{\top}\bar t_m .
+\label{eq:template-similarity}
+\end{equation}
+A centered kernel with norm below $10^{-12}$ is treated as degenerate rather than assigned an arbitrary cosine. The supplementary morphology analysis additionally reports one-to-one assignment scores; the main text uses the nearest-template score in Eq.~\ref{eq:template-similarity}.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig00_overview.pdf}
@@ -75,21 +84,38 @@ Retention keeps $\lambda=1$ throughout 200 epochs. Release keeps $\lambda=1$ thr
 
 For every matched pair, the post-ReLU first-layer activations are cached. Channels are ranked on the validation set by the absolute standardized difference in their global-max activations between the two counterfactual states. Test data are not used for ranking. The top $k$ channels are patched for $k\in\{1,2,4,8\}$; random same-size channel sets are used as controls.
 
-We report two principal output measures. Centered logits remove the common-logit offset,
+We report the same output measures throughout the intervention-size and additivity analyses. Centered logits remove the common-logit offset,
 \begin{equation}
 \widetilde{\ell}
 =
-\ell-\mathrm{mean}(\ell)\mathbf 1,
+\ell-\mathrm{mean}(\ell)\mathbf 1.
 \label{eq:centered-logits}
 \end{equation}
-and centered-logit fidelity measures how much patching moves the base output toward the counterfactual output in this space. We also use the unnormalized reduction in squared probability error,
+For an output representation $q$---either class probabilities $p=\mathrm{softmax}(\ell)$ or centered logits $\widetilde{\ell}$---define the mean squared discrepancy
+\begin{equation}
+E_q(a,b)
+=
+\frac{1}{N}\sum_{i=1}^{N}
+\left\|q_a^{(i)}-q_b^{(i)}\right\|_2^2,
+\label{eq:output-error}
+\end{equation}
+where $0$, $1$, and $S$ denote the base, matched counterfactual, and patched runs. Fidelity is
+\begin{equation}
+F_q(S)
+=
+1-\frac{E_q(S,1)}{E_q(0,1)}.
+\label{eq:fidelity}
+\end{equation}
+The principal normalized metric is $F_{\mathrm{clogit}}$, obtained with $q=\widetilde{\ell}$. Figure~\ref{fig:main-results} also retains the historical probability fidelity $F_{\mathrm{prob}}$. If the summed denominator corresponding to $E_q(0,1)$ is below $10^{-12}$, fidelity is undefined and is not replaced by zero or another finite value.
+
+Because normalization can itself affect interpretation, we additionally use the unnormalized reduction in squared probability error,
 \begin{equation}
 R_{\mathrm{prob}}(S)
 =
-E_{\mathrm{prob}}(0,1)-E_{\mathrm{prob}}(S,1),
+E_{\mathrm{prob}}(0,1)-E_{\mathrm{prob}}(S,1).
 \label{eq:prob-reduction}
 \end{equation}
-where $S$ is the patched channel set. Using both avoids relying on a single normalization convention.
+Thus $F_{\mathrm{clogit}}$ tests movement toward the donor in common-mode-invariant logit space, whereas $R_{\mathrm{prob}}$ measures the absolute reduction in probability-space error.
 
 For any patching metric $M$, let $\Delta^M(k)$ be release minus retention at intervention size $k$. The intervention-size contrast is
 \begin{equation}
@@ -104,7 +130,7 @@ Positive $B$ means that the release-minus-retention difference is larger on aver
 
 \subsection{Experimental sequence}
 
-Table~\ref{tab:studies} summarizes the experiments used in the main text. The initial intervention-size test used 20 held-out renderer blocks. The architecture and spatial-control experiments used new samples of 100 renderer blocks each. Within the 100-block studies, four initialization replicates are averaged before inference; the renderer block, not the number of trained models, is the inferential unit.
+Table~\ref{tab:studies} summarizes the experiments used in the main text. The initial intervention-size test used 20 held-out renderer blocks. The architecture and spatial-control experiments used new samples of 100 renderer blocks each. Within the 100-block studies, four initialization replicates are averaged before inference; the renderer block, not the number of trained models, is the inferential unit. The main architecture, spatial-control, and additivity presentation uses \texttt{two\_concepts}; \texttt{single\_shape} is a secondary task used to test whether the same qualitative phenomena can occur under a different renderer. The original contrasts use $k\in\{1,2,4,8\}$. The post-hoc decomposition evaluates every size $k=0,1,\ldots,16$, while retaining $\{1,2,4,8\}$ for the definition of $B$.
 
 \begin{table}[t]
 \caption{Main experiments. The singleton decomposition reuses completed checkpoints and is therefore post-hoc.}
@@ -114,7 +140,7 @@ Table~\ref{tab:studies} summarizes the experiments used in the main text. The in
 \toprule
 Analysis & Blocks & Scope & Question \\
 \midrule
-Intervention size & 20 & TinyCNN & Does $B$ depend on $k$? \\
+Intervention size & 20 & TinyCNN & Does the release--retention difference vary with $k$? \\
 Architecture & 100 & 16 CNNs & Does downstream architecture matter? \\
 Spatial control & 100 & 4 CNNs & Does 2D filter structure matter? \\
 Additivity & 100 & saved models & Are joint effects additive? \\
@@ -124,25 +150,52 @@ Additivity & 100 & saved models & Are joint effects additive? \\
 
 The spatial control applies one common random permutation of the 81 spatial coordinates to every filter in the bank. This destroys the original edge/corner/ring arrangement while preserving the complete Gram matrix, row norms, numerical rank, singular spectrum, and each row's coefficient multiset.
 
+For the spatial-control primary comparison, ordinary difference intervals are 95\% renderer-block intervals. A pre-specified equivalence companion uses paired two-one-sided tests (TOST) at $\alpha=0.05$, equivalently 90\% confidence intervals, with symmetric margins set before inspecting the fresh spatial-control outcomes. Each margin equals 20\% of the mean absolute $B$ from the earlier architecture study for the same four diagnostic architectures on \texttt{two\_concepts}: $\delta_{\mathrm{clogit}}=0.01704$ and $\delta_{R_{\mathrm{prob}}}=0.06594$. These are study-specific margins, not externally validated thresholds of scientific importance. Additivity intervals use 10,000 renderer-block bootstrap resamples after averaging initialization replicates within block unless otherwise stated.
+
 \subsection{Singleton-additive reconstruction}
 
-To separate intervention-size dependence from multi-channel interaction, we re-evaluate the saved architecture and spatial-control checkpoints one channel at a time. Let $\ell_0$ denote the base logits, $\ell_{\{j\}}$ the logits after patching channel $j$ alone, and $\ell_S$ the logits after jointly patching the set $S$. Define
+To separate intervention-size dependence from multi-channel interaction, we re-evaluate the saved architecture and spatial-control checkpoints one channel at a time. Let $P=I-\mathbf 1\mathbf 1^\top/C$ be the class-logit centering operator and $z=P\ell$. For a matched pair define
 \begin{equation}
-d_j=\ell_{\{j\}}-\ell_0,\qquad
-\widehat{\ell}_S=\ell_0+\sum_{j\in S}d_j,\qquad
-r_S=\ell_S-\widehat{\ell}_S.
+v=z_1-z_0,\qquad
+d_j=z_{\{j\}}-z_0,\qquad
+a_S=\sum_{j\in S}d_j,
+\label{eq:singleton-changes}
+\end{equation}
+and
+\begin{equation}
+\widehat z_S=z_0+a_S,\qquad
+r_S=z_S-\widehat z_S .
 \label{eq:additive}
 \end{equation}
-The same output metrics are computed from $\ell_S$ and from the additive reconstruction $\widehat{\ell}_S$. Thus, a curved metric profile is not automatically counted as model non-additivity. We also measure cancellation among singleton effects using
+The observed metrics are evaluated from $z_S$ and the reconstructed metrics from $\widehat z_S$; for probability metrics, softmax is applied after reconstruction. Thus singleton \emph{logit changes}, not singleton metric values, are added.
+
+Cancellation is computed in centered-logit space,
 \begin{equation}
 K(S)
 =
 1-
-\frac{\left\|\sum_{j\in S}d_j\right\|_2}
+\frac{\|a_S\|_2}
      {\sum_{j\in S}\|d_j\|_2}.
 \label{eq:cancellation}
 \end{equation}
-The tiny architectures provide an analytic control because their downstream computation is pooling followed by a linear classifier; whole-channel patching is therefore additive in logits up to numerical precision.
+If the denominator is at most $10^{-12}$, $K(S)$ is reported as undefined rather than set to zero. Cancellation changes the magnitude of the aggregate intervention, but magnitude alone does not determine fidelity. The additive centered-logit error satisfies
+\begin{equation}
+\|v-a_S\|_2^2
+=
+\|v\|_2^2
+-2v^\top a_S
++\|a_S\|_2^2,
+\label{eq:additive-geometry}
+\end{equation}
+so both alignment with the desired base-to-donor direction, $v^\top a_S$, and aggregate magnitude, $\|a_S\|$, matter. We quantify genuine departure from singleton superposition by the residual $r_S$ and by the aggregate residual-energy ratio
+\begin{equation}
+\rho(S)
+=
+\frac{\sum_i\|r_S^{(i)}\|_2^2}
+     {\sum_i\|v^{(i)}\|_2^2}.
+\label{eq:residual-energy}
+\end{equation}
+The tiny architectures provide an analytic control because their downstream computation is per-channel pooling followed by a linear classifier; whole-channel replacement is therefore additive in logits up to floating-point error.
 
 \section{Results}\label{sec:results}
 
@@ -166,20 +219,20 @@ Figure~\ref{fig:main-results} shows the central pattern. Under global-max poolin
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig06_main_results.pdf}
-\caption{Intervention size and architecture. Top: release-minus-retention curves under three evaluation metrics in the held-out TinyCNN study. Bottom: architecture-specific intervention-size contrast $B$ on \texttt{two\_concepts} across 100 renderer blocks.}
+\caption{Intervention size and architecture. Top: release-minus-retention curves on the primary \texttt{two\_concepts}/TinyCNN study under historical probability fidelity, centered-logit fidelity, and probability-error reduction; bars are 95\% intervals across 20 held-out renderer blocks. Bottom: architecture-specific $B$ on \texttt{two\_concepts} across 100 independent renderer blocks; points are block means after averaging four initialization replicates and bars are 95\% intervals.}
 \label{fig:main-results}
 \end{figure}
 
 \subsection{The spatial arrangement of the filter bank matters}
 
-The pixel-permuted experiment asks whether the effect can be attributed only to retaining a fixed low-rank bank. It cannot. On \texttt{two\_concepts}, the structured-minus-pixel-permuted difference in selected-channel centered-logit $B$, averaged across four architectures, is $+0.05743$ with a 95\% interval of $[+0.05143,+0.06361]$. For probability-error reduction the corresponding difference is $+0.04563$ with interval $[+0.03715,+0.05374]$.
+The pixel-permuted experiment asks whether the measured patching contrast can be attributed only to retaining a fixed low-rank bank. On \texttt{two\_concepts}, the structured-minus-pixel-permuted difference in selected-channel centered-logit $B$, averaged across four architectures, is $+0.05743$ with a 95\% interval of $[+0.05143,+0.06361]$. Its 90\% interval, $[+0.05219,+0.06266]$, lies outside the pre-specified centered-logit equivalence margin $\pm0.01704$. For probability-error reduction the mean difference is $+0.04563$ with a 95\% interval of $[+0.03715,+0.05374]$, but its 90\% interval $[+0.03864,+0.05261]$ lies inside the wider pre-specified equivalence margin $\pm0.06594$. Thus the centered-logit analysis supports a spatial-structure difference under the frozen criterion, whereas the architecture-averaged probability-error effect is nonzero but small enough to satisfy the study-specific equivalence criterion.
 
 The effect is not uniform across architectures. It is positive for \texttt{tiny\_gmp}, \texttt{tiny\_gap}, and \texttt{plain2\_w16\_gap}, but negative for \texttt{plain2\_w16\_gmp}. Random channel subsets yield substantially smaller architecture-averaged differences. Figure~\ref{fig:spatial} shows both the sign reversal and the selected-versus-random comparison.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig07_anchor_specificity.pdf}
-\caption{Effect of the original two-dimensional filter arrangement. The structured bank is compared with a common pixel permutation that preserves Gram matrix, rank, singular spectrum, row norms, and coefficient multisets. The effect is larger for validation-selected channels but changes sign with architecture.}
+\caption{Effect of the original two-dimensional filter arrangement on \texttt{two\_concepts}. (a) Architecture-specific structured-minus-pixel-permuted differences; bars are 95\% intervals across 100 renderer blocks. (b) Architecture-averaged selected- and random-channel effects with 90\% TOST intervals. Gray bands are the pre-specified equivalence regions: $\pm0.01704$ for centered-logit fidelity and $\pm0.06594$ for probability-error reduction. The bank permutation preserves Gram matrix, rank, singular spectrum, row norms, and coefficient multisets.}
 \label{fig:spatial}
 \end{figure}
 
@@ -187,18 +240,25 @@ These results isolate a role for spatial organization beyond simple rank or pair
 
 \subsection{Intervention-size effects do not imply channel interactions}
 
-The singleton reconstruction changes the interpretation of the earlier $k$-dependence result. In the analytically additive tiny networks, observed and reconstructed curves agree to numerical precision even when $B$ is large. On \texttt{two\_concepts}/\texttt{tiny\_gmp}, centered-logit fidelity gives $B=+0.14558$ for both observed and additive curves; probability-error reduction gives $B=+0.83151$ for both. The intervention-size effect therefore survives even when the joint logit change is exactly the sum of the singleton changes.
+The singleton reconstruction changes the interpretation of the earlier $k$-dependence result. In the analytically additive tiny networks, observed and reconstructed curves agree to numerical precision even when $B$ is large. On the primary \texttt{two\_concepts}/\texttt{tiny\_gmp} case, centered-logit fidelity gives $B=+0.14558$ for both observed and additive curves; probability-error reduction gives $B=+0.83151$ for both. Across all $k$, the centered residual-energy ratio remains at floating-point scale: in the release regime it reaches only $8.41\times10^{-14}$ at $k=16$, and in retention $1.45\times10^{-13}$. The full-patch and no-op logit identity errors are exactly zero. The intervention-size effect therefore survives a direct numerical check that the joint logit change is additive.
 
-Cancellation increases with intervention size. In the structured-filter release condition on \texttt{single\_shape}, the mean cancellation score across the four spatial-control architectures is approximately 0.20 at $k=4$, 0.32 at $k=8$, and 0.45 at $k=16$. Joint effects can therefore flatten or change shape simply because singleton logit vectors point in different directions.
+Cancellation provides one part of the explanation, but not the whole geometry. On \texttt{two\_concepts}/\texttt{tiny\_gmp} in the release regime, $K(S)$ rises from 0.054 at $k=4$ to 0.130 at $k=8$ and 0.193 at $k=16$. This reduces $\|a_S\|$ relative to the sum of singleton magnitudes. Equation~\ref{eq:additive-geometry}, however, shows why cancellation alone is insufficient: fidelity also depends on the alignment term $v^\top a_S$. Large $K(S)$ can therefore coexist with either helpful or unhelpful movement toward the donor, depending on the direction of the surviving sum.
 
-Deeper networks add genuine non-additivity. On \texttt{single\_shape}/\texttt{bn2\_w16\_gap}, centered-logit $B$ is $-0.27012$ for the observed curve but $+0.34955$ under the additive reconstruction, reversing sign. On \texttt{bn4\_w16\_gap}, the corresponding values are $+0.37725$ and $+1.64910$. These discrepancies require a nonzero residual $r_S$ and cannot be attributed to metric nonlinearity alone.
+Deeper networks can add a distinct non-additive component. On the primary \texttt{two\_concepts}/\texttt{bn2\_w16\_gap} case, centered-logit $B$ is $-0.13817$ for the observed curve but $+0.04177$ under the additive reconstruction, a sign reversal. At $k=8$, the residual-energy ratio is 0.190 in release and 0.339 in retention. The secondary \texttt{single\_shape} task contains even larger examples, including \texttt{bn2\_w16\_gap} ($-0.27012$ observed versus $+0.34955$ additive) and \texttt{bn4\_w16\_gap} ($+0.37725$ versus $+1.64910$). These gaps require nonzero $r_S$ and cannot be produced by metric nonlinearity alone. Figure~\ref{fig:additivity-curves} shows the primary Tiny and BN2 cases directly.
 
-Finally, the structured-versus-pixel-permuted effect is already present to a large extent in the additive component. Averaged across the four spatial-control architectures on \texttt{two\_concepts}, the centered-logit difference is $+0.05743$ observed and $+0.05710$ additive. For probability-error reduction the values are $+0.04563$ and $+0.04105$. Figure~\ref{fig:additivity} summarizes both results.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig09_additivity_curves.pdf}
+\caption{Direct additivity check on the primary \texttt{two\_concepts} task. (a) In \texttt{tiny\_gmp}, observed and singleton-additive release-minus-retention centered-logit fidelity curves are visually indistinguishable. (b) In \texttt{bn2\_w16\_gap}, the curves separate as $k$ grows. The decomposition evaluates all $k=0,\ldots,16$; the contrast $B$ uses only $k=1,2,4,8$. (c) Centered residual energy $\rho(S)$ for release and retention. The Tiny control stays at numerical precision, whereas BN2 develops a substantial residual. Curves are renderer-block means; this figure is descriptive and the inferential intervals for $B$ are reported in text and Figure~\ref{fig:additivity}.}
+\label{fig:additivity-curves}
+\end{figure}
+
+The spatial-control comparison is also reproduced closely on average, but the paired comparison makes the scope of that statement clearer. On \texttt{two\_concepts}, the architecture-averaged structured-minus-pixel-permuted centered-logit contrast is $+0.05743$ observed and $+0.05710$ additive. Their paired observed-minus-additive difference across the same 100 renderer blocks is $+0.00033$ with a 95\% paired block interval of $[-0.00074,+0.00140]$. For probability-error reduction, the corresponding contrasts are $+0.04563$ and $+0.04105$, with paired difference $+0.00458$ and interval $[+0.00202,+0.00714]$. Across the four architectures, the centered-logit observed-minus-additive discrepancy in the spatial contrast ranges from $-0.00473$ to $+0.00604$; for probability error it ranges from $-0.00635$ to $+0.02466$, with the two Tiny architectures essentially at zero. Thus the additive reconstruction reproduces the studied architecture-averaged spatial contrast closely, while some deeper architectures retain non-negligible discrepancies.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig08_additivity.pdf}
-\caption{Observed versus singleton-additive patching effects. (a) Across 16 architectures, exact agreement occurs for the analytic tiny controls while several deeper architectures depart from the identity line. (b) The structured-versus-pixel-permuted difference on \texttt{two\_concepts} is closely reproduced by the additive reconstruction.}
+\caption{Observed versus singleton-additive patching effects on \texttt{two\_concepts}. (a) Observed $B$ versus reconstructed $B$ across all 16 architectures; the dashed diagonal denotes exact agreement. Highlight labels identify the analytic Tiny control and architectures with large reconstruction gaps. (b) Structured-minus-pixel-permuted $B$ averaged across the four spatial-control architectures. Horizontal bars are 95\% renderer-block bootstrap intervals for each observed or additive estimate; the paired observed-minus-additive intervals are reported in the text.}
 \label{fig:additivity}
 \end{figure}
 
@@ -206,19 +266,19 @@ Finally, the structured-versus-pixel-permuted effect is already present to a lar
 
 The experiments separate several claims that are easy to conflate. First, keeping first-layer kernels close to recognizable spatial templates is a statement about weights. It does not determine how interventions on their activation channels affect model outputs. Second, a patching effect that changes with the number of patched channels is not, by itself, evidence for synergy or another nonlinear interaction. Exact-additivity controls show that singleton geometry and metric choice are sufficient to produce strong intervention-size dependence. Third, genuine non-additivity does occur, but it depends strongly on downstream architecture.
 
-This distinction helps interpret the architecture study. The large differences across CNN variants are not merely different values of the same hidden mechanism. Some architectures largely preserve the additive singleton prediction, whereas others transform joint interventions enough to change the magnitude or even the sign of $B$. BatchNorm variants provide the clearest examples in the present grid. Architecture therefore determines how strongly a first-layer perturbation is recombined after the intervention point.
+This distinction helps interpret the architecture study. The large differences across CNN variants are not merely different values of the same hidden mechanism. Some architectures largely preserve the additive singleton prediction, whereas others transform joint interventions enough to change the magnitude or even the sign of $B$. Architectures containing BatchNorm provide some of the clearest gaps in the present grid, but this does not localize the cause to BatchNorm itself: with stored statistics in evaluation mode, the BatchNorm transform is affine, and the observed residual can arise from its composition with convolution, ReLU, pooling, and subsequent layers. The analysis identifies architecture-dependent non-additivity without uniquely assigning it to one operation.
 
-The pixel-permuted control adds another layer. The structured bank and its permutation have identical Gram matrices, rank, singular spectra, row norms, and coefficient multisets, but they do not produce the same patching behavior. The original two-dimensional arrangement therefore matters functionally. At the same time, the additive reconstruction reproduces most of the structured-versus-permuted difference. This suggests that the spatial bank primarily changes the individual channel contributions and how those contributions align, while architecture-specific downstream computation can further modify them.
+The pixel-permuted control adds another layer. The structured bank and its permutation have identical Gram matrices, rank, singular spectra, row norms, and coefficient multisets, but the centered-logit primary analysis does not treat them as equivalent. The probability-error average, by contrast, falls within its wider pre-specified equivalence region. The additive reconstruction reproduces the architecture-averaged spatial contrast closely, especially for centered logits, but architecture-level discrepancies show why this should not be generalized into a claim that spatial structure acts only through singleton contributions. The narrower conclusion is that much of the studied average contrast is already present before a large residual interaction is required.
 
 The study also illustrates a practical lesson for activation-patching work. A mechanistic claim about interactions should be compared with a singleton-additive baseline. Otherwise, curvature caused by vector cancellation or by a nonlinear evaluation metric can be mistaken for model-level interaction. Reporting the intervention size, patched component, source/target construction, channel-selection rule, metric, and architecture makes the measured quantity easier to interpret.
 
-The scope is deliberately controlled. The tasks are synthetic, the networks are small CNNs, and the filters come from one predefined bank. The retention-versus-release comparison also changes the complete training trajectory, so it does not isolate the effect of replacing final first-layer weights while holding the rest of a trained network fixed. The singleton decomposition is post-hoc and reuses the same checkpoints and renderer blocks as the source experiments. Its role is diagnostic: it separates superposition from residual non-additivity, but it does not uniquely identify which downstream layer causes that residual.
+The scope is deliberately controlled. The tasks are synthetic, the networks are small CNNs, and the filters come from one predefined bank. The retention-versus-release comparison also changes the complete training trajectory, so it does not isolate the effect of replacing final first-layer weights while holding the rest of a trained network fixed. Architecture comparisons are not accuracy-matched: they characterize the trained systems in the grid rather than an architecture effect at fixed predictive performance. Patching uses activations from another valid matched image, but the resulting hybrid hidden state can still lie outside the activation distribution encountered during ordinary inference. Channel selection uses global-max first-layer activation for every architecture, including GAP models; random-channel analyses reduce dependence on that ranking choice but do not remove this design feature. The singleton decomposition is post-hoc and reuses the same checkpoints and renderer blocks as the source experiments. Its role is diagnostic: it separates superposition from residual non-additivity, but it does not uniquely identify which downstream layer causes that residual.
 
 \section{Conclusion}\label{sec:conclusion}
 
 Preserving predefined first-layer filters does not determine a unique activation-patching effect. In controlled CNNs, the release-versus-retention comparison depends on intervention size and on the architecture after the patched layer, while a Gram- and rank-matched pixel permutation shows that the original spatial arrangement of the filter bank also matters.
 
-The singleton decomposition provides the main mechanistic clarification. Large intervention-size effects remain in networks that are exactly additive in logits, so dependence on $k$ should not be interpreted as evidence of channel interaction without an explicit additive baseline. Deeper networks can introduce substantial residual non-additivity, and the amount of that residual is architecture dependent. Much of the structured-versus-pixel-permuted effect, however, is already present in the geometry of singleton channel contributions.
+The singleton decomposition provides the main mechanistic clarification. Large intervention-size effects remain in networks that are exactly additive in logits, so dependence on $k$ should not be interpreted as evidence of channel interaction without an explicit additive baseline. Deeper networks can introduce substantial residual non-additivity, and the amount of that residual is architecture dependent. For the spatial-control study, the singleton reconstruction reproduces the architecture-averaged structured-versus-pixel-permuted contrast closely, while architecture-specific gaps constrain broader mechanistic interpretations.
 
 Taken together, the results argue for separating structural alignment, singleton-effect geometry, metric dependence, and downstream interaction when interpreting activation-patching experiments.
 
