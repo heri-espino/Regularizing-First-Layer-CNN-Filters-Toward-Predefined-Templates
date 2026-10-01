@@ -2,9 +2,9 @@
   "study": "cnn_patching_additivity",
   "frozen_date": "2026-09-30",
   "evidential_role": "post_hoc_saved_checkpoint_analysis",
-  "implementation_status": "validated_locally_bom_compatibility_fixed_source_execution_pending",
+  "implementation_status": "source_execution_complete_results_archived_and_manuscript_integrated",
   "trains_models": false,
-  "scientific_execution_complete": false,
+  "scientific_execution_complete": true,
   "inspected_source_repository_head_before_implementation": "fa5fae0295747ba48ec8a4f222aac07e58fc5ace",
   "source_roots": {
     "architecture": "%LOCALAPPDATA%\\prior-templates-cnns\\results\\architecture_robustness_cuda_001",
@@ -80,5 +80,9 @@
     "REPORT.md",
     "GRID_COMPLETE.json"
   ],
-  "note": "This manifest records implementation provenance only. It is not a scientific result and does not substitute for runtime source inventory or completion markers."
+  "note": "Implementation provenance plus current execution-completion status. Scientific interpretation is documented in CP-017 and the archived analysis reports; runtime source inventory/completion markers remain authoritative for the executed grids.",
+  "archived_analysis_root": "analysis/patching_additivity_001",
+  "result_checkpoint": "checkpoints/CP-017_patching-additivity-results.md",
+  "result_archival_commit": "bd8b513f7b67695fd0caa12f065efdddd8f4d7be",
+  "manuscript_integration_commit": "2aee58db1958f5c4a67272e78b484c45a7fa7462"
 }
