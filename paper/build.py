@@ -33,6 +33,7 @@ FIGURES = tuple(
         "fig06_main_results.pdf",
         "fig07_anchor_specificity.pdf",
         "fig08_additivity.pdf",
+        "fig09_additivity_curves.pdf",
     )
 )
 
@@ -77,11 +78,13 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     from build_main_results_figure import build_figure as build_main_results_figure
     from build_anchor_specificity_figure import build_figure as build_anchor_specificity_figure
     from build_additivity_figure import build_figure as build_additivity_figure
+    from build_additivity_curves_figure import build_figure as build_additivity_curves_figure
 
     build_overview_figure()
     build_main_results_figure()
     build_anchor_specificity_figure()
     build_additivity_figure()
+    build_additivity_curves_figure()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
