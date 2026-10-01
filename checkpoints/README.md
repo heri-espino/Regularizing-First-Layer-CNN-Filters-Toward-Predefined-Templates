@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-017_patching-additivity-results.md`
+`CP-018_sn-computer-science-compact-rewrite.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**
