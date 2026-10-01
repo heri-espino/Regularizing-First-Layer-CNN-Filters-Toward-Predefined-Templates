@@ -45,10 +45,10 @@ HIGHLIGHT_LABELS = {
 }
 
 HIGHLIGHT_OFFSETS = {
-    ("centered_logit_fidelity", "tiny_gmp"): (5, 5),
-    ("centered_logit_fidelity", "bn2_w16_gap"): (5, -11),
-    ("prob_error_reduction", "tiny_gmp"): (5, 5),
-    ("prob_error_reduction", "bn2_w16_gap"): (5, -11),
+    ("centered_logit_fidelity", "tiny_gmp"): (-7, 7),
+    ("centered_logit_fidelity", "bn2_w16_gap"): (7, -12),
+    ("prob_error_reduction", "tiny_gmp"): (-7, 7),
+    ("prob_error_reduction", "bn2_w16_gap"): (7, -12),
 }
 
 
@@ -94,8 +94,8 @@ def build_figure() -> Path:
     arch_rows = read_csv(ARCH_TABLE)
     anchor_rows = read_csv(ANCHOR_TABLE)
 
-    fig = plt.figure(figsize=(7.15, 3.35))
-    grid = fig.add_gridspec(1, 3, width_ratios=[1.0, 1.0, 0.92], wspace=0.34)
+    fig = plt.figure(figsize=(7.15, 3.45))
+    grid = fig.add_gridspec(1, 3, width_ratios=[1.0, 1.0, 0.88], wspace=0.42)
     axes = [fig.add_subplot(grid[0, i]) for i in range(3)]
 
     for ax, (metric, title, color) in zip(axes[:2], METRICS):
@@ -115,7 +115,9 @@ def build_figure() -> Path:
                     (additive, observed),
                     xytext=HIGHLIGHT_OFFSETS[(metric, architecture)],
                     textcoords="offset points",
-                    fontsize=5.8,
+                    fontsize=6.2,
+                    ha="right" if architecture == "tiny_gmp" else "left",
+                    va="bottom" if architecture == "tiny_gmp" else "top",
                 )
 
         ax.set_title(title, pad=4)
@@ -149,6 +151,7 @@ def build_figure() -> Path:
     ax.axvline(0.0, color="#777777", linewidth=0.7)
     ax.set_yticks(y_positions)
     ax.set_yticklabels(["Centered logits", "Probability error"])
+    ax.tick_params(axis="y", pad=7)
     ax.set_xlabel("Structured $-$ pixel-permuted, $B$")
     ax.set_title("Spatial-bank effect", pad=4)
     ax.grid(axis="y", visible=False)
