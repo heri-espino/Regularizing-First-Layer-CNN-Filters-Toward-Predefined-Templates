@@ -171,7 +171,7 @@ def build_figure() -> Path:
     draw_delta_panel(axes[0], rows, "tiny_gmp", "Tiny · GMP")
     draw_delta_panel(axes[1], rows, "bn2_w16_gap", "BN-2 w16 · GAP")
     axes[0].set_ylabel(
-        r"Release $-$ retention\ncentered-logit fidelity"
+        "Release $-$ retention\ncentered-logit fidelity"
     )
     axes[1].set_ylabel("")
     axes[0].legend(loc="lower right", fontsize=5.8, frameon=False)
