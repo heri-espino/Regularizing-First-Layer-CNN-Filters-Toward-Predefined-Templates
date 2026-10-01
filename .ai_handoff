@@ -455,3 +455,33 @@ Key values:
 `paper/main.tex` now includes a compact additive-decomposition method and result section plus revised abstract/discussion/conclusion. Do not revert to wording that treats the intervention-size effect itself as evidence of nonlinear channel interaction.
 
 No new models are required for this interpretation.
+
+
+## 2026-10-01 superseding manuscript note — SN Computer Science
+
+The manuscript target/format has changed. `paper/main.tex` is now a compact Springer Nature / SN Computer Science manuscript using `paper/sn-article-template/sn-jnl.cls`.
+
+Read `checkpoints/CP-018_sn-computer-science-compact-rewrite.md` before expanding the paper.
+
+Current constraints:
+
+- keep the main article compact (~3,000 prose words before references/declarations);
+- use the simple journal sequence Introduction → Related work → Method → Results → Discussion → Conclusion;
+- do **not** restore the five historical appendix files into `main.tex`;
+- use four central figures: overview, intervention-size/architecture, spatial control, and additivity;
+- move exhaustive robustness tables, audits, and developmental analyses to Supplementary Information or `analysis/`;
+- preserve the CP-017 interpretation that (k)-dependence is not synonymous with channel interaction.
+
+Build with:
+
+```powershell
+python paper/build.py --clean
+```
+
+Expected output:
+
+```text
+paper/sn_submission.pdf
+```
+
+The previous TMLR PDF was removed and the paper workflow now names the Springer Nature artifact.
