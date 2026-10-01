@@ -148,14 +148,22 @@ def draw_residual_panel(ax, rows: list[dict[str, str]]) -> None:
     ax.set_ylabel(r"$\rho(S)$")
     ax.set_xticks([2, 4, 8, 12, 16])
     ax.grid(axis="x", visible=False)
-    ax.legend(loc="upper left", fontsize=5.5, frameon=False)
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.24),
+        ncol=2,
+        fontsize=6.3,
+        frameon=False,
+        columnspacing=1.0,
+        handlelength=2.0,
+    )
 
 
 def build_figure() -> Path:
     apply_paper_style()
     rows = read_csv(CURVE_TABLE)
 
-    fig = plt.figure(figsize=(7.15, 2.75))
+    fig = plt.figure(figsize=(7.15, 3.05))
     grid = fig.add_gridspec(
         1,
         3,
@@ -164,7 +172,7 @@ def build_figure() -> Path:
         left=0.08,
         right=0.99,
         top=0.87,
-        bottom=0.20,
+        bottom=0.28,
     )
     axes = [fig.add_subplot(grid[0, i]) for i in range(3)]
 
@@ -174,7 +182,7 @@ def build_figure() -> Path:
         "Release $-$ retention\ncentered-logit fidelity"
     )
     axes[1].set_ylabel("")
-    axes[0].legend(loc="lower right", fontsize=5.8, frameon=False)
+    axes[0].legend(loc="lower right", fontsize=6.3, frameon=False)
 
     draw_residual_panel(axes[2], rows)
 
