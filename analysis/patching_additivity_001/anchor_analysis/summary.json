@@ -1,0 +1,30 @@
+{
+  "study": "cnn_patching_additivity_001",
+  "source": "anchor",
+  "models": 12800,
+  "blocks": 100,
+  "bootstrap_seed": 20260930,
+  "bootstrap_replicates": 10000,
+  "primary_metrics": [
+    "centered_logit_fidelity",
+    "prob_error_reduction"
+  ],
+  "B_budgets": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "figures": [
+    "figures\\observed_vs_additive_single_shape_pixel_permuted_template_centered_logit_fidelity.pdf",
+    "figures\\observed_vs_additive_single_shape_structured_template_centered_logit_fidelity.pdf",
+    "figures\\observed_vs_additive_two_concepts_pixel_permuted_template_centered_logit_fidelity.pdf",
+    "figures\\observed_vs_additive_two_concepts_structured_template_centered_logit_fidelity.pdf",
+    "figures\\observed_vs_additive_single_shape_pixel_permuted_template_prob_error_reduction.pdf",
+    "figures\\observed_vs_additive_single_shape_structured_template_prob_error_reduction.pdf",
+    "figures\\observed_vs_additive_two_concepts_pixel_permuted_template_prob_error_reduction.pdf",
+    "figures\\observed_vs_additive_two_concepts_structured_template_prob_error_reduction.pdf"
+  ],
+  "max_full_patch_logit_error": 0.0,
+  "max_noop_logit_error": 0.0
+}

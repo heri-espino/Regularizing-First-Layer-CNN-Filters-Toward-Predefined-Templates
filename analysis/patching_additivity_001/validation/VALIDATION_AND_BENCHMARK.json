@@ -1,0 +1,43 @@
+{
+  "status": "technical_validation_complete_no_scientific_interpretation",
+  "device": "cuda",
+  "batch_size": 256,
+  "architecture": {
+    "source": "architecture",
+    "validation_models": 64,
+    "earliest_block": 6000,
+    "batch_stability_checkpoint": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\training\\runs\\two_concepts\\plain2_w16_gap\\block6000\\init00\\retention_1\\epoch_0200.pt",
+    "batch_stability_max_abs_difference": 1.0356341633155353e-06,
+    "selected_only_mean_seconds_per_model": 0.09576062036649091,
+    "selected_only_mean_json_bytes_per_model": 68721.15625,
+    "all_controls_benchmark_seconds_one_model": 0.6378099001012743,
+    "all_controls_json_bytes_one_model": 490074,
+    "all_controls_to_selected_time_ratio": 6.660461238244654
+  },
+  "anchor": {
+    "source": "anchor",
+    "validation_models": 128,
+    "earliest_block": 7000,
+    "batch_stability_checkpoint": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\anchor_specificity_cuda_001\\training\\runs\\two_concepts\\plain2_w16_gap\\structured_template\\block7000\\init00\\retention_1\\epoch_0200.pt",
+    "batch_stability_max_abs_difference": 4.556287770185463e-06,
+    "selected_only_mean_seconds_per_model": 0.1027431015354523,
+    "selected_only_mean_json_bytes_per_model": 69601.4453125,
+    "all_controls_benchmark_seconds_one_model": 0.6322741000913084,
+    "all_controls_json_bytes_one_model": 489939,
+    "all_controls_to_selected_time_ratio": 6.153932387111531
+  },
+  "projected_all_controls_hours": {
+    "architecture_25600_models": 4.535537067386839,
+    "anchor_primary_12800_models": 2.248085689213541,
+    "central_total": 6.78362275660038,
+    "secondary_anchor_additional_12800_models": 2.248085689213541
+  },
+  "secondary_anchor_predeclared_cost_rule": {
+    "max_additional_runtime_fraction_of_central": 0.35,
+    "max_additional_summary_storage_gib": 10.0,
+    "projected_additional_runtime_fraction": 0.3313989839759562,
+    "projected_additional_summary_storage_gib": 5.8405280113220215,
+    "run_secondary_anchors": true,
+    "note": "Decision uses timing/storage only; do not inspect additivity outcomes before applying it."
+  }
+}

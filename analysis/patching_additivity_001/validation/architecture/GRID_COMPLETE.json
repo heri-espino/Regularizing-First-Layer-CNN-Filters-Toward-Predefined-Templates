@@ -1,0 +1,8 @@
+{
+  "planned": 64,
+  "complete": 64,
+  "completed_this_invocation": 0,
+  "complete_grid_for_requested_scope": true,
+  "elapsed_seconds_this_invocation": 0.011298200115561485,
+  "training_invoked": false
+}

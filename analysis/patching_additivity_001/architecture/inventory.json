@@ -1,0 +1,454 @@
+{
+  "source": "architecture",
+  "root": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001",
+  "training_design_sha256": "cb3eaf4ff1791fbac28819617e1d83fdad684c4a4103406be27100bfc383784a",
+  "evaluation_design_sha256": "4181774df9d8195afb727f117f8bb5de42b5f549b0af3984a7c23c62f07906f5",
+  "execution_manifest_sha256": "f0f646401d54030c29af99fc47a82226ab8409a5570775a1ab83d302d8bca41c",
+  "training_grid_complete": true,
+  "evaluation_grid_complete": true,
+  "expected_models": 25600,
+  "checkpoints_found": 25600,
+  "evaluations_found": 25600,
+  "missing_evaluations": [],
+  "missing_evaluation_count": 0,
+  "counts": {
+    "task": {
+      "single_shape": 12800,
+      "two_concepts": 12800
+    },
+    "architecture": {
+      "bn2_w16_gap": 1600,
+      "bn2_w16_gmp": 1600,
+      "bn4_w16_gap": 1600,
+      "bn4_w16_gmp": 1600,
+      "plain2_w16_gap": 1600,
+      "plain2_w16_gmp": 1600,
+      "plain2_w64_gap": 1600,
+      "plain2_w64_gmp": 1600,
+      "plain4_w16_gap": 1600,
+      "plain4_w16_gmp": 1600,
+      "plain4_w64_gap": 1600,
+      "plain4_w64_gmp": 1600,
+      "res4_w16_gap": 1600,
+      "res4_w16_gmp": 1600,
+      "tiny_gap": 1600,
+      "tiny_gmp": 1600
+    },
+    "treatment": {
+      "release_default": 12800,
+      "retention_1": 12800
+    },
+    "block": {
+      "6000": 256,
+      "6001": 256,
+      "6002": 256,
+      "6003": 256,
+      "6004": 256,
+      "6005": 256,
+      "6006": 256,
+      "6007": 256,
+      "6008": 256,
+      "6009": 256,
+      "6010": 256,
+      "6011": 256,
+      "6012": 256,
+      "6013": 256,
+      "6014": 256,
+      "6015": 256,
+      "6016": 256,
+      "6017": 256,
+      "6018": 256,
+      "6019": 256,
+      "6020": 256,
+      "6021": 256,
+      "6022": 256,
+      "6023": 256,
+      "6024": 256,
+      "6025": 256,
+      "6026": 256,
+      "6027": 256,
+      "6028": 256,
+      "6029": 256,
+      "6030": 256,
+      "6031": 256,
+      "6032": 256,
+      "6033": 256,
+      "6034": 256,
+      "6035": 256,
+      "6036": 256,
+      "6037": 256,
+      "6038": 256,
+      "6039": 256,
+      "6040": 256,
+      "6041": 256,
+      "6042": 256,
+      "6043": 256,
+      "6044": 256,
+      "6045": 256,
+      "6046": 256,
+      "6047": 256,
+      "6048": 256,
+      "6049": 256,
+      "6050": 256,
+      "6051": 256,
+      "6052": 256,
+      "6053": 256,
+      "6054": 256,
+      "6055": 256,
+      "6056": 256,
+      "6057": 256,
+      "6058": 256,
+      "6059": 256,
+      "6060": 256,
+      "6061": 256,
+      "6062": 256,
+      "6063": 256,
+      "6064": 256,
+      "6065": 256,
+      "6066": 256,
+      "6067": 256,
+      "6068": 256,
+      "6069": 256,
+      "6070": 256,
+      "6071": 256,
+      "6072": 256,
+      "6073": 256,
+      "6074": 256,
+      "6075": 256,
+      "6076": 256,
+      "6077": 256,
+      "6078": 256,
+      "6079": 256,
+      "6080": 256,
+      "6081": 256,
+      "6082": 256,
+      "6083": 256,
+      "6084": 256,
+      "6085": 256,
+      "6086": 256,
+      "6087": 256,
+      "6088": 256,
+      "6089": 256,
+      "6090": 256,
+      "6091": 256,
+      "6092": 256,
+      "6093": 256,
+      "6094": 256,
+      "6095": 256,
+      "6096": 256,
+      "6097": 256,
+      "6098": 256,
+      "6099": 256
+    },
+    "init_rep": {
+      "0": 6400,
+      "1": 6400,
+      "2": 6400,
+      "3": 6400
+    }
+  },
+  "sample_checkpoints": [
+    {
+      "path": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\training\\runs\\single_shape\\bn2_w16_gap\\block6000\\init00\\release_default\\epoch_0200.pt",
+      "sha256": "b429ecd98b84370fade319f5afe012e48ac65e581f4d64a72ef0127f45b51d4d",
+      "epoch": 200,
+      "state_keys": 9,
+      "metadata": {
+        "task": "single_shape",
+        "architecture": "bn2_w16_gap",
+        "block": 6000,
+        "init_rep": 0,
+        "treatment": "release_default",
+        "model_seed": 2613535059,
+        "shuffle_seed": 1579239440
+      }
+    },
+    {
+      "path": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\training\\runs\\single_shape\\plain4_w64_gap\\block6066\\init02\\retention_1\\epoch_0200.pt",
+      "sha256": "f394ebd4a8f42932d3c1bfccef720529262567a5777e8d2caea1752fdc811691",
+      "epoch": 200,
+      "state_keys": 9,
+      "metadata": {
+        "task": "single_shape",
+        "architecture": "plain4_w64_gap",
+        "block": 6066,
+        "init_rep": 2,
+        "treatment": "retention_1",
+        "model_seed": 646582225,
+        "shuffle_seed": 3548759661
+      }
+    },
+    {
+      "path": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\training\\runs\\two_concepts\\plain2_w16_gmp\\block6033\\init01\\release_default\\epoch_0200.pt",
+      "sha256": "6d0425c9e54d1a97ecc26c60744444fc88be81440691659b26fd42a8571cfb68",
+      "epoch": 200,
+      "state_keys": 5,
+      "metadata": {
+        "task": "two_concepts",
+        "architecture": "plain2_w16_gmp",
+        "block": 6033,
+        "init_rep": 1,
+        "treatment": "release_default",
+        "model_seed": 1978375957,
+        "shuffle_seed": 1542452276
+      }
+    },
+    {
+      "path": "C:\\Users\\175199\\AppData\\Local\\prior-templates-cnns\\results\\architecture_robustness_cuda_001\\training\\runs\\two_concepts\\tiny_gmp\\block6099\\init03\\retention_1\\epoch_0200.pt",
+      "sha256": "12c79f2338e352b07b82f57ff4885fa93f16cbbf7baf56210dd43c4959ad7515",
+      "epoch": 200,
+      "state_keys": 3,
+      "metadata": {
+        "task": "two_concepts",
+        "architecture": "tiny_gmp",
+        "block": 6099,
+        "init_rep": 3,
+        "treatment": "retention_1",
+        "model_seed": 2883588459,
+        "shuffle_seed": 3019912650
+      }
+    }
+  ],
+  "training_design": {
+    "study": "cnn_architecture_robustness_stage_f",
+    "protocol_status": "prospectively_frozen_fresh_sample",
+    "start_block": 6000,
+    "blocks": 100,
+    "init_reps": 4,
+    "epochs": 200,
+    "tasks": [
+      "single_shape",
+      "two_concepts"
+    ],
+    "architectures": [
+      "tiny_gmp",
+      "tiny_gap",
+      "plain2_w16_gmp",
+      "plain2_w16_gap",
+      "plain4_w16_gmp",
+      "plain4_w16_gap",
+      "plain2_w64_gmp",
+      "plain2_w64_gap",
+      "plain4_w64_gmp",
+      "plain4_w64_gap",
+      "res4_w16_gmp",
+      "res4_w16_gap",
+      "bn2_w16_gmp",
+      "bn2_w16_gap",
+      "bn4_w16_gmp",
+      "bn4_w16_gap"
+    ],
+    "architecture_specs": {
+      "tiny_gmp": {
+        "total_depth": 1,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "none",
+        "batchnorm": false,
+        "parameters": 1364
+      },
+      "tiny_gap": {
+        "total_depth": 1,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "none",
+        "batchnorm": false,
+        "parameters": 1364
+      },
+      "plain2_w16_gmp": {
+        "total_depth": 2,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 3684
+      },
+      "plain2_w16_gap": {
+        "total_depth": 2,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 3684
+      },
+      "plain4_w16_gmp": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 8324
+      },
+      "plain4_w16_gap": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 8324
+      },
+      "plain2_w64_gmp": {
+        "total_depth": 2,
+        "width": 64,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 10836
+      },
+      "plain2_w64_gap": {
+        "total_depth": 2,
+        "width": 64,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 10836
+      },
+      "plain4_w64_gmp": {
+        "total_depth": 4,
+        "width": 64,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 84692
+      },
+      "plain4_w64_gap": {
+        "total_depth": 4,
+        "width": 64,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": false,
+        "parameters": 84692
+      },
+      "res4_w16_gmp": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "residual",
+        "batchnorm": false,
+        "parameters": 8324
+      },
+      "res4_w16_gap": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "residual",
+        "batchnorm": false,
+        "parameters": 8324
+      },
+      "bn2_w16_gmp": {
+        "total_depth": 2,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": true,
+        "parameters": 3700
+      },
+      "bn2_w16_gap": {
+        "total_depth": 2,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": true,
+        "parameters": 3700
+      },
+      "bn4_w16_gmp": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "max",
+        "connectivity": "plain",
+        "batchnorm": true,
+        "parameters": 8372
+      },
+      "bn4_w16_gap": {
+        "total_depth": 4,
+        "width": 16,
+        "pooling": "avg",
+        "connectivity": "plain",
+        "batchnorm": true,
+        "parameters": 8372
+      }
+    },
+    "treatments": [
+      "retention_1",
+      "release_default"
+    ],
+    "treatment_specs": {
+      "retention_1": {
+        "kind": "constant",
+        "lambda": 1.0
+      },
+      "release_default": {
+        "kind": "linear_release",
+        "start": 10,
+        "end": 80
+      }
+    },
+    "lr": 0.003,
+    "batch_size": 128,
+    "master_seed": 2026090617,
+    "paired_treatment_initialization": true,
+    "device": "cuda",
+    "workers": 1,
+    "threads_per_worker": 1,
+    "protocol_sha256": "fa88b9c09ca68e940165292e440f58d8b50418fbf70db2cd74c0065c9703f54c",
+    "architecture_core_sha256": "5fd97b05696cc2921750511eab8c09c56b4ba3f2379974f663396a5c02e619c0",
+    "trainer_sha256": "d4ea3adea8c15564398cdad2f51f2b4455434438aafff1c83a21790a1c45709f"
+  },
+  "evaluation_design": {
+    "study": "cnn_architecture_robustness_stage_f_evaluation",
+    "training_design_sha256": "cb3eaf4ff1791fbac28819617e1d83fdad684c4a4103406be27100bfc383784a",
+    "protocol_sha256": "fa88b9c09ca68e940165292e440f58d8b50418fbf70db2cd74c0065c9703f54c",
+    "architecture_core_sha256": "5fd97b05696cc2921750511eab8c09c56b4ba3f2379974f663396a5c02e619c0",
+    "evaluator_sha256": "bcf80ef304aa29d0af1a2264a59ac357c607b7d1363ee901e6132fb56232cdbd",
+    "device": "cuda",
+    "batch_size": 256,
+    "budgets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "energy_matched_budgets": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "random_controls": 8,
+    "ranking": "validation_standardized_activation_contrast",
+    "expected_models": 25600,
+    "trains_models": false
+  },
+  "source_code_checks": {
+    "sha256": {
+      "protocol": "fa88b9c09ca68e940165292e440f58d8b50418fbf70db2cd74c0065c9703f54c",
+      "core": "5fd97b05696cc2921750511eab8c09c56b4ba3f2379974f663396a5c02e619c0",
+      "evaluator": "bcf80ef304aa29d0af1a2264a59ac357c607b7d1363ee901e6132fb56232cdbd",
+      "legacy_core": "19dffa1eb38169472f37fa1c05904740b4a7eb8ece1828b3631825ff84042a11"
+    },
+    "git_blob": {
+      "protocol": "de00c0efc1c46fa2ad034c71d2a353ee590584ad",
+      "core": "8dd7adb5ad28c84dfe349e38ea6a8fb86d1babc4",
+      "evaluator": "954657cbbffcd2dc79c77b96c19368acff2424a5",
+      "legacy_core": "753cb5121971e2a57b3c4dce9ccd84d9be3a403f"
+    },
+    "source_manifest_blob_match": {
+      "protocol": true,
+      "core": true,
+      "evaluator": true,
+      "legacy_core": true
+    }
+  }
+}
