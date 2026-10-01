@@ -179,19 +179,17 @@ Interpretation: architecture dependence is decisively reproduced. Pooling is a m
 
 ## Manuscript
 
-`paper/main.tex` is intentionally a pre-Stage-F snapshot.
+`paper/main.tex` is now the current integrated manuscript. It includes the completed metric-sensitivity, architecture, pixel-permuted spatial-control, and post-hoc singleton-additivity results.
 
-Do not perform the outcome-dependent rewrite until Stage F is complete. Follow `paper/REVISION_PLAN.md`.
+The current mechanistic framing is:
 
-Key planned changes:
+- filter-template similarity is distinct from functional patching behavior;
+- intervention-size dependence is distinct from downstream non-additivity;
+- exact-additivity controls show that singleton geometry/cancellation plus metric nonlinearity can create strong (k)-dependence;
+- deeper architectures can add genuine residual non-additivity;
+- the structured-versus-pixel-permuted contrast is largely reproduced by the additive singleton reconstruction.
 
-- integrate metric-sensitivity audit prominently;
-- explicitly discuss treatment-dependent normalization scale;
-- add Stage F as the architecture centerpiece;
-- reorganize results around scientific questions rather than chronological stages;
-- move exhaustive schedules/rankings/controls to appendix;
-- manuscript title revised to include both channel count and architecture;
-- retain strong scope limitations.
+Keep the main text organized around these scientific questions rather than experiment chronology, and avoid re-expanding the appendices with exhaustive tables already archived under `analysis/`.
 
 ## Scientific claim discipline
 
