@@ -1,3 +1,40 @@
+\section*{Supplementary Section S1: Architecture and training specification}
+\label{app:architecture-specification}
+
+For each task and renderer block, the data generator draws 128 training, 64 validation, and 64 test nuisance contexts from independent deterministic streams. Each context is rendered in all four class states, giving 512/256/256 images in the three splits. All Stage-F architecture models are trained for 200 epochs with Adam, learning rate 0.003 and batch size 128. Retention keeps the first-layer penalty at $\lambda=1$; release uses the same penalty through epoch 10, decreases it linearly to zero at epoch 80, and leaves it at zero thereafter. Paired retention/release runs use identical model initialization and paired minibatch-order streams within renderer block, task, architecture, and initialization replicate.
+
+\begin{table}[h]
+\caption{Complete 16-model architecture grid used in the fresh-sample architecture study. Depth counts the shared first convolution. GMP/GAP denote global max/global average pooling.}
+\label{tab:supp-architecture-grid}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Architecture & Depth & Width & Pool & Residual & BatchNorm & Parameters \\
+\midrule
+\texttt{tiny\_gmp} & 1 & 16 & GMP & no & no & 1,364 \\
+\texttt{tiny\_gap} & 1 & 16 & GAP & no & no & 1,364 \\
+\texttt{plain2\_w16\_gmp} & 2 & 16 & GMP & no & no & 3,684 \\
+\texttt{plain2\_w16\_gap} & 2 & 16 & GAP & no & no & 3,684 \\
+\texttt{plain4\_w16\_gmp} & 4 & 16 & GMP & no & no & 8,324 \\
+\texttt{plain4\_w16\_gap} & 4 & 16 & GAP & no & no & 8,324 \\
+\texttt{plain2\_w64\_gmp} & 2 & 64 & GMP & no & no & 10,836 \\
+\texttt{plain2\_w64\_gap} & 2 & 64 & GAP & no & no & 10,836 \\
+\texttt{plain4\_w64\_gmp} & 4 & 64 & GMP & no & no & 84,692 \\
+\texttt{plain4\_w64\_gap} & 4 & 64 & GAP & no & no & 84,692 \\
+\texttt{res4\_w16\_gmp} & 4 & 16 & GMP & yes & no & 8,324 \\
+\texttt{res4\_w16\_gap} & 4 & 16 & GAP & yes & no & 8,324 \\
+\texttt{bn2\_w16\_gmp} & 2 & 16 & GMP & no & yes & 3,700 \\
+\texttt{bn2\_w16\_gap} & 2 & 16 & GAP & no & yes & 3,700 \\
+\texttt{bn4\_w16\_gmp} & 4 & 16 & GMP & no & yes & 8,372 \\
+\texttt{bn4\_w16\_gap} & 4 & 16 & GAP & no & yes & 8,372 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All architectures share the bias-free $1\!\to\!16$, $9\times9$ first convolution and intervention tensor. Plain depth-4 models contain three downstream $3\times3$ convolutions. Width-64 variants use $16\!\to\!64$ in the first downstream convolution and $64\!\to\!64$ thereafter. Residual depth-4 models remain width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm occurs only downstream of the patched first-layer tensor, after each downstream convolution in the corresponding BN models. The final classifier is a learned linear map from the globally pooled representation to four classes.
+
 \section{Earlier analyses motivating the pre-specified contrast}\label{app:historical}
 
 These earlier analyses precede the pre-specified intervention-size experiment reported in \Cref{app:confirmation}. They are retained to show why the primary analysis used the patching effect for selected channels rather than the selected-minus-random comparison.
