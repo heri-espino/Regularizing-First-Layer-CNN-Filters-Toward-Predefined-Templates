@@ -6,3 +6,5 @@
 *.log
 *.out
 *.toc
+/sn_submission.pdf
+/tmlr_submission.pdf
