@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the TMLR manuscript.
+"""Build the Springer Nature / SN Computer Science manuscript.
 
 Default output:
-    paper/tmlr_submission.pdf
+    paper/sn_submission.pdf
 
 Requirements:
     - Python 3.10+
@@ -22,20 +22,17 @@ import sys
 PAPER_DIR = Path(__file__).resolve().parent
 ROOT = PAPER_DIR.parent
 BUILD_DIR = PAPER_DIR / "build"
-STYLE_DIR = PAPER_DIR / "tmlr"
+STYLE_DIR = PAPER_DIR / "sn-article-template"
+BST_DIR = STYLE_DIR / "bst"
 SOURCE = PAPER_DIR / "main.tex"
-DEFAULT_OUTPUT = PAPER_DIR / "tmlr_submission.pdf"
+DEFAULT_OUTPUT = PAPER_DIR / "sn_submission.pdf"
 FIGURES = tuple(
     PAPER_DIR / "figures" / name
     for name in (
         "fig00_overview.pdf",
-        "fig01_learning.pdf",
-        "fig02_patch_size.pdf",
-        "fig03_matching_trajectories.pdf",
-        "fig04_similarity_matrices.pdf",
-        "fig05_kernel_gallery.pdf",
         "fig06_main_results.pdf",
         "fig07_anchor_specificity.pdf",
+        "fig08_additivity.pdf",
     )
 )
 
@@ -79,10 +76,12 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     from build_overview_figure import build_figure as build_overview_figure
     from build_main_results_figure import build_figure as build_main_results_figure
     from build_anchor_specificity_figure import build_figure as build_anchor_specificity_figure
+    from build_additivity_figure import build_figure as build_additivity_figure
 
     build_overview_figure()
     build_main_results_figure()
     build_anchor_specificity_figure()
+    build_additivity_figure()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
@@ -94,7 +93,7 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     env = os.environ.copy()
     sep = os.pathsep
     env["TEXINPUTS"] = f".{sep}{STYLE_DIR}{sep}{env.get('TEXINPUTS', '')}"
-    env["BSTINPUTS"] = f"{STYLE_DIR}{sep}{env.get('BSTINPUTS', '')}"
+    env["BSTINPUTS"] = f"{BST_DIR}{sep}{STYLE_DIR}{sep}{env.get('BSTINPUTS', '')}"
 
     latex_command = [
         pdflatex,
