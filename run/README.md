@@ -172,6 +172,6 @@ The staging helper archives:
 - every file under `architecture_analysis/` and `anchor_analysis/`, including reports, CSV tables, summaries, and figures;
 - a completed cost-gated secondary-anchor analysis automatically, if it exists.
 
-It intentionally does **not** archive `architecture/runs/**`, `anchor/runs/**`, validation per-model outputs, or source checkpoints. Those are large intermediate/reusable artifacts in `%LOCALAPPDATA%`; the archived analysis products and design/completion metadata are the repository-facing scientific results.
+It intentionally does **not** archive `architecture/runs/**`, `anchor/runs/**`, validation per-model outputs, source checkpoints, or the very large reproducible `per_model_curves.csv` / `per_block_curves.csv` expansion tables. Those are large intermediate/reusable artifacts in `%LOCALAPPDATA%`; the archived analysis products and design/completion metadata are the repository-facing scientific results.
 
 The helper writes external files directly into Git's object database and index, so it works on the restricted university Windows worktree without creating the destination directories physically.
