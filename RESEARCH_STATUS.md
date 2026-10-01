@@ -1,6 +1,6 @@
 # Research status and scientific handoff
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 This document is the durable current scientific state of the project. The chronological research memory is now `checkpoints/`. A new researcher or AI agent must first read `checkpoints/README.md`, the latest `CP-XXX_*.md`, this file, `.ai_handoff`, and the active frozen protocols before changing experiments or rewriting the manuscript.
 
@@ -12,40 +12,44 @@ The intended contribution is **empirical and measurement-focused**. The paper do
 
 ## 2. Current live state
 
-### Post-hoc patching additivity — implementation frozen, source execution pending
+### Post-hoc patching additivity — complete and integrated into the manuscript
 
-The user explicitly authorized a new saved-checkpoint analysis after the submission-readiness pass. It is implemented under `studies/cnn_patching_additivity/` and recorded in `checkpoints/CP-015_patching-additivity-implementation.md`.
+The saved-checkpoint mechanistic analysis under `studies/cnn_patching_additivity/` is complete and documented in `checkpoints/CP-017_patching-additivity-results.md`.
 
-Scientific question: how much of the intervention-size dependence of the observed activation-patching curves can be reconstructed by summing all 16 singleton channel effects in centered-logit space, and how much remains as a joint non-additive residual? The analysis explicitly separates singleton geometry/cancellation, downstream-model non-additivity, and evaluation-metric nonlinearity.
+No models were retrained. The central completed scope is:
 
-Source roots on the university Windows VM are read-only:
+- architecture source: **25,600 saved checkpoints**;
+- structured/pixel-permuted anchor source: **12,800 saved checkpoints**;
+- inferential unit: renderer block after averaging four initialization replicates;
+- **100 renderer blocks** per source study.
+
+Paper-facing outputs are archived under:
 
 ```text
-%LOCALAPPDATA%\prior-templates-cnns\results\architecture_robustness_cuda_001
-%LOCALAPPDATA%\prior-templates-cnns\results\anchor_specificity_cuda_001
+analysis/patching_additivity_001/
 ```
 
-The new external output root is:
+The analysis decomposes each multi-channel patch into the sum of singleton logit changes plus a residual. The central interpretation is now:
+
+1. intervention-size dependence does **not** by itself establish channel interaction;
+2. the analytic tiny architectures are exactly additive in logits yet retain large (B) contrasts, so singleton geometry/cancellation and nonlinear scoring can generate strong (k)-dependence;
+3. deeper networks introduce genuine architecture-dependent non-additivity; some BatchNorm variants show large observed-versus-additive discrepancies and even sign reversal;
+4. the structured-versus-pixel-permuted difference is largely reproduced by the additive singleton reconstruction, indicating that much of the spatial-filter effect is already present in singleton contribution geometry.
+
+Key examples:
+
+- `two_concepts/tiny_gmp`, probability-error-reduction (B): observed = additive = **+0.83151**;
+- `single_shape/bn2_w16_gap`, centered-logit (B): observed **-0.27012** versus additive **+0.34955**;
+- `two_concepts` structured-minus-pixel-permuted centered-logit (B), averaged across four architectures: observed **+0.05743**, additive **+0.05710**.
+
+Maximum full-patch and no-op logit identity errors are zero. The manuscript `paper/main.tex` has been updated to integrate this interpretation without adding a large new appendix.
+
+The external VM root remains:
 
 ```text
 %LOCALAPPDATA%\prior-templates-cnns\results\patching_additivity_001
 ```
 
-No models are retrained. The evaluator reuses the exact matched pairs, post-ReLU whole-channel intervention, stored validation ranking, original random-control seed namespaces, and validation-energy-matched control construction. It recomputes every singleton channel patch and checks the original evaluation metrics before accepting a model output.
-
-Implementation-only validation already passes for the exact algebra, k=0/k=1 controls, and analytic additivity of the `tiny_gmp` and `tiny_gap` tails. Synthetic end-to-end analyzer tests also pass for both Stage-F-shaped and Stage-G-shaped outputs. These are engineering checks, not scientific outcomes from the saved models.
-
-The real source roots are not mounted in the current ChatGPT runtime. Therefore **no Stage-F/G additivity result is yet interpreted or marked complete**. On the university VM, use:
-
-```powershell
-.\run\run_patching_additivity.ps1 -Mode Inventory
-.\run\run_patching_additivity.ps1 -Mode Validate
-.\run\run_patching_additivity.ps1 -Mode Main
-```
-
-`-Mode Main` requires the predetermined validation/benchmark artifact and is resumable. The two random filter-bank families are secondary and may be run only if the frozen cost-only rule in the validation artifact permits them.
-
-**BOM compatibility fix (2026-09-30):** the first university-VM `Inventory`/`Validate` invocation exposed that the historical Windows PowerShell `execution_manifest.json` contains a UTF-8 BOM. The additivity evaluator now reads all JSON inputs with `utf-8-sig`, which accepts both BOM and BOM-free UTF-8. This is a design-preserving implementation fix recorded in `checkpoints/CP-016_patching-additivity-bom-fix.md`; real inventory/validation must be rerun after pulling it.
 
 
 ### Stage F is complete
