@@ -1,44 +1,56 @@
-# TMLR submission-readiness checklist
+# SN Computer Science submission checklist
 
-This checklist is for the double-blind review package. The working repository is **not itself anonymous** and should not be uploaded wholesale.
-
-## Manuscript PDF
+## Manuscript
 
 - Build with `python paper/build.py --clean`.
-- Submission PDF: `paper/tmlr_submission.pdf`.
-- Keep the TMLR style files unmodified.
-- Confirm the first-page ChatGPT/LLM-use footnote remains present.
-- Confirm `pdfauthor` is empty and the manuscript contains no author names, affiliations, ORCID, personal URLs, acknowledgments, or identifying repository links.
-- Check the final LaTeX pass for undefined citations/references.
-- Do not submit a PDF whose filename contains an author name.
+- Submission PDF: `paper/sn_submission.pdf`.
+- Keep the Springer Nature template files under `paper/sn-article-template/` unmodified.
+- Confirm that the paper compiles without undefined citations or references.
+- Check that the abstract remains concise and contains no citations or equations.
+- Check all four figures at normal reading size.
+- Keep the main article free of the historical Stage A--G naming used internally.
+- Do not re-embed the five historical appendix files into the main manuscript.
 
-## Supplementary material
+## Front matter and declarations
 
-TMLR supplementary material is also double blind. Do **not** zip the working repository directly.
+Before submission, verify the final author list, affiliations, corresponding-author details, and any ORCID information required by the submission system.
 
-Exclude or sanitize at minimum:
+Confirm that the declarations at the end of `main.tex` accurately state:
 
-- `.git/` and Git history;
-- `CITATION.cff`;
-- `.zenodo.json`;
-- `LICENSE` in its current form because it names the author;
-- `pyproject.toml` metadata fields containing author name, ORCID, or identifying repository URLs;
-- project checkpoint/history files that identify the GitHub account or author;
-- any README or metadata pointing to the identifying GitHub repository;
-- execution/launch manifests containing local paths such as `C:\\Users\\175199\\...`;
-- generated files or artifact names containing an author surname.
+- funding;
+- competing interests;
+- ethics approval / consent;
+- data availability;
+- code availability;
+- author contributions.
 
-Prefer an **allowlist-based clean export** containing only the code, frozen protocols, synthetic-data definitions, aggregate paper-facing results, and instructions needed to reproduce the manuscript claims. Preserve scientific hashes/seeds where useful, but replace identifying absolute filesystem roots with anonymous placeholders.
+Update any statement that changes before submission rather than leaving a generic placeholder.
 
-## Current repository facts relevant to anonymization
+## Supplementary Information
 
-The working repository intentionally contains author-identifying archival metadata for eventual public release, including citation/Zenodo/package metadata. Several scientific execution manifests also preserve original local paths for provenance. These are appropriate for the public archival artifact after review, but not for the double-blind supplementary ZIP.
+Use an allowlist-based export rather than uploading the working repository wholesale.
 
-## Before upload
+Include only material needed to support or reproduce the paper, such as:
 
-- Open the final PDF and visually inspect the first page, figures, captions, references, and PDF properties.
-- Inspect the supplementary ZIP contents after extraction in a clean directory.
-- Search the extracted submission package for author names, surname, ORCID, GitHub username, institutional names, local usernames/IDs, and identifying URLs.
-- Verify that no supplementary file links reviewers to a non-anonymous preprint or repository.
-- Verify that the paper is not simultaneously under review at another archival peer-reviewed venue.
-- Recheck TMLR's current author/submission guidelines immediately before submission.
+- frozen protocols;
+- renderer and model definitions;
+- analysis code;
+- aggregate result tables;
+- secondary robustness tables and figures;
+- instructions for reproduction.
+
+Raw checkpoints and tens of thousands of per-model evaluator JSON files are not needed in the submission package.
+
+Remove local absolute paths, temporary machine-specific files, Git history, and unrelated development notes from the supplementary archive.
+
+## Final visual pass
+
+Compare the compiled article with recent SN Computer Science papers:
+
+- section hierarchy should be simple;
+- figures should carry most of the quantitative story;
+- tables should be sparse and readable;
+- Discussion should interpret rather than repeat Results;
+- supporting audits and exhaustive secondary numbers should remain outside the main text.
+
+The target is a conventional journal article, not an experiment log.
