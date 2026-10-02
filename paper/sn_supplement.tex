@@ -112,6 +112,23 @@ Probability-error reduction & 656.70 & 15, 1485 & 0.869 & $<10^{-300}$ \\
 
 The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Architecture comparisons are not accuracy-matched and are interpreted as properties of the trained systems in this controlled grid.
 
+After the pre-specified architecture results were known, an explicitly post-hoc robustness analysis checked the omnibus conclusion under sphericity correction, within-block permutation, rank-based Friedman tests, and random channel orders. These checks support the robustness statement in the main text without changing the pre-specified status of the original architecture test.
+
+\begin{table}[h]
+\caption{Post-hoc robustness checks for architecture heterogeneity on \texttt{two\_concepts}. Permutation values are Holm adjusted across the two metrics.}
+\label{tab:supp-architecture-robustness}
+\centering
+\footnotesize
+\begin{tabular}{lrrrr}
+\toprule
+Metric & GG $\epsilon$ & GG $p$ & Permutation Holm $p$ & Friedman $p$ \\
+\midrule
+Centered-logit fidelity & 0.1861 & $1.56\times10^{-34}$ & $2.0\times10^{-5}$ & $3.52\times10^{-146}$ \\
+Probability-error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79\times10^{-200}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Pixel-permuted spatial control}\label{supp:spatial}
 
 The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular spectrum, and row coefficient multisets, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
