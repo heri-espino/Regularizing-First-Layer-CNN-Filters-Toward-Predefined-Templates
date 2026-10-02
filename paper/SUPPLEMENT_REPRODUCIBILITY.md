@@ -35,6 +35,7 @@ The package intentionally excludes raw training checkpoints, per-model evaluator
 | 20-block intervention-size contrast | analysis/budget_confirmation_001/budget_contrasts_per_block.csv and budget_contrasts.csv |
 | Alternative-metric B values | analysis/metric_sensitivity_001/stage_d_budget_contrasts_B_per_block.csv and stage_d_budget_contrasts_B.csv |
 | Architecture omnibus and architecture-specific B | analysis/architecture_robustness_001/treatment_delta_curves.csv, primary_architecture_omnibus.csv, architecture_B_summary.csv |
+| Greenhouse-Geisser, permutation, Friedman, and random-channel architecture checks | analysis/architecture_posthoc_diagnostics_001/omnibus_robustness.csv, random_B_per_block.csv, selected_random_summary.csv |
 | Spatial structured-minus-permuted effect | analysis/anchor_specificity_001/primary_spatial_specificity_per_block.csv, secondary_anchor_contrasts_per_block.csv |
 | BN2-GAP observed-minus-additive B | analysis/patching_additivity_001/architecture_analysis/B_per_block.csv |
 | Tiny numerical additivity and residual-energy curves | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv and model_integrity.csv |
@@ -52,6 +53,7 @@ The package includes the protocols that govern the paper-facing analyses:
 - studies/cnn_exhaustive_robustness/PROTOCOL.md
 - studies/cnn_metric_sensitivity/PROTOCOL.md
 - studies/cnn_architecture_robustness/PROTOCOL.md
+- studies/cnn_architecture_posthoc/PROTOCOL.md (outcome-informed robustness analysis)
 - studies/cnn_anchor_specificity/PROTOCOL.md
 - studies/cnn_patching_additivity/PROTOCOL.md
 - studies/cnn_checkpoint_audit/AUDIT_PROTOCOL.md
