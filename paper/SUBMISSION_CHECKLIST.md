@@ -7,7 +7,7 @@
 - Keep the Springer Nature template files under `paper/sn-article-template/` unmodified.
 - Confirm that the paper compiles without undefined citations or references.
 - Check that the abstract remains concise and contains no citations or equations.
-- Check all four figures at normal reading size.
+- Check all five figures at normal reading size, especially the Figure 4 residual legend and the internal metric labels in Figure 5.
 - Keep the main article free of the historical Stage A--G naming used internally.
 - Do not re-embed the five historical appendix files into the main manuscript.
 
@@ -28,6 +28,11 @@ Update any statement that changes before submission rather than leaving a generi
 
 ## Supplementary Information
 
+- Build `paper/sn_supplement.pdf` with `python paper/build_supplement.py --clean`.
+- Confirm Supplementary Section S1 is **Architecture and training specification**, matching the citation in the main text.
+- Confirm the numerical tables in Sections S2--S5 agree with the current analysis CSVs.
+- Review `paper/SUPPLEMENT_REPRODUCIBILITY.md` for the figure/statistic provenance map.
+
 Use an allowlist-based export rather than uploading the working repository wholesale.
 
 Include only material needed to support or reproduce the paper, such as:
@@ -42,6 +47,8 @@ Include only material needed to support or reproduce the paper, such as:
 Raw checkpoints and tens of thousands of per-model evaluator JSON files are not needed in the submission package.
 
 Remove local absolute paths, temporary machine-specific files, Git history, and unrelated development notes from the supplementary archive.
+
+Create the final archive with `python paper/build_submission_package.py`. Open the ZIP and verify that it contains `sn_submission.pdf`, `sn_supplement.pdf`, the frozen protocols, the paper-facing code, and the block-level/aggregate tables listed in the reproducibility map.
 
 ## Final visual pass
 
