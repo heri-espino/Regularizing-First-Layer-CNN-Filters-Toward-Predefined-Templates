@@ -40,6 +40,7 @@ FILES = [
     "paper/sn-article-template/bst/sn-basic.bst",
     "literature/references.bib",
     "pyproject.toml",
+    "README.md",
 
     "studies/cnn_release_experiment/core.py",
     "studies/cnn_budget_confirmation/PROTOCOL.md",
