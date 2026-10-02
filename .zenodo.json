@@ -1,10 +1,10 @@
 {
-  "title": "Template Priors in Small CNNs: Activation-Patching Effects Depend on the Number of Patched Channels",
+  "title": "Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity",
   "upload_type": "software",
   "description": "Research artifact containing the manuscript source, frozen experimental protocols, analysis outputs, and reproduction code for a study of first-layer template priors and activation-patching sensitivity in small convolutional neural networks.",
   "creators": [
     {
-      "name": "Espino-Montelongo, Heriberto",
+      "name": "Espino Montelongo, Heriberto",
       "orcid": "0009-0009-1230-2931"
     }
   ],
