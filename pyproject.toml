@@ -3,7 +3,7 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "prior-templates-for-cnns"
+name = "regularizing-first-layer-cnn-filters-toward-predefined-templates"
 version = "1.0.0"
 description = "Research artifact for template priors and activation-patching sensitivity in small CNNs."
 readme = "README.md"
