@@ -24,8 +24,11 @@ REQUIRED_PDFS = (
 FILES = [
     "paper/main.tex",
     "paper/sn_supplement.tex",
+    "paper/README.md",
+    "paper/SUBMISSION_CHECKLIST.md",
     "paper/SUPPLEMENT_REPRODUCIBILITY.md",
     "paper/build.py",
+    "paper/build_submission_package.py",
     "paper/build_supplement.py",
     "paper/build_overview_figure.py",
     "paper/build_main_results_figure.py",
@@ -33,6 +36,10 @@ FILES = [
     "paper/build_additivity_curves_figure.py",
     "paper/build_additivity_figure.py",
     "paper/plot_style.py",
+    "paper/sn-article-template/sn-jnl.cls",
+    "paper/sn-article-template/bst/sn-basic.bst",
+    "literature/references.bib",
+    "pyproject.toml",
 
     "studies/cnn_release_experiment/core.py",
     "studies/cnn_budget_confirmation/PROTOCOL.md",
