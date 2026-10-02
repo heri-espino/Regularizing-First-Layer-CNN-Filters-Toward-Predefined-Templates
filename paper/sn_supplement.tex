@@ -117,7 +117,7 @@ The architecture-specific estimates plotted in the main paper are stored in \tex
 The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular spectrum, and row coefficient multisets, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
 
 \begin{table}[h]
-\caption{Architecture-averaged structured-minus-pixel-permuted contrast for validation-selected channels on \texttt{two\_concepts}. Difference intervals are 95\%; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
+\caption{Architecture-averaged structured-minus-pixel-permuted contrast for validation-selected channels on \texttt{two\_concepts}. Difference intervals are paired Student-$t$ 95\% intervals from the primary spatial-control analysis; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
 \label{tab:supp-spatial-primary}
 \centering
 \footnotesize
@@ -125,8 +125,8 @@ The spatial-control experiment compares the original structured filter bank with
 \toprule
 Metric & Mean difference & 95\% CI & 90\% CI & Margin \\
 \midrule
-Centered-logit fidelity & +0.05743 & [0.05143, 0.06361] & [0.05219, 0.06266] & $\pm0.01704$ \\
-Probability-error reduction & +0.04563 & [0.03715, 0.05374] & [0.03864, 0.05261] & $\pm0.06594$ \\
+Centered-logit fidelity & +0.05743 & [0.05116, 0.06369] & [0.05219, 0.06266] & $\pm0.01704$ \\
+Probability-error reduction & +0.04563 & [0.03728, 0.05397] & [0.03864, 0.05261] & $\pm0.06594$ \\
 \bottomrule
 \end{tabular}
 \end{table}
