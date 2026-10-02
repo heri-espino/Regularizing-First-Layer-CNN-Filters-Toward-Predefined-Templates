@@ -39,7 +39,7 @@ The package intentionally excludes raw training checkpoints, per-model evaluator
 | BN2-GAP observed-minus-additive B | analysis/patching_additivity_001/architecture_analysis/B_per_block.csv |
 | Tiny numerical additivity and residual-energy curves | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv and model_integrity.csv |
 | Spatial observed-minus-additive paired comparison | analysis/patching_additivity_001/anchor_analysis/B_per_block.csv |
-| Filter/template endpoint similarity | analysis/retention_release_001/endpoints.csv |
+| Filter/template endpoint similarity and accuracy quoted in Results | analysis/exhaustive_robustness_001/model_endpoint_summary.csv and model_endpoints.csv |
 | Independent evaluator audit | analysis/checkpoint_audit/AUDIT_REPORT.md |
 
 The paired two_concepts/bn2_w16_gap centered-logit comparison was independently checked from the archived block table: mean B_obs - B_add = -0.1799415521, Student-t 95% CI [-0.2008225633, -0.1590605409], n = 100.
@@ -49,6 +49,7 @@ The paired two_concepts/bn2_w16_gap centered-logit comparison was independently 
 The package includes the protocols that govern the paper-facing analyses:
 
 - studies/cnn_budget_confirmation/PROTOCOL.md
+- studies/cnn_exhaustive_robustness/PROTOCOL.md
 - studies/cnn_metric_sensitivity/PROTOCOL.md
 - studies/cnn_architecture_robustness/PROTOCOL.md
 - studies/cnn_anchor_specificity/PROTOCOL.md
