@@ -23,7 +23,7 @@ The paper is organized around the scientific story rather than the chronological
 
 ## What moved out of the main paper
 
-The previous five embedded appendices are **not included in `main.tex`**. Their source files remain in the repository for provenance and can be converted into Supplementary Information if needed:
+The previous five embedded appendices are **not included in `main.tex`**. Their source files remain in the repository for provenance, but the authoritative submission-facing supplement is now `paper/sn_supplement.tex`:
 
 - `specificity_robustness_results.tex`
 - `final_robustness_results.tex`
@@ -31,16 +31,17 @@ The previous five embedded appendices are **not included in `main.tex`**. Their 
 - `supplementary_results.tex`
 - `kernel_matching_results.tex`
 
-Complete numerical tables also remain versioned under `analysis/`. The main paper reports only the estimates needed to support the central argument.
+Complete numerical tables also remain versioned under `analysis/`. The main paper reports only the estimates needed to support the central argument. The file `paper/SUPPLEMENT_REPRODUCIBILITY.md` maps every main figure and principal statistic to its archived inputs and frozen protocol.
 
 ## Main figures
 
-The compact manuscript uses four figures:
+The compact manuscript uses five figures:
 
 1. `fig00_overview.pdf` — controlled renderer, predefined filters, and patch location;
 2. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
 3. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
-4. `fig08_additivity.pdf` — observed versus singleton-additive reconstruction.
+4. `fig09_additivity_curves.pdf` — direct observed/additive curves and residual energy;
+5. `fig08_additivity.pdf` — architecture-wide and spatial-control additive reconstruction.
 
 The generated figures are rebuilt automatically by `paper/build.py`.
 
@@ -50,12 +51,16 @@ From the repository root:
 
 ```bash
 python paper/build.py --clean
+python paper/build_supplement.py --clean
+python paper/build_submission_package.py
 ```
 
-The compiled manuscript is written to:
+The generated submission files are:
 
 ```text
 paper/sn_submission.pdf
+paper/sn_supplement.pdf
+paper/dist/sn_submission_package.zip
 ```
 
 The build uses:
@@ -64,7 +69,7 @@ The build uses:
 - the Springer Nature bibliography styles under `paper/sn-article-template/bst/`;
 - `../literature/references.bib`.
 
-The generated PDF and LaTeX intermediates are not intended to be committed; the GitHub Actions `paper-compile` workflow uploads the compiled PDF as an artifact.
+The generated PDFs, ZIP, and LaTeX intermediates are not intended to be committed; the manual-only GitHub Actions `paper-compile` workflow builds and uploads the manuscript, supplement, logs, and allowlisted reproducibility ZIP as an artifact.
 
 ## Writing rule
 
