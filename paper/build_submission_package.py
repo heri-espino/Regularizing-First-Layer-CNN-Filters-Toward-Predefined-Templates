@@ -37,6 +37,10 @@ FILES = [
     "studies/cnn_release_experiment/core.py",
     "studies/cnn_budget_confirmation/PROTOCOL.md",
     "studies/cnn_budget_confirmation/analyze.py",
+    "studies/cnn_exhaustive_robustness/PROTOCOL.md",
+    "studies/cnn_exhaustive_robustness/analyze_grid.py",
+    "studies/cnn_exhaustive_robustness/evaluate_grid.py",
+    "studies/cnn_exhaustive_robustness/train_grid.py",
     "studies/cnn_metric_sensitivity/PROTOCOL.md",
     "studies/cnn_metric_sensitivity/analyze_metrics.py",
     "studies/cnn_metric_sensitivity/evaluate_metrics.py",
@@ -60,6 +64,10 @@ FILES = [
     "studies/cnn_checkpoint_audit/AUDIT_PROTOCOL.md",
 
     "analysis/retention_release_001/endpoints.csv",
+    "analysis/exhaustive_robustness_001/REPORT.md",
+    "analysis/exhaustive_robustness_001/model_endpoint_summary.csv",
+    "analysis/exhaustive_robustness_001/model_endpoints.csv",
+    "analysis/exhaustive_robustness_001/execution_manifest.json",
     "analysis/checkpoint_audit/AUDIT_REPORT.md",
 
     "analysis/budget_confirmation_001/REPORT.md",
