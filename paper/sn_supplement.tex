@@ -1,0 +1,230 @@
+% Submission-facing Supplementary Information for SN Computer Science.
+\documentclass[pdflatex,sn-basic]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+
+\raggedbottom
+
+\begin{document}
+
+\title[Supplementary Information]{Supplementary Information for \emph{Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity}}
+
+\author*[1]{\fnm{Heriberto} \sur{Espino Montelongo}}
+\affil*[1]{\orgname{Universidad de las Américas Puebla}, \city{San Andrés Cholula}, \state{Puebla}, \country{Mexico}}
+
+\maketitle
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\section{Architecture and training specification}\label{supp:architecture-training}
+
+For each task and renderer block, the data generator draws 128 training, 64 validation, and 64 test nuisance contexts from independent deterministic streams. Each context is instantiated in all four class states, giving 512/256/256 images in the three splits. Models are trained for 200 epochs with Adam, learning rate 0.003 and batch size 128. Retention keeps the first-layer penalty at $\lambda=1$ throughout training. Release uses the same penalty through epoch 10, decreases it linearly to zero at epoch 80, and leaves it at zero thereafter. Within the fresh-sample architecture study, paired retention/release runs use the same model initialization and paired minibatch-order streams for a given renderer block, task, architecture, and initialization replicate.
+
+All architectures share a bias-free $1\!\to\!16$, $9\times9$ first convolution, same padding, ReLU, and the same first-layer intervention tensor. GMP and GAP denote global max and global average pooling. Plain depth-2 models add one downstream $3\times3$ convolution; plain depth-4 models add three. Width-64 variants expand the first downstream convolution from 16 to 64 channels and remain width 64 thereafter. Residual depth-4 models remain width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm, when present, occurs only downstream of the intervention tensor, after each downstream convolution. A learned linear classifier maps the pooled representation to four classes.
+
+\begin{table}[h]
+\caption{Complete 16-model architecture grid. Depth counts the shared first convolution.}
+\label{tab:supp-architecture-grid}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Architecture & Depth & Width & Pool & Residual & BatchNorm & Parameters \\
+\midrule
+\texttt{tiny\_gmp} & 1 & 16 & GMP & no & no & 1,364 \\
+\texttt{tiny\_gap} & 1 & 16 & GAP & no & no & 1,364 \\
+\texttt{plain2\_w16\_gmp} & 2 & 16 & GMP & no & no & 3,684 \\
+\texttt{plain2\_w16\_gap} & 2 & 16 & GAP & no & no & 3,684 \\
+\texttt{plain4\_w16\_gmp} & 4 & 16 & GMP & no & no & 8,324 \\
+\texttt{plain4\_w16\_gap} & 4 & 16 & GAP & no & no & 8,324 \\
+\texttt{plain2\_w64\_gmp} & 2 & 64 & GMP & no & no & 10,836 \\
+\texttt{plain2\_w64\_gap} & 2 & 64 & GAP & no & no & 10,836 \\
+\texttt{plain4\_w64\_gmp} & 4 & 64 & GMP & no & no & 84,692 \\
+\texttt{plain4\_w64\_gap} & 4 & 64 & GAP & no & no & 84,692 \\
+\texttt{res4\_w16\_gmp} & 4 & 16 & GMP & yes & no & 8,324 \\
+\texttt{res4\_w16\_gap} & 4 & 16 & GAP & yes & no & 8,324 \\
+\texttt{bn2\_w16\_gmp} & 2 & 16 & GMP & no & yes & 3,700 \\
+\texttt{bn2\_w16\_gap} & 2 & 16 & GAP & no & yes & 3,700 \\
+\texttt{bn4\_w16\_gmp} & 4 & 16 & GMP & no & yes & 8,372 \\
+\texttt{bn4\_w16\_gap} & 4 & 16 & GAP & no & yes & 8,372 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The exact architecture constructor, training loop, frozen design, and parameter counts are included in the accompanying reproducibility artifact under \texttt{studies/cnn\_architecture\_robustness/} and \texttt{analysis/architecture\_robustness\_001/training\_design.json}.
+
+\section{Intervention-size and metric robustness}\label{supp:intervention-size}
+
+For a patching metric $M$, the main intervention-size contrast is
+\begin{equation}
+B^M=
+\frac{\Delta^M(4)+\Delta^M(8)}{2}
+-
+\frac{\Delta^M(1)+\Delta^M(2)}{2},
+\end{equation}
+where $\Delta^M(k)$ is release minus retention at intervention size $k$. The initial pre-specified test uses 20 held-out renderer blocks and the primary \texttt{two\_concepts}/TinyCNN setting.
+
+\begin{table}[h]
+\caption{Primary intervention-size contrast under the historical and two alternative evaluation metrics. Intervals are paired 95\% intervals over the 20 held-out renderer blocks.}
+\label{tab:supp-primary-b}
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+Metric & $B$ & 95\% CI \\
+\midrule
+Probability fidelity & +0.33098 & [0.27368, 0.38827] \\
+Centered-logit fidelity & +0.17888 & [0.12727, 0.23049] \\
+Probability-error reduction & +0.89441 & [0.78630, 1.00252] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The alternative metrics reuse the frozen checkpoints and validation-derived channel rankings. Their metric definitions and analysis plan were fixed before evaluating the alternative-metric outcomes. Full pointwise curves and block-level values are included in \texttt{analysis/metric\_sensitivity\_001/} in the accompanying artifact.
+
+\section{Architecture robustness}\label{supp:architecture}
+
+The fresh-sample architecture study uses 100 renderer blocks, four paired initialization replicates per block, the 16 architectures in Table~\ref{tab:supp-architecture-grid}, two tasks, and the two training regimes. Initialization replicates are averaged within renderer block before inference.
+
+\begin{table}[h]
+\caption{Repeated-measures architecture omnibus tests on the primary \texttt{two\_concepts} task.}
+\label{tab:supp-architecture-omnibus}
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Metric & $F$ & df & partial $\eta^2$ & Holm $p$ \\
+\midrule
+Centered-logit fidelity & 77.09 & 15, 1485 & 0.438 & $2.40\times10^{-173}$ \\
+Probability-error reduction & 656.70 & 15, 1485 & 0.869 & $<10^{-300}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Architecture comparisons are not accuracy-matched and are interpreted as properties of the trained systems in this controlled grid.
+
+\section{Pixel-permuted spatial control}\label{supp:spatial}
+
+The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular spectrum, and row coefficient multisets, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
+
+\begin{table}[h]
+\caption{Architecture-averaged structured-minus-pixel-permuted contrast for validation-selected channels on \texttt{two\_concepts}. Difference intervals are 95\%; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
+\label{tab:supp-spatial-primary}
+\centering
+\footnotesize
+\begin{tabular}{lrrrr}
+\toprule
+Metric & Mean difference & 95\% CI & 90\% CI & Margin \\
+\midrule
+Centered-logit fidelity & +0.05743 & [0.05143, 0.06361] & [0.05219, 0.06266] & $\pm0.01704$ \\
+Probability-error reduction & +0.04563 & [0.03715, 0.05374] & [0.03864, 0.05261] & $\pm0.06594$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The centered-logit interval lies outside its equivalence region. The probability-error 90\% interval lies inside its wider study-specific equivalence margin even though its ordinary difference interval excludes zero.
+
+\begin{table}[h]
+\caption{Structured-minus-pixel-permuted $B$ shown by architecture on \texttt{two\_concepts}.}
+\label{tab:supp-spatial-architectures}
+\centering
+\scriptsize
+\begin{tabular}{lrr}
+\toprule
+Architecture & Centered-logit difference & Probability-error difference \\
+\midrule
+\texttt{tiny\_gmp} & +0.10624 & +0.19953 \\
+\texttt{tiny\_gap} & +0.07690 & +0.04308 \\
+\texttt{plain2\_w16\_gmp} & -0.04453 & -0.08067 \\
+\texttt{plain2\_w16\_gap} & +0.09109 & +0.02057 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The sign reversal in \texttt{plain2\_w16\_gmp} is why the main text limits the spatial conclusion to an architecture- and metric-dependent effect rather than a universal positive contribution of the original bank.
+
+\section{Singleton-additive decomposition}\label{supp:additivity}
+
+The decomposition re-evaluates saved checkpoints one first-layer channel at a time and reconstructs a joint centered-logit intervention from the sum of singleton centered-logit changes. It evaluates all $k=0,\ldots,16$ while retaining $k=1,2,4,8$ for the definition of $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
+
+\begin{table}[h]
+\caption{Primary examples from the singleton-additive analysis on \texttt{two\_concepts}. The BN2-GAP paired interval is computed over the same 100 renderer blocks.}
+\label{tab:supp-additivity-examples}
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Architecture / metric & Observed $B$ & Additive $B$ & Observed $-$ additive \\
+\midrule
+\texttt{tiny\_gmp}, centered logits & +0.14558 & +0.14558 & numerical precision \\
+\texttt{tiny\_gmp}, probability error & +0.83151 & +0.83151 & numerical precision \\
+\texttt{bn2\_w16\_gap}, centered logits & -0.13817 & +0.04177 & -0.17994 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For \texttt{bn2\_w16\_gap}, the paired centered-logit difference is $-0.17994$ with 95\% Student-$t$ interval $[-0.20082,-0.15906]$. In the analytic \texttt{tiny\_gmp} control, the aggregate centered residual-energy ratio remains at floating-point scale: $8.41\times10^{-14}$ for release and $1.45\times10^{-13}$ for retention at $k=16$. For \texttt{bn2\_w16\_gap} at $k=8$, the corresponding ratios are 0.190 and 0.339.
+
+\begin{table}[h]
+\caption{Observed and additive reconstruction of the architecture-averaged structured-minus-pixel-permuted $B$ on \texttt{two\_concepts}. The final column is the paired observed-minus-additive comparison over 100 renderer blocks.}
+\label{tab:supp-spatial-additivity}
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Metric & Observed & Additive & Paired difference [95\% CI] \\
+\midrule
+Centered-logit fidelity & +0.05743 & +0.05710 & +0.00033 [$-0.00074$, +0.00140] \\
+Probability-error reduction & +0.04563 & +0.04105 & +0.00458 [+0.00202, +0.00714] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These comparisons support the narrower claim made in the article: the singleton reconstruction reproduces the studied architecture-averaged spatial contrast closely, but architecture-specific reconstruction gaps remain.
+
+\section{Reproducibility map}\label{supp:repro-map}
+
+Table~\ref{tab:supp-repro-map} identifies the exact presentation script and archived analysis tables used for each main figure. The accompanying reproducibility artifact preserves these paths relative to the repository root.
+
+\begin{table}[h]
+\caption{Main-figure provenance.}
+\label{tab:supp-repro-map}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{0.06\textwidth}p{0.29\textwidth}p{0.57\textwidth}}
+\toprule
+Figure & Presentation script & Principal archived inputs \\
+\midrule
+1 & \texttt{paper/build\_overview\_figure.py} &
+\texttt{studies/cnn\_release\_experiment/core.py} \\
+2 & \texttt{paper/build\_main\_results\_figure.py} &
+\texttt{analysis/metric\_sensitivity\_001/stage\_d\_treatment\_contrasts.csv}; \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv} \\
+3 & \texttt{paper/build\_anchor\_specificity\_figure.py} &
+\texttt{analysis/anchor\_specificity\_001/secondary\_anchor\_contrasts.csv}; \texttt{primary\_spatial\_specificity.csv}; \texttt{random\_channel\_spatial\_specificity.csv} \\
+4 & \texttt{paper/build\_additivity\_curves\_figure.py} &
+\texttt{analysis/patching\_additivity\_001/architecture\_analysis/curve\_summary.csv} \\
+5 & \texttt{paper/build\_additivity\_figure.py} &
+\texttt{analysis/patching\_additivity\_001/architecture\_analysis/B\_summary.csv}; \texttt{analysis/patching\_additivity\_001/anchor\_analysis/structured\_vs\_pixel\_permuted\_B\_averaged\_architectures.csv} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The paired BN2-GAP interval in Section~\ref{supp:additivity} is reproduced from \texttt{architecture\_analysis/B\_per\_block.csv}. The paired spatial observed-minus-additive intervals are reproduced from \texttt{anchor\_analysis/B\_per\_block.csv}. The frozen protocols corresponding to the intervention-size, metric, architecture, spatial-control, and additivity analyses are included in the artifact.
+
+\section{Integrity checks and artifact scope}\label{supp:integrity}
+
+Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and singleton-additive centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is also included as \texttt{analysis/checkpoint\_audit/AUDIT\_REPORT.md}.
+
+The submission artifact intentionally excludes raw training checkpoints and tens of thousands of per-model evaluator JSON files. Those files are retained separately because of their size. The included block-level and aggregate CSV files are sufficient to regenerate the main figures and the reported block-level inferential summaries without retraining the models. A file-by-file map and package-building instructions are provided in \texttt{paper/SUPPLEMENT\_REPRODUCIBILITY.md}.
+
+\end{document}
