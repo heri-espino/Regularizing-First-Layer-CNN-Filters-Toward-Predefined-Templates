@@ -16,7 +16,7 @@ This produces:
 - paper/sn_supplement.pdf — standalone Supplementary Information;
 - paper/dist/sn_submission_package.zip — allowlisted reproducibility package.
 
-The package intentionally excludes raw training checkpoints, per-model evaluator JSON files, Git history, local absolute-path outputs, caches, and development-only notes.
+The package intentionally excludes raw training checkpoints, per-model evaluator JSON files, Git history, local absolute-path outputs, caches, and development-only notes. It includes the Springer class/style files, bibliography database, and project metadata needed by the manuscript build scripts.
 
 ## Main-figure provenance
 
