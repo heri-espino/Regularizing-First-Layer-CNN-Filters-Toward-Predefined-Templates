@@ -150,8 +150,22 @@ def build_figure() -> Path:
             )
     ax.axvline(0.0, color="#777777", linewidth=0.7)
     ax.set_yticks(y_positions)
-    ax.set_yticklabels(["Centered logits", "Probability error"])
-    ax.tick_params(axis="y", pad=7)
+    ax.set_yticklabels([])
+    ax.tick_params(axis="y", length=0)
+    # Keep the metric labels inside the spatial panel so they do not crowd the
+    # Tiny-GMP annotation or the separator between panels.
+    ax.text(
+        0.03, 0.88, "Centered logits",
+        transform=ax.transAxes, ha="left", va="center", fontsize=6.4,
+        bbox=dict(facecolor="white", edgecolor="none", alpha=0.82, pad=0.7),
+        zorder=4,
+    )
+    ax.text(
+        0.03, 0.18, "Probability error",
+        transform=ax.transAxes, ha="left", va="center", fontsize=6.4,
+        bbox=dict(facecolor="white", edgecolor="none", alpha=0.82, pad=0.7),
+        zorder=4,
+    )
     ax.set_xlabel("Structured $-$ pixel-permuted, $B$")
     ax.set_title("Spatial-bank effect", pad=4)
     ax.grid(axis="y", visible=False)
