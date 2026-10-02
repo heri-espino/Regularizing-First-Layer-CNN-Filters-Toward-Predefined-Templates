@@ -41,6 +41,9 @@ FILES = [
     "literature/references.bib",
     "pyproject.toml",
     "README.md",
+    "LICENSE",
+    "CITATION.cff",
+    ".zenodo.json",
 
     "studies/cnn_release_experiment/core.py",
     "studies/cnn_budget_confirmation/PROTOCOL.md",
