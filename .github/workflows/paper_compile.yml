@@ -22,13 +22,20 @@ jobs:
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-bibtex-extra
       - name: Compile manuscript
         run: python paper/build.py --clean
-      - name: Upload compiled PDF and log
+      - name: Compile supplement
+        run: python paper/build_supplement.py --clean
+      - name: Build allowlisted submission package
+        run: python paper/build_submission_package.py
+      - name: Upload compiled submission package
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sn-computer-science-submission-${{ github.sha }}
           path: |
             paper/sn_submission.pdf
+            paper/sn_supplement.pdf
+            paper/dist/sn_submission_package.zip
             paper/build/main.log
+            paper/supplement_build/sn_supplement.log
           retention-days: 30
           if-no-files-found: warn
