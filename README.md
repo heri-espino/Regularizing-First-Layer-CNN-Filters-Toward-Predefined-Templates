@@ -1,19 +1,21 @@
-# Activation Patching with Structured First-Layer Priors
+# Activation Patching in Structured CNNs
 
 Research artifact for:
 
-> **Activation-Patching Effects in Controlled CNNs Depend on Intervention Size, Network Architecture, and First-Layer Filter Structure**
+> **Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity**
 
 This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on intervention size and network architecture. A pixel-permuted control further shows that the original 2D filter arrangement changes the patching effect for channels selected on the validation set beyond matched non-spatial filter-bank properties, with architecture- and evaluation-metric-dependent effects.
 
 ## Start here
 
 - **Research checkpoint log / project memory:** [`checkpoints/README.md`](checkpoints/README.md)
-- **Latest checkpoint:** [`checkpoints/CP-014_submission-readiness.md)
+- **Latest checkpoint:** [`checkpoints/CP-018_sn-computer-science-compact-rewrite.md`](checkpoints/CP-018_sn-computer-science-compact-rewrite.md)
 - **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
 - **Final manuscript source:** [`paper/main.tex`](paper/main.tex)
-- **Build:** `python paper/build.py`
-- **Publication figures:** `python paper/build_figures.py`
+- **Submission supplement:** [`paper/sn_supplement.tex`](paper/sn_supplement.tex)
+- **Reproducibility map:** [`paper/SUPPLEMENT_REPRODUCIBILITY.md`](paper/SUPPLEMENT_REPRODUCIBILITY.md)
+- **Build main paper:** `python paper/build.py --clean`
+- **Build supplement:** `python paper/build_supplement.py --clean`
 - **Prospective test (Stage D):** [`analysis/budget_confirmation_001/REPORT.md`](analysis/budget_confirmation_001/REPORT.md)
 - **1,200-model sensitivity study (Stage E):** [`analysis/exhaustive_robustness_001/REPORT.md`](analysis/exhaustive_robustness_001/REPORT.md)
 - **Independent checkpoint audit:** [`analysis/checkpoint_audit/AUDIT_REPORT.md`](analysis/checkpoint_audit/AUDIT_REPORT.md)
@@ -38,7 +40,14 @@ python paper/build.py --clean
 This produces:
 
 ```text
-paper/tmlr_submission.pdf
+paper/sn_submission.pdf
+```
+
+Build the standalone supplement and allowlisted submission package with:
+
+```bash
+python paper/build_supplement.py --clean
+python paper/build_submission_package.py
 ```
 
 The manuscript builder itself uses only the Python standard library. LaTeX intermediates and the generated PDF are not versioned.
@@ -157,9 +166,9 @@ Stage F targets that remaining architecture question with fresh blocks and multi
 
 The pixel-permuted filter-bank control and post-hoc architecture analyses are complete. The control compares the original structured bank with a common pixel permutation preserving the complete Gram matrix, rank, and singular spectrum, plus generic random rank-10 and full-rank controls. Results are archived under `analysis/anchor_specificity_001/` and `analysis/architecture_posthoc_diagnostics_001/`.
 
-The current default task is manuscript polish and anonymous-artifact preparation, not further large-scale experimentation.
+The current default task is SN Computer Science submission packaging and final reproducibility/visual checks, not further large-scale experimentation.
 
-A subsequent, explicitly post-hoc saved-checkpoint decomposition is implemented under `studies/cnn_patching_additivity/`. It asks whether the intervention-size curves can be reconstructed from all 16 singleton channel effects and separates cancellation, downstream non-additivity, and metric nonlinearity. It trains no models. The implementation is validated, while execution on the external Stage-F/G checkpoint roots remains pending; see `checkpoints/CP-015_patching-additivity-implementation.md` and `RESEARCH_STATUS.md`.
+The explicitly post-hoc saved-checkpoint decomposition under `studies/cnn_patching_additivity/` is complete. It reconstructs multi-channel interventions from all 16 singleton channel effects and separates singleton geometry, cancellation, metric transformation, and residual downstream non-additivity without training new models. Results are archived under `analysis/patching_additivity_001/`; see `checkpoints/CP-017_patching-additivity-results.md`.
 
 ## Scope
 
