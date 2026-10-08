@@ -1,6 +1,6 @@
 # Supplement and reproducibility map
 
-This file defines the submission-facing support package for the SN Computer Science manuscript **Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity**.
+This file defines the submission-facing support package for the SN Computer Science manuscript **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**.
 
 ## Deliverables
 
@@ -23,9 +23,9 @@ The package intentionally excludes raw training checkpoints, per-model evaluator
 | Main figure | Generator | Principal data/source |
 |---|---|---|
 | Fig. 1 — experimental system | paper/build_overview_figure.py | studies/cnn_release_experiment/core.py |
-| Fig. 2 — intervention size + architectures | paper/build_main_results_figure.py | analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv; analysis/architecture_robustness_001/architecture_B_summary.csv |
-| Fig. 3 — spatial specificity | paper/build_anchor_specificity_figure.py | analysis/anchor_specificity_001/secondary_anchor_contrasts.csv; primary_spatial_specificity.csv; random_channel_spatial_specificity.csv |
-| Fig. 4 — direct additivity curves | paper/build_additivity_curves_figure.py | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv |
+| Fig. 2 — direct additivity curves | paper/build_additivity_curves_figure.py | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv |
+| Fig. 3 — intervention size + architectures | paper/build_main_results_figure.py | analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv; analysis/architecture_robustness_001/architecture_B_summary.csv |
+| Fig. 4 — spatial specificity | paper/build_anchor_specificity_figure.py | analysis/anchor_specificity_001/secondary_anchor_contrasts.csv; primary_spatial_specificity.csv; random_channel_spatial_specificity.csv |
 | Fig. 5 — observed vs additive summary | paper/build_additivity_figure.py | analysis/patching_additivity_001/architecture_analysis/B_summary.csv; analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv |
 
 ## Main numerical claims

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this research artifact, please cite the repository and the associated manuscript."
-title: "Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity"
+title: "When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs"
 type: software
 authors:
   - family-names: "Espino Montelongo"

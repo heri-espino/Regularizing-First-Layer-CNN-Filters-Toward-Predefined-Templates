@@ -1,15 +1,15 @@
-# Activation Patching in Structured CNNs
+# When Do Activation-Patching Effects Add Up?
 
 Research artifact for:
 
-> **Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity**
+> **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**
 
 This repository contains the manuscript, frozen experimental protocols, saved analysis outputs, and reproduction code. The paper separates first-layer **kernel-template similarity** from **activation-patching behavior** and shows that the measured release-versus-retention comparison depends on intervention size and network architecture. A pixel-permuted control further shows that the original 2D filter arrangement changes the patching effect for channels selected on the validation set beyond matched non-spatial filter-bank properties, with architecture- and evaluation-metric-dependent effects.
 
 ## Start here
 
 - **Research checkpoint log / project memory:** [`checkpoints/README.md`](checkpoints/README.md)
-- **Latest checkpoint:** [`checkpoints/CP-018_sn-computer-science-compact-rewrite.md`](checkpoints/CP-018_sn-computer-science-compact-rewrite.md)
+- **Latest checkpoint:** [`checkpoints/CP-020_reviewed-sn-manuscript-sync.md`](checkpoints/CP-020_reviewed-sn-manuscript-sync.md)
 - **Current research state / handoff:** [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md)
 - **Final manuscript source:** [`paper/main.tex`](paper/main.tex)
 - **Submission supplement:** [`paper/sn_supplement.tex`](paper/sn_supplement.tex)
@@ -51,7 +51,9 @@ python paper/build_supplement.py --clean
 python paper/build_submission_package.py
 ```
 
-The SN builder regenerates all five publication figures from archived aggregate tables before compiling the manuscript. It requires NumPy, Matplotlib, Pillow, and Seaborn through the common project environment; no model retraining is performed. LaTeX intermediates and generated PDFs are not versioned.
+The target remains **SN Computer Science**. The manuscript source matches the reviewed `sn_submission(5).pdf` revision, with the Figure 3 label unified to **Release − retention**. The related-work discussion includes the multiple-mediator analysis of Vaidyanathan et al. (2026), distinguishing it from the paper's aggregate logit-reconstruction residual.
+
+The SN builder regenerates all five publication figures from archived aggregate tables before compiling the manuscript. It requires NumPy, Matplotlib, Pillow, and Seaborn through the common project environment; no model retraining is performed. Always rebuild the main PDF and supplement together before packaging; previously generated PDFs may reflect an older source revision.
 
 ### Publication figures
 

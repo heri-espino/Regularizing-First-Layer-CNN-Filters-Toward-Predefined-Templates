@@ -2,9 +2,9 @@
 
 `main.tex` is the authoritative **Springer Nature / SN Computer Science** manuscript source for:
 
-> **Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity**
+> **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**
 
-The manuscript uses the vendored Springer Nature article template under `paper/sn-article-template/` and is intentionally much shorter than the earlier TMLR draft.
+The manuscript uses the vendored Springer Nature article template under `paper/sn-article-template/`. It is synchronized with the reviewed `sn_submission(5).pdf` revision. Figure 3 uses **Release − retention**, matching the training-regime terminology in the text; narrative citations use `\citet` and parenthetical citations use `\citep`. The Vaidyanathan et al. (2026) entry is included in the central `literature/references.bib` database.
 
 ## Editorial structure
 
@@ -38,12 +38,12 @@ Complete numerical tables also remain versioned under `analysis/`. The main pape
 The compact manuscript uses five figures:
 
 1. `fig00_overview.pdf` — controlled renderer, predefined filters, and patch location;
-2. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
-3. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
-4. `fig09_additivity_curves.pdf` — direct observed/additive curves and residual energy;
+2. `fig09_additivity_curves.pdf` — direct observed/additive curves and residual energy;
+3. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
+4. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
 5. `fig08_additivity.pdf` — architecture-wide and spatial-control additive reconstruction.
 
-The generated figures are rebuilt automatically by `paper/build.py`.
+The generated figures are rebuilt automatically by `paper/build.py`. Rebuild both PDFs before making the ZIP so the manuscript, supplement title, figure numbering, and bibliography all reflect the same source revision.
 
 ## Build
 

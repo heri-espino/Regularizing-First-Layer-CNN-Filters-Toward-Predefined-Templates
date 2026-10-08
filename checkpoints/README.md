@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-019_sn-submission-package-audit.md`
+`CP-020_reviewed-sn-manuscript-sync.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**

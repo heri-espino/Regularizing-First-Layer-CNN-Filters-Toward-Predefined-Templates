@@ -62,7 +62,7 @@ class FigureLayoutTests(unittest.TestCase):
         path = self.build_to_temp("build_main_results_figure", "fig06_layout_test.pdf")
         words = pdf_words(path)
         header = word(words, "Architecture")
-        top_xlabel = word(words, "Patched")
+        top_xlabel = word(words, "Intervention")
         self.assertGreater(
             float(header["y0"]) - float(top_xlabel["y1"]),
             3.0,
@@ -72,8 +72,8 @@ class FigureLayoutTests(unittest.TestCase):
     def test_anchor_header_b_clears_top_x_axis_labels(self) -> None:
         path = self.build_to_temp("build_anchor_specificity_figure", "fig07_layout_test.pdf")
         words = pdf_words(path)
-        header = word(words, "Selected-channel")
-        top_xlabel = word(words, "Structured", occurrence=0)
+        header = word(words, "Channels")
+        top_xlabel = word(words, "Difference:")
         self.assertGreater(
             float(header["y0"]) - float(top_xlabel["y1"]),
             3.0,
@@ -100,15 +100,18 @@ class FigureLayoutTests(unittest.TestCase):
             "Panel (c) must not dominate the overall figure width.",
         )
 
-    def test_overview_channel_contribution_labels_clear_the_state_stacks(self) -> None:
+    def test_overview_channel_contribution_labels_clear_downstream_block(self) -> None:
         path = self.build_to_temp("build_overview_figure", "fig00_labels_test.pdf")
         words = pdf_words(path)
+        downstream = word(words, "downstream")
         for label in ("retain", "copy"):
             self.assertLess(
-                float(word(words, label)["x0"]),
-                400.0,
-                f"The {label!r} label must remain near its source stack.",
+                float(word(words, label)["x1"]),
+                float(downstream["x0"]),
+                f"The {label!r} label must clear the downstream block horizontally.",
             )
+        self.assertLess(float(word(words, "retain")["y1"]), float(downstream["y0"]))
+        self.assertGreater(float(word(words, "copy")["y0"]), float(downstream["y1"]))
 
     def test_overview_downstream_block_aligns_with_hybrid_state(self) -> None:
         path = self.build_to_temp("build_overview_figure", "fig00_downstream_test.pdf")

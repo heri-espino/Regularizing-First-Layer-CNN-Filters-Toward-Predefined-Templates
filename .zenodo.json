@@ -1,5 +1,5 @@
 {
-  "title": "Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity",
+  "title": "When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs",
   "upload_type": "software",
   "description": "Research artifact containing the manuscript source, frozen experimental protocols, analysis outputs, and reproduction code for a study of first-layer template priors and activation-patching sensitivity in small convolutional neural networks.",
   "creators": [

@@ -7,7 +7,10 @@
 - Keep the Springer Nature template files under `paper/sn-article-template/` unmodified.
 - Confirm that the paper compiles without undefined citations or references.
 - Check that the abstract remains concise and contains no citations or equations.
-- Check all five figures at normal reading size, especially the Figure 4 residual legend and the internal metric labels in Figure 5.
+- Check all five figures at normal reading size, especially the Figure 2 residual legend and the internal metric labels in Figure 5.
+- Confirm that Figure 3 labels the treatment difference **Release − retention**, matching the text.
+- Confirm the main PDF, supplement, and citation metadata use **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**.
+- Check narrative citations for duplicated author names; use `\citet` for narrative citations and `\citep` for parenthetical citations.
 - Keep the main article free of the historical Stage A--G naming used internally.
 - Do not re-embed the five historical appendix files into the main manuscript.
 

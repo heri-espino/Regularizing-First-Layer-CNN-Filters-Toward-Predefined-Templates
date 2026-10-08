@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the manuscript's central robustness figure from archived analysis tables.
 
-Panel (a) shows the annealed-minus-constant treatment difference as a function
+Panel (a) shows the release-minus-retention treatment difference as a function
 of intervention size in the pre-specified two_concepts/TinyCNN
 experiment under the historical probability metric and the two frozen
 alternative metrics.
@@ -216,7 +216,7 @@ def build_figure() -> Path:
         draw_top_metric(ax, prospective_rows(metric_rows, metric), label, color)
         top_axes.append(ax)
 
-    top_axes[0].set_ylabel(r"Annealed $-$ constant, $\Delta^M(k)$")
+    top_axes[0].set_ylabel(r"Release $-$ retention, $\Delta^M(k)$")
     top_axes[1].set_ylabel("")
     top_axes[2].set_ylabel("")
 

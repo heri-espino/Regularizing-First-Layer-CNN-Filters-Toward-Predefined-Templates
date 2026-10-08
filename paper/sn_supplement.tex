@@ -5,15 +5,16 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{xurl} % Break long provenance paths within table columns.
 
 \raggedbottom
 
 \begin{document}
 
-\title[Supplementary Information]{Supplementary Information for \emph{Activation Patching in Structured CNNs: Intervention Size, Architecture, and Additivity}}
+\title[Supplementary Information]{Supplementary Information for \emph{When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs}}
 
 \author*[1]{\fnm{Heriberto} \sur{Espino Montelongo}}
-\affil*[1]{\orgname{Universidad de las Américas Puebla}, \city{San Andrés Cholula}, \state{Puebla}, \country{Mexico}}
+\affil*[1]{\orgname{Universidad de las Am\'ericas Puebla}, \city{San Andr\'es Cholula}, \state{Puebla}, \country{Mexico}}
 
 \maketitle
 
@@ -219,18 +220,18 @@ Table~\ref{tab:supp-repro-map} identifies the exact presentation script and arch
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{p{0.06\textwidth}p{0.29\textwidth}p{0.57\textwidth}}
 \toprule
-Figure & Presentation script & Principal archived inputs \\
+Fig. & Presentation script & Principal archived inputs \\
 \midrule
-1 & \texttt{paper/build\_overview\_figure.py} &
-\texttt{studies/cnn\_release\_experiment/core.py} \\
-2 & \texttt{paper/build\_main\_results\_figure.py} &
-\texttt{analysis/metric\_sensitivity\_001/stage\_d\_treatment\_contrasts.csv}; \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv} \\
-3 & \texttt{paper/build\_anchor\_specificity\_figure.py} &
-\texttt{analysis/anchor\_specificity\_001/secondary\_anchor\_contrasts.csv}; \texttt{primary\_spatial\_specificity.csv}; \texttt{random\_channel\_spatial\_specificity.csv} \\
-4 & \texttt{paper/build\_additivity\_curves\_figure.py} &
-\texttt{analysis/patching\_additivity\_001/architecture\_analysis/curve\_summary.csv} \\
-5 & \texttt{paper/build\_additivity\_figure.py} &
-\texttt{analysis/patching\_additivity\_001/architecture\_analysis/B\_summary.csv}; \texttt{analysis/patching\_additivity\_001/anchor\_analysis/structured\_vs\_pixel\_permuted\_B\_averaged\_architectures.csv} \\
+1 & \path{paper/build_overview_figure.py} &
+\path{studies/cnn_release_experiment/core.py} \\
+2 & \path{paper/build_additivity_curves_figure.py} &
+\path{analysis/patching_additivity_001/architecture_analysis/curve_summary.csv} \\
+3 & \path{paper/build_main_results_figure.py} &
+\path{analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv}; \path{analysis/architecture_robustness_001/architecture_B_summary.csv} \\
+4 & \path{paper/build_anchor_specificity_figure.py} &
+\path{analysis/anchor_specificity_001/secondary_anchor_contrasts.csv}; \path{primary_spatial_specificity.csv}; \path{random_channel_spatial_specificity.csv} \\
+5 & \path{paper/build_additivity_figure.py} &
+\path{analysis/patching_additivity_001/architecture_analysis/B_summary.csv}; \path{analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv} \\
 \bottomrule
 \end{tabular}
 \end{table}
