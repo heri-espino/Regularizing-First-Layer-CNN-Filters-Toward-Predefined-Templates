@@ -26,7 +26,7 @@
 
 \section{Architecture and training specification}\label{supp:architecture-training}
 
-For each task and renderer block, the data generator draws 128 training, 64 validation, and 64 test nuisance contexts from independent deterministic streams. Each context is instantiated in all four class states, giving 512/256/256 images in the three splits. Models are trained for 200 epochs with Adam, learning rate 0.003 and batch size 128. Retention keeps the first-layer penalty at $\lambda=1$ throughout training. Release uses the same penalty through epoch 10, decreases it linearly to zero at epoch 80, and leaves it at zero thereafter. Within the fresh-sample architecture study, paired retention/release runs use the same model initialization and paired minibatch-order streams for a given renderer block, task, architecture, and initialization replicate.
+For each task and renderer block, the data generator draws 128 training, 64 validation, and 64 test contexts from independent deterministic streams. Each context specifies rendering conditions such as angle, scale, and noise. Rendering all four classes in every context gives 512/256/256 images in the three splits. Models are trained for 200 epochs with Adam, learning rate 0.003 and batch size 128. Retention keeps the first-layer penalty at $\lambda=1$ throughout training. Release uses the same penalty through epoch 10, decreases it linearly to zero at epoch 80, and leaves it at zero thereafter. In the architecture study, paired retention and release runs use the same model initialization and paired minibatch-order streams. Pairing is within each renderer block, task, architecture, and initialization replicate.
 
 All architectures share a bias-free $1\!\to\!16$, $9\times9$ first convolution, same padding, ReLU, and the same first-layer intervention tensor. GMP and GAP denote global max and global average pooling. Plain depth-2 models add one downstream $3\times3$ convolution; plain depth-4 models add three. Width-64 variants expand the first downstream convolution from 16 to 64 channels and remain width 64 thereafter. Residual depth-4 models remain width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm, when present, occurs only downstream of the intervention tensor, after each downstream convolution. A learned linear classifier maps the pooled representation to four classes.
 
@@ -93,10 +93,10 @@ The alternative metrics reuse the frozen checkpoints and validation-derived chan
 
 \section{Architecture robustness}\label{supp:architecture}
 
-The fresh-sample architecture study uses 100 renderer blocks, four paired initialization replicates per block, the 16 architectures in Table~\ref{tab:supp-architecture-grid}, two tasks, and the two training regimes. Initialization replicates are averaged within renderer block before inference.
+The architecture study with new renderer blocks uses 100 renderer blocks, four paired initialization replicates per block, the 16 architectures in Table~\ref{tab:supp-architecture-grid}, two tasks, and the two training regimes. Initialization replicates are averaged within renderer block before inference.
 
 \begin{table}[h]
-\caption{Repeated-measures architecture omnibus tests on the primary \texttt{two\_concepts} task.}
+\caption{Repeated-measures tests of differences across architectures on the primary \texttt{two\_concepts} task.}
 \label{tab:supp-architecture-omnibus}
 \centering
 \small
@@ -110,12 +110,12 @@ Probability-error reduction & 656.70 & 15, 1485 & 0.869 & $<10^{-300}$ \\
 \end{tabular}
 \end{table}
 
-The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Architecture comparisons are not accuracy-matched and are interpreted as properties of the trained systems in this controlled grid.
+The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Classification accuracy is not matched across architectures. These comparisons describe the trained networks in this controlled grid.
 
-After the pre-specified architecture results were known, an explicitly post-hoc robustness analysis checked the omnibus conclusion under sphericity correction, within-block permutation, rank-based Friedman tests, and random channel orders. These checks support the robustness statement in the main text without changing the pre-specified status of the original architecture test.
+After the pre-specified architecture results were known, a post-hoc analysis checked whether differences across architectures remained after sphericity correction, within-block permutation tests, Friedman tests, and random channel orders. These checks support the robustness statement in the main text without changing the pre-specified status of the original architecture test.
 
 \begin{table}[h]
-\caption{Post-hoc robustness checks for architecture heterogeneity on \texttt{two\_concepts}. Permutation values are Holm adjusted across the two metrics.}
+\caption{Post-hoc checks of differences across architectures on \texttt{two\_concepts}. Permutation values are Holm adjusted across the two metrics.}
 \label{tab:supp-architecture-robustness}
 \centering
 \footnotesize
@@ -131,10 +131,10 @@ Probability-error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79
 
 \section{Pixel-permuted spatial control}\label{supp:spatial}
 
-The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular spectrum, and row coefficient multisets, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
+The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular values, and each row's coefficient values and their multiplicities, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
 
 \begin{table}[h]
-\caption{Architecture-averaged structured-minus-pixel-permuted contrast for validation-selected channels on \texttt{two\_concepts}. Difference intervals are paired Student-$t$ 95\% intervals from the primary spatial-control analysis; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
+\caption{Difference between the structured and pixel-permuted banks, averaged across architectures, for channels selected on the validation set in \texttt{two\_concepts}. Difference intervals are paired Student-$t$ 95\% intervals from the primary spatial-control analysis; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
 \label{tab:supp-spatial-primary}
 \centering
 \footnotesize
@@ -148,7 +148,7 @@ Probability-error reduction & +0.04563 & [0.03728, 0.05397] & [0.03864, 0.05261]
 \end{tabular}
 \end{table}
 
-The centered-logit interval lies outside its equivalence region. The probability-error 90\% interval lies inside its wider study-specific equivalence margin even though its ordinary difference interval excludes zero.
+The centered-logit interval lies outside its equivalence region. The probability-error 90\% interval lies inside its wider study-specific equivalence margin even though its 95\% difference interval excludes zero.
 
 \begin{table}[h]
 \caption{Structured-minus-pixel-permuted $B$ shown by architecture on \texttt{two\_concepts}.}
@@ -169,12 +169,12 @@ Architecture & Centered-logit difference & Probability-error difference \\
 
 The sign reversal in \texttt{plain2\_w16\_gmp} is why the main text limits the spatial conclusion to an architecture- and metric-dependent effect rather than a universal positive contribution of the original bank.
 
-\section{Singleton-additive decomposition}\label{supp:additivity}
+\section{Reconstructing joint outputs from individual patches}\label{supp:additivity}
 
-The decomposition re-evaluates saved checkpoints one first-layer channel at a time and reconstructs a joint centered-logit intervention from the sum of singleton centered-logit changes. It evaluates all $k=0,\ldots,16$ while retaining $k=1,2,4,8$ for the definition of $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
+We re-evaluate saved checkpoints by patching one first-layer channel at a time. We then reconstruct the jointly patched output by summing these individual centered-logit changes against the same base run. It evaluates all $k=0,\ldots,16$ while retaining $k=1,2,4,8$ for the definition of $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
 
 \begin{table}[h]
-\caption{Primary examples from the singleton-additive analysis on \texttt{two\_concepts}. The BN2-GAP paired interval is computed over the same 100 renderer blocks.}
+\caption{Primary examples from the reconstruction using individual patches on \texttt{two\_concepts}. The BN2-GAP paired interval is computed over the same 100 renderer blocks.}
 \label{tab:supp-additivity-examples}
 \centering
 \small
@@ -189,10 +189,10 @@ Architecture / metric & Observed $B$ & Additive $B$ & Observed $-$ additive \\
 \end{tabular}
 \end{table}
 
-For \texttt{bn2\_w16\_gap}, the paired centered-logit difference is $-0.17994$ with 95\% Student-$t$ interval $[-0.20082,-0.15906]$. In the analytic \texttt{tiny\_gmp} control, the aggregate centered residual-energy ratio remains at floating-point scale: $8.41\times10^{-14}$ for release and $1.45\times10^{-13}$ for retention at $k=16$. For \texttt{bn2\_w16\_gap} at $k=8$, the corresponding ratios are 0.190 and 0.339.
+For \texttt{bn2\_w16\_gap}, the paired centered-logit difference is $-0.17994$ with 95\% Student-$t$ interval $[-0.20082,-0.15906]$. In the analytic \texttt{tiny\_gmp} control, centered-logit residual energy remains at floating-point scale: $8.41\times10^{-14}$ for release and $1.45\times10^{-13}$ for retention at $k=16$. For \texttt{bn2\_w16\_gap} at $k=8$, the corresponding ratios are 0.190 and 0.339.
 
 \begin{table}[h]
-\caption{Observed and additive reconstruction of the architecture-averaged structured-minus-pixel-permuted $B$ on \texttt{two\_concepts}. The final column is the paired observed-minus-additive comparison over 100 renderer blocks.}
+\caption{Observed and reconstructed differences in $B$ between the structured and pixel-permuted banks, averaged across architectures on \texttt{two\_concepts}. The final column is the paired observed-minus-additive comparison over 100 renderer blocks.}
 \label{tab:supp-spatial-additivity}
 \centering
 \small
@@ -206,7 +206,7 @@ Probability-error reduction & +0.04563 & +0.04105 & +0.00458 [+0.00202, +0.00714
 \end{tabular}
 \end{table}
 
-These comparisons support the narrower claim made in the article: the singleton reconstruction reproduces the studied architecture-averaged spatial contrast closely, but architecture-specific reconstruction gaps remain.
+The sum of individual logit changes closely reproduces the spatial contrast averaged across the studied architectures. Differences between observed and reconstructed contrasts remain in individual architectures.
 
 \section{Reproducibility map}\label{supp:repro-map}
 
@@ -240,7 +240,7 @@ The paired BN2-GAP interval in Section~\ref{supp:additivity} is reproduced from 
 
 \section{Integrity checks and artifact scope}\label{supp:integrity}
 
-Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and singleton-additive centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is also included as \texttt{analysis/checkpoint\_audit/AUDIT\_REPORT.md}.
+Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and reconstructed centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is also included as \texttt{analysis/checkpoint\_audit/AUDIT\_REPORT.md}.
 
 The submission artifact intentionally excludes raw training checkpoints and tens of thousands of per-model evaluator JSON files. Those files are retained separately because of their size. The included block-level and aggregate CSV files are sufficient to regenerate the main figures and the reported block-level inferential summaries without retraining the models. A file-by-file map and package-building instructions are provided in \texttt{paper/SUPPLEMENT\_REPRODUCIBILITY.md}.
 

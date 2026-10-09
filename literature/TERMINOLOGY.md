@@ -166,3 +166,36 @@ Before introducing a new recurring term into the manuscript:
 5. Add any new approved terminology to this file so future revisions remain consistent.
 
 The manuscript should sound like the literature, not like the names of the project’s scripts, stages, checkpoints, or analysis folders.
+
+
+## Direct-language revision (2026-10-09)
+
+Use the most direct wording that preserves the scientific meaning. Prefer a familiar technical term when it names the exact concept; otherwise describe the object and operation in plain language. Do not introduce a compact label merely to avoid writing a clear clause.
+
+| Dense wording | Direct alternative |
+| --- | --- |
+| singleton superposition | joint logit changes equal the sum of single-channel changes |
+| singleton-additive decomposition | reconstructing joint outputs from individual patches |
+| individual-effect geometry | the directions and magnitudes of individual logit changes |
+| metric-transformed sum | the sum of individual logit changes evaluated with the same metric |
+| fixed-base, vector-valued reconstruction | measure every channel change against the same base run and sum the logit vectors |
+| bank-based training regimes | train networks using each filter bank |
+| downstream co-adaptation | downstream parameters adapt along with the first layer |
+| architecture-averaged selected-channel contrast | the contrast for channels selected on the validation set, averaged across architectures |
+| singular spectrum | singular values |
+| coefficient multiset | coefficient values and their multiplicities |
+| consequential discrepancies | reconstruction errors that change the sign of the reported contrast |
+
+These are context-dependent examples, not a mechanical blacklist. Keep standard terms such as activation patching, centered logits, additivity, residual, Gram matrix, equivalence margin, paired confidence interval, and higher-order interaction where they are precise. Define project-specific metrics and renderer blocks before using them.
+
+For sentences and paragraphs:
+
+1. Name the quantity, then state what was done or found.
+2. Put qualifiers in separate clauses rather than before a single noun.
+3. Split a sentence when it introduces both a result and its interpretation, or several statistical conditions.
+4. Keep observed and reconstructed outputs distinct. Apply the metric after reconstructing logits; never imply that scalar scores were summed.
+5. Preserve the distinction between an interval excluding zero, an interval containing zero, and a pre-specified equivalence result.
+6. Preserve post-hoc status, the renderer-block inferential unit, and limitations on generalization and causal attribution.
+7. Do not simplify executable identifiers, file paths, equation labels, historical checkpoints, or frozen protocols. Their names remain unchanged for reproducibility.
+
+The direct-language pass applies to the active manuscript and supplement. It does not rename archived analyses or redefine scientific quantities.

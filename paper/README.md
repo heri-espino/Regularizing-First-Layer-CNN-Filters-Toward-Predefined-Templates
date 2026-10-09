@@ -4,7 +4,7 @@
 
 > **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**
 
-The manuscript uses the vendored Springer Nature article template under `paper/sn-article-template/`. It is synchronized with the reviewed `sn_submission(5).pdf` revision. Figure 3 uses **Release − retention**, matching the training-regime terminology in the text; narrative citations use `\citet` and parenthetical citations use `\citep`. The Vaidyanathan et al. (2026) entry is included in the central `literature/references.bib` database.
+The manuscript uses the vendored Springer Nature article template under `paper/sn-article-template/`. It is based on the reviewed `sn_submission(6).pdf` revision, followed by the direct-language pass recorded in `checkpoints/CP-021_direct-language-editorial-pass.md`. Figure 3 uses **Release − retention**, matching the training-regime terminology in the text; narrative citations use `\citet` and parenthetical citations use `\citep`. The Vaidyanathan et al. (2026) entry is included in the central `literature/references.bib` database.
 
 ## Editorial structure
 
@@ -74,3 +74,6 @@ The generated PDFs, ZIP, and LaTeX intermediates are not intended to be committe
 ## Writing rule
 
 Keep the main paper compact. New robustness checks, large tables, implementation audits, and exhaustive secondary analyses belong in `analysis/` or Supplementary Information unless they change the central scientific conclusion.
+
+
+Use the most direct wording that preserves the meaning. Prefer familiar technical terms and explicit descriptions of operations to abstract labels or chains of modifiers. The rules and examples in `literature/TERMINOLOGY.md` apply to the main manuscript, captions, and standalone supplement. Simplifying prose must preserve metric definitions, uncertainty, post-hoc status, and the limits of causal claims.

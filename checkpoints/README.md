@@ -108,6 +108,6 @@ Use `TEMPLATE.md`.
 
 ## Current latest checkpoint
 
-`CP-020_reviewed-sn-manuscript-sync.md`
+`CP-021_direct-language-editorial-pass.md`
 
 **Future agents must update this line whenever a new checkpoint is added.**

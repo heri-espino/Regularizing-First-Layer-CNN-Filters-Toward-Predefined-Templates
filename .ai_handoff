@@ -1,12 +1,14 @@
 # AI handoff
 
-Last updated: 2026-10-08
+Last updated: 2026-10-09
 
 ## Current submission revision
 
-The author reconfirmed **SN Computer Science** on 2026-10-08. `paper/main.tex` now matches the reviewed `sn_submission(5).pdf` revision: **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**. Figure 3 uses Release − retention; related work includes Vaidyanathan et al. (2026), with its BibTeX entry integrated into `literature/references.bib`. Main figure order is overview, direct additivity curves, intervention-size/architecture results, spatial control, and observed/additive summary.
+The author reconfirmed **SN Computer Science** on 2026-10-08. `paper/main.tex` is based on the reviewed `sn_submission(6).pdf` revision, followed by a direct-language editorial pass: **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**. Figure 3 uses Release − retention; related work includes Vaidyanathan et al. (2026), with its BibTeX entry integrated into `literature/references.bib`. Main figure order is overview, direct additivity curves, intervention-size/architecture results, spatial control, and observed/additive summary.
 
-Read `checkpoints/CP-020_reviewed-sn-manuscript-sync.md` before the older manuscript/venue notes below. The next action is to rebuild the main PDF, supplement, and allowlisted ZIP together and inspect them. No new experimental campaign is requested. Submission readiness is not a guarantee of acceptance.
+Read `checkpoints/CP-021_direct-language-editorial-pass.md` and `literature/TERMINOLOGY.md` before the older manuscript/venue notes below. The next action is to rebuild the main PDF, supplement, and allowlisted ZIP together and inspect them. No new experimental campaign is requested. Submission readiness is not a guarantee of acceptance.
+
+The latest editorial pass simplifies unnecessary labels and sentence structure in `paper/main.tex` and `paper/sn_supplement.tex`. Use direct wording in future revisions while preserving standard technical terms, equations, results, uncertainty, and evidential status. Archived protocols and results are unchanged.
 
 ## Read this first
 
