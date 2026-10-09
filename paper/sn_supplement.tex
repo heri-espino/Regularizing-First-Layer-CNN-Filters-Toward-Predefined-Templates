@@ -28,7 +28,7 @@
 
 For each task and renderer block, the data generator draws 128 training, 64 validation, and 64 test contexts from independent deterministic streams. Each context specifies rendering conditions such as angle, scale, and noise. Rendering all four classes in every context gives 512/256/256 images in the three splits. Models are trained for 200 epochs with Adam, learning rate 0.003 and batch size 128. Retention keeps the first-layer penalty at $\lambda=1$ throughout training. Release uses the same penalty through epoch 10, decreases it linearly to zero at epoch 80, and leaves it at zero thereafter. In the architecture study, paired retention and release runs use the same model initialization and paired minibatch-order streams. Pairing is within each renderer block, task, architecture, and initialization replicate.
 
-All architectures share a bias-free $1\!\to\!16$, $9\times9$ first convolution, same padding, ReLU, and the same first-layer intervention tensor. GMP and GAP denote global max and global average pooling. Plain depth-2 models add one downstream $3\times3$ convolution; plain depth-4 models add three. Width-64 variants expand the first downstream convolution from 16 to 64 channels and remain width 64 thereafter. Residual depth-4 models remain width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm, when present, occurs only downstream of the intervention tensor, after each downstream convolution. A learned linear classifier maps the pooled representation to four classes.
+All architectures use a bias-free $1\!\to\!16$, $9\times9$ first convolution with same padding and ReLU. Patching is applied to the post-ReLU output of this layer. GMP and GAP denote global max and global average pooling. Plain depth-2 models add one downstream $3\times3$ convolution; plain depth-4 models add three. Width-64 variants expand the first downstream convolution from 16 to 64 channels and remain width 64 thereafter. Residual depth-4 models remain width 16 and add the third downstream convolution to the original first-layer activation before the final ReLU. BatchNorm, when present, occurs only after the patching location, following each downstream convolution. A learned linear classifier maps the pooled representation to four classes.
 
 \begin{table}[h]
 \caption{Complete 16-model architecture grid. Depth counts the shared first convolution.}
@@ -74,7 +74,7 @@ B^M=
 where $\Delta^M(k)$ is release minus retention at intervention size $k$. The initial pre-specified test uses 20 held-out renderer blocks and the primary \texttt{two\_concepts}/TinyCNN setting.
 
 \begin{table}[h]
-\caption{Primary intervention-size contrast under the historical and two alternative evaluation metrics. Intervals are paired 95\% intervals over the 20 held-out renderer blocks.}
+\caption{Primary intervention-size contrast under the initial metric and two alternative evaluation metrics. Intervals are paired 95\% intervals over the 20 held-out renderer blocks.}
 \label{tab:supp-primary-b}
 \centering
 \small
@@ -93,7 +93,7 @@ The alternative metrics reuse the frozen checkpoints and validation-derived chan
 
 \section{Architecture robustness}\label{supp:architecture}
 
-The architecture study with new renderer blocks uses 100 renderer blocks, four paired initialization replicates per block, the 16 architectures in Table~\ref{tab:supp-architecture-grid}, two tasks, and the two training regimes. Initialization replicates are averaged within renderer block before inference.
+The architecture study uses 100 new renderer blocks and four paired initialization replicates per block. It covers the 16 architectures in Table~\ref{tab:supp-architecture-grid}, two tasks, and both training regimes. Initialization replicates are averaged within renderer block before inference.
 
 \begin{table}[h]
 \caption{Repeated-measures tests of differences across architectures on the primary \texttt{two\_concepts} task.}
@@ -112,7 +112,7 @@ Probability-error reduction & 656.70 & 15, 1485 & 0.869 & $<10^{-300}$ \\
 
 The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Classification accuracy is not matched across architectures. These comparisons describe the trained networks in this controlled grid.
 
-After the pre-specified architecture results were known, a post-hoc analysis checked whether differences across architectures remained after sphericity correction, within-block permutation tests, Friedman tests, and random channel orders. These checks support the robustness statement in the main text without changing the pre-specified status of the original architecture test.
+After the pre-specified architecture results were known, a post-hoc analysis checked whether differences across architectures remained after sphericity correction, within-block permutation tests, Friedman tests, and random channel orders. The original architecture test was pre-specified; these additional robustness checks were post-hoc.
 
 \begin{table}[h]
 \caption{Post-hoc checks of differences across architectures on \texttt{two\_concepts}. Permutation values are Holm adjusted across the two metrics.}
@@ -131,7 +131,7 @@ Probability-error reduction & 0.5973 & $<10^{-300}$ & $2.0\times10^{-5}$ & $7.79
 
 \section{Pixel-permuted spatial control}\label{supp:spatial}
 
-The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular values, and each row's coefficient values and their multiplicities, while destroying the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
+The spatial-control experiment compares the original structured filter bank with a bank obtained by applying one common permutation to the 81 spatial coordinates of every filter. This transformation preserves row norms, the complete Gram matrix, numerical rank, singular values, and the coefficients in each filter, including how often each value occurs. It destroys the original two-dimensional arrangement. The primary analysis uses 100 new renderer blocks and four architectures.
 
 \begin{table}[h]
 \caption{Difference between the structured and pixel-permuted banks, averaged across architectures, for channels selected on the validation set in \texttt{two\_concepts}. Difference intervals are paired Student-$t$ 95\% intervals from the primary spatial-control analysis; equivalence uses the pre-specified 90\% TOST interval and symmetric margin.}
@@ -167,11 +167,11 @@ Architecture & Centered-logit difference & Probability-error difference \\
 \end{tabular}
 \end{table}
 
-The sign reversal in \texttt{plain2\_w16\_gmp} is why the main text limits the spatial conclusion to an architecture- and metric-dependent effect rather than a universal positive contribution of the original bank.
+The negative difference in \texttt{plain2\_w16\_gmp} shows that the original bank does not increase the contrast in every architecture. The spatial effect depends on architecture and metric.
 
 \section{Reconstructing joint outputs from individual patches}\label{supp:additivity}
 
-We re-evaluate saved checkpoints by patching one first-layer channel at a time. We then reconstruct the jointly patched output by summing these individual centered-logit changes against the same base run. It evaluates all $k=0,\ldots,16$ while retaining $k=1,2,4,8$ for the definition of $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
+We re-evaluate saved checkpoints by patching one first-layer channel at a time. We then reconstruct the jointly patched output by summing these individual centered-logit changes against the same base run. We evaluate all $k=0,\ldots,16$ and use $k=1,2,4,8$ to compute $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
 
 \begin{table}[h]
 \caption{Primary examples from the reconstruction using individual patches on \texttt{two\_concepts}. The BN2-GAP paired interval is computed over the same 100 renderer blocks.}
@@ -189,7 +189,7 @@ Architecture / metric & Observed $B$ & Additive $B$ & Observed $-$ additive \\
 \end{tabular}
 \end{table}
 
-For \texttt{bn2\_w16\_gap}, the paired centered-logit difference is $-0.17994$ with 95\% Student-$t$ interval $[-0.20082,-0.15906]$. In the analytic \texttt{tiny\_gmp} control, centered-logit residual energy remains at floating-point scale: $8.41\times10^{-14}$ for release and $1.45\times10^{-13}$ for retention at $k=16$. For \texttt{bn2\_w16\_gap} at $k=8$, the corresponding ratios are 0.190 and 0.339.
+For \texttt{bn2\_w16\_gap}, the paired centered-logit difference is $-0.17994$ with 95\% Student-$t$ interval $[-0.20082,-0.15906]$. In the analytic \texttt{tiny\_gmp} control, centered-logit residual energy remains at numerical precision: $8.41\times10^{-14}$ for release and $1.45\times10^{-13}$ for retention at $k=16$. For \texttt{bn2\_w16\_gap} at $k=8$, residual energy is 0.190 under release and 0.339 under retention.
 
 \begin{table}[h]
 \caption{Observed and reconstructed differences in $B$ between the structured and pixel-permuted banks, averaged across architectures on \texttt{two\_concepts}. The final column is the paired observed-minus-additive comparison over 100 renderer blocks.}
@@ -210,7 +210,7 @@ The sum of individual logit changes closely reproduces the spatial contrast aver
 
 \section{Reproducibility map}\label{supp:repro-map}
 
-Table~\ref{tab:supp-repro-map} identifies the exact presentation script and archived analysis tables used for each main figure. The accompanying reproducibility artifact preserves these paths relative to the repository root.
+Table~\ref{tab:supp-repro-map} lists the figure-generation script and archived analysis tables used for each main figure. The accompanying reproducibility artifact preserves these paths relative to the repository root.
 
 \begin{table}[h]
 \caption{Main-figure provenance.}
@@ -220,7 +220,7 @@ Table~\ref{tab:supp-repro-map} identifies the exact presentation script and arch
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{p{0.06\textwidth}p{0.29\textwidth}p{0.57\textwidth}}
 \toprule
-Fig. & Presentation script & Principal archived inputs \\
+Fig. & Figure script & Archived input tables \\
 \midrule
 1 & \path{paper/build_overview_figure.py} &
 \path{studies/cnn_release_experiment/core.py} \\
@@ -242,6 +242,6 @@ The paired BN2-GAP interval in Section~\ref{supp:additivity} is reproduced from 
 
 Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and reconstructed centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is also included as \texttt{analysis/checkpoint\_audit/AUDIT\_REPORT.md}.
 
-The submission artifact intentionally excludes raw training checkpoints and tens of thousands of per-model evaluator JSON files. Those files are retained separately because of their size. The included block-level and aggregate CSV files are sufficient to regenerate the main figures and the reported block-level inferential summaries without retraining the models. A file-by-file map and package-building instructions are provided in \texttt{paper/SUPPLEMENT\_REPRODUCIBILITY.md}.
+The submission artifact intentionally excludes raw training checkpoints and tens of thousands of per-model evaluator JSON files. Those files are retained separately because of their size. The included block-level and aggregate CSV files are sufficient to regenerate the main figures and the reported statistical summaries across renderer blocks without retraining the models. A file-by-file map and package-building instructions are provided in \texttt{paper/SUPPLEMENT\_REPRODUCIBILITY.md}.
 
 \end{document}

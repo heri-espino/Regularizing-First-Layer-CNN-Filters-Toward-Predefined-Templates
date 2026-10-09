@@ -4,7 +4,11 @@ Last updated: 2026-10-09
 
 This document is the durable current scientific state of the project. The chronological research memory is now `checkpoints/`. A new researcher or AI agent must first read `checkpoints/README.md`, the latest `CP-XXX_*.md`, this file, `.ai_handoff`, and the active frozen protocols before changing experiments or rewriting the manuscript.
 
-## Latest editorial revision — 2026-10-09
+## Second readability pass — 2026-10-09
+
+The second pass clarifies the logit-reconstruction sequence, removes repeated conclusions about architecture, replaces vague referents in the supplement, and separates statistical results from their interpretation. The scientific definitions and results are preserved. See `checkpoints/CP-022_second-readability-pass.md`.
+
+## First editorial revision — 2026-10-09
 
 `paper/main.tex` and `paper/sn_supplement.tex` now use more direct descriptions of individual patches, logit reconstruction, filter comparisons, and statistical inference. Dense labels and long modifier chains were replaced or rewritten as clauses. See `checkpoints/CP-021_direct-language-editorial-pass.md` and the direct-language section of `literature/TERMINOLOGY.md`.
 
