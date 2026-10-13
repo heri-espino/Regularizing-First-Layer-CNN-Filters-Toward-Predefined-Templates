@@ -415,6 +415,12 @@ def build(verify: bool) -> None:
         for exported in [*PDFS, SOURCE_ARCHIVE, REPRO_ARCHIVE]:
             (tmp / exported).replace(DIST / exported)
     verify_outputs(run_full=verify)
+    # The former mixed manuscript/code ZIP is obsolete. Avoid leaving a stale
+    # upload candidate next to the four newly verified deliverables.
+    legacy = DIST / "sn_submission_package.zip"
+    if legacy.is_file():
+        legacy.unlink()
+        print(f"Removed obsolete {legacy.relative_to(ROOT)}")
     for name in [*PDFS, SOURCE_ARCHIVE, REPRO_ARCHIVE]:
         output = DIST / name
         print(f"Built {output.relative_to(ROOT)} ({output.stat().st_size / (1024 * 1024):.2f} MiB)")
