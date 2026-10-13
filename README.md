@@ -44,16 +44,16 @@ This produces:
 paper/sn_submission.pdf
 ```
 
-Build the standalone supplement and allowlisted submission package with:
+Build the standalone supplement and the four reader-facing submission artifacts with:
 
 ```bash
 python paper/build_supplement.py --clean
-python paper/build_submission_package.py
+python paper/build_submission_package.py --verify
 ```
 
 The target remains **SN Computer Science**. The manuscript source matches the reviewed `sn_submission(5).pdf` revision, with the Figure 3 label unified to **Release − retention**. The related-work discussion includes the multiple-mediator analysis of Vaidyanathan et al. (2026), distinguishing it from the paper's aggregate logit-reconstruction residual.
 
-The SN builder regenerates all five publication figures from archived aggregate tables before compiling the manuscript. It requires NumPy, Matplotlib, Pillow, and Seaborn through the common project environment; no model retraining is performed. Always rebuild the main PDF and supplement together before packaging; previously generated PDFs may reflect an older source revision.
+The SN builder regenerates all five publication figures from archived aggregate tables before compiling the manuscript. It requires NumPy, Matplotlib, Pillow, and Seaborn through the common project environment; no model retraining is performed. Always rebuild the main PDF and supplement together before packaging; previously generated PDFs may reflect an older source revision. The exporter produces separate manuscript and supplement PDFs, a manuscript-source ZIP, and a standalone reproducibility ZIP under `paper/dist/`.
 
 ### Publication figures
 
