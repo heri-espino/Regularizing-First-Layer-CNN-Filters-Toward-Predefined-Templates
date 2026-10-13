@@ -1,0 +1,29 @@
+name: submission-package-unit-tests
+
+on:
+  push:
+    paths:
+      - paper/build_submission_package.py
+      - paper/reproducibility/**
+      - tests/test_submission_package.py
+      - .github/workflows/submission_package_checks.yml
+  pull_request:
+    paths:
+      - paper/build_submission_package.py
+      - paper/reproducibility/**
+      - tests/test_submission_package.py
+      - .github/workflows/submission_package_checks.yml
+
+permissions:
+  contents: read
+
+jobs:
+  archive-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check archive path mappings and checksum protections
+        run: python -m unittest discover -s tests -v
