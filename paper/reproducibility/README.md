@@ -13,7 +13,7 @@ python -m pip install -r requirements.txt
 python reproduce.py --all
 ~~~
 
-Five figure PDFs appear in [outputs/figures](outputs/figures) after the command completes. The numerical and integrity report appears at [outputs/verification_report.json](outputs/verification_report.json). The outputs directory is **generated**; these links are to command outputs and will not exist before reproduction.
+Five figure PDFs appear in `outputs/figures/` after the command completes. The numerical and integrity report appears at `outputs/verification_report.json`. The outputs directory is **generated**; these links are to command outputs and will not exist before reproduction.
 
 You can run the components separately:
 
