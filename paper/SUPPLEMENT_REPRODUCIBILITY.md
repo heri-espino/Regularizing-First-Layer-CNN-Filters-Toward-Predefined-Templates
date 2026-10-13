@@ -8,15 +8,18 @@ Build from the repository root:
 
     python paper/build.py --clean
     python paper/build_supplement.py --clean
-    python paper/build_submission_package.py
+    python paper/build_submission_package.py --verify
 
 This produces:
 
-- paper/sn_submission.pdf — main article;
-- paper/sn_supplement.pdf — standalone Supplementary Information;
-- paper/dist/sn_submission_package.zip — allowlisted reproducibility package.
+- paper/dist/manuscript.pdf — main article (copy of paper/sn_submission.pdf);
+- paper/dist/supplementary_information.pdf — standalone supporting article (copy of paper/sn_supplement.pdf);
+- paper/dist/manuscript_sources.zip — LaTeX sources, bibliography, template, figures, and required derived figure tables;
+- paper/dist/activation_patching_reproducibility.zip — self-contained reproducibility runner, data, code, protocols, and SHA-256 manifest.
 
-The package intentionally excludes raw training checkpoints, per-model evaluator JSON files, Git history, local absolute-path outputs, caches, and development-only notes. It includes the Springer class/style files, bibliography database, and project metadata needed by the manuscript build scripts.
+The reproducibility ZIP excludes raw training checkpoints, per-model evaluator JSON files, Git history, local absolute-path outputs, caches, and development-only notes. The separate source ZIP contains the Springer class/BibTeX style, figure inputs, and bibliography needed by the manuscript build scripts. The publisher's PDF and supplemental upload fields should receive the two PDFs separately rather than embedding them in a code archive.
+
+**Independent acceptance check:** `--verify` extracts both ZIPs to empty temporary directories, verifies inventory and SHA-256 checksums, regenerates all five figures using only exported tables, and recomputes the budget means and paired BN2-GAP observed-minus-additive Student-t interval. The archive includes instructions for installing dependencies. The other derived inferential summaries remain archived rather than being recomputed by this compact entry point.
 
 ## Main-figure provenance
 
