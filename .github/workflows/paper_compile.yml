@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install figure dependencies
-        run: python -m pip install numpy matplotlib pillow seaborn
+        run: python -m pip install numpy scipy matplotlib pillow seaborn
       - name: Install TeX
         run: |
           sudo apt-get update
@@ -24,17 +24,18 @@ jobs:
         run: python paper/build.py --clean
       - name: Compile supplement
         run: python paper/build_supplement.py --clean
-      - name: Build allowlisted submission package
-        run: python paper/build_submission_package.py
+      - name: Build and independently verify submission archives
+        run: python paper/build_submission_package.py --verify
       - name: Upload compiled submission package
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sn-computer-science-submission-${{ github.sha }}
           path: |
-            paper/sn_submission.pdf
-            paper/sn_supplement.pdf
-            paper/dist/sn_submission_package.zip
+            paper/dist/manuscript.pdf
+            paper/dist/supplementary_information.pdf
+            paper/dist/manuscript_sources.zip
+            paper/dist/activation_patching_reproducibility.zip
             paper/build/main.log
             paper/supplement_build/sn_supplement.log
           retention-days: 30
