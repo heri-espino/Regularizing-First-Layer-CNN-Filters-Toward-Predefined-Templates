@@ -60,7 +60,7 @@ Architecture & Depth & Width & Pool & Residual & BatchNorm & Parameters \\
 \end{tabular}
 \end{table}
 
-The exact architecture constructor, training loop, frozen design, and parameter counts are included in the accompanying reproducibility artifact under \texttt{studies/cnn\_architecture\_robustness/} and \texttt{analysis/architecture\_robustness\_001/training\_design.json}.
+The architecture constructor and training routines are provided in the separate reproducibility archive's architecture-comparison code group. The frozen design and parameter counts are recorded in its architecture data group. The archived code is supplied for inspection; a complete retraining run additionally requires the raw experiment store.
 
 \section{Intervention-size and metric robustness}\label{supp:intervention-size}
 
@@ -89,7 +89,7 @@ Probability-error reduction & +0.89441 & [0.78630, 1.00252] \\
 \end{tabular}
 \end{table}
 
-The alternative metrics reuse the frozen checkpoints and validation-derived channel rankings. Their metric definitions and analysis plan were fixed before evaluating the alternative-metric outcomes. Full pointwise curves and block-level values are included in \texttt{analysis/metric\_sensitivity\_001/} in the accompanying artifact.
+The alternative metrics reuse the frozen checkpoints and validation-derived channel rankings. Their metric definitions and analysis plan were fixed before evaluating the alternative-metric outcomes. Full pointwise curves and block-level values are provided in the reproducibility archive's metric-sensitivity data group.
 
 \section{Architecture robustness}\label{supp:architecture}
 
@@ -110,7 +110,7 @@ Probability-error reduction & 656.70 & 15, 1485 & 0.869 & $<10^{-300}$ \\
 \end{tabular}
 \end{table}
 
-The architecture-specific estimates plotted in the main paper are stored in \texttt{analysis/architecture\_robustness\_001/architecture\_B\_summary.csv}. The corresponding training design, factor contrasts, input-effect diagnostics, and omnibus results are included alongside that file. Classification accuracy is not matched across architectures. These comparisons describe the trained networks in this controlled grid.
+The architecture-specific estimates plotted in the main paper are in the accompanying archive's architecture data group, together with the training design, factor contrasts, input-effect diagnostics, and omnibus results. Classification accuracy is not matched across architectures. These comparisons describe the trained networks in this controlled grid.
 
 After the pre-specified architecture results were known, a post-hoc analysis checked whether differences across architectures remained after sphericity correction, within-block permutation tests, Friedman tests, and random channel orders. The original architecture test was pre-specified; these additional robustness checks were post-hoc.
 
@@ -171,7 +171,7 @@ The negative difference in \texttt{plain2\_w16\_gmp} shows that the original ban
 
 \section{Reconstructing joint outputs from individual patches}\label{supp:additivity}
 
-We re-evaluate saved checkpoints by patching one first-layer channel at a time. We then reconstruct the jointly patched output by summing these individual centered-logit changes against the same base run. We evaluate all $k=0,\ldots,16$ and use $k=1,2,4,8$ to compute $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included under \texttt{studies/cnn\_patching\_additivity/}.
+We re-evaluate saved checkpoints by patching one first-layer channel at a time. We then reconstruct the jointly patched output by summing these individual centered-logit changes against the same base run. We evaluate all $k=0,\ldots,16$ and use $k=1,2,4,8$ to compute $B$. The protocol, implementation manifest, numerical unit tests, and analysis code are included in the accompanying archive's additivity study group (see the source-path manifest for original identifiers).
 
 \begin{table}[h]
 \caption{Primary examples from the reconstruction using individual patches on \texttt{two\_concepts}. The BN2-GAP paired interval is computed over the same 100 renderer blocks.}
@@ -210,38 +210,35 @@ The sum of individual logit changes closely reproduces the spatial contrast aver
 
 \section{Reproducibility map}\label{supp:repro-map}
 
-Table~\ref{tab:supp-repro-map} lists the figure-generation script and archived analysis tables used for each main figure. The accompanying reproducibility artifact preserves these paths relative to the repository root.
+Table~\ref{tab:supp-repro-map} identifies the five figure generators and their compact input groups in the separately supplied reproducibility archive. The archive's \texttt{manifest.json} provides a SHA-256 checksum and a reversible original-to-exported path mapping for each file. Its \texttt{reproduce.py} rebuilds all five figures from the provided tables without requiring the original repository.
 
 \begin{table}[h]
-\caption{Main-figure provenance.}
+\caption{Manuscript figures and compact reproducibility input groups. Each figure
+generator is supplied under \texttt{code/figures/}; the archival source filename
+for every input is recorded in \texttt{manifest.json}.}
 \label{tab:supp-repro-map}
 \centering
-\scriptsize
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{p{0.06\textwidth}p{0.29\textwidth}p{0.57\textwidth}}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.07\textwidth}p{0.35\textwidth}p{0.48\textwidth}}
 \toprule
-Fig. & Figure script & Archived input tables \\
+Fig. & Figure generator & Archive input group \\
 \midrule
-1 & \path{paper/build_overview_figure.py} &
-\path{studies/cnn_release_experiment/core.py} \\
-2 & \path{paper/build_additivity_curves_figure.py} &
-\path{analysis/patching_additivity_001/architecture_analysis/curve_summary.csv} \\
-3 & \path{paper/build_main_results_figure.py} &
-\path{analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv}; \path{analysis/architecture_robustness_001/architecture_B_summary.csv} \\
-4 & \path{paper/build_anchor_specificity_figure.py} &
-\path{analysis/anchor_specificity_001/secondary_anchor_contrasts.csv}; \path{primary_spatial_specificity.csv}; \path{random_channel_spatial_specificity.csv} \\
-5 & \path{paper/build_additivity_figure.py} &
-\path{analysis/patching_additivity_001/architecture_analysis/B_summary.csv}; \path{analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv} \\
+1 & Overview & Procedural renderer and fixed template bank; no CSV input \\
+2 & Direct additivity curves & Additivity: architecture comparison \\
+3 & Intervention-size and architecture results & Metric sensitivity; architecture comparison \\
+4 & Spatial filter-bank specificity & Spatial specificity \\
+5 & Observed and additive reconstruction & Additivity: architecture comparison and spatial controls \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The paired BN2-GAP interval in Section~\ref{supp:additivity} is reproduced from \texttt{architecture\_analysis/B\_per\_block.csv}. The paired spatial observed-minus-additive intervals are reproduced from \texttt{anchor\_analysis/B\_per\_block.csv}. The frozen protocols corresponding to the intervention-size, metric, architecture, spatial-control, and additivity analyses are included in the artifact.
+The BN2-GAP interval in Section~\ref{supp:additivity} is independently recomputed from the archived 100-block table by the reproduction entry point. The spatial observed-minus-additive tables and their published inferential summaries are also supplied, but the compact runner does not repeat their original bootstrap calculations. Frozen and post-hoc protocols remain separately labeled in the archive's \texttt{protocols/} directory.
 
 \section{Integrity checks and artifact scope}\label{supp:integrity}
 
-Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and reconstructed centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is also included as \texttt{analysis/checkpoint\_audit/AUDIT\_REPORT.md}.
+Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and reconstructed centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is included in the archive's checkpoint-audit data group.
 
-The submission artifact intentionally excludes raw training checkpoints and tens of thousands of per-model evaluator JSON files. Those files are retained separately because of their size. The included block-level and aggregate CSV files are sufficient to regenerate the main figures and the reported statistical summaries across renderer blocks without retraining the models. A file-by-file map and package-building instructions are provided in \texttt{paper/SUPPLEMENT\_REPRODUCIBILITY.md}.
+The reproducibility archive excludes raw training checkpoints and per-model evaluator JSON files, which are retained separately because of their size. Its derived tables support regeneration of the five manuscript figures and selected independent numerical checks. The other reported inferential summaries remain archived, rather than being recalculated by the compact entry point. The separately supplied manuscript-source ZIP includes LaTeX, the bibliography, required figures, and figure inputs. The original-to-exported file map and limitations are documented in the archive README and manifest.
 
 \end{document}
