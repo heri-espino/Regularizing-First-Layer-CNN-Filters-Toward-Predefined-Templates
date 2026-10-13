@@ -44,7 +44,7 @@ class SubmissionPackageTest(unittest.TestCase):
         exported = list(export.values())
         self.assertEqual(len(exported), len(set(exported)))
         self.assertIn("README.md", exported)
-        self.assertIn("manifest.json", exported + ["manifest.json"])
+        self.assertNotIn("manifest.json", exported)  # created from inventory metadata
         self.assertIn("protocols/architecture_posthoc.md", exported)
         self.assertIn("data/additivity/architecture_comparison/B_per_block.csv", exported)
         self.assertIn("code/figures/build_main_results_figure.py", exported)
