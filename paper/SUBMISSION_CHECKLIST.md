@@ -51,7 +51,16 @@ Raw checkpoints and tens of thousands of per-model evaluator JSON files are not 
 
 Remove local absolute paths, temporary machine-specific files, Git history, and unrelated development notes from the supplementary archive.
 
-Create the final archive with `python paper/build_submission_package.py`. Open the ZIP and verify that it contains `sn_submission.pdf`, `sn_supplement.pdf`, the frozen protocols, the paper-facing code, and the block-level/aggregate tables listed in the reproducibility map.
+Create all four deliverables with `python paper/build_submission_package.py --verify`. This runs a clean extraction, checksum verification, all five figure generators, and selected numeric checks. Inspect:
+
+- `paper/dist/manuscript.pdf` — main manuscript upload;
+- `paper/dist/supplementary_information.pdf` — supplementary PDF upload;
+- `paper/dist/manuscript_sources.zip` — independently rebuildable LaTeX sources;
+- `paper/dist/activation_patching_reproducibility.zip` — reviewer-facing reproduction material.
+
+Confirm that the reproduction ZIP's README links resolve after extraction; `reproduce.py --all` regenerates five figure PDFs and produces a verification report. Its `manifest.json` records original-to-exported paths, SHA-256 checksums, and source commit when available. No raw model checkpoints or per-model JSONs are included. The code-only experiment scripts are archived for inspection, not advertised as end-to-end train/evaluate commands.
+
+Submit the files in the appropriate publisher fields; do not upload a single archive that mixes manuscript PDF, supplementary PDF, and code. Remove the obsolete `paper/dist/sn_submission_package.zip` from local dist if one exists: it is not produced by the new exporter.
 
 ## Final visual pass
 
