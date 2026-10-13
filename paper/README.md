@@ -52,7 +52,7 @@ From the repository root:
 ```bash
 python paper/build.py --clean
 python paper/build_supplement.py --clean
-python paper/build_submission_package.py
+python paper/build_submission_package.py --verify
 ```
 
 The generated submission files are:
@@ -60,7 +60,10 @@ The generated submission files are:
 ```text
 paper/sn_submission.pdf
 paper/sn_supplement.pdf
-paper/dist/sn_submission_package.zip
+paper/dist/manuscript.pdf
+paper/dist/supplementary_information.pdf
+paper/dist/manuscript_sources.zip
+paper/dist/activation_patching_reproducibility.zip
 ```
 
 The build uses:
@@ -69,7 +72,9 @@ The build uses:
 - the Springer Nature bibliography styles under `paper/sn-article-template/bst/`;
 - `../literature/references.bib`.
 
-The generated PDFs, ZIP, and LaTeX intermediates are not intended to be committed; the manual-only GitHub Actions `paper-compile` workflow builds and uploads the manuscript, supplement, logs, and allowlisted reproducibility ZIP as an artifact.
+The generated PDFs, ZIPs, and LaTeX intermediates are not intended to be committed. The manual-only GitHub Actions `paper-compile` workflow uploads all four reader-facing deliverables plus build logs. The exporter also checks the independently extracted archives; `--verify` regenerates all five figures and recomputes selected archived-table statistics.
+
+The manuscript source ZIP retains its LaTeX-compatible folder structure. The separate reproducibility ZIP uses descriptive `data/`, `code/`, and `protocols/` paths, with an original-to-exported checksum manifest and a standalone `reproduce.py`. The PDFs are individual files suitable for the manuscript and supplement fields of a journal submission.
 
 ## Writing rule
 
