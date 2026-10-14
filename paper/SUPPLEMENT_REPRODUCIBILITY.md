@@ -19,7 +19,7 @@ This produces:
 
 The reproducibility ZIP excludes raw training checkpoints, per-model evaluator JSON files, Git history, local absolute-path outputs, caches, and development-only notes. The separate source ZIP contains the Springer class/BibTeX style, figure inputs, and bibliography needed by the manuscript build scripts. The publisher's PDF and supplemental upload fields should receive the two PDFs separately rather than embedding them in a code archive.
 
-**Independent acceptance check:** `--verify` extracts both ZIPs to empty temporary directories, verifies inventory and SHA-256 checksums, regenerates all five figures using only exported tables, and recomputes the budget means and paired BN2-GAP observed-minus-additive Student-t interval. The archive includes instructions for installing dependencies. The other derived inferential summaries remain archived rather than being recomputed by this compact entry point.
+**Independent acceptance check:** `--verify` extracts both ZIPs to empty temporary directories, verifies inventory and SHA-256 checksums, regenerates eleven figure PDFs from exported CSV/NPZ inputs, and recomputes the budget means and paired BN2-GAP observed-minus-additive Student-t interval. The archive includes instructions for installing dependencies. The other derived inferential summaries remain archived rather than being recomputed by this compact entry point.
 
 ## Main-figure provenance
 
@@ -30,6 +30,19 @@ The reproducibility ZIP excludes raw training checkpoints, per-model evaluator J
 | Fig. 3 — intervention size + architectures | paper/build_main_results_figure.py | analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv; analysis/architecture_robustness_001/architecture_B_summary.csv |
 | Fig. 4 — spatial specificity | paper/build_anchor_specificity_figure.py | analysis/anchor_specificity_001/secondary_anchor_contrasts.csv; primary_spatial_specificity.csv; random_channel_spatial_specificity.csv |
 | Fig. 5 — observed vs additive summary | paper/build_additivity_figure.py | analysis/patching_additivity_001/architecture_analysis/B_summary.csv; analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv |
+| Compact gallery (number determined automatically by LaTeX) | paper/build_figures.py | analysis/kernel_similarity/results/kernel_gallery.npz |
+
+## Restored supplementary-figure provenance
+
+| Supplementary figure | Generator | Immutable input |
+|---|---|---|
+| S1 — learning dynamics | paper/build_figures.py | results/retention_release_001/analysis/learning_curves.csv |
+| S2 — patching curves | paper/build_figures.py | analysis/exhaustive_robustness_001/full_budget_curves.csv |
+| S3 — filter matching trajectories | paper/build_figures.py | analysis/kernel_similarity/results/per_checkpoint.csv |
+| S4 — similarity matrices | paper/build_figures.py | per_checkpoint.csv and analysis/kernel_similarity/results/similarity_matrices.npz |
+| S5 — complete kernel gallery | paper/build_figures.py | analysis/kernel_similarity/results/kernel_gallery.npz |
+
+The compact gallery and S5 use the same normalized kernel arrays, Hungarian one-to-one matching, and symmetric color scale. They show `two_concepts`, TinyCNN, block 2000, with original templates and retained/released training at epoch 200 (S5 also includes all five original conditions at epochs 0 and 200). The NPZ is exported once using `python paper/prepare_kernel_gallery.py` from the retained checkpoints and then suffices for PyTorch-free gallery reproduction. The exporter records the original checkpoint identifiers and content hashes inside the NPZ; the reproducibility ZIP manifest independently records file hashes and descriptive export paths. S1 and S3 plot run means ± standard deviations; S2 uses the archived interval bounds. S4 and S5 are a single illustrative run.
 
 ## Main numerical claims
 
@@ -63,6 +76,6 @@ The package includes the protocols that govern the paper-facing analyses:
 
 ## Scope of reproducibility
 
-The included block-level and aggregate tables reproduce the reported plots and inferential summaries without retraining. Exact retraining also requires the retained raw output/checkpoint store and compute environment recorded in the study manifests; those large files are intentionally not part of the journal upload.
+The included block-level/aggregate tables and compact NPZ reproduce the published figures without retraining. The independent entry point checks selected numeric claims, not every original inference or bootstrap. Exact retraining also requires the retained raw output/checkpoint store and compute environment recorded in the study manifests; those large files are intentionally not part of the journal upload.
 
 The renderer, architecture definitions, training/evaluation routines, and analysis code needed to inspect the experimental specification are included in the package. This distinction should remain explicit: the submission artifact supports numerical verification of the manuscript from archived result tables, while full checkpoint-level reruns use the separately retained raw experiment store.
