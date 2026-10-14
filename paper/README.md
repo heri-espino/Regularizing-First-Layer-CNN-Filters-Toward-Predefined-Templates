@@ -35,14 +35,14 @@ Complete numerical tables also remain versioned under `analysis/`. The main pape
 
 ## Main figures
 
-The manuscript now uses six figures, including a compact filter gallery:
+The manuscript now uses six figures, in manuscript order:
 
 1. `fig00_overview.pdf` — controlled renderer, predefined filters, and patch location;
-2. `fig09_additivity_curves.pdf` — direct observed/additive curves and residual energy;
-3. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
-4. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
-5. `fig08_additivity.pdf` — architecture-wide and spatial-control additive reconstruction.
-6. `fig05_kernel_gallery_compact.pdf` — retained versus released first-layer kernels in a frozen illustrative example (positioned before the later results figures in the text).
+2. `fig05_kernel_gallery_compact.pdf` — representative retained and released first-layer kernels;
+3. `fig09_additivity_curves.pdf` — observed/additive curves and residual energy;
+4. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
+5. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
+6. `fig08_additivity.pdf` — architecture-wide and spatial-control additive reconstruction.
 
 The supplementary PDF additionally restores five legacy figures: learning curves, patching curves, matching trajectories, similarity matrices, and the complete kernel gallery. `paper/build_figures.py` recreates all five and the compact main-text gallery from archived CSV/NPZ inputs.
 
