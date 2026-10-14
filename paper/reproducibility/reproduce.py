@@ -25,6 +25,7 @@ FIGURES = (
     "build_main_results_figure.py",
     "build_anchor_specificity_figure.py",
     "build_additivity_figure.py",
+    "build_figures.py",
 )
 EXPECTED_PDFS = (
     "fig00_overview.pdf",
@@ -32,6 +33,12 @@ EXPECTED_PDFS = (
     "fig06_main_results.pdf",
     "fig07_anchor_specificity.pdf",
     "fig08_additivity.pdf",
+    "fig01_learning.pdf",
+    "fig02_patch_size.pdf",
+    "fig03_matching_trajectories.pdf",
+    "fig04_similarity_matrices.pdf",
+    "fig05_kernel_gallery.pdf",
+    "fig05_kernel_gallery_compact.pdf",
 )
 
 
@@ -150,14 +157,14 @@ def verify_numbers() -> dict:
 
 
 def regenerate_figures() -> list[str]:
-    """Create an isolated, repository-compatible workspace from the manifest."""
+    """Rebuild all manuscript and supplement figures from exported tables/NPZ."""
     manifest = _manifest()
     with tempfile.TemporaryDirectory(prefix="cnn-submission-repro-") as tmp:
         workspace = Path(tmp)
         for entry in manifest["files"]:
             original = entry["source_path"]
             # Copy only the files needed by the frozen manuscript figure scripts.
-            if original.startswith("analysis/") or original in {
+            if original.startswith(("analysis/", "results/retention_release_001/analysis/")) or original in {
                 "paper/plot_style.py",
                 *(f"paper/{name}" for name in FIGURES),
             }:
@@ -181,7 +188,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", action="store_true", help="Verify checksums and README links only")
-    group.add_argument("--figures", action="store_true", help="Regenerate all five manuscript figures")
+    group.add_argument("--figures", action="store_true", help="Regenerate all main and supplementary figures")
     group.add_argument("--numbers", action="store_true", help="Recompute supported numerical checks")
     group.add_argument("--all", action="store_true", help="Run all checks and regenerate the figures")
     args = parser.parse_args()
