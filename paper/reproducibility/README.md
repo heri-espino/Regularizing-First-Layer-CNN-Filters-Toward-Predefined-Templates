@@ -2,7 +2,7 @@
 
 Companion artifact for **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**, submitted to *SN Computer Science*.
 
-This archive is designed for a reviewer who does **not** have the original repository. It provides the exact archived inputs required for all five manuscript figures, selected numerical cross-checks, and the original frozen study code and protocols. The data are **derived aggregate and block-level tables**, not raw images, neural-network checkpoints, or per-model evaluator JSON files.
+This archive is designed for a reviewer who does **not** have the original repository. It provides the exact archived inputs required for all manuscript and restored supplementary figures, selected numerical cross-checks, and the original frozen study code and protocols. The data are **derived aggregate and block-level tables**, not raw images, neural-network checkpoints, or per-model evaluator JSON files.
 
 ## Quick start
 
@@ -13,22 +13,22 @@ python -m pip install -r requirements.txt
 python reproduce.py --all
 ~~~
 
-Five figure PDFs appear in `outputs/figures/` after the command completes. The numerical and integrity report appears at `outputs/verification_report.json`. The outputs directory is **generated**; these links are to command outputs and will not exist before reproduction.
+Eleven figure PDFs appear in `outputs/figures/` after the command completes. The numerical and integrity report appears at `outputs/verification_report.json`. The outputs directory is **generated**; these links are to command outputs and will not exist before reproduction.
 
 You can run the components separately:
 
 ~~~bash
 python reproduce.py --check     # archive checksums and README relative links
 python reproduce.py --numbers   # recompute selected archived-table statistics
-python reproduce.py --figures   # regenerate the five paper figures
+python reproduce.py --figures   # regenerate every manuscript and supplementary figure
 ~~~
 
-The reproduction script temporarily reconstructs the required original input paths in an isolated directory, runs the archived figure generators unchanged, and copies their outputs into outputs/figures/. Nothing needs to be installed from the author's original repository.
+The reproduction script temporarily reconstructs the original expected input paths in an isolated directory, runs all archived figure generators, and copies their outputs into outputs/figures/. It does not download PyTorch checkpoints or depend on the original repository.
 
 ## Directory guide
 
-- [data/](data/): readable, study-grouped CSV and JSON results. The files preserve their original basenames.
-- [code/figures/](code/figures/): all five unchanged manuscript figure generators and their plotting module.
+- [data/](data/): readable, study-grouped CSV/JSON and compact NPZ results. The files preserve their original basenames.
+- [code/figures/](code/figures/): all six figure-generator scripts (five current plus one legacy/restored) and their plotting module.
 - [code/experiments/](code/experiments/): archived training/evaluation and analysis routines supplied for methodological inspection. These are **not** independent end-to-end training commands without external raw run outputs.
 - [protocols/](protocols/): frozen experimental plans, including an explicitly **post hoc** architecture diagnostic protocol.
 - [manifest.json](manifest.json): source commit when available, original-to-exported path mapping, SHA-256 checksums, and byte sizes of every packaged source file.
@@ -44,7 +44,22 @@ The reproduction script temporarily reconstructs the required original input pat
 | Fig. 4 — spatial filter-bank specificity | data/spatial_specificity | fig07_anchor_specificity.pdf |
 | Fig. 5 — additive reconstruction | data/additivity/architecture_comparison; data/additivity/spatial_controls | fig08_additivity.pdf |
 
-The names shown in the output column are all created under outputs/figures/.
+The outputs listed above are generated under `outputs/figures/`.
+
+### Restored training-dynamics and filter figures
+
+| Figure | Archived input group | Output |
+| --- | --- | --- |
+| Main compact gallery | [data/filter_structure/](data/filter_structure/) | fig05_kernel_gallery_compact.pdf |
+| Supplementary S1 — learning curves | [data/training_dynamics/](data/training_dynamics/) | fig01_learning.pdf |
+| Supplementary S2 — patching curves | [data/robustness/](data/robustness/) | fig02_patch_size.pdf |
+| Supplementary S3 — matching trajectories | [data/filter_structure/](data/filter_structure/) | fig03_matching_trajectories.pdf |
+| Supplementary S4 — similarity matrices | [data/filter_structure/](data/filter_structure/) | fig04_similarity_matrices.pdf |
+| Supplementary S5 — full kernel gallery | [data/filter_structure/](data/filter_structure/) | fig05_kernel_gallery.pdf |
+
+The immutable historical inputs are `learning_curves.csv`, `full_budget_curves.csv`, `per_checkpoint.csv`, and `similarity_matrices.npz`. Both galleries use `kernel_gallery.npz` and require no PyTorch or original model checkpoints for plotting. The gallery example is `two_concepts` / TinyCNN / block 2000, epochs 0 and 200. The NPZ preserves all five condition identifiers, the original templates, ten unmodified first-layer weight arrays, and their source checksums/provenance. The matching procedure is maximum-sum one-to-one assignment on centered, unit-norm cosine similarities; visualization applies the same normalization and a shared symmetric color limit to complete and compact galleries.
+
+**Uncertainty:** S1 and S3 show run-level mean ± one standard deviation. S2 uses archived interval bounds; S4 and S5 display a single example run without statistical uncertainty. The renderer, archived tables, and NPZ are the full supported figure-reproduction boundary.
 
 ## Numerical verification
 
