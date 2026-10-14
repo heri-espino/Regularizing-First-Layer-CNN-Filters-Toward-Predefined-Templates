@@ -13,9 +13,13 @@
 \title[When Do Activation-Patching Effects Add Up?]{When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs}
 
 \author*[1]{\fnm{Heriberto} \sur{Espino Montelongo}}
+\email{heriberto.espinomo@udlap.mx}
 \affil*[1]{\orgname{Universidad de las Am\'ericas Puebla}, \city{San Andr\'es Cholula}, \state{Puebla}, \country{Mexico}}
 
-\abstract{Can the effect of patching several activation channels be predicted from the effects of patching them individually? We examine this question in controlled convolutional networks initialized with predefined edge, corner, and ring filters. Two training regimes either retain these filters through regularization or release them by annealing the penalty. We find two distinct outcomes. In networks with per-channel pooling and a linear classifier, the release--retention contrast changes substantially with intervention size even though individual logit changes reconstruct the joint effect to numerical precision. In a deeper network, the same additive reconstruction predicts a positive intervention-size contrast while the observed contrast is negative: $+0.042$ versus $-0.138$. A 100-block comparison across 16 architectures shows that the gap between individual and joint effects depends on the downstream network. A separate spatial control permutes filter pixels while preserving the bank's Gram matrix, rank, and singular values. The original arrangement changes the patching contrast, but individual effects closely reproduce the average centered-logit difference across architectures. These results separate changes in patching scores that individual logit changes and the evaluation metric can explain from changes that require departures from logit additivity. In the studied CNNs, intervention-size dependence alone is insufficient evidence of channel interaction, while assuming additivity can give the wrong sign for the intervention-size contrast between training regimes.}
+\abstract{\textbf{Purpose.} Can the effect of patching several activation channels be predicted from the effects of patching them individually? We investigate when intervention-size dependence reflects the evaluation metric and when it requires non-additive changes in a network's logits.
+\textbf{Methods.} We train small convolutional neural networks initialized with a bank of predefined edge, corner, and ring filters. Retention maintains a first-layer template penalty, whereas release anneals that penalty to zero. We compare the observed effects of joint first-layer patches with reconstructions obtained by summing individual centered-logit changes, across two controlled tasks, 16 architectures, and a pixel-permuted filter-bank control that preserves the Gram matrix.
+\textbf{Results.} Networks with per-channel pooling and a linear classifier exhibit substantial intervention-size dependence despite numerical logit additivity. In a deeper architecture, additive reconstruction instead predicts a positive contrast when the observed contrast is negative ($+0.042$ versus $-0.138$). The disagreement depends on downstream architecture across 100 renderer blocks. The spatially permuted filter bank changes patching contrasts even though its rank, singular values, and Gram matrix are preserved; individual changes closely reproduce the architecture-averaged spatial difference.
+\textbf{Conclusion.} Intervention-size dependence alone does not demonstrate interactions among patched channels. Conversely, an additive approximation can reverse the inferred sign of a training-regime contrast. Distinguishing metric-induced effects from failures of logit additivity is essential when interpreting joint activation patches.}
 
 \keywords{Activation patching, mechanistic interpretability, convolutional neural networks, additivity, predefined filters}
 
@@ -80,6 +84,16 @@ Training minimizes cross-entropy plus a normalized first-layer penalty,
 \label{eq:regularization}
 \end{equation}
 where $W_{\mathrm{ref}}$ is the initialization bank and $e$ is the epoch. Retention keeps $\lambda=1$ throughout 200 epochs. Release keeps $\lambda=1$ through epoch 10, decreases it linearly to zero by epoch 80, and then trains without the penalty. Both regimes train the entire network with Adam, learning rate $0.003$, and batch size 128. Downstream parameters can therefore change along with the first layer.
+
+Figure~\ref{fig:filter-gallery} illustrates how the two schedules change the learned filters. This visual comparison establishes neither the causal role of a filter nor the additivity of its activation effects; those questions are assessed by the subsequent patching experiments.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig05_kernel_gallery_compact.pdf}
+\caption{Illustrative first-layer filters for \texttt{two\_concepts}/TinyCNN, renderer block 2000. The same 16 original templates are shown above the retention and release weights at epoch 200. Learned kernels are aligned to templates by maximum-sum one-to-one assignment of centered, unit-norm signed cosine similarity; columns follow assigned template index. Each displayed kernel is centered and normalized to unit spatial norm, with one symmetric color scale across all rows. This example visualizes filter structure, not the functional effect of activation patching. The complete conditions and epochs are shown in Supplementary Fig.~S5.}
+\label{fig:filter-gallery}
+\end{figure}
+
 
 Filter--template similarity is signed cosine similarity after centering each spatial kernel and normalizing it to unit norm. For normalized learned filter $\bar w_j$ and template $\bar t_m$, the nearest-template score is
 \begin{equation}
