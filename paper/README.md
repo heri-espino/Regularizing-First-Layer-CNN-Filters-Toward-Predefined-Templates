@@ -35,15 +35,18 @@ Complete numerical tables also remain versioned under `analysis/`. The main pape
 
 ## Main figures
 
-The compact manuscript uses five figures:
+The manuscript now uses six figures, including a compact filter gallery:
 
 1. `fig00_overview.pdf` — controlled renderer, predefined filters, and patch location;
 2. `fig09_additivity_curves.pdf` — direct observed/additive curves and residual energy;
 3. `fig06_main_results.pdf` — intervention-size and 16-architecture results;
 4. `fig07_anchor_specificity.pdf` — structured versus pixel-permuted filter bank;
 5. `fig08_additivity.pdf` — architecture-wide and spatial-control additive reconstruction.
+6. `fig05_kernel_gallery_compact.pdf` — retained versus released first-layer kernels in a frozen illustrative example (positioned before the later results figures in the text).
 
-The generated figures are rebuilt automatically by `paper/build.py`. Rebuild both PDFs before making the ZIP so the manuscript, supplement title, figure numbering, and bibliography all reflect the same source revision.
+The supplementary PDF additionally restores five legacy figures: learning curves, patching curves, matching trajectories, similarity matrices, and the complete kernel gallery. `paper/build_figures.py` recreates all five and the compact main-text gallery from archived CSV/NPZ inputs.
+
+Run `python paper/prepare_kernel_gallery.py` once if the lightweight `analysis/kernel_similarity/results/kernel_gallery.npz` has not yet been exported from the archived checkpoints. The figure generator itself never loads checkpoints. The generated files are rebuilt automatically by `paper/build.py` and `paper/build_supplement.py`. Rebuild both PDFs before making the ZIP so the manuscript, supplement title, figure numbering, and bibliography all reflect the same source revision.
 
 ## Build
 
@@ -72,7 +75,7 @@ The build uses:
 - the Springer Nature bibliography styles under `paper/sn-article-template/bst/`;
 - `../literature/references.bib`.
 
-The generated PDFs, ZIPs, and LaTeX intermediates are not intended to be committed. The manual-only GitHub Actions `paper-compile` workflow uploads all four reader-facing deliverables plus build logs. The exporter also checks the independently extracted archives; `--verify` regenerates all five figures and recomputes selected archived-table statistics.
+The generated PDFs, ZIPs, and LaTeX intermediates are not intended to be committed. The manual-only GitHub Actions `paper-compile` workflow uploads all four reader-facing deliverables plus build logs. The exporter also checks the independently extracted archives; `--verify` regenerates all eleven figure PDFs and recomputes selected archived-table statistics.
 
 The manuscript source ZIP retains its LaTeX-compatible folder structure. The separate reproducibility ZIP uses descriptive `data/`, `code/`, and `protocols/` paths, with an original-to-exported checksum manifest and a standalone `reproduce.py`. The PDFs are individual files suitable for the manuscript and supplement fields of a journal submission.
 
