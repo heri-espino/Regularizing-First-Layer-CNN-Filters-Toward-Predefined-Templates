@@ -33,6 +33,7 @@ FIGURE_SCRIPTS = (
     "build_main_results_figure.py",
     "build_anchor_specificity_figure.py",
     "build_additivity_figure.py",
+    "build_figures.py",
 )
 FIGURE_PDFS = (
     "fig00_overview.pdf",
@@ -40,6 +41,12 @@ FIGURE_PDFS = (
     "fig06_main_results.pdf",
     "fig07_anchor_specificity.pdf",
     "fig08_additivity.pdf",
+    "fig01_learning.pdf",
+    "fig02_patch_size.pdf",
+    "fig03_matching_trajectories.pdf",
+    "fig04_similarity_matrices.pdf",
+    "fig05_kernel_gallery.pdf",
+    "fig05_kernel_gallery_compact.pdf",
 )
 # These inputs allow manuscript_sources.zip to build from scratch, even
 # though the build.py script always regenerates manuscript figures.
@@ -52,6 +59,12 @@ FIGURE_DATA = (
     "analysis/anchor_specificity_001/random_channel_spatial_specificity.csv",
     "analysis/patching_additivity_001/architecture_analysis/B_summary.csv",
     "analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv",
+    # Frozen inputs to the five restored supplement figures and both galleries.
+    "results/retention_release_001/analysis/learning_curves.csv",
+    "analysis/exhaustive_robustness_001/full_budget_curves.csv",
+    "analysis/kernel_similarity/results/per_checkpoint.csv",
+    "analysis/kernel_similarity/results/similarity_matrices.npz",
+    "analysis/kernel_similarity/results/kernel_gallery.npz",
 )
 
 # This list is the former checked-in allowlist, preserved as the export
@@ -72,6 +85,8 @@ ALLOWLIST = [
     "paper/build_anchor_specificity_figure.py",
     "paper/build_additivity_curves_figure.py",
     "paper/build_additivity_figure.py",
+    "paper/build_figures.py",
+    "paper/prepare_kernel_gallery.py",
     "paper/plot_style.py",
     "paper/sn-article-template/sn-jnl.cls",
     "paper/sn-article-template/bst/sn-basic.bst",
@@ -114,6 +129,11 @@ ALLOWLIST = [
     "studies/cnn_checkpoint_audit/AUDIT_PROTOCOL.md",
 
     "analysis/retention_release_001/endpoints.csv",
+    "results/retention_release_001/analysis/learning_curves.csv",
+    "analysis/exhaustive_robustness_001/full_budget_curves.csv",
+    "analysis/kernel_similarity/results/per_checkpoint.csv",
+    "analysis/kernel_similarity/results/similarity_matrices.npz",
+    "analysis/kernel_similarity/results/kernel_gallery.npz",
     "analysis/exhaustive_robustness_001/REPORT.md",
     "analysis/exhaustive_robustness_001/model_endpoint_summary.csv",
     "analysis/exhaustive_robustness_001/model_endpoints.csv",
@@ -218,6 +238,8 @@ DATA_PREFIXES = {
     "analysis/architecture_robustness_001/": "data/architecture/",
     "analysis/architecture_posthoc_diagnostics_001/": "data/architecture_posthoc/",
     "analysis/anchor_specificity_001/": "data/spatial_specificity/",
+    "analysis/kernel_similarity/results/": "data/filter_structure/",
+    "results/retention_release_001/analysis/": "data/training_dynamics/",
 }
 PROTOCOL_NAMES = {
     "cnn_budget_confirmation": "intervention_budget.md",
@@ -264,6 +286,7 @@ def source_mapping() -> dict[str, str]:
         "paper/sn_supplement.tex": "paper/sn_supplement.tex",
         "paper/build.py": "paper/build.py",
         "paper/build_supplement.py": "paper/build_supplement.py",
+        "paper/prepare_kernel_gallery.py": "paper/prepare_kernel_gallery.py",
         "paper/plot_style.py": "paper/plot_style.py",
         "paper/sn-article-template/sn-jnl.cls": "paper/sn-article-template/sn-jnl.cls",
         "paper/sn-article-template/bst/sn-basic.bst": "paper/sn-article-template/bst/sn-basic.bst",
@@ -288,7 +311,7 @@ def repro_mapping() -> dict[str, str]:
         "LICENSE": "LICENSE",
     }
     for original in ALLOWLIST:
-        if original.startswith("analysis/"):
+        if original.startswith(("analysis/", "results/retention_release_001/analysis/")):
             for prefix, friendly in DATA_PREFIXES.items():
                 if original.startswith(prefix):
                     files[original] = friendly + original[len(prefix):]
