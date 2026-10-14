@@ -43,6 +43,20 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     if clean_first:
         clean(output)
 
+    from plot_style import apply_paper_style
+    from prepare_kernel_gallery import build as prepare_gallery
+    from build_figures import (
+        fig1_learning, fig2_patch_size, fig3_matching_trajectories,
+        fig4_similarity_matrices, make_galleries,
+    )
+    apply_paper_style()
+    prepare_gallery()
+    fig1_learning()
+    fig2_patch_size()
+    fig3_matching_trajectories()
+    fig4_similarity_matrices()
+    make_galleries()
+
     pdflatex = require_tool("pdflatex")
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
     output.parent.mkdir(parents=True, exist_ok=True)
