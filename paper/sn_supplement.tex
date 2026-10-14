@@ -14,6 +14,7 @@
 \title[Supplementary Information]{Supplementary Information for \emph{When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs}}
 
 \author*[1]{\fnm{Heriberto} \sur{Espino Montelongo}}
+\email{heriberto.espinomo@udlap.mx}
 \affil*[1]{\orgname{Universidad de las Am\'ericas Puebla}, \city{San Andr\'es Cholula}, \state{Puebla}, \country{Mexico}}
 
 \maketitle
@@ -61,6 +62,46 @@ Architecture & Depth & Width & Pool & Residual & BatchNorm & Parameters \\
 \end{table}
 
 The architecture constructor and training routines are provided in the separate reproducibility archive's architecture-comparison code group. The frozen design and parameter counts are recorded in its architecture data group. The archived code is supplied for inspection; a complete retraining run additionally requires the raw experiment store.
+
+\section{Training dynamics and filter structure}\label{supp:filter-dynamics}
+
+The supplementary plots document the behavior of the first-layer templates throughout training and the corresponding patching-score trajectories. Figures~\ref{fig:supp-learning} and \ref{fig:supp-matching} aggregate multiple saved runs across renderer blocks and report \emph{mean $\pm$ standard deviation}, not confidence intervals. Figure~\ref{fig:supp-patching} plots the \emph{archived interval bounds} for each aggregate patching estimate; these bands must not be interpreted as run-to-run standard deviations. Figures~\ref{fig:supp-matrices} and \ref{fig:supp-gallery} show only the specified illustrative example (\texttt{two\_concepts}, TinyCNN, renderer block 2000), at epochs 0 and 200. These visualizations do not independently establish functional importance.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig01_learning.pdf}
+\caption{Training dynamics for both tasks and two architectures. Curves show mean validation accuracy, validation cross-entropy, and filter--template alignment by training condition; shaded regions are $\pm1$ standard deviation across saved runs. The vertical line marks epoch 80, when the default release penalty reaches zero.}
+\label{fig:supp-learning}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig02_patch_size.pdf}
+\caption{First-layer selected-channel patching scores as a function of channel count $k$ for the original training schedules, both tasks, and two architectures. Shaded regions use the archived \texttt{ci\_low} and \texttt{ci\_high} interval bounds in the aggregate curve table (not run-to-run standard deviation). Retention and release designate the constant-penalty and annealed-penalty conditions.}
+\label{fig:supp-patching}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig03_matching_trajectories.pdf}
+\caption{Filter--template matching over training, aggregated across the saved runs of each task and architecture. Curves and shading show mean $\pm1$ standard deviation. Nearest-template similarity allows repeated use of a template; one-to-one similarity uses maximum-sum bipartite matching (Hungarian assignment), assigning each learned kernel to a distinct template. Matching difference is their signed difference. Each spatial kernel is centered and normalized to unit norm before computing signed cosine similarity.}
+\label{fig:supp-matching}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig04_similarity_matrices.pdf}
+\caption{Illustrative $16\times16$ signed cosine-similarity matrices for \texttt{two\_concepts}/TinyCNN, block 2000, at epochs 0 and 200. Rows index learned filters and columns index predefined templates. Black crosses denote the maximum-sum one-to-one (Hungarian) matches, not independent nearest neighbors. All panels use the same $[-1,1]$ color range.}
+\label{fig:supp-matrices}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig05_kernel_gallery.pdf}
+\caption{Complete filter gallery for the same \texttt{two\_concepts}/TinyCNN example, renderer block 2000. Original templates and all five original training conditions at epochs 0 and 200 are displayed. Kernels are ordered by the one-to-one maximum-similarity template assignment; each is spatially centered and normalized to unit norm. All rows share the same symmetric color limit, including the compact three-row comparison in the main article. The plot shows weight structure only, not patching effects.}
+\label{fig:supp-gallery}
+\end{figure}
+\clearpage
 
 \section{Intervention-size and metric robustness}\label{supp:intervention-size}
 
@@ -210,7 +251,7 @@ The sum of individual logit changes closely reproduces the spatial contrast aver
 
 \section{Reproducibility map}\label{supp:repro-map}
 
-Table~\ref{tab:supp-repro-map} identifies the five figure generators and their compact input groups in the separately supplied reproducibility archive. The archive's \texttt{manifest.json} provides a SHA-256 checksum and a reversible original-to-exported path mapping for each file. Its \texttt{reproduce.py} rebuilds all five figures from the provided tables without requiring the original repository.
+Table~\ref{tab:supp-repro-map} identifies the five principal figure generators and their compact input groups in the separately supplied reproducibility archive. The archive's \texttt{manifest.json} provides a SHA-256 checksum and a reversible original-to-exported path mapping for each file. Its \texttt{reproduce.py} rebuilds all five figures from the provided tables without requiring the original repository.
 
 \begin{table}[h]
 \caption{Manuscript figures and compact reproducibility input groups. Each figure
