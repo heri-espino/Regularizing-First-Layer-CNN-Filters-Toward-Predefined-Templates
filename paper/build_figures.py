@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
 """Regenerate the five figures used by the manuscript from saved artifacts.
 
-The script is presentation-only: it reads immutable/saved analysis outputs and
-checkpoints, and does not train models or change any statistical result.
+The script is presentation-only: it reads immutable archived analysis outputs
+and a small pre-exported kernel NPZ; it never loads PyTorch checkpoints.
 
 Usage from the repository root::
 
     python paper/build_figures.py
 
-Requirements are provided by ``pyproject.toml``; PyTorch is needed only for the
-kernel gallery (Figure 5).
+Requirements are provided by ``pyproject.toml``; PyTorch is needed only for the one-time preparation of the kernel NPZ,
+not for figure regeneration.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+import argparse
 
 import matplotlib
 matplotlib.use("Agg")
@@ -47,6 +48,24 @@ STAGE_E_PROFILES = (
     "release_default",
     "release_late",
 )
+GALLERY_FILE = ROOT / "analysis/kernel_similarity/results/kernel_gallery.npz"
+MATRIX_FILE = ROOT / "analysis/kernel_similarity/results/similarity_matrices.npz"
+EXAMPLE = ("two_concepts", "TinyCNN", 2000)
+EPOCHS = (0, 200)
+
+
+def display_label(condition: str) -> str:
+    """Keep the intended training-regime names explicit in figure legends."""
+    return {
+        "template_retention_1": "Retention",
+        "template_release": "Release",
+        "retention_1": "Retention",
+        "release_default": "Release",
+        "retention_0p1": r"Retention ($\\lambda=0.1$)",
+        "release_early": "Release (early)",
+        "release_late": "Release (late)",
+    }.get(condition, LABELS[condition])
+
 
 
 def pretty_task(task: str) -> str:
@@ -98,7 +117,7 @@ def fig1_learning() -> Path:
                     linestyle=LINESTYLES[condition],
                     linewidth=width,
                     alpha=alpha,
-                    label=LABELS[condition],
+                    label=display_label(condition),
                 )
                 ax.fill_between(
                     mean.index,
@@ -152,7 +171,7 @@ def fig2_patch_size() -> Path:
                     linestyle=LINESTYLES[profile],
                     linewidth=1.8 if primary else 1.15,
                     alpha=1.0 if primary else 0.88,
-                    label=LABELS[profile],
+                    label=display_label(profile),
                 )
                 ax.fill_between(
                     q.k,
@@ -189,9 +208,9 @@ def fig2_patch_size() -> Path:
 def fig3_matching_trajectories() -> Path:
     data = pd.read_csv(ROOT / "analysis/kernel_similarity/results/per_checkpoint.csv")
     metrics = (
-        ("nearest_cosine", "Nearest-template cosine similarity"),
-        ("assignment_cosine", "One-to-one cosine similarity"),
-        ("matching_gap", "Difference"),
+        ("nearest_cosine", "Nearest-template similarity"),
+        ("assignment_cosine", "One-to-one similarity"),
+        ("matching_gap", "Matching difference"),
     )
 
     fig, axes = plt.subplots(3, 4, figsize=(7.15, 5.15), sharex=True, sharey="row")
@@ -209,7 +228,7 @@ def fig3_matching_trajectories() -> Path:
                     linestyle=LINESTYLES[condition],
                     linewidth=1.75 if primary else 1.1,
                     alpha=1.0 if primary else 0.85,
-                    label=LABELS[condition],
+                    label=display_label(condition),
                 )
                 ax.fill_between(
                     g.index,
@@ -247,12 +266,12 @@ def fig3_matching_trajectories() -> Path:
 
 def fig4_similarity_matrices() -> Path:
     table = pd.read_csv(ROOT / "analysis/kernel_similarity/results/per_checkpoint.csv")
-    bundle = np.load(ROOT / "analysis/kernel_similarity/results/similarity_matrices.npz")
+    bundle = np.load(MATRIX_FILE, allow_pickle=False)
     matrices = bundle["cosine"]
     if len(table) != len(matrices):
         raise ValueError("per_checkpoint.csv and similarity_matrices.npz are misaligned")
 
-    task, arch, block = "two_concepts", "TinyCNN", 2000
+    task, arch, block = EXAMPLE
     fig, axes = plt.subplots(2, 5, figsize=(7.15, 3.25), sharex=True, sharey=True)
     image = None
     for j, condition in enumerate(STAGE_B_CONDITIONS):
@@ -280,7 +299,7 @@ def fig4_similarity_matrices() -> Path:
             )
             ax.scatter(cols, rows, s=9, c="#111111", marker="x", linewidths=0.65)
             if i == 0:
-                ax.set_title(LABELS[condition], pad=3)
+                ax.set_title(display_label(condition), pad=3)
             if j == 0:
                 ax.set_ylabel(f"Epoch {epoch}\nChannel index")
             if i == 1:
@@ -289,59 +308,61 @@ def fig4_similarity_matrices() -> Path:
             ax.set_yticks([0, 5, 10, 15])
             ax.grid(False)
 
-    cbar = fig.colorbar(image, ax=axes.ravel().tolist(), fraction=0.022, pad=0.025)
+    fig.subplots_adjust(left=0.075, right=0.898, top=0.90, bottom=0.14, wspace=0.16, hspace=0.18)
+    # Dedicated colorbar axis, outside the 2x5 matrix grid.
+    cax = fig.add_axes([0.923, 0.19, 0.017, 0.64])
+    cbar = fig.colorbar(image, cax=cax)
     cbar.set_label("Signed cosine similarity")
     cbar.set_ticks([-1, -0.5, 0, 0.5, 1])
-    fig.subplots_adjust(left=0.075, right=0.91, top=0.90, bottom=0.14, wspace=0.16, hspace=0.18)
     return save_pdf(fig, OUT / "fig04_similarity_matrices.pdf")
 
 
-def _load_checkpoint_weight(path: Path) -> np.ndarray:
-    try:
-        import torch
-    except ImportError as exc:  # pragma: no cover - environment-dependent guidance
-        raise SystemExit(
-            "Figure 5 requires PyTorch. Install the experiment extra with "
-            "`python -m pip install -e \".[experiments]\"`."
-        ) from exc
-    saved = torch.load(path, map_location="cpu", weights_only=True)
-    return saved["model"]["conv.weight"].detach().cpu().numpy()
+def _load_gallery() -> tuple[np.ndarray, np.ndarray]:
+    """Return the templates and original, unpermuted checkpoint weight tensors."""
+    if not GALLERY_FILE.is_file():
+        raise FileNotFoundError(
+            f"Missing compact gallery source: {GALLERY_FILE}. "
+            "Run 'python paper/prepare_kernel_gallery.py' once on a checkout "
+            "containing the historical saved checkpoints."
+        )
+    with np.load(GALLERY_FILE, allow_pickle=False) as bundle:
+        required = {"templates", "kernels", "conditions", "epochs", "task", "architecture", "block"}
+        if not required.issubset(bundle.files):
+            raise ValueError(f"Gallery missing fields: {sorted(required - set(bundle.files))}")
+        conditions = tuple(str(v) for v in bundle["conditions"])
+        epochs = tuple(int(v) for v in bundle["epochs"])
+        example = (str(bundle["task"]), str(bundle["architecture"]), int(bundle["block"]))
+        if conditions != STAGE_B_CONDITIONS or epochs != EPOCHS or example != EXAMPLE:
+            raise ValueError(f"Unexpected gallery provenance: {example}, {conditions}, {epochs}")
+        templates = np.asarray(bundle["templates"])
+        kernels = np.asarray(bundle["kernels"])
+    if templates.shape != (16, 9, 9) or kernels.shape != (5, 2, 16, 9, 9):
+        raise ValueError(f"Unexpected kernel gallery dimensions: {templates.shape}, {kernels.shape}")
+    if not np.isfinite(templates).all() or not np.isfinite(kernels).all():
+        raise ValueError("Non-finite gallery kernels")
+    return templates, kernels
 
 
-def fig5_kernel_gallery() -> Path:
-    bundle = np.load(ROOT / "analysis/kernel_similarity/results/similarity_matrices.npz")
-    templates = bundle["templates"]
-    task, arch, block = "two_concepts", "TinyCNN", 2000
-
-    rows: list[tuple[str, np.ndarray]] = [("Original templates", templates)]
-    for condition in STAGE_B_CONDITIONS:
-        for epoch in (0, 200):
-            checkpoint = (
-                ROOT
-                / "results/retention_release_001/runs"
-                / task
-                / arch
-                / f"block{block:04d}"
-                / condition
-                / f"epoch_{epoch:04d}.pt"
-            )
-            weights = _load_checkpoint_weight(checkpoint)
+def _gallery_rows(templates: np.ndarray, kernels: np.ndarray):
+    """Preserve centered normalization, Hungarian assignment, and template order."""
+    rows = [("Original templates", templates)]
+    for i, condition in enumerate(STAGE_B_CONDITIONS):
+        for j, epoch in enumerate(EPOCHS):
+            weights = kernels[i, j]
             cols = assignment_columns(weights, templates)
-            rows.append((f"{LABELS[condition]} · ep. {epoch}", weights[np.argsort(cols)]))
+            rows.append((f"{display_label(condition)} · ep. {epoch}", weights[np.argsort(cols)]))
+    return rows
 
-    images = [normalized(w).reshape(16, 9, 9) for _, w in rows]
-    limit = max(float(np.abs(x).max()) for x in images)
-    fig, axes = plt.subplots(len(rows), 16, figsize=(7.15, 4.65))
+
+def _draw_gallery(rows, *, width: float, height: float, path: Path, limit: float) -> Path:
+    images = [normalized(weights).reshape(16, 9, 9) for _, weights in rows]
+    fig, axes = plt.subplots(len(rows), 16, figsize=(width, height), squeeze=False)
     for i, ((label, _), kernels) in enumerate(zip(rows, images)):
-        for j, image in enumerate(kernels):
+        for j, kernel in enumerate(kernels):
             ax = axes[i, j]
             ax.imshow(
-                image,
-                cmap="RdBu_r",
-                vmin=-limit,
-                vmax=limit,
-                interpolation="nearest",
-                rasterized=True,
+                kernel, cmap="RdBu_r", vmin=-limit, vmax=limit,
+                interpolation="nearest", rasterized=True,
             )
             ax.set_xticks([])
             ax.set_yticks([])
@@ -350,22 +371,56 @@ def fig5_kernel_gallery() -> Path:
                 spine.set_visible(False)
             if i == 0:
                 ax.set_title(f"T{j}", fontsize=6.2, pad=2)
-        axes[i, 0].set_ylabel(label, rotation=0, ha="right", va="center", fontsize=6.6, labelpad=8)
+        axes[i, 0].set_ylabel(
+            label, rotation=0, ha="right", va="center",
+            fontsize=6.4, labelpad=8,
+        )
+    fig.subplots_adjust(
+        left=0.175, right=0.997, top=0.94 if len(rows) == 3 else 0.96,
+        bottom=0.03 if len(rows) == 3 else 0.01,
+        wspace=0.025, hspace=0.075,
+    )
+    return save_pdf(fig, path)
 
-    fig.subplots_adjust(left=0.175, right=0.997, top=0.96, bottom=0.01, wspace=0.025, hspace=0.075)
-    return save_pdf(fig, OUT / "fig05_kernel_gallery.pdf")
+
+def make_galleries() -> tuple[Path, Path]:
+    templates, kernels = _load_gallery()
+    rows = _gallery_rows(templates, kernels)
+    # One symmetric color scale across the complete AND compact versions.
+    limit = max(float(np.max(np.abs(normalized(w)))) for _, w in rows)
+    complete = _draw_gallery(
+        rows, width=7.15, height=4.65,
+        path=OUT / "fig05_kernel_gallery.pdf", limit=limit,
+    )
+    retention = next(w for label, w in rows if label == "Retention · ep. 200")
+    release = next(w for label, w in rows if label == "Release · ep. 200")
+    compact = _draw_gallery(
+        [rows[0], ("Retention · ep. 200", retention), ("Release · ep. 200", release)],
+        width=7.15, height=1.65,
+        path=OUT / "fig05_kernel_gallery_compact.pdf", limit=limit,
+    )
+    return complete, compact
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--gallery-only", action="store_true",
+        help="Generate only complete and compact galleries from the checkpoint-free NPZ",
+    )
+    args = parser.parse_args()
     apply_paper_style()
     OUT.mkdir(parents=True, exist_ok=True)
-    outputs = [
-        fig1_learning(),
-        fig2_patch_size(),
-        fig3_matching_trajectories(),
-        fig4_similarity_matrices(),
-        fig5_kernel_gallery(),
-    ]
+    if args.gallery_only:
+        outputs = list(make_galleries())
+    else:
+        outputs = [
+            fig1_learning(),
+            fig2_patch_size(),
+            fig3_matching_trajectories(),
+            fig4_similarity_matrices(),
+            *make_galleries(),
+        ]
     plt.close("all")
     for path in outputs:
         print(path.relative_to(ROOT))
