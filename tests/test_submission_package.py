@@ -36,6 +36,10 @@ class SubmissionPackageTest(unittest.TestCase):
         for path in (
             PROJECT / "paper/build_submission_package.py",
             PROJECT / "paper/reproducibility/reproduce.py",
+            PROJECT / "paper/build_figures.py",
+            PROJECT / "paper/prepare_kernel_gallery.py",
+            PROJECT / "paper/build.py",
+            PROJECT / "paper/build_supplement.py",
         ):
             ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
@@ -50,6 +54,25 @@ class SubmissionPackageTest(unittest.TestCase):
         self.assertIn("code/figures/build_main_results_figure.py", exported)
         self.assertTrue(all(not p.startswith("analysis/") for p in exported))
         self.assertTrue(all(".." not in Path(p).parts for p in exported))
+
+    def test_legacy_gallery_and_supplement_are_fully_packaged(self):
+        builder = self.packager
+        repro = builder.repro_mapping()
+        source = builder.source_mapping()
+        self.assertEqual(len(builder.FIGURE_PDFS), 11)
+        expected = {
+            "results/retention_release_001/analysis/learning_curves.csv": "data/training_dynamics/learning_curves.csv",
+            "analysis/exhaustive_robustness_001/full_budget_curves.csv": "data/robustness/full_budget_curves.csv",
+            "analysis/kernel_similarity/results/per_checkpoint.csv": "data/filter_structure/per_checkpoint.csv",
+            "analysis/kernel_similarity/results/similarity_matrices.npz": "data/filter_structure/similarity_matrices.npz",
+            "analysis/kernel_similarity/results/kernel_gallery.npz": "data/filter_structure/kernel_gallery.npz",
+            "paper/build_figures.py": "code/figures/build_figures.py",
+        }
+        for original, expected_export in expected.items():
+            self.assertEqual(repro[original], expected_export)
+            self.assertIn(original, source)
+        for pdf in ("fig05_kernel_gallery.pdf", "fig05_kernel_gallery_compact.pdf"):
+            self.assertIn(pdf, builder.FIGURE_PDFS)
 
     def test_manuscript_source_zip_contains_all_figure_inputs(self):
         mapping = self.packager.source_mapping()
