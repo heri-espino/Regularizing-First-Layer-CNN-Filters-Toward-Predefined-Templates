@@ -34,6 +34,7 @@ FIGURES = tuple(
         "fig07_anchor_specificity.pdf",
         "fig08_additivity.pdf",
         "fig09_additivity_curves.pdf",
+        "fig05_kernel_gallery_compact.pdf",
     )
 )
 
@@ -85,6 +86,13 @@ def build(output: Path, *, clean_first: bool = False) -> Path:
     build_anchor_specificity_figure()
     build_additivity_figure()
     build_additivity_curves_figure()
+
+    # The three-row visual is an illustrative subset of the historical gallery.
+    # Its NPZ is exported once from frozen checkpoints if not already present.
+    from prepare_kernel_gallery import build as prepare_gallery
+    from build_figures import make_galleries
+    prepare_gallery()
+    make_galleries()
 
     require_figures()
     pdflatex = require_tool("pdflatex")
