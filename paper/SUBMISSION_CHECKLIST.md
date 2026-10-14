@@ -7,7 +7,7 @@
 - Keep the Springer Nature template files under `paper/sn-article-template/` unmodified.
 - Confirm that the paper compiles without undefined citations or references.
 - Check that the abstract remains concise and contains no citations or equations.
-- Check all five figures at normal reading size, especially the Figure 2 residual legend and the internal metric labels in Figure 5.
+- Check all six main figures at reading size, especially the direct-additivity residual legend, the compact matched-filter gallery, and all five restored supplementary figures.
 - Confirm that Figure 3 labels the treatment difference **Release − retention**, matching the text.
 - Confirm the main PDF, supplement, and citation metadata use **When Do Activation-Patching Effects Add Up? Evidence from Controlled CNNs**.
 - Check narrative citations for duplicated author names; use `\citet` for narrative citations and `\citep` for parenthetical citations.
@@ -51,16 +51,18 @@ Raw checkpoints and tens of thousands of per-model evaluator JSON files are not 
 
 Remove local absolute paths, temporary machine-specific files, Git history, and unrelated development notes from the supplementary archive.
 
-Create all four deliverables with `python paper/build_submission_package.py --verify`. This runs a clean extraction, checksum verification, all five figure generators, and selected numeric checks. Inspect:
+Create all four deliverables with `python paper/build_submission_package.py --verify`. This runs a clean extraction, checksum verification, all eleven generated figure PDFs, and selected numeric checks. Inspect:
 
 - `paper/dist/manuscript.pdf` — main manuscript upload;
 - `paper/dist/supplementary_information.pdf` — supplementary PDF upload;
 - `paper/dist/manuscript_sources.zip` — independently rebuildable LaTeX sources;
 - `paper/dist/activation_patching_reproducibility.zip` — reviewer-facing reproduction material.
 
-Confirm that the reproduction ZIP's README links resolve after extraction; `reproduce.py --all` regenerates five figure PDFs and produces a verification report. Its `manifest.json` records original-to-exported paths, SHA-256 checksums, and source commit when available. No raw model checkpoints or per-model JSONs are included. The code-only experiment scripts are archived for inspection, not advertised as end-to-end train/evaluate commands.
+Confirm that the reproduction ZIP's README links resolve after extraction; `reproduce.py --all` regenerates eleven figure PDFs and produces a verification report. Its `manifest.json` records original-to-exported paths, SHA-256 checksums, and source commit when available. No raw model checkpoints or per-model JSONs are included. The code-only experiment scripts are archived for inspection, not advertised as end-to-end train/evaluate commands.
 
 Submit the files in the appropriate publisher fields; do not upload a single archive that mixes manuscript PDF, supplementary PDF, and code. Remove the obsolete `paper/dist/sn_submission_package.zip` from local dist if one exists: it is not produced by the new exporter.
+
+Confirm the abstract uses **Purpose, Methods, Results, Conclusion** and contains 150–250 words; check the corresponding-author academic email is active. The legacy kernel gallery must be exported from the specified saved checkpoints before packaging: `python paper/prepare_kernel_gallery.py`. If checkpoints are missing, do not substitute synthetic weight tensors or package a non-reproducible gallery.
 
 ## Final visual pass
 
