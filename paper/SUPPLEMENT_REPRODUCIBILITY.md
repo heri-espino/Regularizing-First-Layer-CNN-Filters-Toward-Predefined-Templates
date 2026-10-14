@@ -26,11 +26,11 @@ The reproducibility ZIP excludes raw training checkpoints, per-model evaluator J
 | Main figure | Generator | Principal data/source |
 |---|---|---|
 | Fig. 1 — experimental system | paper/build_overview_figure.py | studies/cnn_release_experiment/core.py |
-| Fig. 2 — direct additivity curves | paper/build_additivity_curves_figure.py | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv |
-| Fig. 3 — intervention size + architectures | paper/build_main_results_figure.py | analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv; analysis/architecture_robustness_001/architecture_B_summary.csv |
-| Fig. 4 — spatial specificity | paper/build_anchor_specificity_figure.py | analysis/anchor_specificity_001/secondary_anchor_contrasts.csv; primary_spatial_specificity.csv; random_channel_spatial_specificity.csv |
-| Fig. 5 — observed vs additive summary | paper/build_additivity_figure.py | analysis/patching_additivity_001/architecture_analysis/B_summary.csv; analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv |
-| Compact gallery (number determined automatically by LaTeX) | paper/build_figures.py | analysis/kernel_similarity/results/kernel_gallery.npz |
+| Fig. 3 — direct additivity curves | paper/build_additivity_curves_figure.py | analysis/patching_additivity_001/architecture_analysis/curve_summary.csv |
+| Fig. 4 — intervention size + architectures | paper/build_main_results_figure.py | analysis/metric_sensitivity_001/stage_d_treatment_contrasts.csv; analysis/architecture_robustness_001/architecture_B_summary.csv |
+| Fig. 5 — spatial specificity | paper/build_anchor_specificity_figure.py | analysis/anchor_specificity_001/secondary_anchor_contrasts.csv; primary_spatial_specificity.csv; random_channel_spatial_specificity.csv |
+| Fig. 6 — observed vs additive summary | paper/build_additivity_figure.py | analysis/patching_additivity_001/architecture_analysis/B_summary.csv; analysis/patching_additivity_001/anchor_analysis/structured_vs_pixel_permuted_B_averaged_architectures.csv |
+| Fig. 2 — compact filter gallery | paper/build_figures.py | analysis/kernel_similarity/results/kernel_gallery.npz |
 
 ## Restored supplementary-figure provenance
 
