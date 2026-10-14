@@ -61,7 +61,7 @@ def display_label(condition: str) -> str:
         "template_release": "Release",
         "retention_1": "Retention",
         "release_default": "Release",
-        "retention_0p1": r"Retention ($\\lambda=0.1$)",
+        "retention_0p1": r"Retention ($\lambda=0.1$)",
         "release_early": "Release (early)",
         "release_late": "Release (late)",
     }.get(condition, LABELS[condition])
