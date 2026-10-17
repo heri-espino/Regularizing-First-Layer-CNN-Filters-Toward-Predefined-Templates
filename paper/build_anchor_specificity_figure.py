@@ -85,7 +85,12 @@ def draw_architecture_panel(ax, rows: list[dict[str, str]], title: str, color: s
     ax.set_title(title, pad=3)
     ax.set_yticks(y)
     ax.set_yticklabels([ARCH_LABELS[a] for a in ARCH_ORDER] if show_labels else [])
-    ax.grid(axis="y", visible=False)
+    ax.grid(True, axis="both", which="major")
+    ax.text(
+        0.0, 0.97, "zero difference",
+        transform=ax.get_xaxis_transform(), ha="right", va="top",
+        rotation=90, fontsize=5.4, color="#555555",
+    )
 
 
 def draw_equivalence_panel(ax, primary_rows, random_rows, metric: str, title: str, color: str) -> None:
@@ -124,7 +129,7 @@ def draw_equivalence_panel(ax, primary_rows, random_rows, metric: str, title: st
     ax.set_title(title, pad=3)
     ax.set_xlabel("Architecture-averaged difference")
     ax.set_ylim(-0.6, 1.6)
-    ax.grid(axis="y", visible=False)
+    ax.grid(True, axis="both", which="major")
 
 
 def build_figure() -> Path:

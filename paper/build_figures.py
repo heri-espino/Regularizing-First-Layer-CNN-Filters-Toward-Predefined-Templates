@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate the five figures used by the manuscript from saved artifacts.
+"""Regenerate the restored figure set used by the manuscript and supplement.
 
 The script is presentation-only: it reads immutable archived analysis outputs
 and a small pre-exported kernel NPZ; it never loads PyTorch checkpoints.
@@ -146,7 +146,7 @@ def fig1_learning() -> Path:
         labels,
         loc="lower center",
         bbox_to_anchor=(0.5, -0.005),
-        ncol=5,
+        ncol=3,
         columnspacing=1.1,
         handlelength=2.2,
     )
@@ -240,6 +240,10 @@ def fig3_matching_trajectories() -> Path:
                     alpha=0.07,
                     linewidth=0,
                 )
+            ax.axvline(
+                80, color="#7A7A7A", linestyle=(0, (2, 2)),
+                linewidth=0.7, zorder=0,
+            )
             if j == 0:
                 ax.set_ylabel(ylabel)
             if i == 0:
@@ -260,7 +264,7 @@ def fig3_matching_trajectories() -> Path:
         labels,
         loc="lower center",
         bbox_to_anchor=(0.5, -0.005),
-        ncol=5,
+        ncol=3,
         columnspacing=1.1,
         handlelength=2.2,
     )

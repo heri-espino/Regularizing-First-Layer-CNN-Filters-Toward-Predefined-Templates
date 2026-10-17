@@ -138,6 +138,30 @@ class SubmissionPackageTest(unittest.TestCase):
         finally:
             builder.ROOT = old_root
 
+    def test_submission_text_matches_eleven_figure_archive(self):
+        supplement = (PROJECT / "paper/sn_supplement.tex").read_text(encoding="utf-8")
+        readme = (PROJECT / "README.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("rebuilds all five figures", supplement)
+        self.assertNotIn("regeneration of the five manuscript figures", supplement)
+        self.assertIn("all eleven figure PDFs", supplement)
+        self.assertIn("all eleven generated figure PDFs", readme)
+
+    def test_epoch_80_marks_zero_penalty_in_supplementary_figures(self):
+        source = (PROJECT / "paper/build_figures.py").read_text(encoding="utf-8")
+
+        self.assertNotIn("Annealing begins (epoch 80)", source)
+        self.assertEqual(source.count("Penalty reaches zero (epoch 80)"), 2)
+
+    def test_filter_gallery_is_fixed_after_penalty_explanation(self):
+        manuscript = (PROJECT / "paper/main.tex").read_text(encoding="utf-8")
+        explanation = manuscript.index("Downstream parameters can therefore change")
+        gallery = manuscript.index("\\includegraphics[width=0.98\\textwidth]{figures/fig05_kernel_gallery_compact.pdf}")
+
+        self.assertLess(explanation, gallery)
+        self.assertIn("\\usepackage{float}", manuscript)
+        self.assertIn("\\begin{figure}[H]", manuscript[explanation:gallery])
+
 
 if __name__ == "__main__":
     unittest.main()

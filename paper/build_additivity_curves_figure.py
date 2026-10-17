@@ -19,7 +19,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from plot_style import apply_paper_style, save_pdf
+from plot_style import ROLE_STYLES, apply_paper_style, save_pdf
 
 PAPER = Path(__file__).resolve().parent
 ROOT = PAPER.parent
@@ -94,24 +94,30 @@ def draw_delta_panel(
     architecture: str,
     title: str,
 ) -> None:
-    for quantity, label, marker in (
-        ("observed_centered_logit_fidelity", "Observed", "o"),
-        ("additive_centered_logit_fidelity", "Additive", "s"),
+    for quantity, label, role in (
+        ("observed_centered_logit_fidelity", "Observed", "observed"),
+        ("additive_centered_logit_fidelity", "Additive reconstruction", "additive"),
     ):
+        style = ROLE_STYLES[role]
         ks, delta = treatment_difference(rows, architecture, quantity)
         ax.plot(
             ks,
             delta,
-            marker=marker,
-            markersize=2.8,
-            linewidth=1.15,
+            color=style["color"],
+            linestyle=style["linestyle"],
+            marker=style["marker"],
+            markerfacecolor="white" if role == "additive" else style["color"],
+            markeredgewidth=0.8,
+            markersize=3.2 if role == "observed" else 4.8,
+            linewidth=1.5 if role == "observed" else 1.3,
             label=label,
+            zorder=4 if role == "observed" else 3,
         )
-    ax.axhline(0.0, linewidth=0.7, color="#666666")
+    ax.axhline(0.0, linewidth=0.8, color="#555555", zorder=1)
     ax.set_title(title, pad=3)
     ax.set_xticks([0, 4, 8, 12, 16])
     ax.set_xlabel("Patched channels, $k$")
-    ax.grid(axis="x", visible=False)
+    ax.grid(True, axis="both", which="major")
 
 
 def draw_residual_panel(ax, rows: list[dict[str, str]]) -> None:
@@ -147,7 +153,7 @@ def draw_residual_panel(ax, rows: list[dict[str, str]]) -> None:
     ax.set_xlabel("Patched channels, $k$")
     ax.set_ylabel(r"$\rho(S)$")
     ax.set_xticks([2, 4, 8, 12, 16])
-    ax.grid(axis="x", visible=False)
+    ax.grid(True, axis="both", which="major")
     ax.legend(
         loc="upper center",
         bbox_to_anchor=(0.5, -0.24),
@@ -182,7 +188,17 @@ def build_figure() -> Path:
         "Release $-$ retention\ncentered-logit fidelity"
     )
     axes[1].set_ylabel("")
-    axes[0].legend(loc="lower right", fontsize=6.3, frameon=False)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        loc="lower center",
+        bbox_to_anchor=(0.34, 0.035),
+        ncol=2,
+        fontsize=6.6,
+        columnspacing=1.4,
+        handlelength=2.5,
+    )
 
     draw_residual_panel(axes[2], rows)
 

@@ -62,6 +62,16 @@ ARCH_ORDER = (
     "bn4_w16_gap",
 )
 
+ARCH_GROUPS = (
+    ("Tiny", ("tiny_gmp", "tiny_gap")),
+    ("Plain · width 16", ("plain2_w16_gmp", "plain2_w16_gap", "plain4_w16_gmp", "plain4_w16_gap")),
+    ("Plain · width 64", ("plain2_w64_gmp", "plain2_w64_gap", "plain4_w64_gmp", "plain4_w64_gap")),
+    ("Residual", ("res4_w16_gmp", "res4_w16_gap")),
+    ("BatchNorm", ("bn2_w16_gmp", "bn2_w16_gap", "bn4_w16_gmp", "bn4_w16_gap")),
+)
+
+ARCH_GROUP_GAP = 0.75
+
 ARCH_LABELS = {
     "tiny_gmp": "Tiny · GMP",
     "tiny_gap": "Tiny · GAP",
@@ -114,6 +124,20 @@ def architecture_rows(rows: list[dict[str, str]], metric: str) -> dict[str, dict
     return selected
 
 
+def architecture_positions() -> tuple[np.ndarray, list[tuple[str, float, float]]]:
+    """Return row positions and group extents, with breathing room between families."""
+    positions: list[float] = []
+    groups: list[tuple[str, float, float]] = []
+    cursor = 0.0
+    for name, architectures in ARCH_GROUPS:
+        group_positions = [-(cursor + offset) for offset in range(len(architectures))]
+        positions.extend(group_positions)
+        cursor += len(architectures)
+        groups.append((name, group_positions[-1] - 0.45, group_positions[0] + 0.45))
+        cursor += ARCH_GROUP_GAP
+    return np.array(positions), groups
+
+
 def draw_top_metric(ax, rows, title: str, color: str) -> None:
     x = np.array([int(row["k"]) for row in rows], dtype=float)
     mean = np.array([float(row["mean"]) for row in rows])
@@ -121,7 +145,7 @@ def draw_top_metric(ax, rows, title: str, color: str) -> None:
     high = np.array([float(row["ci_high"]) for row in rows])
     yerr = np.vstack([mean - low, high - mean])
 
-    ax.axhline(0, color="#555555", linewidth=0.7, zorder=0)
+    ax.axhline(0, color="#555555", linewidth=0.8, zorder=0)
     ax.errorbar(
         x,
         mean,
@@ -136,17 +160,18 @@ def draw_top_metric(ax, rows, title: str, color: str) -> None:
     )
     ax.set_title(title, pad=3)
     ax.set_xticks([1, 2, 4, 8])
-    ax.grid(axis="x", visible=False)
+    ax.grid(True, axis="y", which="major")
+    ax.grid(False, axis="x")
 
 
 def draw_forest(ax, rows_by_arch, title: str, color: str, show_labels: bool) -> None:
-    y = np.arange(len(ARCH_ORDER))[::-1]
+    y, groups = architecture_positions()
     mean = np.array([float(rows_by_arch[a]["mean"]) for a in ARCH_ORDER])
     low = np.array([float(rows_by_arch[a]["ci_low"]) for a in ARCH_ORDER])
     high = np.array([float(rows_by_arch[a]["ci_high"]) for a in ARCH_ORDER])
     xerr = np.vstack([mean - low, high - mean])
 
-    ax.axvline(0, color="#555555", linewidth=0.7, zorder=0)
+    ax.axvline(0, color="#555555", linewidth=0.8, zorder=0)
     ax.errorbar(
         mean,
         y,
@@ -162,18 +187,51 @@ def draw_forest(ax, rows_by_arch, title: str, color: str, show_labels: bool) -> 
     ax.set_title(title, pad=3)
     ax.set_yticks(y)
     if show_labels:
-        ax.set_yticklabels([ARCH_LABELS[a] for a in ARCH_ORDER], fontsize=6.2)
+        ax.set_yticklabels([])
+        label_transform = ax.get_yaxis_transform()
+        for row_y, architecture in zip(y, ARCH_ORDER):
+            architecture_label, pooling_label = ARCH_LABELS[architecture].rsplit(" · ", 1)
+            ax.text(
+                -0.105,
+                row_y,
+                architecture_label,
+                transform=label_transform,
+                ha="right",
+                va="center",
+                fontsize=5.9,
+                color="#333333",
+                clip_on=False,
+                gid="architecture-label",
+            )
+            ax.text(
+                -0.012,
+                row_y,
+                pooling_label,
+                transform=label_transform,
+                ha="right",
+                va="center",
+                fontsize=5.9,
+                color="#333333",
+                clip_on=False,
+                gid="pooling-label",
+            )
     else:
         ax.set_yticklabels([])
-    ax.set_ylim(-0.8, len(ARCH_ORDER) - 0.2)
+    ax.set_ylim(y[-1] - 0.7, y[0] + 0.7)
     ax.set_xlabel(r"Intervention-size contrast, $B$")
-    ax.grid(axis="y", visible=False)
+    ax.grid(True, axis="x", which="major")
+    ax.grid(False, axis="y")
+    ax.tick_params(axis="y", length=0)
 
-    # Visual separators preserve the prespecified architecture-family ordering
-    # without assigning inferential meaning to the groups.
-    for after in (2, 6, 10, 12, 14):
-        ypos = len(ARCH_ORDER) - after - 0.5
-        ax.axhline(ypos, color="#D9D9D9", linewidth=0.5, zorder=0)
+    for index, (_, low_y, high_y) in enumerate(groups):
+        if index % 2 == 0:
+            ax.axhspan(low_y, high_y, color="#F2F4F6", zorder=-2)
+
+    ax.text(
+        0.0, 0.97, "zero difference",
+        transform=ax.get_xaxis_transform(), ha="right", va="top",
+        rotation=90, fontsize=5.4, color="#555555",
+    )
 
 
 def build_figure() -> Path:

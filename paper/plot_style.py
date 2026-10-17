@@ -53,6 +53,23 @@ LINESTYLES = {
     "release_late": (0, (1, 1.5)),
 }
 
+# A visual role keeps the same encoding wherever observed joint interventions
+# are compared with a reconstruction from individual interventions.
+ROLE_STYLES = {
+    "observed": {
+        "color": "#0072B2",
+        "linestyle": "-",
+        "marker": "o",
+        "label": "Observed joint patch",
+    },
+    "additive": {
+        "color": "#D55E00",
+        "linestyle": "--",
+        "marker": "s",
+        "label": "Additive reconstruction",
+    },
+}
+
 
 def _register_latin_modern() -> bool:
     """Register the same OpenType text face that the TMLR style loads."""
@@ -106,12 +123,29 @@ def apply_paper_style() -> None:
             "xtick.labelsize": 7.0,
             "ytick.labelsize": 7.0,
             "axes.edgecolor": "#444444",
-            "axes.linewidth": 0.6,
+            "axes.linewidth": 0.75,
             "axes.spines.top": False,
             "axes.spines.right": False,
+            "axes.spines.left": True,
+            "axes.spines.bottom": True,
+            "axes.axisbelow": True,
             "grid.color": "#D5D9DE",
             "grid.linewidth": 0.45,
-            "grid.alpha": 0.65,
+            "grid.alpha": 0.62,
+            "xtick.direction": "out",
+            "ytick.direction": "out",
+            "xtick.bottom": True,
+            "ytick.left": True,
+            "xtick.top": False,
+            "ytick.right": False,
+            "xtick.color": "#444444",
+            "ytick.color": "#444444",
+            "xtick.major.size": 4.2,
+            "ytick.major.size": 4.2,
+            "xtick.major.width": 0.6,
+            "ytick.major.width": 0.6,
+            "xtick.minor.visible": False,
+            "ytick.minor.visible": False,
             "lines.linewidth": 1.35,
             "lines.markersize": 3.0,
             "legend.frameon": False,
@@ -126,6 +160,23 @@ def apply_paper_style() -> None:
     )
 
 
+def synchronize_tick_visibility(fig) -> None:
+    """Show tick marks only on axes that also show the corresponding labels."""
+
+    fig.canvas.draw()
+    for ax in fig.axes:
+        has_xlabels = any(
+            label.get_visible() and label.get_text().strip()
+            for label in ax.get_xticklabels()
+        )
+        has_ylabels = any(
+            label.get_visible() and label.get_text().strip()
+            for label in ax.get_yticklabels()
+        )
+        ax.tick_params(axis="x", bottom=has_xlabels)
+        ax.tick_params(axis="y", left=has_ylabels)
+
+
 def save_pdf(fig, path: str | Path) -> Path:
     """Save a publication figure as PDF with vector text/lines.
 
@@ -135,5 +186,6 @@ def save_pdf(fig, path: str | Path) -> Path:
 
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
+    synchronize_tick_visibility(fig)
     fig.savefig(target, format="pdf")
     return target
