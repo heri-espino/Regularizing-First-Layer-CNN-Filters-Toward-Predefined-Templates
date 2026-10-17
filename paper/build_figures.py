@@ -139,6 +139,8 @@ def fig1_learning() -> Path:
     axes[0, 0].set_ylim(0.20, 1.02)
     axes[2, 0].set_ylim(0.0, 1.02)
     handles, labels = axes[0, 0].get_legend_handles_labels()
+    handles.append(plt.Line2D([0], [0], color="#7A7A7A", linestyle=(0, (2, 2)), linewidth=0.8))
+    labels.append("Penalty reaches zero (epoch 80)")
     fig.legend(
         handles,
         labels,
@@ -251,6 +253,8 @@ def fig3_matching_trajectories() -> Path:
     gap_max = max(0.01, float(data.matching_gap.max()) * 1.15)
     axes[2, 0].set_ylim(0, gap_max)
     handles, labels = axes[0, 0].get_legend_handles_labels()
+    handles.append(plt.Line2D([0], [0], color="#7A7A7A", linestyle=(0, (2, 2)), linewidth=0.8))
+    labels.append("Penalty reaches zero (epoch 80)")
     fig.legend(
         handles,
         labels,

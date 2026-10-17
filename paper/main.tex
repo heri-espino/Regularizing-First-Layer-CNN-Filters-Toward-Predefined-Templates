@@ -4,6 +4,7 @@
 \documentclass[pdflatex,sn-basic]{sn-jnl}
 
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \raggedbottom
@@ -87,7 +88,7 @@ where $W_{\mathrm{ref}}$ is the initialization bank and $e$ is the epoch. Retent
 
 Figure~\ref{fig:filter-gallery} illustrates how the two schedules change the learned filters. This visual comparison establishes neither the causal role of a filter nor the additivity of its activation effects; those questions are assessed by the subsequent patching experiments.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig05_kernel_gallery_compact.pdf}
 \caption{Illustrative first-layer filters for \texttt{two\_concepts}/TinyCNN, renderer block 2000. The same 16 original templates are shown above the retention and release weights at epoch 200. Learned kernels are aligned to templates by maximum-sum one-to-one assignment of centered, unit-norm signed cosine similarity; columns follow assigned template index. Each displayed kernel is centered and normalized to unit spatial norm, with one symmetric color scale across all rows. This example visualizes filter structure, not the functional effect of activation patching. The complete conditions and epochs are shown in Supplementary Fig.~S5.}
@@ -329,9 +330,9 @@ A standalone Supplementary Information PDF provides the architecture/training sp
 
 \textbf{Consent for publication} Not applicable.
 
-\textbf{Data availability} All experimental images are procedurally generated from the renderer included with the research code. The accompanying reproducibility artifact contains the block-level and aggregate result tables required to regenerate the reported figures and inferential summaries without retraining. Raw checkpoints and per-model evaluator files are retained separately because of their size.
+\textbf{Data availability} Experimental images are procedurally generated using the renderer documented in the research code. Archived aggregate and block-level results, including the inputs needed to regenerate all six manuscript and five supplementary figures, are publicly available in the versioned reproducibility artifact at \href{https://doi.org/10.5281/zenodo.23432463}{doi:10.5281/zenodo.23432463}. The artifact enables selected numerical checks but does not independently rerun every inferential analysis. Original training checkpoints and per-model evaluator outputs are not included.
 
-\textbf{Code availability} The article's reproducibility artifact contains the renderer, model definitions, frozen protocols, training and evaluation code, analysis code, and figure-generation scripts used for the reported results.
+\textbf{Code availability} Selected training, evaluation, and analysis code, the frozen experimental protocols, figure generators, and the standalone reproduction runner are archived in the versioned Zenodo release \href{https://doi.org/10.5281/zenodo.23432463}{doi:10.5281/zenodo.23432463} \citep{espino_2026_activation_patching_artifact}. From these archived inputs, the runner regenerates eleven figure PDFs and independently checks selected reported statistics; full retraining requires additional raw experiment outputs and checkpoints.
 
 \textbf{Author contributions} H.E.M. conceived the study, developed the methodology and software, conducted the experiments and analyses, prepared the visualizations, and wrote and revised the manuscript.
 

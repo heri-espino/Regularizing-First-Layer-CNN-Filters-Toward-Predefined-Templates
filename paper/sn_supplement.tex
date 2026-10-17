@@ -251,7 +251,7 @@ The sum of individual logit changes closely reproduces the spatial contrast aver
 
 \section{Reproducibility map}\label{supp:repro-map}
 
-Table~\ref{tab:supp-repro-map} identifies the five principal figure generators and their compact input groups in the separately supplied reproducibility archive. The archive's \texttt{manifest.json} provides a SHA-256 checksum and a reversible original-to-exported path mapping for each file. Its \texttt{reproduce.py} rebuilds all five figures from the provided tables without requiring the original repository.
+Table~\ref{tab:supp-repro-map} identifies the six main-manuscript figures and their archived input groups. The same archive also contains the inputs for five supplementary figures. The publicly accessible, versioned reproducibility artifact is available at \href{https://doi.org/10.5281/zenodo.23432463}{doi:10.5281/zenodo.23432463}. Its \texttt{manifest.json} records SHA-256 checksums and original-to-exported source paths; \texttt{reproduce.py} regenerates all eleven figure PDFs from the archived CSV/NPZ inputs without requiring the original repository or model checkpoints.
 
 \begin{table}[h]
 \caption{Manuscript figures and compact reproducibility input groups. Each figure
@@ -281,6 +281,6 @@ The BN2-GAP interval in Section~\ref{supp:additivity} is independently recompute
 
 Full-patch and no-op identity checks are recorded in the archived evaluator summaries. For the analytic Tiny controls, observed and reconstructed centered-logit curves agree to floating-point precision. An independent checkpoint reimplementation audit of the earlier causal evaluator is included in the archive's checkpoint-audit data group.
 
-The reproducibility archive excludes raw training checkpoints and per-model evaluator JSON files, which are retained separately because of their size. Its derived tables support regeneration of the five manuscript figures and selected independent numerical checks. The other reported inferential summaries remain archived, rather than being recalculated by the compact entry point. The separately supplied manuscript-source ZIP includes LaTeX, the bibliography, required figures, and figure inputs. The original-to-exported file map and limitations are documented in the archive README and manifest.
+The versioned reproducibility archive at \href{https://doi.org/10.5281/zenodo.23432463}{doi:10.5281/zenodo.23432463} excludes raw training checkpoints and per-model evaluator JSON files, which are retained separately because of their size. Its derived tables and compact kernel arrays allow regeneration of all eleven figure PDFs (six main and five supplementary) and selected independent numerical checks. Other reported inferential summaries are archived rather than recomputed by this compact entry point. The archive README and manifest document file provenance, checksums, and the reproduction boundary.
 
 \end{document}
